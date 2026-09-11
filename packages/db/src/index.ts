@@ -1,0 +1,6 @@
+export { createPrismaClient } from './client.js';
+export { withTenant } from './tenant.js';
+
+export type { TenantTransaction } from './tenant.js';
+
+export * from './generated/prisma/client.js';

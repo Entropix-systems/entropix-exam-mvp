@@ -8,14 +8,63 @@ datasource db {
 }
 
 model Tenant {
-  id        String   @id @default(uuid()) @db.Uuid
+  id        String       @id @default(uuid()) @db.Uuid
   name      String
-  slug      String   @unique
-  status    String   @default("ACTIVE")
+  slug      String       @unique
+  status    String       @default("ACTIVE")
   timezone  String
-  plan      String   @default("MVP")
+  plan      String       @default("MVP")
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  memberships Membership[]
+
+  @@map("tenants")
+}
+
+model User {
+  id           String       @id @default(uuid()) @db.Uuid
+  email        String       @unique
+  passwordHash String?      @map("password_hash")
+  status       String       @default("ACTIVE")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  memberships Membership[]
+
+  @@map("users")
+}
+
+model Membership {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  status    String   @default("ACTIVE")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("tenants")
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  user       User        @relation(fields: [userId], references: [id], onDelete: Restrict)
+  roleGrants RoleGrant[]
+
+  @@unique([tenantId, userId], map: "memberships_tenant_user_key")
+  @@unique([tenantId, id], map: "memberships_tenant_id_id_key")
+  @@index([tenantId])
+  @@index([userId])
+  @@map("memberships")
+}
+
+model RoleGrant {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  membershipId String   @map("membership_id") @db.Uuid
+  role         String
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  membership Membership @relation(fields: [tenantId, membershipId], references: [tenantId, id], onDelete: Cascade)
+
+  @@unique([tenantId, membershipId, role], map: "role_grants_tenant_membership_role_key")
+  @@index([tenantId])
+  @@index([membershipId])
+  @@map("role_grants")
 }

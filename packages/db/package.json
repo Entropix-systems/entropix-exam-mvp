@@ -20,6 +20,8 @@
     "generate": "prisma generate",
     "migrate:dev": "prisma migrate dev",
     "migrate:status": "prisma migrate status",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "smoke:runtime": "tsx scripts/runtime-smoke.ts",
+    "smoke:tenancy": "tsx scripts/tenant-rls-smoke.ts"
   }
 }
