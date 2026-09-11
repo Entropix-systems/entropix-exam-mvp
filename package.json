@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "concurrently": "^10.0.5",
+    "tsx": "^4.23.13",
     "typescript": "^6.0.3"
   }
 }
