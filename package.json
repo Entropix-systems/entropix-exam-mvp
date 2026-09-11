@@ -8,12 +8,17 @@
     "node": "24.20.0"
   },
   "scripts": {
+    "dev": "concurrently -n web,api,worker \"pnpm dev:web\" \"pnpm dev:api\" \"pnpm dev:worker\"",
+    "dev:web": "pnpm --filter @entropix/web dev",
+    "dev:api": "pnpm --filter @entropix/api start:dev",
+    "dev:worker": "pnpm --filter @entropix/worker start:dev",
     "build": "pnpm -r --if-present build",
     "lint": "pnpm -r --if-present lint",
     "test": "pnpm -r --if-present test",
     "typecheck": "pnpm -r --if-present typecheck"
   },
   "devDependencies": {
-    "typescript": "^7.0.2"
+    "concurrently": "^10.0.5",
+    "typescript": "^6.0.3"
   }
 }

@@ -1,10 +1,31 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
+
+import { HealthModule } from './health/health.module.js';
+
+import { IdentityModule } from './modules/identity/identity.module.js';
+import { AcademicsModule } from './modules/academics/academics.module.js';
+import { ExamsModule } from './modules/exams/exams.module.js';
+import { SchedulingModule } from './modules/scheduling/scheduling.module.js';
+import { ConductModule } from './modules/conduct/conduct.module.js';
+import { EvaluationModule } from './modules/evaluation/evaluation.module.js';
+import { ResultsModule } from './modules/results/results.module.js';
+import { DocumentsModule } from './modules/documents/documents.module.js';
+import { NotificationsModule } from './modules/notifications/notifications.module.js';
+import { AuditModule } from './modules/audit/audit.module.js';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    HealthModule,
+    IdentityModule,
+    AcademicsModule,
+    ExamsModule,
+    SchedulingModule,
+    ConductModule,
+    EvaluationModule,
+    ResultsModule,
+    DocumentsModule,
+    NotificationsModule,
+    AuditModule,
+  ],
 })
 export class AppModule {}
