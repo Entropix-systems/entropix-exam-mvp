@@ -1,0 +1,124 @@
+{
+  "fixtureVersion": 1,
+  "tenant": {
+    "name": "Cedar School",
+    "slug": "cedar-school",
+    "timezone": "Asia/Kolkata",
+    "mode": "AUTO_ENROL"
+  },
+  "academicStructure": {
+    "campus": {
+      "code": "MAIN",
+      "name": "Main Campus"
+    },
+    "academicYear": {
+      "code": "AY2026",
+      "name": "2026-27"
+    },
+    "term": {
+      "code": "ANNUAL",
+      "name": "Annual"
+    },
+    "cohort": {
+      "code": "CLASS10A",
+      "name": "Class 10 A"
+    },
+    "departments": [
+      {
+        "code": "SCHOOL",
+        "name": "Secondary School"
+      }
+    ],
+    "program": {
+      "code": "CLASS10",
+      "name": "Class 10"
+    },
+    "subjects": [
+      {
+        "code": "MAT10",
+        "name": "Mathematics",
+        "credits": 1
+      },
+      {
+        "code": "SCI10",
+        "name": "Science",
+        "credits": 1
+      },
+      {
+        "code": "ENG10",
+        "name": "English",
+        "credits": 1
+      }
+    ]
+  },
+  "faculty": [
+    {
+      "code": "CSF001",
+      "name": "Nisha Rao",
+      "email": "nisha.rao@cedar.example.test",
+      "departmentCodes": [
+        "SCHOOL"
+      ]
+    },
+    {
+      "code": "CSF002",
+      "name": "Arun Das",
+      "email": "arun.das@cedar.example.test",
+      "departmentCodes": [
+        "SCHOOL"
+      ]
+    },
+    {
+      "code": "CSF003",
+      "name": "Priya Nair",
+      "email": "priya.nair@cedar.example.test",
+      "departmentCodes": [
+        "SCHOOL"
+      ]
+    }
+  ],
+  "exam": {
+    "code": "CEDAR-ANNUAL-2026",
+    "name": "Class 10 Annual Examination 2026",
+    "registrationMode": "AUTO_ENROL",
+    "rule": {
+      "components": [
+        {
+          "code": "FINAL",
+          "maximum": 100,
+          "weight": 100,
+          "passPercentage": 40
+        }
+      ],
+      "totalPassPercentage": 40,
+      "gradeBands": [
+        {
+          "grade": "A",
+          "minInclusive": 80,
+          "maxInclusive": 100,
+          "points": 10
+        },
+        {
+          "grade": "B",
+          "minInclusive": 60,
+          "maxExclusive": 80,
+          "points": 8
+        },
+        {
+          "grade": "C",
+          "minInclusive": 40,
+          "maxExclusive": 60,
+          "points": 6
+        },
+        {
+          "grade": "F",
+          "minInclusive": 0,
+          "maxExclusive": 40,
+          "points": 0
+        }
+      ],
+      "gpaEnabled": false,
+      "graceMarks": 0
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "fixtureVersion": 1,
+  "tenants": {
+    "northstarCollege": {
+      "studentCount": 100,
+      "subjectCount": 3,
+      "minimumFacultyCount": 3,
+      "actualFacultyCount": 4,
+      "registrationMode": "APPLICATION"
+    },
+    "cedarSchool": {
+      "studentCount": 20,
+      "subjectCount": 3,
+      "actualFacultyCount": 3,
+      "registrationMode": "AUTO_ENROL"
+    }
+  },
+  "requiredEdgeCases": [
+    "DUPLICATE_ROLL",
+    "UNKNOWN_SUBJECT",
+    "INACTIVE_STUDENT",
+    "REJECTED_APPLICATION",
+    "DUAL_DEPARTMENT_FACULTY"
+  ],
+  "resultFixtureIds": [
+    "R1_TWO_COMPONENT_PASS",
+    "R2_COMPONENT_THRESHOLD_FAIL",
+    "R3_UNROUNDED_BOUNDARY_FAIL",
+    "R4_ABSENT",
+    "R5_WITHHELD",
+    "R6_GPA"
+  ]
+}

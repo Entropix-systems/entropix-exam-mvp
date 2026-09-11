@@ -15,7 +15,9 @@
     "build": "pnpm -r --if-present build",
     "lint": "pnpm -r --if-present lint",
     "test": "pnpm -r --if-present test",
-    "typecheck": "pnpm -r --if-present typecheck"
+    "typecheck": "pnpm -r --if-present typecheck",
+    "fixtures:generate": "node scripts/generate-d0-fixtures.mjs",
+    "fixtures:check": "node scripts/check-d0-fixtures.mjs"
   },
   "devDependencies": {
     "concurrently": "^10.0.5",
