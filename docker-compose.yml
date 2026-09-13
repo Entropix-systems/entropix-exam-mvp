@@ -31,5 +31,36 @@ services:
 
     restart: unless-stopped
 
+  s3mock:
+    image: adobe/s3mock@sha256:65cf60155a2e235fe7d5bf6c633747d6fc7ed93f9f5a6727d86470026b83c2a2
+    container_name: entropix-exam-s3
+
+    ports:
+      - "127.0.0.1:9090:9090"
+
+    environment:
+      COM_ADOBE_TESTING_S3MOCK_STORE_INITIAL_BUCKETS: entropix-exam-mvp
+      COM_ADOBE_TESTING_S3MOCK_STORE_ROOT: /data
+      COM_ADOBE_TESTING_S3MOCK_STORE_RETAIN_FILES_ON_EXIT: "true"
+
+    volumes:
+      - exam_s3_data:/data
+
+    restart: unless-stopped
+
+  clamav:
+    image: clamav/clamav-debian@sha256:4c975c439fcb7ab9cbdd72162c2802f5efcb4a11dcf5b0b37da1d746474ef20e
+    container_name: entropix-exam-clamav
+
+    ports:
+      - "127.0.0.1:3310:3310"
+
+    volumes:
+      - exam_clamav_db:/var/lib/clamav
+
+    restart: unless-stopped
+
 volumes:
   exam_postgres_data:
+  exam_s3_data:
+  exam_clamav_db:
