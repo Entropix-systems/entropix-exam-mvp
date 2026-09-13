@@ -544,10 +544,6 @@ export type SessionUncheckedUpdateManyWithoutMembershipNestedInput = {
   deleteMany?: Prisma.SessionScalarWhereInput | Prisma.SessionScalarWhereInput[]
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type SessionCreateNestedOneWithoutAuthTokensInput = {
   create?: Prisma.XOR<Prisma.SessionCreateWithoutAuthTokensInput, Prisma.SessionUncheckedCreateWithoutAuthTokensInput>
   connectOrCreate?: Prisma.SessionCreateOrConnectWithoutAuthTokensInput

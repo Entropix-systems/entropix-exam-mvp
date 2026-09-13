@@ -112,6 +112,31 @@ export type Enrolment = Prisma.EnrolmentModel
  */
 export type StudentImport = Prisma.StudentImportModel
 /**
+ * Model RuleVersion
+ *
+ */
+export type RuleVersion = Prisma.RuleVersionModel
+/**
+ * Model Exam
+ *
+ */
+export type Exam = Prisma.ExamModel
+/**
+ * Model ExamSubject
+ *
+ */
+export type ExamSubject = Prisma.ExamSubjectModel
+/**
+ * Model Registration
+ *
+ */
+export type Registration = Prisma.RegistrationModel
+/**
+ * Model RegistrationSubject
+ *
+ */
+export type RegistrationSubject = Prisma.RegistrationSubjectModel
+/**
  * Model RoleGrant
  *
  */

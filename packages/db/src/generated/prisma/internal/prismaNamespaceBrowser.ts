@@ -65,6 +65,11 @@ export const ModelName = {
   Faculty: 'Faculty',
   Enrolment: 'Enrolment',
   StudentImport: 'StudentImport',
+  RuleVersion: 'RuleVersion',
+  Exam: 'Exam',
+  ExamSubject: 'ExamSubject',
+  Registration: 'Registration',
+  RegistrationSubject: 'RegistrationSubject',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -282,6 +287,82 @@ export const StudentImportScalarFieldEnum = {
 export type StudentImportScalarFieldEnum = (typeof StudentImportScalarFieldEnum)[keyof typeof StudentImportScalarFieldEnum]
 
 
+export const RuleVersionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  version: 'version',
+  config: 'config',
+  frozenAt: 'frozenAt',
+  createdAt: 'createdAt'
+} as const
+
+export type RuleVersionScalarFieldEnum = (typeof RuleVersionScalarFieldEnum)[keyof typeof RuleVersionScalarFieldEnum]
+
+
+export const ExamScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  termId: 'termId',
+  ruleVersionId: 'ruleVersionId',
+  code: 'code',
+  name: 'name',
+  registrationMode: 'registrationMode',
+  state: 'state',
+  registrationOpensAt: 'registrationOpensAt',
+  registrationClosesAt: 'registrationClosesAt',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExamScalarFieldEnum = (typeof ExamScalarFieldEnum)[keyof typeof ExamScalarFieldEnum]
+
+
+export const ExamSubjectScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examId: 'examId',
+  subjectId: 'subjectId',
+  createdAt: 'createdAt'
+} as const
+
+export type ExamSubjectScalarFieldEnum = (typeof ExamSubjectScalarFieldEnum)[keyof typeof ExamSubjectScalarFieldEnum]
+
+
+export const RegistrationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examId: 'examId',
+  studentId: 'studentId',
+  state: 'state',
+  version: 'version',
+  controllerEligible: 'controllerEligible',
+  controllerEligibilityReason: 'controllerEligibilityReason',
+  eligibilitySnapshot: 'eligibilitySnapshot',
+  submittedAt: 'submittedAt',
+  reviewedByMembershipId: 'reviewedByMembershipId',
+  reviewedAt: 'reviewedAt',
+  decisionReason: 'decisionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RegistrationScalarFieldEnum = (typeof RegistrationScalarFieldEnum)[keyof typeof RegistrationScalarFieldEnum]
+
+
+export const RegistrationSubjectScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  registrationId: 'registrationId',
+  examId: 'examId',
+  examSubjectId: 'examSubjectId',
+  enrolmentId: 'enrolmentId',
+  createdAt: 'createdAt'
+} as const
+
+export type RegistrationSubjectScalarFieldEnum = (typeof RegistrationSubjectScalarFieldEnum)[keyof typeof RegistrationSubjectScalarFieldEnum]
+
+
 export const RoleGrantScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -338,6 +419,21 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -352,4 +448,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
