@@ -4,11 +4,16 @@ import type {
 } from './generated/prisma/client.js';
 
 export type TenantTransaction = Prisma.TransactionClient;
+export interface TenantTransactionOptions {
+  maxWait?: number;
+  timeout?: number;
+}
 
 export async function withTenant<T>(
   prisma: PrismaClient,
   tenantId: string,
   operation: (tx: TenantTransaction) => Promise<T>,
+  options?: TenantTransactionOptions,
 ): Promise<T> {
   return prisma.$transaction(async (tx) => {
     await tx.$queryRaw<Array<{ set_config: string }>>`
@@ -20,5 +25,5 @@ export async function withTenant<T>(
     `;
 
     return operation(tx);
-  });
+  }, options);
 }

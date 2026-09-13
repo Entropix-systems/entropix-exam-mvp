@@ -61,6 +61,10 @@ export const ModelName = {
   Subject: 'Subject',
   User: 'User',
   Membership: 'Membership',
+  Student: 'Student',
+  Faculty: 'Faculty',
+  Enrolment: 'Enrolment',
+  StudentImport: 'StudentImport',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -216,6 +220,66 @@ export const MembershipScalarFieldEnum = {
 } as const
 
 export type MembershipScalarFieldEnum = (typeof MembershipScalarFieldEnum)[keyof typeof MembershipScalarFieldEnum]
+
+
+export const StudentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  membershipId: 'membershipId',
+  cohortId: 'cohortId',
+  rollNo: 'rollNo',
+  name: 'name',
+  email: 'email',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
+
+
+export const FacultyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  membershipId: 'membershipId',
+  departmentId: 'departmentId',
+  code: 'code',
+  name: 'name',
+  email: 'email',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FacultyScalarFieldEnum = (typeof FacultyScalarFieldEnum)[keyof typeof FacultyScalarFieldEnum]
+
+
+export const EnrolmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studentId: 'studentId',
+  cohortId: 'cohortId',
+  subjectId: 'subjectId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EnrolmentScalarFieldEnum = (typeof EnrolmentScalarFieldEnum)[keyof typeof EnrolmentScalarFieldEnum]
+
+
+export const StudentImportScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  contentHash: 'contentHash',
+  fileName: 'fileName',
+  rowCount: 'rowCount',
+  createdCount: 'createdCount',
+  enrolmentCount: 'enrolmentCount',
+  committedAt: 'committedAt'
+} as const
+
+export type StudentImportScalarFieldEnum = (typeof StudentImportScalarFieldEnum)[keyof typeof StudentImportScalarFieldEnum]
 
 
 export const RoleGrantScalarFieldEnum = {

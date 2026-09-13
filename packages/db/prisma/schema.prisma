@@ -25,6 +25,10 @@ model Tenant {
   terms         Term[]
   cohorts       Cohort[]
   subjects      Subject[]
+  students      Student[]
+  faculty       Faculty[]
+  enrolments    Enrolment[]
+  studentImports StudentImport[]
 
   @@map("tenants")
 }
@@ -58,6 +62,7 @@ model Department {
   tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   campus   Campus    @relation(fields: [tenantId, campusId], references: [tenantId, id], onDelete: Restrict)
   programs Program[]
+  faculty  Faculty[]
 
   @@unique([tenantId, id], map: "departments_tenant_id_id_key")
   @@unique([tenantId, campusId, code], map: "departments_tenant_campus_code_key")
@@ -144,6 +149,8 @@ model Cohort {
 
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   term   Term   @relation(fields: [tenantId, termId], references: [tenantId, id], onDelete: Restrict)
+  students   Student[]
+  enrolments Enrolment[]
 
   @@unique([tenantId, id], map: "cohorts_tenant_id_id_key")
   @@unique([tenantId, termId, code], map: "cohorts_tenant_term_code_key")
@@ -164,6 +171,7 @@ model Subject {
 
   tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   program Program @relation(fields: [tenantId, programId], references: [tenantId, id], onDelete: Restrict)
+  enrolments Enrolment[]
 
   @@unique([tenantId, id], map: "subjects_tenant_id_id_key")
   @@unique([tenantId, programId, code], map: "subjects_tenant_program_code_key")
@@ -202,6 +210,8 @@ model Membership {
   roleGrants RoleGrant[]
   sessions   Session[]
   authTokens AuthToken[]
+  student    Student?
+  faculty    Faculty?
 
   @@unique([tenantId, userId], map: "memberships_tenant_user_key")
   @@unique([tenantId, id], map: "memberships_tenant_id_id_key")
@@ -209,6 +219,92 @@ model Membership {
   @@index([tenantId])
   @@index([userId])
   @@map("memberships")
+}
+
+model Student {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  membershipId String   @map("membership_id") @db.Uuid
+  cohortId     String   @map("cohort_id") @db.Uuid
+  rollNo       String   @map("roll_no")
+  name         String
+  email        String
+  status       String   @default("ACTIVE")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tenant     Tenant     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  membership Membership @relation(fields: [tenantId, membershipId], references: [tenantId, id], onDelete: Restrict)
+  cohort     Cohort     @relation(fields: [tenantId, cohortId], references: [tenantId, id], onDelete: Restrict)
+  enrolments Enrolment[]
+
+  @@unique([tenantId, id], map: "students_tenant_id_id_key")
+  @@unique([tenantId, id, cohortId], map: "students_tenant_id_cohort_id_key")
+  @@unique([tenantId, membershipId], map: "students_tenant_membership_key")
+  @@unique([tenantId, rollNo], map: "students_tenant_roll_no_key")
+  @@index([tenantId, cohortId])
+  @@map("students")
+}
+
+model Faculty {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  membershipId String   @map("membership_id") @db.Uuid
+  departmentId String   @map("department_id") @db.Uuid
+  code         String
+  name         String
+  email        String
+  status       String   @default("ACTIVE")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tenant     Tenant     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  membership Membership @relation(fields: [tenantId, membershipId], references: [tenantId, id], onDelete: Restrict)
+  department Department @relation(fields: [tenantId, departmentId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, id], map: "faculty_tenant_id_id_key")
+  @@unique([tenantId, membershipId], map: "faculty_tenant_membership_key")
+  @@unique([tenantId, code], map: "faculty_tenant_code_key")
+  @@index([tenantId, departmentId])
+  @@map("faculty")
+}
+
+model Enrolment {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  studentId String   @map("student_id") @db.Uuid
+  cohortId  String   @map("cohort_id") @db.Uuid
+  subjectId String   @map("subject_id") @db.Uuid
+  status    String   @default("ACTIVE")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  student Student @relation(fields: [tenantId, studentId, cohortId], references: [tenantId, id, cohortId], onDelete: Restrict)
+  cohort  Cohort  @relation(fields: [tenantId, cohortId], references: [tenantId, id], onDelete: Restrict)
+  subject Subject @relation(fields: [tenantId, subjectId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, studentId, subjectId, cohortId], map: "enrolments_tenant_student_subject_cohort_key")
+  @@index([tenantId, cohortId, subjectId])
+  @@map("enrolments")
+}
+
+model StudentImport {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  contentHash    String   @map("content_hash")
+  fileName       String   @map("file_name")
+  rowCount       Int      @map("row_count")
+  createdCount   Int      @map("created_count")
+  enrolmentCount Int      @map("enrolment_count")
+  committedAt    DateTime @default(now()) @map("committed_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([tenantId, id], map: "student_imports_tenant_id_id_key")
+  @@unique([tenantId, contentHash], map: "student_imports_tenant_content_hash_key")
+  @@index([tenantId, committedAt])
+  @@map("student_imports")
 }
 
 model RoleGrant {

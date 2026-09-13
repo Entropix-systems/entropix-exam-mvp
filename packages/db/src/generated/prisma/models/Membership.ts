@@ -237,6 +237,8 @@ export type MembershipWhereInput = {
   roleGrants?: Prisma.RoleGrantListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   authTokens?: Prisma.AuthTokenListRelationFilter
+  student?: Prisma.XOR<Prisma.StudentNullableScalarRelationFilter, Prisma.StudentWhereInput> | null
+  faculty?: Prisma.XOR<Prisma.FacultyNullableScalarRelationFilter, Prisma.FacultyWhereInput> | null
 }
 
 export type MembershipOrderByWithRelationInput = {
@@ -252,6 +254,8 @@ export type MembershipOrderByWithRelationInput = {
   roleGrants?: Prisma.RoleGrantOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   authTokens?: Prisma.AuthTokenOrderByRelationAggregateInput
+  student?: Prisma.StudentOrderByWithRelationInput
+  faculty?: Prisma.FacultyOrderByWithRelationInput
 }
 
 export type MembershipWhereUniqueInput = Prisma.AtLeast<{
@@ -273,6 +277,8 @@ export type MembershipWhereUniqueInput = Prisma.AtLeast<{
   roleGrants?: Prisma.RoleGrantListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   authTokens?: Prisma.AuthTokenListRelationFilter
+  student?: Prisma.XOR<Prisma.StudentNullableScalarRelationFilter, Prisma.StudentWhereInput> | null
+  faculty?: Prisma.XOR<Prisma.FacultyNullableScalarRelationFilter, Prisma.FacultyWhereInput> | null
 }, "id" | "tenantId_userId" | "tenantId_id" | "tenantId_id_userId">
 
 export type MembershipOrderByWithAggregationInput = {
@@ -314,6 +320,8 @@ export type MembershipCreateInput = {
   roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
   sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
   authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
 }
 
 export type MembershipUncheckedCreateInput = {
@@ -327,6 +335,8 @@ export type MembershipUncheckedCreateInput = {
   roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
   authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
 }
 
 export type MembershipUpdateInput = {
@@ -340,6 +350,8 @@ export type MembershipUpdateInput = {
   roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
   authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateInput = {
@@ -353,6 +365,8 @@ export type MembershipUncheckedUpdateInput = {
   roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
   authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
 }
 
 export type MembershipCreateManyInput = {
@@ -541,6 +555,34 @@ export type MembershipUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.MembershipScalarWhereInput | Prisma.MembershipScalarWhereInput[]
 }
 
+export type MembershipCreateNestedOneWithoutStudentInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutStudentInput, Prisma.MembershipUncheckedCreateWithoutStudentInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutStudentInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipUpdateOneRequiredWithoutStudentNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutStudentInput, Prisma.MembershipUncheckedCreateWithoutStudentInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutStudentInput
+  upsert?: Prisma.MembershipUpsertWithoutStudentInput
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutStudentInput, Prisma.MembershipUpdateWithoutStudentInput>, Prisma.MembershipUncheckedUpdateWithoutStudentInput>
+}
+
+export type MembershipCreateNestedOneWithoutFacultyInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutFacultyInput, Prisma.MembershipUncheckedCreateWithoutFacultyInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutFacultyInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipUpdateOneRequiredWithoutFacultyNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutFacultyInput, Prisma.MembershipUncheckedCreateWithoutFacultyInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutFacultyInput
+  upsert?: Prisma.MembershipUpsertWithoutFacultyInput
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutFacultyInput, Prisma.MembershipUpdateWithoutFacultyInput>, Prisma.MembershipUncheckedUpdateWithoutFacultyInput>
+}
+
 export type MembershipCreateNestedOneWithoutRoleGrantsInput = {
   create?: Prisma.XOR<Prisma.MembershipCreateWithoutRoleGrantsInput, Prisma.MembershipUncheckedCreateWithoutRoleGrantsInput>
   connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutRoleGrantsInput
@@ -597,6 +639,8 @@ export type MembershipCreateWithoutTenantInput = {
   roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
   sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
   authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
 }
 
 export type MembershipUncheckedCreateWithoutTenantInput = {
@@ -609,6 +653,8 @@ export type MembershipUncheckedCreateWithoutTenantInput = {
   roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
   authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
 }
 
 export type MembershipCreateOrConnectWithoutTenantInput = {
@@ -660,6 +706,8 @@ export type MembershipCreateWithoutUserInput = {
   roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
   sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
   authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
 }
 
 export type MembershipUncheckedCreateWithoutUserInput = {
@@ -672,6 +720,8 @@ export type MembershipUncheckedCreateWithoutUserInput = {
   roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
   authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
 }
 
 export type MembershipCreateOrConnectWithoutUserInput = {
@@ -700,6 +750,150 @@ export type MembershipUpdateManyWithWhereWithoutUserInput = {
   data: Prisma.XOR<Prisma.MembershipUpdateManyMutationInput, Prisma.MembershipUncheckedUpdateManyWithoutUserInput>
 }
 
+export type MembershipCreateWithoutStudentInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+}
+
+export type MembershipUncheckedCreateWithoutStudentInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+}
+
+export type MembershipCreateOrConnectWithoutStudentInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutStudentInput, Prisma.MembershipUncheckedCreateWithoutStudentInput>
+}
+
+export type MembershipUpsertWithoutStudentInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutStudentInput, Prisma.MembershipUncheckedUpdateWithoutStudentInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutStudentInput, Prisma.MembershipUncheckedCreateWithoutStudentInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutStudentInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutStudentInput, Prisma.MembershipUncheckedUpdateWithoutStudentInput>
+}
+
+export type MembershipUpdateWithoutStudentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutStudentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+}
+
+export type MembershipCreateWithoutFacultyInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+}
+
+export type MembershipUncheckedCreateWithoutFacultyInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+}
+
+export type MembershipCreateOrConnectWithoutFacultyInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutFacultyInput, Prisma.MembershipUncheckedCreateWithoutFacultyInput>
+}
+
+export type MembershipUpsertWithoutFacultyInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutFacultyInput, Prisma.MembershipUncheckedUpdateWithoutFacultyInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutFacultyInput, Prisma.MembershipUncheckedCreateWithoutFacultyInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutFacultyInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutFacultyInput, Prisma.MembershipUncheckedUpdateWithoutFacultyInput>
+}
+
+export type MembershipUpdateWithoutFacultyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutFacultyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+}
+
 export type MembershipCreateWithoutRoleGrantsInput = {
   id?: string
   status?: string
@@ -710,6 +904,8 @@ export type MembershipCreateWithoutRoleGrantsInput = {
   user: Prisma.UserCreateNestedOneWithoutMembershipsInput
   sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
   authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
 }
 
 export type MembershipUncheckedCreateWithoutRoleGrantsInput = {
@@ -722,6 +918,8 @@ export type MembershipUncheckedCreateWithoutRoleGrantsInput = {
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
   authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
 }
 
 export type MembershipCreateOrConnectWithoutRoleGrantsInput = {
@@ -750,6 +948,8 @@ export type MembershipUpdateWithoutRoleGrantsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
   authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutRoleGrantsInput = {
@@ -762,6 +962,8 @@ export type MembershipUncheckedUpdateWithoutRoleGrantsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
   authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
 }
 
 export type MembershipCreateWithoutSessionsInput = {
@@ -774,6 +976,8 @@ export type MembershipCreateWithoutSessionsInput = {
   user: Prisma.UserCreateNestedOneWithoutMembershipsInput
   roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
   authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
 }
 
 export type MembershipUncheckedCreateWithoutSessionsInput = {
@@ -786,6 +990,8 @@ export type MembershipUncheckedCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
   authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
 }
 
 export type MembershipCreateOrConnectWithoutSessionsInput = {
@@ -814,6 +1020,8 @@ export type MembershipUpdateWithoutSessionsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
   roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
   authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutSessionsInput = {
@@ -826,6 +1034,8 @@ export type MembershipUncheckedUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
   authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
 }
 
 export type MembershipCreateWithoutAuthTokensInput = {
@@ -838,6 +1048,8 @@ export type MembershipCreateWithoutAuthTokensInput = {
   user: Prisma.UserCreateNestedOneWithoutMembershipsInput
   roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
   sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
 }
 
 export type MembershipUncheckedCreateWithoutAuthTokensInput = {
@@ -850,6 +1062,8 @@ export type MembershipUncheckedCreateWithoutAuthTokensInput = {
   updatedAt?: Date | string
   roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
 }
 
 export type MembershipCreateOrConnectWithoutAuthTokensInput = {
@@ -878,6 +1092,8 @@ export type MembershipUpdateWithoutAuthTokensInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
   roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutAuthTokensInput = {
@@ -890,6 +1106,8 @@ export type MembershipUncheckedUpdateWithoutAuthTokensInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
 }
 
 export type MembershipCreateManyTenantInput = {
@@ -911,6 +1129,8 @@ export type MembershipUpdateWithoutTenantInput = {
   roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
   authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutTenantInput = {
@@ -923,6 +1143,8 @@ export type MembershipUncheckedUpdateWithoutTenantInput = {
   roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
   authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateManyWithoutTenantInput = {
@@ -953,6 +1175,8 @@ export type MembershipUpdateWithoutUserInput = {
   roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
   authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutUserInput = {
@@ -965,6 +1189,8 @@ export type MembershipUncheckedUpdateWithoutUserInput = {
   roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
   authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateManyWithoutUserInput = {
@@ -1038,6 +1264,8 @@ export type MembershipSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   roleGrants?: boolean | Prisma.Membership$roleGrantsArgs<ExtArgs>
   sessions?: boolean | Prisma.Membership$sessionsArgs<ExtArgs>
   authTokens?: boolean | Prisma.Membership$authTokensArgs<ExtArgs>
+  student?: boolean | Prisma.Membership$studentArgs<ExtArgs>
+  faculty?: boolean | Prisma.Membership$facultyArgs<ExtArgs>
   _count?: boolean | Prisma.MembershipCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["membership"]>
 
@@ -1082,6 +1310,8 @@ export type MembershipInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   roleGrants?: boolean | Prisma.Membership$roleGrantsArgs<ExtArgs>
   sessions?: boolean | Prisma.Membership$sessionsArgs<ExtArgs>
   authTokens?: boolean | Prisma.Membership$authTokensArgs<ExtArgs>
+  student?: boolean | Prisma.Membership$studentArgs<ExtArgs>
+  faculty?: boolean | Prisma.Membership$facultyArgs<ExtArgs>
   _count?: boolean | Prisma.MembershipCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MembershipIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1101,6 +1331,8 @@ export type $MembershipPayload<ExtArgs extends runtime.Types.Extensions.Internal
     roleGrants: Prisma.$RoleGrantPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     authTokens: Prisma.$AuthTokenPayload<ExtArgs>[]
+    student: Prisma.$StudentPayload<ExtArgs> | null
+    faculty: Prisma.$FacultyPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1509,6 +1741,8 @@ export interface Prisma__MembershipClient<T, Null = never, ExtArgs extends runti
   roleGrants<T extends Prisma.Membership$roleGrantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$roleGrantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoleGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.Membership$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   authTokens<T extends Prisma.Membership$authTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$authTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  student<T extends Prisma.Membership$studentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$studentArgs<ExtArgs>>): Prisma.Prisma__StudentClient<runtime.Types.Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  faculty<T extends Prisma.Membership$facultyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$facultyArgs<ExtArgs>>): Prisma.Prisma__FacultyClient<runtime.Types.Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2015,6 +2249,44 @@ export type Membership$authTokensArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.AuthTokenScalarFieldEnum | Prisma.AuthTokenScalarFieldEnum[]
+}
+
+/**
+ * Membership.student
+ */
+export type Membership$studentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Student
+   */
+  select?: Prisma.StudentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Student
+   */
+  omit?: Prisma.StudentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StudentInclude<ExtArgs> | null
+  where?: Prisma.StudentWhereInput
+}
+
+/**
+ * Membership.faculty
+ */
+export type Membership$facultyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Faculty
+   */
+  select?: Prisma.FacultySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Faculty
+   */
+  omit?: Prisma.FacultyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FacultyInclude<ExtArgs> | null
+  where?: Prisma.FacultyWhereInput
 }
 
 /**
