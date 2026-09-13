@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { HealthModule } from './health/health.module.js';
 
-import { IdentityModule } from './modules/identity/identity.module.js';
+import { IdentityHttpModule } from './modules/identity/identity-http.module.js';
 import { AcademicsModule } from './modules/academics/academics.module.js';
 import { ExamsModule } from './modules/exams/exams.module.js';
 import { SchedulingModule } from './modules/scheduling/scheduling.module.js';
@@ -16,7 +16,7 @@ import { AuditModule } from './modules/audit/audit.module.js';
 @Module({
   imports: [
     HealthModule,
-    IdentityModule,
+    IdentityHttpModule,
     AcademicsModule,
     ExamsModule,
     SchedulingModule,

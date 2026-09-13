@@ -72,8 +72,7 @@ export interface LoginSessionCommand {
 }
 
 export type LoginSessionResult =
-  | { kind: 'CREATED'; identity: AccessTokenIdentity }
-  | { kind: 'DENIED' };
+  { kind: 'CREATED'; identity: AccessTokenIdentity } | { kind: 'DENIED' };
 
 export interface RotateRefreshCommand {
   currentTokenHash: string;
@@ -108,8 +107,7 @@ export interface ResetPasswordCommand {
 }
 
 export type ResetPasswordResult =
-  | { kind: 'RESET'; userId: UUID }
-  | { kind: 'INVALID' | 'USER_INACTIVE' };
+  { kind: 'RESET'; userId: UUID } | { kind: 'INVALID' | 'USER_INACTIVE' };
 
 export interface AcceptInvitationCommand {
   tokenHash: string;
@@ -220,9 +218,66 @@ export abstract class AuthenticatedContextResolver {
 }
 
 /** Persistence-side resolver may use verified hints only as lookup keys. */
-export interface CurrentAuthorityRepository {
-  resolveCurrentAuthority(
+export abstract class CurrentAuthorityRepository {
+  abstract resolveCurrentAuthority(
     identity: AccessTokenIdentity,
     now: Date,
   ): Promise<AuthenticatedContext | null>;
+}
+
+export interface MembershipListItem {
+  id: UUID;
+  userId: UUID;
+  email: string;
+  name: string | null;
+  status: string;
+  version: number;
+  grants: readonly ScopedRoleGrant[];
+}
+
+export interface CreateInvitationCommand {
+  tenantId: UUID;
+  actorMembershipId: UUID;
+  email: string;
+  grants: readonly ScopedRoleGrant[];
+  invitationTokenId: UUID;
+  invitationTokenHash: string;
+  now: Date;
+  expiresAt: Date;
+}
+
+export type CreateInvitationResult =
+  { kind: 'CREATED'; membership: MembershipListItem } | { kind: 'INELIGIBLE' };
+
+export interface ReplaceMembershipRoleGrantsCommand {
+  tenantId: UUID;
+  actorUserId: UUID;
+  actorMembershipId: UUID;
+  membershipId: UUID;
+  grants: readonly ScopedRoleGrant[];
+  expectedVersion: number | null;
+}
+
+export type MembershipMutationResult =
+  | { kind: 'UPDATED'; membership: MembershipListItem }
+  | { kind: 'NOT_FOUND' | 'INELIGIBLE' | 'VERSION_CONFLICT' | 'FORBIDDEN' };
+
+/** Tenant administration port. Implementations keep every tenant mutation inside withTenant(). */
+export abstract class IdentityAdminRepository {
+  abstract listMemberships(
+    tenantId: UUID,
+  ): Promise<readonly MembershipListItem[]>;
+  abstract createInvitation(
+    command: CreateInvitationCommand,
+  ): Promise<CreateInvitationResult>;
+  abstract replaceRoleGrants(
+    command: ReplaceMembershipRoleGrantsCommand,
+  ): Promise<MembershipMutationResult>;
+  abstract setMembershipActive(
+    tenantId: UUID,
+    actorMembershipId: UUID,
+    membershipId: UUID,
+    active: boolean,
+    now: Date,
+  ): Promise<MembershipMutationResult>;
 }

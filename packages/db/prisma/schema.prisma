@@ -8,14 +8,14 @@ datasource db {
 }
 
 model Tenant {
-  id        String       @id @default(uuid()) @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   name      String
-  slug      String       @unique
-  status    String       @default("ACTIVE")
+  slug      String   @unique
+  status    String   @default("ACTIVE")
   timezone  String
-  plan      String       @default("MVP")
-  createdAt DateTime     @default(now()) @map("created_at")
-  updatedAt DateTime     @updatedAt @map("updated_at")
+  plan      String   @default("MVP")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   memberships Membership[]
 
@@ -23,14 +23,17 @@ model Tenant {
 }
 
 model User {
-  id           String       @id @default(uuid()) @db.Uuid
-  email        String       @unique
-  passwordHash String?      @map("password_hash")
-  status       String       @default("ACTIVE")
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime     @updatedAt @map("updated_at")
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String?  @map("password_hash")
+  status       String   @default("ACTIVE")
+  platformRole String?  @map("platform_role")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
   memberships Membership[]
+  sessions    Session[]
+  authTokens  AuthToken[]
 
   @@map("users")
 }
@@ -40,15 +43,19 @@ model Membership {
   tenantId  String   @map("tenant_id") @db.Uuid
   userId    String   @map("user_id") @db.Uuid
   status    String   @default("ACTIVE")
+  version   Int      @default(1)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   user       User        @relation(fields: [userId], references: [id], onDelete: Restrict)
   roleGrants RoleGrant[]
+  sessions   Session[]
+  authTokens AuthToken[]
 
   @@unique([tenantId, userId], map: "memberships_tenant_user_key")
   @@unique([tenantId, id], map: "memberships_tenant_id_id_key")
+  @@unique([tenantId, id, userId], map: "memberships_tenant_id_user_id_key")
   @@index([tenantId])
   @@index([userId])
   @@map("memberships")
@@ -59,12 +66,65 @@ model RoleGrant {
   tenantId     String   @map("tenant_id") @db.Uuid
   membershipId String   @map("membership_id") @db.Uuid
   role         String
+  departmentId String?  @map("department_id") @db.Uuid
   createdAt    DateTime @default(now()) @map("created_at")
 
   membership Membership @relation(fields: [tenantId, membershipId], references: [tenantId, id], onDelete: Cascade)
 
-  @@unique([tenantId, membershipId, role], map: "role_grants_tenant_membership_role_key")
+  @@unique([tenantId, membershipId, role, departmentId], map: "role_grants_scope_key")
+  @@index([tenantId, membershipId, role, departmentId], map: "role_grants_scope_idx")
   @@index([tenantId])
   @@index([membershipId])
   @@map("role_grants")
+}
+
+model Session {
+  id               String    @id @default(uuid()) @db.Uuid
+  userId           String    @map("user_id") @db.Uuid
+  kind             String
+  tenantId         String?   @map("tenant_id") @db.Uuid
+  membershipId     String?   @map("membership_id") @db.Uuid
+  expiresAt        DateTime  @map("expires_at")
+  lastUsedAt       DateTime? @map("last_used_at")
+  revokedAt        DateTime? @map("revoked_at")
+  revocationReason String?   @map("revocation_reason")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  membership Membership? @relation(fields: [tenantId, membershipId, userId], references: [tenantId, id, userId], onDelete: Restrict)
+  authTokens AuthToken[]
+
+  @@index([userId])
+  @@index([tenantId, membershipId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model AuthToken {
+  id            String    @id @default(uuid()) @db.Uuid
+  tokenHash     String    @unique @map("token_hash")
+  purpose       String
+  userId        String    @map("user_id") @db.Uuid
+  sessionId     String?   @map("session_id") @db.Uuid
+  tenantId      String?   @map("tenant_id") @db.Uuid
+  membershipId  String?   @map("membership_id") @db.Uuid
+  predecessorId String?   @unique @map("predecessor_id") @db.Uuid
+  expiresAt     DateTime  @map("expires_at")
+  consumedAt    DateTime? @map("consumed_at")
+  revokedAt     DateTime? @map("revoked_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session     Session?    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  membership  Membership? @relation(fields: [tenantId, membershipId, userId], references: [tenantId, id, userId], onDelete: Restrict)
+  predecessor AuthToken?  @relation("RefreshRotation", fields: [predecessorId], references: [id], onDelete: Restrict)
+  successor   AuthToken?  @relation("RefreshRotation")
+
+  @@index([userId, purpose])
+  @@index([sessionId])
+  @@index([tenantId, membershipId])
+  @@index([purpose, expiresAt])
+  @@map("auth_tokens")
 }
