@@ -104,6 +104,28 @@ In CSV, `subject_codes` is pipe-delimited. Preview, atomic commit, validation,
 row-number retention, and retry semantics are those documented in the frozen
 student-import contract.
 
+The typed A02 records and import results are defined in
+`packages/contracts/src/people.ts`. The authenticated API surface is:
+
+```text
+GET  /api/v1/people/students
+GET  /api/v1/people/students/:id
+GET  /api/v1/people/faculty
+POST /api/v1/people/student-imports/preview
+POST /api/v1/people/student-imports/commit
+```
+
+Preview/commit accepts `{ fileName, sourceText }` for the demo CSV path. The
+server computes the SHA-256 import identity. A committed identity is durable and
+replays return the original result without creating students or enrolments.
+Students with the `STUDENT` grant are scoped to the Student profile bound to
+their current membership. Tenant scope and membership authority are never
+accepted from the request.
+
+`withTenant` accepts an optional transaction-options argument for bounded
+long-running atomic work. Existing callers are unchanged; the A02 import commit
+sets an explicit timeout and keeps the tenant context transaction-local.
+
 ---
 
 # Registration States

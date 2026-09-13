@@ -7,14 +7,16 @@ Known-good foundation: d0-ready
 Known-good D0 verification: PASS at integration SHA 6182f80
 Shared development branch: integration
 Current sprint: D1–D3 MVP implementation
-Current day: D1 IAM FINAL CONVERGENCE COMPLETE
+Current day: D1 PEOPLE / IMPORT VERTICAL SLICE COMPLETE
 ```
 
 ## Current Gate
 
 ```text
-A01 Academic Masters is implemented and focused-verified on d1-a-academic-masters.
-Authenticated setup-page browser proof still requires an existing demo credential.
+A01 Academic Masters and A02 Students/Faculty/Enrolments are implemented on
+`codex/start-enrolments-import-work`. A02 migration, fixtures, RLS smoke, focused API tests,
+and Web/API/DB builds pass. Authenticated browser proof still requires an
+existing demo credential.
 ```
 
 ## Completed
@@ -40,7 +42,7 @@ deactivation and tenant-isolation demo gate
 
 ```text
 M01 Academics Department records and IAM department-source integration
-A01 review/commit/merge from d1-a-academic-masters
+A02 review/commit/merge from d1-a-academic-masters
 ```
 
 ## Blockers
@@ -55,7 +57,7 @@ No repository-managed demo password exists for authenticated browser verificatio
 
 ```text
 Owner: Developer A
-Purpose: A01 Academic Masters migration applied; retain until branch merge
+Purpose: A02 people/import migration applied; retain until branch merge
 ```
 
 ## Shared Contract Lock
@@ -68,8 +70,8 @@ Purpose: D1 contract freeze
 ## Developer A
 
 ```text
-Task: A01 Academic Masters
-Branch: d1-a-academic-masters
+Task: A02 Students, Faculty, Enrolments & Import
+Branch: codex/start-enrolments-import-work
 Status: IMPLEMENTED AND FOCUSED VERIFIED; AWAITING REVIEW/COMMIT/MERGE
 ```
 
@@ -89,13 +91,15 @@ Focused IAM browser/API/database demo journey: PASS.
 A01 migration `20260913150000_academic_masters`: APPLIED to configured demo DB.
 A01 Northstar/Cedar seed and academic tenant-isolation smoke: PASS.
 A01 API/Web unit tests, relevant builds/typechecks/lints: PASS.
+A02 migration `20260913170000_people_imports`: APPLIED to configured demo DB.
+A02 fixtures: Northstar 100 students/4 faculty/300 enrolments; Cedar 20/3/60.
+A02 valid/invalid/atomic/retry/self-scope tests and database isolation smoke: PASS.
 ```
 
 ## Next Required Action
 
 ```text
-Review and commit A01, merge it through integration, then release the migration
-lock. IAM may then consume the A01 Department source for department-backed grants.
-Supply an existing fictional admin credential if authenticated browser proof is
-required before merge.
+Review and commit the A01+A02 branch, merge it through integration, then release
+or transfer the migration and contract locks. Dependent registration/scheduling
+lanes must pull/rebase before consuming Student, Enrolment, Cohort, or Subject IDs.
 ```
