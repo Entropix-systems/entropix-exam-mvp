@@ -137,6 +137,26 @@ export type Registration = Prisma.RegistrationModel
  */
 export type RegistrationSubject = Prisma.RegistrationSubjectModel
 /**
+ * Model ExamPaper
+ *
+ */
+export type ExamPaper = Prisma.ExamPaperModel
+/**
+ * Model Hall
+ *
+ */
+export type Hall = Prisma.HallModel
+/**
+ * Model HallSitting
+ *
+ */
+export type HallSitting = Prisma.HallSittingModel
+/**
+ * Model SeatAssignment
+ *
+ */
+export type SeatAssignment = Prisma.SeatAssignmentModel
+/**
  * Model RoleGrant
  *
  */

@@ -363,6 +363,31 @@ SeatAssignment
 Duty
 ```
 
+Typed A04 scheduling contracts live in `packages/contracts/src/scheduling.ts`.
+
+```text
+GET  /scheduling
+POST /scheduling/halls
+POST /scheduling/exams/:examId/initialize
+PUT  /scheduling/papers/:paperId/schedule
+POST /scheduling/papers/:paperId/allocations/preview
+POST /scheduling/papers/:paperId/allocations/commit
+POST /scheduling/exams/:examId/publish
+```
+
+- `ExamPaper` is one-to-one with `ExamSubject` and owns the half-open
+  `[startsAt, endsAt)` schedule interval.
+- Seat allocation consumes the stable approved `RegistrationSubject.id` roster
+  identity. Selected `hallIds` order is room order; students are filled by roll
+  number and seat numbering restarts at 1 in each room.
+- Preview is non-reserving. Commit rechecks student overlap, hall overlap,
+  capacity and `expectedVersion` under the tenant scheduling transaction lock.
+- `Exam.scheduleRevision` increments only when a ready PREPARATION schedule is
+  published. Editing a published paper or allocation returns the exam to
+  PREPARATION until it is validated and published as a later revision.
+- `SchedulingSnapshot` exposes tenant timezone, stable paper/hall/sitting/seat
+  IDs, readiness totals and explicit unallocated students for Web and B04.
+
 ---
 
 # D1 Contract Freeze Checklist

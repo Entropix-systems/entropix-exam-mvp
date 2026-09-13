@@ -107,6 +107,34 @@ Related task: D1 IAM Phase 2.
 
 ---
 
+## DEC-007 — ExamPaper Owns Published Schedule Revisions
+
+Status: ACCEPTED
+
+Context:
+
+Scheduling, invigilator duties and student documents need one stable source for
+paper time, hall and seat references without duplicating the approved roster.
+
+Decision:
+
+`ExamPaper` is the one-to-one written-paper aggregate for an `ExamSubject` and
+owns its half-open schedule interval. `SeatAssignment` references the stable A03
+`RegistrationSubject.id`. Allocation commit uses a tenant-scoped advisory
+transaction lock and deterministic roll-number ordering across explicitly
+ordered halls. `Exam.scheduleRevision` advances only on successful publication;
+editing a live schedule returns it to PREPARATION.
+
+Consequences:
+
+B04 and duty work consume the persisted paper, hall-sitting, seat and revision
+IDs. Preview never reserves seats, and all conflicts/capacity are rechecked when
+the allocation is committed or the schedule is published.
+
+Related task: A04 Timetable, Halls & Seats.
+
+---
+
 ## New Decision Template
 
 ### DEC-XXX — Title

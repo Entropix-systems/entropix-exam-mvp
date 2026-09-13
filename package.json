@@ -21,6 +21,7 @@
     "seed:academics": "pnpm --filter @entropix/db seed:academics",
     "seed:people": "pnpm --filter @entropix/db seed:people",
     "seed:exams": "pnpm --filter @entropix/db seed:exams",
+    "seed:scheduling": "pnpm --filter @entropix/db seed:scheduling",
     "ci:quality": "pnpm fixtures:check && pnpm --filter @entropix/contracts smoke && pnpm typecheck && pnpm build && pnpm lint && pnpm test && pnpm --filter @entropix/api test:e2e",
     "infra:up": "bash scripts/dev/infra-up.sh",
     "infra:down": "bash scripts/dev/infra-down.sh",

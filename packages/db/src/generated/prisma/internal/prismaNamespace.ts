@@ -416,6 +416,10 @@ export const ModelName = {
   ExamSubject: 'ExamSubject',
   Registration: 'Registration',
   RegistrationSubject: 'RegistrationSubject',
+  ExamPaper: 'ExamPaper',
+  Hall: 'Hall',
+  HallSitting: 'HallSitting',
+  SeatAssignment: 'SeatAssignment',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -434,7 +438,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "campus" | "department" | "program" | "academicYear" | "term" | "cohort" | "subject" | "user" | "membership" | "student" | "faculty" | "enrolment" | "studentImport" | "ruleVersion" | "exam" | "examSubject" | "registration" | "registrationSubject" | "roleGrant" | "session" | "authToken"
+    modelProps: "tenant" | "campus" | "department" | "program" | "academicYear" | "term" | "cohort" | "subject" | "user" | "membership" | "student" | "faculty" | "enrolment" | "studentImport" | "ruleVersion" | "exam" | "examSubject" | "registration" | "registrationSubject" | "examPaper" | "hall" | "hallSitting" | "seatAssignment" | "roleGrant" | "session" | "authToken"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1844,6 +1848,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ExamPaper: {
+      payload: Prisma.$ExamPaperPayload<ExtArgs>
+      fields: Prisma.ExamPaperFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ExamPaperFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPaperPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ExamPaperFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPaperPayload>
+        }
+        findFirst: {
+          args: Prisma.ExamPaperFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPaperPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ExamPaperFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPaperPayload>
+        }
+        findMany: {
+          args: Prisma.ExamPaperFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPaperPayload>[]
+        }
+        create: {
+          args: Prisma.ExamPaperCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPaperPayload>
+        }
+        createMany: {
+          args: Prisma.ExamPaperCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ExamPaperCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPaperPayload>[]
+        }
+        delete: {
+          args: Prisma.ExamPaperDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPaperPayload>
+        }
+        update: {
+          args: Prisma.ExamPaperUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPaperPayload>
+        }
+        deleteMany: {
+          args: Prisma.ExamPaperDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ExamPaperUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ExamPaperUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPaperPayload>[]
+        }
+        upsert: {
+          args: Prisma.ExamPaperUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPaperPayload>
+        }
+        aggregate: {
+          args: Prisma.ExamPaperAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateExamPaper>
+        }
+        groupBy: {
+          args: Prisma.ExamPaperGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ExamPaperGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ExamPaperCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ExamPaperCountAggregateOutputType> | number
+        }
+      }
+    }
+    Hall: {
+      payload: Prisma.$HallPayload<ExtArgs>
+      fields: Prisma.HallFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HallFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HallFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallPayload>
+        }
+        findFirst: {
+          args: Prisma.HallFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HallFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallPayload>
+        }
+        findMany: {
+          args: Prisma.HallFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallPayload>[]
+        }
+        create: {
+          args: Prisma.HallCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallPayload>
+        }
+        createMany: {
+          args: Prisma.HallCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HallCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallPayload>[]
+        }
+        delete: {
+          args: Prisma.HallDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallPayload>
+        }
+        update: {
+          args: Prisma.HallUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallPayload>
+        }
+        deleteMany: {
+          args: Prisma.HallDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HallUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HallUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallPayload>[]
+        }
+        upsert: {
+          args: Prisma.HallUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallPayload>
+        }
+        aggregate: {
+          args: Prisma.HallAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHall>
+        }
+        groupBy: {
+          args: Prisma.HallGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HallGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HallCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HallCountAggregateOutputType> | number
+        }
+      }
+    }
+    HallSitting: {
+      payload: Prisma.$HallSittingPayload<ExtArgs>
+      fields: Prisma.HallSittingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HallSittingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallSittingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HallSittingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallSittingPayload>
+        }
+        findFirst: {
+          args: Prisma.HallSittingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallSittingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HallSittingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallSittingPayload>
+        }
+        findMany: {
+          args: Prisma.HallSittingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallSittingPayload>[]
+        }
+        create: {
+          args: Prisma.HallSittingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallSittingPayload>
+        }
+        createMany: {
+          args: Prisma.HallSittingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HallSittingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallSittingPayload>[]
+        }
+        delete: {
+          args: Prisma.HallSittingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallSittingPayload>
+        }
+        update: {
+          args: Prisma.HallSittingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallSittingPayload>
+        }
+        deleteMany: {
+          args: Prisma.HallSittingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HallSittingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HallSittingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallSittingPayload>[]
+        }
+        upsert: {
+          args: Prisma.HallSittingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HallSittingPayload>
+        }
+        aggregate: {
+          args: Prisma.HallSittingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHallSitting>
+        }
+        groupBy: {
+          args: Prisma.HallSittingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HallSittingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HallSittingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HallSittingCountAggregateOutputType> | number
+        }
+      }
+    }
+    SeatAssignment: {
+      payload: Prisma.$SeatAssignmentPayload<ExtArgs>
+      fields: Prisma.SeatAssignmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SeatAssignmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatAssignmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SeatAssignmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatAssignmentPayload>
+        }
+        findFirst: {
+          args: Prisma.SeatAssignmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatAssignmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SeatAssignmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatAssignmentPayload>
+        }
+        findMany: {
+          args: Prisma.SeatAssignmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatAssignmentPayload>[]
+        }
+        create: {
+          args: Prisma.SeatAssignmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatAssignmentPayload>
+        }
+        createMany: {
+          args: Prisma.SeatAssignmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SeatAssignmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatAssignmentPayload>[]
+        }
+        delete: {
+          args: Prisma.SeatAssignmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatAssignmentPayload>
+        }
+        update: {
+          args: Prisma.SeatAssignmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatAssignmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.SeatAssignmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SeatAssignmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SeatAssignmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatAssignmentPayload>[]
+        }
+        upsert: {
+          args: Prisma.SeatAssignmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatAssignmentPayload>
+        }
+        aggregate: {
+          args: Prisma.SeatAssignmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSeatAssignment>
+        }
+        groupBy: {
+          args: Prisma.SeatAssignmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SeatAssignmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SeatAssignmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SeatAssignmentCountAggregateOutputType> | number
+        }
+      }
+    }
     RoleGrant: {
       payload: Prisma.$RoleGrantPayload<ExtArgs>
       fields: Prisma.RoleGrantFieldRefs
@@ -2325,6 +2625,7 @@ export const ExamScalarFieldEnum = {
   registrationOpensAt: 'registrationOpensAt',
   registrationClosesAt: 'registrationClosesAt',
   version: 'version',
+  scheduleRevision: 'scheduleRevision',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2375,6 +2676,64 @@ export const RegistrationSubjectScalarFieldEnum = {
 } as const
 
 export type RegistrationSubjectScalarFieldEnum = (typeof RegistrationSubjectScalarFieldEnum)[keyof typeof RegistrationSubjectScalarFieldEnum]
+
+
+export const ExamPaperScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examId: 'examId',
+  examSubjectId: 'examSubjectId',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExamPaperScalarFieldEnum = (typeof ExamPaperScalarFieldEnum)[keyof typeof ExamPaperScalarFieldEnum]
+
+
+export const HallScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  campusId: 'campusId',
+  code: 'code',
+  name: 'name',
+  capacity: 'capacity',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HallScalarFieldEnum = (typeof HallScalarFieldEnum)[keyof typeof HallScalarFieldEnum]
+
+
+export const HallSittingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examPaperId: 'examPaperId',
+  hallId: 'hallId',
+  roomOrder: 'roomOrder',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HallSittingScalarFieldEnum = (typeof HallSittingScalarFieldEnum)[keyof typeof HallSittingScalarFieldEnum]
+
+
+export const SeatAssignmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examPaperId: 'examPaperId',
+  examSubjectId: 'examSubjectId',
+  hallSittingId: 'hallSittingId',
+  registrationSubjectId: 'registrationSubjectId',
+  seatNumber: 'seatNumber',
+  createdAt: 'createdAt'
+} as const
+
+export type SeatAssignmentScalarFieldEnum = (typeof SeatAssignmentScalarFieldEnum)[keyof typeof SeatAssignmentScalarFieldEnum]
 
 
 export const RoleGrantScalarFieldEnum = {
@@ -2725,6 +3084,10 @@ export type GlobalOmitConfig = {
   examSubject?: Prisma.ExamSubjectOmit
   registration?: Prisma.RegistrationOmit
   registrationSubject?: Prisma.RegistrationSubjectOmit
+  examPaper?: Prisma.ExamPaperOmit
+  hall?: Prisma.HallOmit
+  hallSitting?: Prisma.HallSittingOmit
+  seatAssignment?: Prisma.SeatAssignmentOmit
   roleGrant?: Prisma.RoleGrantOmit
   session?: Prisma.SessionOmit
   authToken?: Prisma.AuthTokenOmit

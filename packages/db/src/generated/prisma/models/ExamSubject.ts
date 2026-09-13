@@ -186,6 +186,7 @@ export type ExamSubjectWhereInput = {
   exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
   subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
   registrationSubjects?: Prisma.RegistrationSubjectListRelationFilter
+  paper?: Prisma.XOR<Prisma.ExamPaperNullableScalarRelationFilter, Prisma.ExamPaperWhereInput> | null
 }
 
 export type ExamSubjectOrderByWithRelationInput = {
@@ -198,6 +199,7 @@ export type ExamSubjectOrderByWithRelationInput = {
   exam?: Prisma.ExamOrderByWithRelationInput
   subject?: Prisma.SubjectOrderByWithRelationInput
   registrationSubjects?: Prisma.RegistrationSubjectOrderByRelationAggregateInput
+  paper?: Prisma.ExamPaperOrderByWithRelationInput
 }
 
 export type ExamSubjectWhereUniqueInput = Prisma.AtLeast<{
@@ -216,6 +218,7 @@ export type ExamSubjectWhereUniqueInput = Prisma.AtLeast<{
   exam?: Prisma.XOR<Prisma.ExamScalarRelationFilter, Prisma.ExamWhereInput>
   subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
   registrationSubjects?: Prisma.RegistrationSubjectListRelationFilter
+  paper?: Prisma.XOR<Prisma.ExamPaperNullableScalarRelationFilter, Prisma.ExamPaperWhereInput> | null
 }, "id" | "tenantId_id" | "tenantId_id_examId" | "tenantId_examId_subjectId">
 
 export type ExamSubjectOrderByWithAggregationInput = {
@@ -247,6 +250,7 @@ export type ExamSubjectCreateInput = {
   exam: Prisma.ExamCreateNestedOneWithoutSubjectsInput
   subject: Prisma.SubjectCreateNestedOneWithoutExamSubjectsInput
   registrationSubjects?: Prisma.RegistrationSubjectCreateNestedManyWithoutExamSubjectInput
+  paper?: Prisma.ExamPaperCreateNestedOneWithoutExamSubjectInput
 }
 
 export type ExamSubjectUncheckedCreateInput = {
@@ -256,6 +260,7 @@ export type ExamSubjectUncheckedCreateInput = {
   subjectId: string
   createdAt?: Date | string
   registrationSubjects?: Prisma.RegistrationSubjectUncheckedCreateNestedManyWithoutExamSubjectInput
+  paper?: Prisma.ExamPaperUncheckedCreateNestedOneWithoutExamSubjectInput
 }
 
 export type ExamSubjectUpdateInput = {
@@ -265,6 +270,7 @@ export type ExamSubjectUpdateInput = {
   exam?: Prisma.ExamUpdateOneRequiredWithoutSubjectsNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput
   registrationSubjects?: Prisma.RegistrationSubjectUpdateManyWithoutExamSubjectNestedInput
+  paper?: Prisma.ExamPaperUpdateOneWithoutExamSubjectNestedInput
 }
 
 export type ExamSubjectUncheckedUpdateInput = {
@@ -274,6 +280,7 @@ export type ExamSubjectUncheckedUpdateInput = {
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registrationSubjects?: Prisma.RegistrationSubjectUncheckedUpdateManyWithoutExamSubjectNestedInput
+  paper?: Prisma.ExamPaperUncheckedUpdateOneWithoutExamSubjectNestedInput
 }
 
 export type ExamSubjectCreateManyInput = {
@@ -493,12 +500,27 @@ export type ExamSubjectUpdateOneRequiredWithoutRegistrationSubjectsNestedInput =
   update?: Prisma.XOR<Prisma.XOR<Prisma.ExamSubjectUpdateToOneWithWhereWithoutRegistrationSubjectsInput, Prisma.ExamSubjectUpdateWithoutRegistrationSubjectsInput>, Prisma.ExamSubjectUncheckedUpdateWithoutRegistrationSubjectsInput>
 }
 
+export type ExamSubjectCreateNestedOneWithoutPaperInput = {
+  create?: Prisma.XOR<Prisma.ExamSubjectCreateWithoutPaperInput, Prisma.ExamSubjectUncheckedCreateWithoutPaperInput>
+  connectOrCreate?: Prisma.ExamSubjectCreateOrConnectWithoutPaperInput
+  connect?: Prisma.ExamSubjectWhereUniqueInput
+}
+
+export type ExamSubjectUpdateOneRequiredWithoutPaperNestedInput = {
+  create?: Prisma.XOR<Prisma.ExamSubjectCreateWithoutPaperInput, Prisma.ExamSubjectUncheckedCreateWithoutPaperInput>
+  connectOrCreate?: Prisma.ExamSubjectCreateOrConnectWithoutPaperInput
+  upsert?: Prisma.ExamSubjectUpsertWithoutPaperInput
+  connect?: Prisma.ExamSubjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ExamSubjectUpdateToOneWithWhereWithoutPaperInput, Prisma.ExamSubjectUpdateWithoutPaperInput>, Prisma.ExamSubjectUncheckedUpdateWithoutPaperInput>
+}
+
 export type ExamSubjectCreateWithoutTenantInput = {
   id?: string
   createdAt?: Date | string
   exam: Prisma.ExamCreateNestedOneWithoutSubjectsInput
   subject: Prisma.SubjectCreateNestedOneWithoutExamSubjectsInput
   registrationSubjects?: Prisma.RegistrationSubjectCreateNestedManyWithoutExamSubjectInput
+  paper?: Prisma.ExamPaperCreateNestedOneWithoutExamSubjectInput
 }
 
 export type ExamSubjectUncheckedCreateWithoutTenantInput = {
@@ -507,6 +529,7 @@ export type ExamSubjectUncheckedCreateWithoutTenantInput = {
   subjectId: string
   createdAt?: Date | string
   registrationSubjects?: Prisma.RegistrationSubjectUncheckedCreateNestedManyWithoutExamSubjectInput
+  paper?: Prisma.ExamPaperUncheckedCreateNestedOneWithoutExamSubjectInput
 }
 
 export type ExamSubjectCreateOrConnectWithoutTenantInput = {
@@ -552,6 +575,7 @@ export type ExamSubjectCreateWithoutSubjectInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutExamSubjectsInput
   exam: Prisma.ExamCreateNestedOneWithoutSubjectsInput
   registrationSubjects?: Prisma.RegistrationSubjectCreateNestedManyWithoutExamSubjectInput
+  paper?: Prisma.ExamPaperCreateNestedOneWithoutExamSubjectInput
 }
 
 export type ExamSubjectUncheckedCreateWithoutSubjectInput = {
@@ -559,6 +583,7 @@ export type ExamSubjectUncheckedCreateWithoutSubjectInput = {
   examId: string
   createdAt?: Date | string
   registrationSubjects?: Prisma.RegistrationSubjectUncheckedCreateNestedManyWithoutExamSubjectInput
+  paper?: Prisma.ExamPaperUncheckedCreateNestedOneWithoutExamSubjectInput
 }
 
 export type ExamSubjectCreateOrConnectWithoutSubjectInput = {
@@ -593,6 +618,7 @@ export type ExamSubjectCreateWithoutExamInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutExamSubjectsInput
   subject: Prisma.SubjectCreateNestedOneWithoutExamSubjectsInput
   registrationSubjects?: Prisma.RegistrationSubjectCreateNestedManyWithoutExamSubjectInput
+  paper?: Prisma.ExamPaperCreateNestedOneWithoutExamSubjectInput
 }
 
 export type ExamSubjectUncheckedCreateWithoutExamInput = {
@@ -600,6 +626,7 @@ export type ExamSubjectUncheckedCreateWithoutExamInput = {
   subjectId: string
   createdAt?: Date | string
   registrationSubjects?: Prisma.RegistrationSubjectUncheckedCreateNestedManyWithoutExamSubjectInput
+  paper?: Prisma.ExamPaperUncheckedCreateNestedOneWithoutExamSubjectInput
 }
 
 export type ExamSubjectCreateOrConnectWithoutExamInput = {
@@ -634,6 +661,7 @@ export type ExamSubjectCreateWithoutRegistrationSubjectsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutExamSubjectsInput
   exam: Prisma.ExamCreateNestedOneWithoutSubjectsInput
   subject: Prisma.SubjectCreateNestedOneWithoutExamSubjectsInput
+  paper?: Prisma.ExamPaperCreateNestedOneWithoutExamSubjectInput
 }
 
 export type ExamSubjectUncheckedCreateWithoutRegistrationSubjectsInput = {
@@ -642,6 +670,7 @@ export type ExamSubjectUncheckedCreateWithoutRegistrationSubjectsInput = {
   examId: string
   subjectId: string
   createdAt?: Date | string
+  paper?: Prisma.ExamPaperUncheckedCreateNestedOneWithoutExamSubjectInput
 }
 
 export type ExamSubjectCreateOrConnectWithoutRegistrationSubjectsInput = {
@@ -666,6 +695,7 @@ export type ExamSubjectUpdateWithoutRegistrationSubjectsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamSubjectsNestedInput
   exam?: Prisma.ExamUpdateOneRequiredWithoutSubjectsNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput
+  paper?: Prisma.ExamPaperUpdateOneWithoutExamSubjectNestedInput
 }
 
 export type ExamSubjectUncheckedUpdateWithoutRegistrationSubjectsInput = {
@@ -674,6 +704,59 @@ export type ExamSubjectUncheckedUpdateWithoutRegistrationSubjectsInput = {
   examId?: Prisma.StringFieldUpdateOperationsInput | string
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  paper?: Prisma.ExamPaperUncheckedUpdateOneWithoutExamSubjectNestedInput
+}
+
+export type ExamSubjectCreateWithoutPaperInput = {
+  id?: string
+  createdAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutExamSubjectsInput
+  exam: Prisma.ExamCreateNestedOneWithoutSubjectsInput
+  subject: Prisma.SubjectCreateNestedOneWithoutExamSubjectsInput
+  registrationSubjects?: Prisma.RegistrationSubjectCreateNestedManyWithoutExamSubjectInput
+}
+
+export type ExamSubjectUncheckedCreateWithoutPaperInput = {
+  id?: string
+  tenantId: string
+  examId: string
+  subjectId: string
+  createdAt?: Date | string
+  registrationSubjects?: Prisma.RegistrationSubjectUncheckedCreateNestedManyWithoutExamSubjectInput
+}
+
+export type ExamSubjectCreateOrConnectWithoutPaperInput = {
+  where: Prisma.ExamSubjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExamSubjectCreateWithoutPaperInput, Prisma.ExamSubjectUncheckedCreateWithoutPaperInput>
+}
+
+export type ExamSubjectUpsertWithoutPaperInput = {
+  update: Prisma.XOR<Prisma.ExamSubjectUpdateWithoutPaperInput, Prisma.ExamSubjectUncheckedUpdateWithoutPaperInput>
+  create: Prisma.XOR<Prisma.ExamSubjectCreateWithoutPaperInput, Prisma.ExamSubjectUncheckedCreateWithoutPaperInput>
+  where?: Prisma.ExamSubjectWhereInput
+}
+
+export type ExamSubjectUpdateToOneWithWhereWithoutPaperInput = {
+  where?: Prisma.ExamSubjectWhereInput
+  data: Prisma.XOR<Prisma.ExamSubjectUpdateWithoutPaperInput, Prisma.ExamSubjectUncheckedUpdateWithoutPaperInput>
+}
+
+export type ExamSubjectUpdateWithoutPaperInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutExamSubjectsNestedInput
+  exam?: Prisma.ExamUpdateOneRequiredWithoutSubjectsNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput
+  registrationSubjects?: Prisma.RegistrationSubjectUpdateManyWithoutExamSubjectNestedInput
+}
+
+export type ExamSubjectUncheckedUpdateWithoutPaperInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registrationSubjects?: Prisma.RegistrationSubjectUncheckedUpdateManyWithoutExamSubjectNestedInput
 }
 
 export type ExamSubjectCreateManyTenantInput = {
@@ -689,6 +772,7 @@ export type ExamSubjectUpdateWithoutTenantInput = {
   exam?: Prisma.ExamUpdateOneRequiredWithoutSubjectsNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput
   registrationSubjects?: Prisma.RegistrationSubjectUpdateManyWithoutExamSubjectNestedInput
+  paper?: Prisma.ExamPaperUpdateOneWithoutExamSubjectNestedInput
 }
 
 export type ExamSubjectUncheckedUpdateWithoutTenantInput = {
@@ -697,6 +781,7 @@ export type ExamSubjectUncheckedUpdateWithoutTenantInput = {
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registrationSubjects?: Prisma.RegistrationSubjectUncheckedUpdateManyWithoutExamSubjectNestedInput
+  paper?: Prisma.ExamPaperUncheckedUpdateOneWithoutExamSubjectNestedInput
 }
 
 export type ExamSubjectUncheckedUpdateManyWithoutTenantInput = {
@@ -718,6 +803,7 @@ export type ExamSubjectUpdateWithoutSubjectInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamSubjectsNestedInput
   exam?: Prisma.ExamUpdateOneRequiredWithoutSubjectsNestedInput
   registrationSubjects?: Prisma.RegistrationSubjectUpdateManyWithoutExamSubjectNestedInput
+  paper?: Prisma.ExamPaperUpdateOneWithoutExamSubjectNestedInput
 }
 
 export type ExamSubjectUncheckedUpdateWithoutSubjectInput = {
@@ -725,6 +811,7 @@ export type ExamSubjectUncheckedUpdateWithoutSubjectInput = {
   examId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registrationSubjects?: Prisma.RegistrationSubjectUncheckedUpdateManyWithoutExamSubjectNestedInput
+  paper?: Prisma.ExamPaperUncheckedUpdateOneWithoutExamSubjectNestedInput
 }
 
 export type ExamSubjectUncheckedUpdateManyWithoutSubjectInput = {
@@ -745,6 +832,7 @@ export type ExamSubjectUpdateWithoutExamInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamSubjectsNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput
   registrationSubjects?: Prisma.RegistrationSubjectUpdateManyWithoutExamSubjectNestedInput
+  paper?: Prisma.ExamPaperUpdateOneWithoutExamSubjectNestedInput
 }
 
 export type ExamSubjectUncheckedUpdateWithoutExamInput = {
@@ -752,6 +840,7 @@ export type ExamSubjectUncheckedUpdateWithoutExamInput = {
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registrationSubjects?: Prisma.RegistrationSubjectUncheckedUpdateManyWithoutExamSubjectNestedInput
+  paper?: Prisma.ExamPaperUncheckedUpdateOneWithoutExamSubjectNestedInput
 }
 
 export type ExamSubjectUncheckedUpdateManyWithoutExamInput = {
@@ -801,6 +890,7 @@ export type ExamSubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
   registrationSubjects?: boolean | Prisma.ExamSubject$registrationSubjectsArgs<ExtArgs>
+  paper?: boolean | Prisma.ExamSubject$paperArgs<ExtArgs>
   _count?: boolean | Prisma.ExamSubjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["examSubject"]>
 
@@ -840,6 +930,7 @@ export type ExamSubjectInclude<ExtArgs extends runtime.Types.Extensions.Internal
   exam?: boolean | Prisma.ExamDefaultArgs<ExtArgs>
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
   registrationSubjects?: boolean | Prisma.ExamSubject$registrationSubjectsArgs<ExtArgs>
+  paper?: boolean | Prisma.ExamSubject$paperArgs<ExtArgs>
   _count?: boolean | Prisma.ExamSubjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ExamSubjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -860,6 +951,7 @@ export type $ExamSubjectPayload<ExtArgs extends runtime.Types.Extensions.Interna
     exam: Prisma.$ExamPayload<ExtArgs>
     subject: Prisma.$SubjectPayload<ExtArgs>
     registrationSubjects: Prisma.$RegistrationSubjectPayload<ExtArgs>[]
+    paper: Prisma.$ExamPaperPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1265,6 +1357,7 @@ export interface Prisma__ExamSubjectClient<T, Null = never, ExtArgs extends runt
   exam<T extends Prisma.ExamDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamDefaultArgs<ExtArgs>>): Prisma.Prisma__ExamClient<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   subject<T extends Prisma.SubjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubjectDefaultArgs<ExtArgs>>): Prisma.Prisma__SubjectClient<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   registrationSubjects<T extends Prisma.ExamSubject$registrationSubjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamSubject$registrationSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RegistrationSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  paper<T extends Prisma.ExamSubject$paperArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamSubject$paperArgs<ExtArgs>>): Prisma.Prisma__ExamPaperClient<runtime.Types.Result.GetResult<Prisma.$ExamPaperPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1721,6 +1814,25 @@ export type ExamSubject$registrationSubjectsArgs<ExtArgs extends runtime.Types.E
   take?: number
   skip?: number
   distinct?: Prisma.RegistrationSubjectScalarFieldEnum | Prisma.RegistrationSubjectScalarFieldEnum[]
+}
+
+/**
+ * ExamSubject.paper
+ */
+export type ExamSubject$paperArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ExamPaper
+   */
+  select?: Prisma.ExamPaperSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ExamPaper
+   */
+  omit?: Prisma.ExamPaperOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExamPaperInclude<ExtArgs> | null
+  where?: Prisma.ExamPaperWhereInput
 }
 
 /**

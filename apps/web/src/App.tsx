@@ -6,6 +6,7 @@ import { IdentityApiClient } from './identity/identity-client'
 import { AcademicsApiClient } from './academics/academics-client'
 import { PeopleApiClient } from './people/people-client'
 import { ExamsApiClient } from './exams/exams-client'
+import { SchedulingApiClient } from './scheduling/scheduling-client'
 import { AccessDeniedPage } from './pages/access-denied-page'
 import { ForgotPasswordPage } from './pages/forgot-password-page'
 import { HomePage } from './pages/home-page'
@@ -15,6 +16,7 @@ import { ResetPasswordPage } from './pages/reset-password-page'
 import { SetupAccessPage } from './pages/setup-access-page'
 import { StudentsPage } from './pages/students-page'
 import { ExamsPage } from './pages/exams-page'
+import { SchedulingPage } from './pages/scheduling-page'
 import './App.css'
 
 const authClient = new AuthApiClient(
@@ -24,6 +26,7 @@ const identityClient = new IdentityApiClient(authClient)
 const academicsClient = new AcademicsApiClient(authClient)
 const peopleClient = new PeopleApiClient(authClient)
 const examsClient = new ExamsApiClient(authClient)
+const schedulingClient = new SchedulingApiClient(authClient)
 
 function usePathname() {
   const [pathname, setPathname] = useState(window.location.pathname)
@@ -60,6 +63,12 @@ function Routes() {
     return (
       <ProtectedRoute>
         <ExamsPage client={examsClient} academicClient={academicsClient} />
+      </ProtectedRoute>
+    )
+  if (pathname === '/schedule')
+    return (
+      <ProtectedRoute>
+        <SchedulingPage client={schedulingClient} academicClient={academicsClient} />
       </ProtectedRoute>
     )
   return (
