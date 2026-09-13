@@ -6,7 +6,7 @@ export interface IdentityNotificationMessage {
   subject: string;
   text: string;
   /** Safe reason/category only. Never put raw credentials here. */
-  category: 'PASSWORD_RESET';
+  category: 'PASSWORD_RESET' | 'INVITATION';
 }
 
 export abstract class IdentityNotificationSender {

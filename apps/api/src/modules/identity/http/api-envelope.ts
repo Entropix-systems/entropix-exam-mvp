@@ -19,14 +19,18 @@ import { AuthApplicationError } from '../application/auth.errors.js';
 import { requestIdFor } from './request-context.js';
 
 @Injectable()
-export class ApiEnvelopeInterceptor<T>
-  implements NestInterceptor<T, ApiSuccess<T>>
-{
+export class ApiEnvelopeInterceptor<T> implements NestInterceptor<
+  T,
+  ApiSuccess<T>
+> {
   intercept(
     execution: ExecutionContext,
     next: CallHandler<T>,
   ): Observable<ApiSuccess<T>> {
     const request = execution.switchToHttp().getRequest<Request>();
+    // D0 health probes intentionally retain their stable raw infrastructure shape.
+    if (request.path.startsWith('/api/v1/health/'))
+      return next.handle() as Observable<ApiSuccess<T>>;
     return next
       .handle()
       .pipe(map((data) => ({ data, requestId: requestIdFor(request) })));

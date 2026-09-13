@@ -15,7 +15,10 @@ import {
   IdentityWorkflowRepository,
 } from '../identity.repository.js';
 import { AccessTokenCodec } from '../security/access-token.js';
-import { generateOpaqueToken, hashOpaqueToken } from '../security/opaque-token.js';
+import {
+  generateOpaqueToken,
+  hashOpaqueToken,
+} from '../security/opaque-token.js';
 import { PasswordHasher } from '../security/password-hasher.js';
 import type { TokenPolicy } from '../security/token-policy.js';
 import { DEFAULT_TOKEN_POLICY } from '../security/token-policy.js';
@@ -102,9 +105,11 @@ export class AuthApplicationService {
     @Inject(AUTH_CLOCK) private readonly clock: () => Date,
   ) {
     this.policy = configuration.tokenPolicy ?? DEFAULT_TOKEN_POLICY;
-    if (!/^\$argon2id\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9+/]+={0,2}\$[A-Za-z0-9+/]+={0,2}$/.test(
-      configuration.dummyPasswordHash,
-    ))
+    if (
+      !/^\$argon2id\$v=\d+\$m=\d+,(?:t=\d+,p=\d+|p=\d+,t=\d+)\$[A-Za-z0-9+/]+={0,2}\$[A-Za-z0-9+/]+={0,2}$/.test(
+        configuration.dummyPasswordHash,
+      )
+    )
       throw new Error('Invalid authentication service configuration');
     try {
       this.passwordResetUrl = new URL(configuration.passwordResetUrl);
@@ -129,7 +134,8 @@ export class AuthApplicationService {
     } catch {
       // Keep the public result and password-verification work account-agnostic.
     }
-    const candidateHash = user?.passwordHash ?? this.configuration.dummyPasswordHash;
+    const candidateHash =
+      user?.passwordHash ?? this.configuration.dummyPasswordHash;
     const verified = await this.passwords.verify(
       typeof input.password === 'string' ? input.password : '',
       candidateHash,
@@ -240,7 +246,9 @@ export class AuthApplicationService {
     return { accepted: true };
   }
 
-  async resetPassword(input: ResetPasswordRequest): Promise<ResetPasswordResult> {
+  async resetPassword(
+    input: ResetPasswordRequest,
+  ): Promise<ResetPasswordResult> {
     validatePassword(input.password);
     let tokenHash: string;
     try {

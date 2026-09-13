@@ -124,6 +124,9 @@ importers:
       '@entropix/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@entropix/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@entropix/domain':
         specifier: workspace:*
         version: link:../../packages/domain
@@ -142,6 +145,9 @@ importers:
       argon2:
         specifier: ^0.45.1
         version: 0.45.1
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
       jose:
         specifier: ^6.2.12
         version: 6.2.12

@@ -13,8 +13,8 @@ Current day: D1 IAM IMPLEMENTATION
 ## Current Gate
 
 ```text
-Review IAM Phase 2 application/browser orchestration and complete the D1 shared
-domain/IAM migration before production identity wiring.
+Merge IAM Phase 3 backend/database, then Developer A must rebase and run the real
+browser IAM journey against the wired API.
 ```
 
 ## Completed
@@ -31,28 +31,27 @@ fixtures
 CI
 fresh-clone verification
 d0-ready tag
+IAM Phase 3 PostgreSQL persistence, production API wiring and admin endpoints
 ```
 
 ## In Progress
 
 ```text
-D1 IAM Phase 1 security foundation: branch `d1-a-iam-phase1`
-D1 IAM Phase 2 application/API/web orchestration: branch `d1-a-iam-phase2`
-D1 shared-domain migration: owned by Developer B
+IAM Phase 3 merge and Developer A browser verification
 ```
 
 ## Blockers
 
 ```text
-IAM production wiring and A14 database acceptance are blocked on real
-Session/AuthToken/invitation persistence and transaction adapters.
+No backend persistence blocker. Final browser verification waits for Developer A
+to pull/rebase the backend merge.
 ```
 
 ## Migration Lock
 
 ```text
-Owner: Developer B
-Purpose: D1 shared-domain and IAM persistence migration
+Owner: Developer B through the IAM Phase 3 merge
+Purpose: `20260913120000_iam_phase3`; release immediately after merge
 ```
 
 ## Shared Contract Lock
@@ -74,9 +73,9 @@ PRODUCTION WIRING BLOCKED ON MIGRATION
 ## Developer B
 
 ```text
-Task: First D1 migration after contract freeze
-Branch: TBD
-Status: D1 SHARED-DOMAIN MIGRATION IN PROGRESS
+Task: IAM Phase 3 Backend/DB
+Branch: `d1-b-iam-phase3`
+Status: IMPLEMENTED; FOCUSED IAM/RLS VERIFICATION PASS; READY FOR MERGE
 ```
 
 ## Latest Integrated Acceptance
@@ -89,7 +88,6 @@ D1 business gate has not started.
 ## Next Required Action
 
 ```text
-Developer B must account for the persistence handoff in `IAM-PHASE2.md`. After the
-reviewed migration merges, Developer A must resync and implement real adapters as a
-separately authorized Phase 3.
+Merge `d1-b-iam-phase3`, release the migration lock, then Developer A must
+pull/rebase and run the real login/invitation/membership browser journey.
 ```

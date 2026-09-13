@@ -167,43 +167,49 @@ async function main() {
   await withTenant(
     prisma,
     tenantA.id,
-    (tx) =>
-      tx.roleGrant.upsert({
+    async (tx) => {
+      const existing = await tx.roleGrant.findFirst({
         where: {
-          tenantId_membershipId_role: {
-            tenantId: tenantA.id,
-            membershipId: membershipA.id,
-            role: 'STUDENT',
-          },
-        },
-        update: {},
-        create: {
           tenantId: tenantA.id,
           membershipId: membershipA.id,
           role: 'STUDENT',
+          departmentId: null,
         },
-      }),
+      });
+      if (!existing)
+        await tx.roleGrant.create({
+          data: {
+            tenantId: tenantA.id,
+            membershipId: membershipA.id,
+            role: 'STUDENT',
+            departmentId: null,
+          },
+        });
+    },
   );
 
   await withTenant(
     prisma,
     tenantB.id,
-    (tx) =>
-      tx.roleGrant.upsert({
+    async (tx) => {
+      const existing = await tx.roleGrant.findFirst({
         where: {
-          tenantId_membershipId_role: {
-            tenantId: tenantB.id,
-            membershipId: membershipB.id,
-            role: 'STUDENT',
-          },
-        },
-        update: {},
-        create: {
           tenantId: tenantB.id,
           membershipId: membershipB.id,
           role: 'STUDENT',
+          departmentId: null,
         },
-      }),
+      });
+      if (!existing)
+        await tx.roleGrant.create({
+          data: {
+            tenantId: tenantB.id,
+            membershipId: membershipB.id,
+            role: 'STUDENT',
+            departmentId: null,
+          },
+        });
+    },
   );
 
   /*

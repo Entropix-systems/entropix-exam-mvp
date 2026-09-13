@@ -342,3 +342,27 @@ Phase 2 orchestration is recorded in `docs/codex/IAM-PHASE2.md`.
   platform users never receive fabricated tenant or membership identifiers.
 - The API controller is not production-wired until real Session/AuthToken and
   invitation/reset transaction providers are available.
+
+---
+
+# D1 IAM Phase 3 Backend Contract
+
+Migration `20260913120000_iam_phase3` supplies durable hash-only AuthToken,
+Session, membership lifecycle/version, canonical role-grant scope and nullable
+`User.platformRole`. Phase 2 auth routes are production-wired to PostgreSQL.
+
+The fixed tenant-admin surface is:
+
+```text
+GET  /api/v1/identity/memberships
+POST /api/v1/identity/invitations
+PUT  /api/v1/identity/memberships/:id/role-grants
+POST /api/v1/identity/memberships/:id/deactivate
+POST /api/v1/identity/memberships/:id/activate
+```
+
+These routes require a current tenant `INSTITUTION_ADMIN`. Invitation and grant
+inputs use canonical `{ role, departmentId }` grants; `PLATFORM_ADMIN` is rejected.
+Membership reads/mutations are current-tenant only, foreign IDs are inaccessible,
+and invitation responses never expose raw tokens. Developer A must pull/rebase this
+merge before final browser verification.
