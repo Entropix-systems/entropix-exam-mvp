@@ -59,6 +59,29 @@ ExamSubject joins Exam + Subject.
 
 All entity identifiers exposed through the API use UUIDs.
 
+A01 exposes the tenant-derived academic surface below. `resource` is one of
+`campuses`, `departments`, `programs`, `academic-years`, `terms`, `cohorts`, or
+`subjects`.
+
+```text
+GET  /api/v1/academics
+GET  /api/v1/academics/:resource/:id
+POST /api/v1/academics/:resource
+PUT  /api/v1/academics/:resource/:id
+```
+
+Reads require a current tenant context; create/update additionally require an
+`INSTITUTION_ADMIN` grant. Tenant scope is never accepted from the request.
+Codes are canonical uppercase values and unique in their documented tenant or
+parent scope. Academic-year and term dates are ordered, term dates stay within
+their academic year, and all parent IDs resolve inside the current tenant.
+Delete is intentionally not part of the A01 surface.
+
+The shared Web/API DTOs are defined in `packages/contracts/src/academics.ts`.
+The list response is `AcademicStructureSnapshot`; create/update inputs and
+records are mapped by `AcademicInputByResource` and
+`AcademicRecordByResource`.
+
 ---
 
 # Student Import Input
@@ -300,7 +323,7 @@ Duty
 - [x] Optimistic version field
 - [x] Result rule schema
 - [x] Scheduling entity IDs
-- [x] Migration owner — Developer B
+- [x] Migration owner — Developer A for A01 Academic Masters
 - [x] Contract owner — Developer A
 
 ---
@@ -364,7 +387,7 @@ POST /api/v1/identity/memberships/:id/activate
 These routes require a current tenant `INSTITUTION_ADMIN`. Invitation and grant
 inputs use canonical `{ role, departmentId }` grants; `PLATFORM_ADMIN` is rejected.
 Membership reads/mutations are current-tenant only, foreign IDs are inaccessible,
-and invitation responses never expose raw tokens. Until M01 Academics provides real
-Department records, `DEPARTMENT_ADMIN` grant writes are rejected and the Web UI
-disables that role when no real department choices exist. Once M01 lands, IAM must
-consume its Department source rather than introduce an IAM-owned department model.
+and invitation responses never expose raw tokens. A01 Academics now provides real
+tenant-scoped Department records. IAM still rejects `DEPARTMENT_ADMIN` grant writes
+and disables that role until a follow-up consumes the A01 Department source; IAM
+must not introduce a separate department model.

@@ -541,14 +541,6 @@ export type MembershipUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.MembershipScalarWhereInput | Prisma.MembershipScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type MembershipCreateNestedOneWithoutRoleGrantsInput = {
   create?: Prisma.XOR<Prisma.MembershipCreateWithoutRoleGrantsInput, Prisma.MembershipUncheckedCreateWithoutRoleGrantsInput>
   connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutRoleGrantsInput

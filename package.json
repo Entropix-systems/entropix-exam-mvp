@@ -18,6 +18,7 @@
     "typecheck": "pnpm --filter @entropix/domain... build && pnpm -r --if-present typecheck",
     "fixtures:generate": "node scripts/generate-d0-fixtures.mjs",
     "fixtures:check": "node scripts/check-d0-fixtures.mjs",
+    "seed:academics": "pnpm --filter @entropix/db seed:academics",
     "ci:quality": "pnpm fixtures:check && pnpm --filter @entropix/contracts smoke && pnpm typecheck && pnpm build && pnpm lint && pnpm test && pnpm --filter @entropix/api test:e2e",
     "infra:up": "bash scripts/dev/infra-up.sh",
     "infra:down": "bash scripts/dev/infra-down.sh",

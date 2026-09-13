@@ -3,6 +3,7 @@ import { AuthApiClient } from './auth/auth-client'
 import { AuthProvider } from './auth/auth-provider'
 import { ProtectedRoute } from './auth/protected-route'
 import { IdentityApiClient } from './identity/identity-client'
+import { AcademicsApiClient } from './academics/academics-client'
 import { AccessDeniedPage } from './pages/access-denied-page'
 import { ForgotPasswordPage } from './pages/forgot-password-page'
 import { HomePage } from './pages/home-page'
@@ -16,6 +17,7 @@ const authClient = new AuthApiClient(
   import.meta.env.VITE_API_BASE_URL ?? '/api/v1',
 )
 const identityClient = new IdentityApiClient(authClient)
+const academicsClient = new AcademicsApiClient(authClient)
 
 function usePathname() {
   const [pathname, setPathname] = useState(window.location.pathname)
@@ -39,7 +41,7 @@ function Routes() {
   if (pathname === '/setup-access')
     return (
       <ProtectedRoute>
-        <SetupAccessPage client={identityClient} />
+        <SetupAccessPage client={identityClient} academicClient={academicsClient} />
       </ProtectedRoute>
     )
   return (

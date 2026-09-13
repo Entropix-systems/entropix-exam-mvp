@@ -207,6 +207,13 @@ export type TenantWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   memberships?: Prisma.MembershipListRelationFilter
+  campuses?: Prisma.CampusListRelationFilter
+  departments?: Prisma.DepartmentListRelationFilter
+  programs?: Prisma.ProgramListRelationFilter
+  academicYears?: Prisma.AcademicYearListRelationFilter
+  terms?: Prisma.TermListRelationFilter
+  cohorts?: Prisma.CohortListRelationFilter
+  subjects?: Prisma.SubjectListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -219,6 +226,13 @@ export type TenantOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   memberships?: Prisma.MembershipOrderByRelationAggregateInput
+  campuses?: Prisma.CampusOrderByRelationAggregateInput
+  departments?: Prisma.DepartmentOrderByRelationAggregateInput
+  programs?: Prisma.ProgramOrderByRelationAggregateInput
+  academicYears?: Prisma.AcademicYearOrderByRelationAggregateInput
+  terms?: Prisma.TermOrderByRelationAggregateInput
+  cohorts?: Prisma.CohortOrderByRelationAggregateInput
+  subjects?: Prisma.SubjectOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -234,6 +248,13 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   memberships?: Prisma.MembershipListRelationFilter
+  campuses?: Prisma.CampusListRelationFilter
+  departments?: Prisma.DepartmentListRelationFilter
+  programs?: Prisma.ProgramListRelationFilter
+  academicYears?: Prisma.AcademicYearListRelationFilter
+  terms?: Prisma.TermListRelationFilter
+  cohorts?: Prisma.CohortListRelationFilter
+  subjects?: Prisma.SubjectListRelationFilter
 }, "id" | "slug">
 
 export type TenantOrderByWithAggregationInput = {
@@ -274,6 +295,13 @@ export type TenantCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.MembershipCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -286,6 +314,13 @@ export type TenantUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearUncheckedCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermUncheckedCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortUncheckedCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -298,6 +333,13 @@ export type TenantUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -310,6 +352,13 @@ export type TenantUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUncheckedUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUncheckedUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUncheckedUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -391,6 +440,104 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type TenantCreateNestedOneWithoutCampusesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCampusesInput, Prisma.TenantUncheckedCreateWithoutCampusesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCampusesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutCampusesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCampusesInput, Prisma.TenantUncheckedCreateWithoutCampusesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCampusesInput
+  upsert?: Prisma.TenantUpsertWithoutCampusesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCampusesInput, Prisma.TenantUpdateWithoutCampusesInput>, Prisma.TenantUncheckedUpdateWithoutCampusesInput>
+}
+
+export type TenantCreateNestedOneWithoutDepartmentsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutDepartmentsInput, Prisma.TenantUncheckedCreateWithoutDepartmentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutDepartmentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutDepartmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutDepartmentsInput, Prisma.TenantUncheckedCreateWithoutDepartmentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutDepartmentsInput
+  upsert?: Prisma.TenantUpsertWithoutDepartmentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutDepartmentsInput, Prisma.TenantUpdateWithoutDepartmentsInput>, Prisma.TenantUncheckedUpdateWithoutDepartmentsInput>
+}
+
+export type TenantCreateNestedOneWithoutProgramsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutProgramsInput, Prisma.TenantUncheckedCreateWithoutProgramsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutProgramsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutProgramsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutProgramsInput, Prisma.TenantUncheckedCreateWithoutProgramsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutProgramsInput
+  upsert?: Prisma.TenantUpsertWithoutProgramsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutProgramsInput, Prisma.TenantUpdateWithoutProgramsInput>, Prisma.TenantUncheckedUpdateWithoutProgramsInput>
+}
+
+export type TenantCreateNestedOneWithoutAcademicYearsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutAcademicYearsInput, Prisma.TenantUncheckedCreateWithoutAcademicYearsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutAcademicYearsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutAcademicYearsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutAcademicYearsInput, Prisma.TenantUncheckedCreateWithoutAcademicYearsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutAcademicYearsInput
+  upsert?: Prisma.TenantUpsertWithoutAcademicYearsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutAcademicYearsInput, Prisma.TenantUpdateWithoutAcademicYearsInput>, Prisma.TenantUncheckedUpdateWithoutAcademicYearsInput>
+}
+
+export type TenantCreateNestedOneWithoutTermsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutTermsInput, Prisma.TenantUncheckedCreateWithoutTermsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutTermsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutTermsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutTermsInput, Prisma.TenantUncheckedCreateWithoutTermsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutTermsInput
+  upsert?: Prisma.TenantUpsertWithoutTermsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutTermsInput, Prisma.TenantUpdateWithoutTermsInput>, Prisma.TenantUncheckedUpdateWithoutTermsInput>
+}
+
+export type TenantCreateNestedOneWithoutCohortsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCohortsInput, Prisma.TenantUncheckedCreateWithoutCohortsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCohortsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutCohortsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCohortsInput, Prisma.TenantUncheckedCreateWithoutCohortsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCohortsInput
+  upsert?: Prisma.TenantUpsertWithoutCohortsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCohortsInput, Prisma.TenantUpdateWithoutCohortsInput>, Prisma.TenantUncheckedUpdateWithoutCohortsInput>
+}
+
+export type TenantCreateNestedOneWithoutSubjectsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutSubjectsInput, Prisma.TenantUncheckedCreateWithoutSubjectsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutSubjectsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutSubjectsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutSubjectsInput, Prisma.TenantUncheckedCreateWithoutSubjectsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutSubjectsInput
+  upsert?: Prisma.TenantUpsertWithoutSubjectsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutSubjectsInput, Prisma.TenantUpdateWithoutSubjectsInput>, Prisma.TenantUncheckedUpdateWithoutSubjectsInput>
+}
+
 export type TenantCreateNestedOneWithoutMembershipsInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutMembershipsInput, Prisma.TenantUncheckedCreateWithoutMembershipsInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutMembershipsInput
@@ -405,6 +552,622 @@ export type TenantUpdateOneRequiredWithoutMembershipsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutMembershipsInput, Prisma.TenantUpdateWithoutMembershipsInput>, Prisma.TenantUncheckedUpdateWithoutMembershipsInput>
 }
 
+export type TenantCreateWithoutCampusesInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutCampusesInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearUncheckedCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermUncheckedCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortUncheckedCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutCampusesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCampusesInput, Prisma.TenantUncheckedCreateWithoutCampusesInput>
+}
+
+export type TenantUpsertWithoutCampusesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutCampusesInput, Prisma.TenantUncheckedUpdateWithoutCampusesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCampusesInput, Prisma.TenantUncheckedCreateWithoutCampusesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutCampusesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutCampusesInput, Prisma.TenantUncheckedUpdateWithoutCampusesInput>
+}
+
+export type TenantUpdateWithoutCampusesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutCampusesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUncheckedUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUncheckedUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUncheckedUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutDepartmentsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutDepartmentsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusUncheckedCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearUncheckedCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermUncheckedCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortUncheckedCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutDepartmentsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutDepartmentsInput, Prisma.TenantUncheckedCreateWithoutDepartmentsInput>
+}
+
+export type TenantUpsertWithoutDepartmentsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutDepartmentsInput, Prisma.TenantUncheckedUpdateWithoutDepartmentsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutDepartmentsInput, Prisma.TenantUncheckedCreateWithoutDepartmentsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutDepartmentsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutDepartmentsInput, Prisma.TenantUncheckedUpdateWithoutDepartmentsInput>
+}
+
+export type TenantUpdateWithoutDepartmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutDepartmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUncheckedUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUncheckedUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUncheckedUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUncheckedUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutProgramsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutProgramsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearUncheckedCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermUncheckedCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortUncheckedCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutProgramsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutProgramsInput, Prisma.TenantUncheckedCreateWithoutProgramsInput>
+}
+
+export type TenantUpsertWithoutProgramsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutProgramsInput, Prisma.TenantUncheckedUpdateWithoutProgramsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutProgramsInput, Prisma.TenantUncheckedCreateWithoutProgramsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutProgramsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutProgramsInput, Prisma.TenantUncheckedUpdateWithoutProgramsInput>
+}
+
+export type TenantUpdateWithoutProgramsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutProgramsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUncheckedUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUncheckedUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUncheckedUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutAcademicYearsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutAcademicYearsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermUncheckedCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortUncheckedCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutAcademicYearsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutAcademicYearsInput, Prisma.TenantUncheckedCreateWithoutAcademicYearsInput>
+}
+
+export type TenantUpsertWithoutAcademicYearsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutAcademicYearsInput, Prisma.TenantUncheckedUpdateWithoutAcademicYearsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutAcademicYearsInput, Prisma.TenantUncheckedCreateWithoutAcademicYearsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutAcademicYearsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutAcademicYearsInput, Prisma.TenantUncheckedUpdateWithoutAcademicYearsInput>
+}
+
+export type TenantUpdateWithoutAcademicYearsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutAcademicYearsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUncheckedUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUncheckedUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutTermsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutTermsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearUncheckedCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortUncheckedCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutTermsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutTermsInput, Prisma.TenantUncheckedCreateWithoutTermsInput>
+}
+
+export type TenantUpsertWithoutTermsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutTermsInput, Prisma.TenantUncheckedUpdateWithoutTermsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutTermsInput, Prisma.TenantUncheckedCreateWithoutTermsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutTermsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutTermsInput, Prisma.TenantUncheckedUpdateWithoutTermsInput>
+}
+
+export type TenantUpdateWithoutTermsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutTermsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUncheckedUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUncheckedUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutCohortsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutCohortsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearUncheckedCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermUncheckedCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutCohortsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCohortsInput, Prisma.TenantUncheckedCreateWithoutCohortsInput>
+}
+
+export type TenantUpsertWithoutCohortsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutCohortsInput, Prisma.TenantUncheckedUpdateWithoutCohortsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCohortsInput, Prisma.TenantUncheckedCreateWithoutCohortsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutCohortsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutCohortsInput, Prisma.TenantUncheckedUpdateWithoutCohortsInput>
+}
+
+export type TenantUpdateWithoutCohortsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutCohortsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUncheckedUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUncheckedUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutSubjectsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutSubjectsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearUncheckedCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermUncheckedCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutSubjectsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutSubjectsInput, Prisma.TenantUncheckedCreateWithoutSubjectsInput>
+}
+
+export type TenantUpsertWithoutSubjectsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutSubjectsInput, Prisma.TenantUncheckedUpdateWithoutSubjectsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutSubjectsInput, Prisma.TenantUncheckedCreateWithoutSubjectsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutSubjectsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutSubjectsInput, Prisma.TenantUncheckedUpdateWithoutSubjectsInput>
+}
+
+export type TenantUpdateWithoutSubjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutSubjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUncheckedUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUncheckedUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUncheckedUpdateManyWithoutTenantNestedInput
+}
+
 export type TenantCreateWithoutMembershipsInput = {
   id?: string
   name: string
@@ -414,6 +1177,13 @@ export type TenantCreateWithoutMembershipsInput = {
   plan?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  campuses?: Prisma.CampusCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutMembershipsInput = {
@@ -425,6 +1195,13 @@ export type TenantUncheckedCreateWithoutMembershipsInput = {
   plan?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  campuses?: Prisma.CampusUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearUncheckedCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermUncheckedCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortUncheckedCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutMembershipsInput = {
@@ -452,6 +1229,13 @@ export type TenantUpdateWithoutMembershipsInput = {
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  campuses?: Prisma.CampusUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutMembershipsInput = {
@@ -463,6 +1247,13 @@ export type TenantUncheckedUpdateWithoutMembershipsInput = {
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  campuses?: Prisma.CampusUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUncheckedUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUncheckedUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUncheckedUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -472,10 +1263,24 @@ export type TenantUncheckedUpdateWithoutMembershipsInput = {
 
 export type TenantCountOutputType = {
   memberships: number
+  campuses: number
+  departments: number
+  programs: number
+  academicYears: number
+  terms: number
+  cohorts: number
+  subjects: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   memberships?: boolean | TenantCountOutputTypeCountMembershipsArgs
+  campuses?: boolean | TenantCountOutputTypeCountCampusesArgs
+  departments?: boolean | TenantCountOutputTypeCountDepartmentsArgs
+  programs?: boolean | TenantCountOutputTypeCountProgramsArgs
+  academicYears?: boolean | TenantCountOutputTypeCountAcademicYearsArgs
+  terms?: boolean | TenantCountOutputTypeCountTermsArgs
+  cohorts?: boolean | TenantCountOutputTypeCountCohortsArgs
+  subjects?: boolean | TenantCountOutputTypeCountSubjectsArgs
 }
 
 /**
@@ -495,6 +1300,55 @@ export type TenantCountOutputTypeCountMembershipsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.MembershipWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountCampusesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CampusWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountDepartmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DepartmentWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountProgramsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProgramWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountAcademicYearsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AcademicYearWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountTermsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TermWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountCohortsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CohortWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountSubjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubjectWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -506,6 +1360,13 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   createdAt?: boolean
   updatedAt?: boolean
   memberships?: boolean | Prisma.Tenant$membershipsArgs<ExtArgs>
+  campuses?: boolean | Prisma.Tenant$campusesArgs<ExtArgs>
+  departments?: boolean | Prisma.Tenant$departmentsArgs<ExtArgs>
+  programs?: boolean | Prisma.Tenant$programsArgs<ExtArgs>
+  academicYears?: boolean | Prisma.Tenant$academicYearsArgs<ExtArgs>
+  terms?: boolean | Prisma.Tenant$termsArgs<ExtArgs>
+  cohorts?: boolean | Prisma.Tenant$cohortsArgs<ExtArgs>
+  subjects?: boolean | Prisma.Tenant$subjectsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -545,6 +1406,13 @@ export type TenantSelectScalar = {
 export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "status" | "timezone" | "plan" | "createdAt" | "updatedAt", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   memberships?: boolean | Prisma.Tenant$membershipsArgs<ExtArgs>
+  campuses?: boolean | Prisma.Tenant$campusesArgs<ExtArgs>
+  departments?: boolean | Prisma.Tenant$departmentsArgs<ExtArgs>
+  programs?: boolean | Prisma.Tenant$programsArgs<ExtArgs>
+  academicYears?: boolean | Prisma.Tenant$academicYearsArgs<ExtArgs>
+  terms?: boolean | Prisma.Tenant$termsArgs<ExtArgs>
+  cohorts?: boolean | Prisma.Tenant$cohortsArgs<ExtArgs>
+  subjects?: boolean | Prisma.Tenant$subjectsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -554,6 +1422,13 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name: "Tenant"
   objects: {
     memberships: Prisma.$MembershipPayload<ExtArgs>[]
+    campuses: Prisma.$CampusPayload<ExtArgs>[]
+    departments: Prisma.$DepartmentPayload<ExtArgs>[]
+    programs: Prisma.$ProgramPayload<ExtArgs>[]
+    academicYears: Prisma.$AcademicYearPayload<ExtArgs>[]
+    terms: Prisma.$TermPayload<ExtArgs>[]
+    cohorts: Prisma.$CohortPayload<ExtArgs>[]
+    subjects: Prisma.$SubjectPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -959,6 +1834,13 @@ readonly fields: TenantFieldRefs;
 export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   memberships<T extends Prisma.Tenant$membershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  campuses<T extends Prisma.Tenant$campusesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$campusesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  departments<T extends Prisma.Tenant$departmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$departmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  programs<T extends Prisma.Tenant$programsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$programsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  academicYears<T extends Prisma.Tenant$academicYearsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$academicYearsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AcademicYearPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  terms<T extends Prisma.Tenant$termsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$termsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TermPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cohorts<T extends Prisma.Tenant$cohortsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$cohortsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CohortPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subjects<T extends Prisma.Tenant$subjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1410,6 +2292,174 @@ export type Tenant$membershipsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.MembershipScalarFieldEnum | Prisma.MembershipScalarFieldEnum[]
+}
+
+/**
+ * Tenant.campuses
+ */
+export type Tenant$campusesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Campus
+   */
+  select?: Prisma.CampusSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Campus
+   */
+  omit?: Prisma.CampusOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CampusInclude<ExtArgs> | null
+  where?: Prisma.CampusWhereInput
+  orderBy?: Prisma.CampusOrderByWithRelationInput | Prisma.CampusOrderByWithRelationInput[]
+  cursor?: Prisma.CampusWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CampusScalarFieldEnum | Prisma.CampusScalarFieldEnum[]
+}
+
+/**
+ * Tenant.departments
+ */
+export type Tenant$departmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Department
+   */
+  select?: Prisma.DepartmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Department
+   */
+  omit?: Prisma.DepartmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DepartmentInclude<ExtArgs> | null
+  where?: Prisma.DepartmentWhereInput
+  orderBy?: Prisma.DepartmentOrderByWithRelationInput | Prisma.DepartmentOrderByWithRelationInput[]
+  cursor?: Prisma.DepartmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DepartmentScalarFieldEnum | Prisma.DepartmentScalarFieldEnum[]
+}
+
+/**
+ * Tenant.programs
+ */
+export type Tenant$programsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Program
+   */
+  select?: Prisma.ProgramSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Program
+   */
+  omit?: Prisma.ProgramOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramInclude<ExtArgs> | null
+  where?: Prisma.ProgramWhereInput
+  orderBy?: Prisma.ProgramOrderByWithRelationInput | Prisma.ProgramOrderByWithRelationInput[]
+  cursor?: Prisma.ProgramWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProgramScalarFieldEnum | Prisma.ProgramScalarFieldEnum[]
+}
+
+/**
+ * Tenant.academicYears
+ */
+export type Tenant$academicYearsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AcademicYear
+   */
+  select?: Prisma.AcademicYearSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AcademicYear
+   */
+  omit?: Prisma.AcademicYearOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AcademicYearInclude<ExtArgs> | null
+  where?: Prisma.AcademicYearWhereInput
+  orderBy?: Prisma.AcademicYearOrderByWithRelationInput | Prisma.AcademicYearOrderByWithRelationInput[]
+  cursor?: Prisma.AcademicYearWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AcademicYearScalarFieldEnum | Prisma.AcademicYearScalarFieldEnum[]
+}
+
+/**
+ * Tenant.terms
+ */
+export type Tenant$termsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Term
+   */
+  select?: Prisma.TermSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Term
+   */
+  omit?: Prisma.TermOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TermInclude<ExtArgs> | null
+  where?: Prisma.TermWhereInput
+  orderBy?: Prisma.TermOrderByWithRelationInput | Prisma.TermOrderByWithRelationInput[]
+  cursor?: Prisma.TermWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TermScalarFieldEnum | Prisma.TermScalarFieldEnum[]
+}
+
+/**
+ * Tenant.cohorts
+ */
+export type Tenant$cohortsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Cohort
+   */
+  select?: Prisma.CohortSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Cohort
+   */
+  omit?: Prisma.CohortOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CohortInclude<ExtArgs> | null
+  where?: Prisma.CohortWhereInput
+  orderBy?: Prisma.CohortOrderByWithRelationInput | Prisma.CohortOrderByWithRelationInput[]
+  cursor?: Prisma.CohortWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CohortScalarFieldEnum | Prisma.CohortScalarFieldEnum[]
+}
+
+/**
+ * Tenant.subjects
+ */
+export type Tenant$subjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Subject
+   */
+  select?: Prisma.SubjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Subject
+   */
+  omit?: Prisma.SubjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectInclude<ExtArgs> | null
+  where?: Prisma.SubjectWhereInput
+  orderBy?: Prisma.SubjectOrderByWithRelationInput | Prisma.SubjectOrderByWithRelationInput[]
+  cursor?: Prisma.SubjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubjectScalarFieldEnum | Prisma.SubjectScalarFieldEnum[]
 }
 
 /**

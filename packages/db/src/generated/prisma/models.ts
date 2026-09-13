@@ -9,6 +9,13 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Tenant.js'
+export type * from './models/Campus.js'
+export type * from './models/Department.js'
+export type * from './models/Program.js'
+export type * from './models/AcademicYear.js'
+export type * from './models/Term.js'
+export type * from './models/Cohort.js'
+export type * from './models/Subject.js'
 export type * from './models/User.js'
 export type * from './models/Membership.js'
 export type * from './models/RoleGrant.js'
