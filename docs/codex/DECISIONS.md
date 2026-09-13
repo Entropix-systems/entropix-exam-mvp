@@ -155,6 +155,36 @@ Related task: A05 Duties, Attendance & Incidents.
 
 ---
 
+## DEC-009 — Session-owned active institution role
+
+Status: ACCEPTED
+
+Context:
+
+One user may belong to multiple institutions and hold multiple role grants. Using
+all grants simultaneously made the browser's displayed role diverge from the
+permissions the API actually granted, while requiring an institution slug at login
+split one account into several sign-in paths.
+
+Decision:
+
+Login is credentials-only. A tenant Session persists one server-validated
+`activeRole` alongside its tenant and membership binding. The context-switch
+command may select only the authenticated user's active memberships and grants and
+updates the session and refresh binding atomically. Authorization evaluates only
+the selected role; all grants are returned solely to populate the role switcher.
+
+Consequences:
+
+Institution and role switches issue a new access token and force tenant screens to
+remount. `/auth/me` supplies verified institution names and the signed-in email.
+No client request can assert tenant authority, and removing the selected grant
+invalidates subsequent authority resolution and refresh.
+
+Related task: QA-01 through QA-06 IAM context follow-up.
+
+---
+
 ## New Decision Template
 
 ### DEC-XXX — Title

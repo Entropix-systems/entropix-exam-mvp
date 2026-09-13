@@ -2,9 +2,11 @@ import { randomUUID } from 'node:crypto';
 import type {
   AuthenticatedContext,
   CreateInvitationRequest,
+  MembershipDirectoryResponse,
   ScopedRoleGrant,
   UUID,
 } from '@entropix/contracts';
+import { MAX_CURSOR_PAGE_SIZE } from '@entropix/contracts';
 import { isScopedRoleGrant, isUuid } from '@entropix/domain';
 import {
   ConflictException,
@@ -94,10 +96,48 @@ export class IdentityAdminService {
     this.policy = configuration.tokenPolicy ?? DEFAULT_TOKEN_POLICY;
   }
 
-  async list(context: AuthenticatedContext) {
+  async list(
+    context: AuthenticatedContext,
+    cursorValue: unknown,
+    pageSizeValue: unknown,
+  ): Promise<MembershipDirectoryResponse> {
     const tenant = tenantContext(context);
+    const cursor =
+      cursorValue === undefined || cursorValue === ''
+        ? null
+        : typeof cursorValue === 'string' && isUuid(cursorValue)
+          ? cursorValue.toLowerCase()
+          : (() => {
+              throw new UnprocessableEntityException('Membership cursor is invalid');
+            })();
+    const parsedPageSize =
+      pageSizeValue === undefined || pageSizeValue === ''
+        ? 25
+        : typeof pageSizeValue === 'string' && /^\d+$/.test(pageSizeValue)
+          ? Number(pageSizeValue)
+          : Number.NaN;
+    if (
+      !Number.isSafeInteger(parsedPageSize) ||
+      parsedPageSize < 1 ||
+      parsedPageSize > MAX_CURSOR_PAGE_SIZE
+    )
+      throw new UnprocessableEntityException('Membership page size is invalid');
+    const directory = await this.repository.listMemberships(
+      tenant.tenantId,
+      parsedPageSize,
+      cursor,
+    );
+    if (!directory) throw new NotFoundException('Membership page not found');
     return {
-      memberships: await this.repository.listMemberships(tenant.tenantId),
+      institutionName: directory.institutionName,
+      departments: directory.departments,
+      pageSize: parsedPageSize,
+      memberships: {
+        items: directory.memberships.items.map(
+          ({ userId: _userId, ...membership }) => membership,
+        ),
+        nextCursor: directory.memberships.nextCursor,
+      },
     };
   }
 

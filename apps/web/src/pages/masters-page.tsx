@@ -147,7 +147,7 @@ function formForRecord(record: AcademicMasterRecord): MasterFormState {
 }
 
 export function MastersPage({ client }: { client: AcademicsApiClient }) {
-  const { currentUser, logout } = useAuth()
+  const { currentUser, logout, switchInstitution, switchRole } = useAuth()
   const [structure, setStructure] = useState<AcademicStructureSnapshot | null>(null)
   const [resource, setResource] = useState<AcademicResourcePath>('campuses')
   const [editing, setEditing] = useState<AcademicMasterRecord | null>(null)
@@ -259,7 +259,13 @@ export function MastersPage({ client }: { client: AcademicsApiClient }) {
   }
 
   return (
-    <WorkspaceShell currentUser={currentUser} active="masters" onLogout={logout}>
+    <WorkspaceShell
+      currentUser={currentUser}
+      active="masters"
+      onLogout={logout}
+      onSwitchInstitution={switchInstitution}
+      onSwitchRole={switchRole}
+    >
       <div className="page-heading">
         <div>
           <p className="eyebrow">Institution administration</p>

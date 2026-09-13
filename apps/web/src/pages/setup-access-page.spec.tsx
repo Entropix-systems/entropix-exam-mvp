@@ -7,7 +7,9 @@ describe('Setup & access membership directory', () => {
     const html = renderToStaticMarkup(
       <MembershipTable
         directory={{
-          tenantName: 'Northstar College',
+          institutionName: 'Northstar College',
+          nextCursor: null,
+          pageSize: 25,
           departments: [{ id: 'department-1', name: 'Computer Science' }],
           memberships: [
             {

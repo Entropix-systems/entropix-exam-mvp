@@ -1,5 +1,6 @@
 import type {
   CreateInvitationRequest,
+  MembershipDirectoryResponse,
   ReplaceRoleGrantsRequest,
   ScopedRoleGrant,
 } from '@entropix/contracts'
@@ -21,34 +22,20 @@ export interface MembershipSummary {
 }
 
 export interface MembershipDirectory {
-  tenantName?: string
+  institutionName: string
   memberships: readonly MembershipSummary[]
   departments: readonly DepartmentSummary[]
-}
-
-interface ApiMembershipSummary {
-  id: string
-  userId: string
-  email: string
-  name: string | null
-  status: string
-  version: number
-  grants: readonly ScopedRoleGrant[]
+  nextCursor: string | null
+  pageSize: number
 }
 
 interface AuthenticatedRequester {
   request<T>(path: string, init?: RequestInit): Promise<T>
 }
 
-type MembershipDirectoryPayload =
-  | MembershipDirectory
-  | { memberships: readonly ApiMembershipSummary[] }
-  | readonly MembershipSummary[]
-
 function normalizeMembership(
-  membership: MembershipSummary | ApiMembershipSummary,
+  membership: MembershipDirectoryResponse['memberships']['items'][number],
 ): MembershipSummary {
-  if ('user' in membership) return membership
   return {
     id: membership.id,
     version: membership.version,
@@ -65,26 +52,22 @@ export class IdentityApiClient {
     this.requester = requester
   }
 
-  async listMemberships(): Promise<MembershipDirectory> {
-    const payload = await this.requester.request<MembershipDirectoryPayload>(
-      '/identity/memberships',
+  async listMemberships(options: {
+    cursor?: string | null
+    pageSize?: number
+  } = {}): Promise<MembershipDirectory> {
+    const query = new URLSearchParams()
+    if (options.cursor) query.set('cursor', options.cursor)
+    if (options.pageSize) query.set('pageSize', String(options.pageSize))
+    const payload = await this.requester.request<MembershipDirectoryResponse>(
+      `/identity/memberships${query.size ? `?${query.toString()}` : ''}`,
     )
-    if (Array.isArray(payload)) {
-      const memberships = (payload as readonly MembershipSummary[]).map(
-        normalizeMembership,
-      )
-      return {
-        memberships,
-        departments: [],
-      }
-    }
-    const directory = payload as MembershipDirectory | {
-      memberships: readonly ApiMembershipSummary[]
-    }
     return {
-      tenantName: 'tenantName' in directory ? directory.tenantName : undefined,
-      memberships: (directory.memberships ?? []).map(normalizeMembership),
-      departments: 'departments' in directory ? directory.departments : [],
+      institutionName: payload.institutionName,
+      memberships: payload.memberships.items.map(normalizeMembership),
+      departments: payload.departments,
+      nextCursor: payload.memberships.nextCursor,
+      pageSize: payload.pageSize,
     }
   }
 

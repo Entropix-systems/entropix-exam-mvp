@@ -4,7 +4,7 @@ import { ConflictException, ForbiddenException, Injectable, NotFoundException, U
 import { SchedulingRepository } from './scheduling.repository.js';
 
 function controller(context: AuthenticatedContext) {
-  if (context.kind !== 'TENANT' || !context.grants.some((grant) => ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(grant.role))) {
+  if (context.kind !== 'TENANT' || !['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(context.activeRole)) {
     throw new ForbiddenException('Permission denied');
   }
   return context;

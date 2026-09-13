@@ -8,7 +8,7 @@ function tenant(context: AuthenticatedContext) {
   return context;
 }
 function hasRole(context: AuthenticatedContext, roles: readonly string[]) {
-  return context.kind === 'TENANT' && context.grants.some((grant) => roles.includes(grant.role));
+  return context.kind === 'TENANT' && roles.includes(context.activeRole);
 }
 function controller(context: AuthenticatedContext) {
   if (!hasRole(context, ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'])) throw new ForbiddenException('Permission denied');

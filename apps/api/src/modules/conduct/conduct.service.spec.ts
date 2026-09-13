@@ -12,7 +12,7 @@ const firstSeatId = '66666666-6666-4666-8666-666666666666';
 const secondSeatId = '77777777-7777-4777-8777-777777777777';
 
 function context(role: 'INVIGILATOR' | 'EXAM_CONTROLLER'): AuthenticatedContext {
-  return { kind: 'TENANT', userId: '88888888-8888-4888-8888-888888888888', tenantId, membershipId, grants: [{ role, departmentId: null }] };
+  return { kind: 'TENANT', userId: '88888888-8888-4888-8888-888888888888', tenantId, membershipId, activeRole: role, grants: [{ role, departmentId: null }] };
 }
 
 function repository(overrides: Partial<ConductRepository> = {}) {
@@ -24,6 +24,20 @@ function repository(overrides: Partial<ConductRepository> = {}) {
 }
 
 describe('ConductService core examination rules', () => {
+  it('authorizes the selected role rather than another available grant', () => {
+    const service = new ConductService(repository());
+    const auditorContext: AuthenticatedContext = {
+      ...context('EXAM_CONTROLLER'),
+      activeRole: 'AUDITOR',
+      grants: [
+        ...context('EXAM_CONTROLLER').grants,
+        { role: 'AUDITOR', departmentId: null },
+      ],
+    };
+
+    expect(() => service.assign(auditorContext, sittingId, { facultyId })).toThrow('Permission denied');
+  });
+
   it('scopes invigilator reads and responses to the server-resolved membership', async () => {
     const snapshot = vi.fn().mockResolvedValue({ faculty: [], sittings: [] });
     const respondDuty = vi.fn().mockResolvedValue({ id: dutyId });

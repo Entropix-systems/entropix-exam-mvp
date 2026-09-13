@@ -14,7 +14,7 @@ function message(reason: unknown, fallback: string): string {
 }
 
 export function StudentsPage({ client }: { client: PeopleApiClient }) {
-  const { currentUser, logout } = useAuth()
+  const { currentUser, logout, switchInstitution, switchRole } = useAuth()
   const [students, setStudents] = useState<readonly StudentDirectoryRecord[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -27,8 +27,8 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
   const fileInput = useRef<HTMLInputElement>(null)
 
   const canImport = currentUser?.context.kind === 'TENANT' &&
-    currentUser.context.grants.some((grant) =>
-      grant.role === 'INSTITUTION_ADMIN' || grant.role === 'EXAM_CONTROLLER')
+    (currentUser.context.activeRole === 'INSTITUTION_ADMIN' ||
+      currentUser.context.activeRole === 'EXAM_CONTROLLER')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -106,7 +106,13 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
 
   if (!currentUser) return null
   return (
-    <WorkspaceShell currentUser={currentUser} active="students" onLogout={logout}>
+    <WorkspaceShell
+      currentUser={currentUser}
+      active="students"
+      onLogout={logout}
+      onSwitchInstitution={switchInstitution}
+      onSwitchRole={switchRole}
+    >
       <div className="page-heading">
         <div>
           <p className="eyebrow">Academic records</p>

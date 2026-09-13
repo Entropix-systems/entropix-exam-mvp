@@ -13,7 +13,7 @@ const examSubjectId = '77777777-7777-4777-8777-777777777777';
 const enrolmentId = '88888888-8888-4888-8888-888888888888';
 
 function context(role: 'STUDENT' | 'EXAM_CONTROLLER'): AuthenticatedContext {
-  return { kind: 'TENANT', userId: '99999999-9999-4999-8999-999999999999', tenantId, membershipId, grants: [{ role, departmentId: null }] };
+  return { kind: 'TENANT', userId: '99999999-9999-4999-8999-999999999999', tenantId, membershipId, activeRole: role, grants: [{ role, departmentId: null }] };
 }
 function registration(overrides: Partial<RegistrationRecord> = {}): RegistrationRecord {
   return {

@@ -3212,6 +3212,7 @@ export const SessionScalarFieldEnum = {
   kind: 'kind',
   tenantId: 'tenantId',
   membershipId: 'membershipId',
+  activeRole: 'activeRole',
   expiresAt: 'expiresAt',
   lastUsedAt: 'lastUsedAt',
   revokedAt: 'revokedAt',

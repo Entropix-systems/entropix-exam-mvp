@@ -697,6 +697,7 @@ model Session {
   kind             String
   tenantId         String?   @map("tenant_id") @db.Uuid
   membershipId     String?   @map("membership_id") @db.Uuid
+  activeRole       String?   @map("active_role")
   expiresAt        DateTime  @map("expires_at")
   lastUsedAt       DateTime? @map("last_used_at")
   revokedAt        DateTime? @map("revoked_at")

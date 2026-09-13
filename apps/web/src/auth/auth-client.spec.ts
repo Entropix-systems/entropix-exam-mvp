@@ -4,11 +4,20 @@ import { AuthApiClient } from './auth-client'
 
 const me: CurrentUserResponse = {
   sessionId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+  email: 'student@example.test',
+  institutions: [
+    {
+      id: '11111111-1111-4111-8111-111111111111',
+      name: 'Northstar College',
+      slug: 'northstar-college',
+    },
+  ],
   context: {
     kind: 'TENANT',
     userId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
     tenantId: '11111111-1111-4111-8111-111111111111',
     membershipId: '22222222-2222-4222-8222-222222222222',
+    activeRole: 'STUDENT',
     grants: [{ role: 'STUDENT', departmentId: null }],
   },
 }
@@ -64,7 +73,7 @@ describe('AuthApiClient', () => {
         : jsonResponse(null, 401)
     })
     const client = new AuthApiClient('/api/v1', fetchMock)
-    await client.login({ email: 'a@example.test', password: 'correct password', institutionSlug: 'northstar-college' })
+    await client.login({ email: 'a@example.test', password: 'correct password' })
     const first = client.request<{ value: string }>('/resource/one')
     const second = client.request<{ value: string }>('/resource/two')
     await vi.waitFor(() => expect(refreshCalls).toBe(1))
@@ -95,6 +104,28 @@ describe('AuthApiClient', () => {
     )
     await expect(client.restoreSession()).rejects.toMatchObject({ status: 401 })
     expect(client.hasAccessToken()).toBe(false)
+  })
+
+  it('replaces the access token after a verified context switch', async () => {
+    const switched = {
+      ...me,
+      context: { ...me.context, activeRole: 'AUDITOR' as const },
+    }
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(jsonResponse({ accessToken: 'access', expiresInSeconds: 900 }))
+      .mockResolvedValueOnce(jsonResponse(me))
+      .mockResolvedValueOnce(jsonResponse({ accessToken: 'switched', expiresInSeconds: 900 }))
+      .mockResolvedValueOnce(jsonResponse(switched))
+    const client = new AuthApiClient('/api/v1', fetchMock)
+    await client.login({ email: 'a@example.test', password: 'correct password' })
+
+    await expect(client.switchContext({
+      institutionId: me.context.kind === 'TENANT' ? me.context.tenantId : '',
+      role: 'AUDITOR',
+    })).resolves.toEqual(switched)
+
+    expect(fetchMock.mock.calls[2][0]).toBe('/api/v1/auth/context')
+    expect(new Headers(fetchMock.mock.calls[3][1]?.headers).get('authorization')).toBe('Bearer switched')
   })
 
   it('notifies the shell when an ordinary request cannot refresh a revoked session', async () => {

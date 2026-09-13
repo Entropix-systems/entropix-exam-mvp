@@ -7,6 +7,7 @@ import type {
   ForgotPasswordRequest,
   LoginRequest,
   ResetPasswordRequest,
+  SwitchAuthContextRequest,
 } from '@entropix/contracts'
 
 export class AuthApiError extends Error {
@@ -86,6 +87,23 @@ export class AuthApiClient {
       { method: 'GET' },
       retryAfterRefresh,
     )
+  }
+
+  async switchContext(
+    input: SwitchAuthContextRequest,
+  ): Promise<CurrentUserResponse> {
+    const issued = await this.send<AccessTokenResponse>(
+      '/auth/context',
+      { method: 'POST', body: JSON.stringify(input) },
+      true,
+    )
+    this.accessToken = issued.accessToken
+    try {
+      return await this.getMe(false)
+    } catch (error) {
+      this.clearSession()
+      throw error
+    }
   }
 
   async logout(): Promise<void> {

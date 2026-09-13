@@ -4,28 +4,35 @@ import type {
   TenantRole,
 } from '@entropix/contracts'
 
+const ROLE_LABELS: Readonly<Record<TenantRole, string>> = {
+  INSTITUTION_ADMIN: 'Institution Admin',
+  EXAM_CONTROLLER: 'Exam Controller',
+  DEPARTMENT_ADMIN: 'Department Admin',
+  FACULTY: 'Faculty / Examiner',
+  INVIGILATOR: 'Invigilator / Observer',
+  STUDENT: 'Student',
+  AUDITOR: 'Auditor',
+}
+
 export const TENANT_ROLE_OPTIONS: readonly {
-  value: TenantRole
+  value: Exclude<TenantRole, 'STUDENT'>
   label: string
-}[] = [
-  { value: 'INSTITUTION_ADMIN', label: 'Institution Admin' },
-  { value: 'EXAM_CONTROLLER', label: 'Exam Controller' },
-  { value: 'DEPARTMENT_ADMIN', label: 'Department Admin' },
-  { value: 'FACULTY', label: 'Faculty / Examiner' },
-  { value: 'INVIGILATOR', label: 'Invigilator / Observer' },
-  { value: 'STUDENT', label: 'Student' },
-  { value: 'AUDITOR', label: 'Auditor' },
-]
+}[] = Object.entries(ROLE_LABELS)
+  .filter(([role]) => role !== 'STUDENT')
+  .map(([value, label]) => ({
+    value: value as Exclude<TenantRole, 'STUDENT'>,
+    label,
+  }))
 
 export function canManageIdentity(user: CurrentUserResponse | null): boolean {
   return (
     user?.context.kind === 'TENANT' &&
-    user.context.grants.some((grant) => grant.role === 'INSTITUTION_ADMIN')
+    user.context.activeRole === 'INSTITUTION_ADMIN'
   )
 }
 
 export function roleLabel(role: TenantRole): string {
-  return TENANT_ROLE_OPTIONS.find((option) => option.value === role)?.label ?? role
+  return ROLE_LABELS[role]
 }
 
 export function validateGrants(

@@ -36,6 +36,13 @@ const tenantPermissions: Readonly<
   AUDITOR: [],
 };
 
+export function hasActiveRole(
+  context: AuthenticatedContext,
+  roles: readonly TenantRole[],
+): boolean {
+  return context.kind === 'TENANT' && roles.includes(context.activeRole);
+}
+
 /** Scope is loaded by the server. A role check never replaces domain ownership/assignment checks. */
 export function hasPermission(
   context: unknown,
@@ -69,6 +76,7 @@ export function hasPermission(
   // Evaluate permission AND scope on the same grant; never flatten into separate sets.
   return context.grants.some(
     (grant) =>
+      grant.role === context.activeRole &&
       tenantPermissions[grant.role].some((value) => value === permission) &&
       (grant.departmentId === null ||
         (scope.departmentId !== null &&

@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { PropsWithChildren } from 'react'
-import type { CurrentUserResponse, LoginRequest } from '@entropix/contracts'
+import type {
+  CurrentUserResponse,
+  LoginRequest,
+  TenantRole,
+} from '@entropix/contracts'
 import { AuthApiClient, AuthApiError } from './auth-client'
 import { AuthContext } from './auth-context'
 import type { AuthStatus } from './auth-context'
@@ -65,6 +69,28 @@ export function AuthProvider({
     [client],
   )
 
+  const switchInstitution = useCallback(
+    async (institutionId: string) => {
+      setCurrentUser(await client.switchContext({ institutionId }))
+      setStatus('AUTHENTICATED')
+    },
+    [client],
+  )
+
+  const switchRole = useCallback(
+    async (role: TenantRole) => {
+      if (!currentUser || currentUser.context.kind !== 'TENANT') return
+      setCurrentUser(
+        await client.switchContext({
+          institutionId: currentUser.context.tenantId,
+          role,
+        }),
+      )
+      setStatus('AUTHENTICATED')
+    },
+    [client, currentUser],
+  )
+
   const logout = useCallback(async () => {
     try {
       await client.logout()
@@ -75,8 +101,24 @@ export function AuthProvider({
   }, [client])
 
   const value = useMemo(
-    () => ({ status, currentUser, login, logout, restore }),
-    [status, currentUser, login, logout, restore],
+    () => ({
+      status,
+      currentUser,
+      login,
+      switchInstitution,
+      switchRole,
+      logout,
+      restore,
+    }),
+    [
+      status,
+      currentUser,
+      login,
+      switchInstitution,
+      switchRole,
+      logout,
+      restore,
+    ],
   )
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

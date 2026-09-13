@@ -7,18 +7,21 @@ Known-good foundation: d0-ready
 Known-good D0 verification: PASS at integration SHA 6182f80
 Shared development branch: integration
 Current sprint: D1–D3 MVP implementation
-Current day: D1 EXAMS / REGISTRATION VERTICAL SLICE MERGED
+Current day: A05 MERGED; IAM QA-01 THROUGH QA-06 FOLLOW-UP VERIFIED
 ```
 
 ## Current Gate
 
 ```text
-A05 Duties, Attendance & Incidents is implemented on
-`feat/A05-duties-attendance-incidents`, stacked on A04 commit `3d697d9` from
-integration base `48dac03`. A05 migrations are applied with no live schema drift.
-Cedar has 3 invigilators and 3 pending duties. Focused conduct tests, RLS smoke,
-DB/API/Web typechecks, API/Web builds and lint pass. Authenticated browser proof
-still requires a demo credential.
+Integration includes A04 Timetable, Halls & Seats and A05 Duties, Attendance &
+Incidents. Their migrations, focused tests, tenant-isolation smoke, typechecks,
+builds and lint passed before merge.
+
+IAM institution/role context switching, credentials-only login, staff-only
+cursor pagination and the no-UUID UI audit are integrated. The new transactional
+migration and all repository gates pass against disposable local PostgreSQL. It
+is also applied to the shared demo database after explicit deployment approval;
+live login and `/auth/me` context verification pass.
 ```
 
 ## Completed
@@ -38,36 +41,38 @@ d0-ready tag
 IAM Phase 3 PostgreSQL persistence, production API wiring and admin endpoints
 IAM browser login, membership directory, invitation, session, recovery,
 deactivation and tenant-isolation demo gate
+IAM QA-01 through QA-06 implementation and local verification
+A04 Timetable, Halls & Seats
+A05 Duties, Attendance & Incidents
 ```
 
 ## In Progress
 
 ```text
-A04 remains first in the stacked merge order. A05 is implemented and awaits
-review after A04 integration. B02/B03 must consume the authoritative A05
-`ConductResultState` attendance/hold contract after A05 merges.
+B02/B03 must consume the authoritative A05 `ConductResultState`
+attendance/hold contract and approved RegistrationSubject identifiers from the
+latest integration branch.
 ```
 
 ## Blockers
 
 ```text
-Department records now exist in A01; IAM still needs a focused follow-up to consume
-them for department-scoped grant selection. IAM must not own or fabricate them.
-No repository-managed demo password exists for authenticated browser verification.
+None for the IAM QA context flow.
 ```
 
 ## Migration Lock
 
 ```text
-Owner: Developer A — A05 Duties, Attendance & Incidents
-Purpose: Held through stacked A04/A05 review and merge for conduct persistence
+Owner: FREE after IAM QA context follow-up
+Last change: `20260914100000_iam_context_switching` persists active role and
+adds restricted identity-routing RLS policies
 ```
 
 ## Shared Contract Lock
 
 ```text
-Owner: Developer A — A05 Duties, Attendance & Incidents
-Purpose: Held through stacked A04/A05 review and merge for ConductResultState and conduct commands
+Owner: FREE after IAM QA context follow-up
+Last change: authenticated institution/role context and paginated staff-directory contracts
 ```
 
 ## Developer A
@@ -75,7 +80,7 @@ Purpose: Held through stacked A04/A05 review and merge for ConductResultState an
 ```text
 Task: A05 Duties, Attendance & Incidents
 Branch: feat/A05-duties-attendance-incidents
-Status: IMPLEMENTED; FOCUSED VERIFICATION PASS; STACKED REVIEW REQUIRED; LOCKS HELD UNTIL MERGE
+Status: MERGED INTO INTEGRATION AT `82a28cc`; LOCKS RELEASED
 ```
 
 ## Developer B
@@ -113,13 +118,14 @@ A05 migrations `20260914020000_conduct_duties_attendance_incidents`,
 A05 Cedar fixture: 3 invigilators and 3 pending duties; retry-safe seed and
 conduct tenant-isolation smoke PASS. Focused conduct rules: 7 tests PASS; API,
 Web, DB and contracts typechecks/builds plus API/Web lint PASS.
+IAM QA migration: APPLIED to disposable local PostgreSQL and the shared demo database.
+IAM PostgreSQL 9 tests, API 82 tests, API E2E 2, Web 26, Domain 32, Worker 2: PASS.
+Canonical `pnpm d0:verify`: PASS under available Node 24.19.0 (pin is 24.20.0).
+Live admin login: HTTP 201; `/auth/me`: Northstar College / INSTITUTION_ADMIN; logout: HTTP 201.
 ```
 
 ## Next Required Action
 
 ```text
-Review and merge A04 first. Review/rebase and merge A05 second, then release both
-locks. B02/B03 pull/rebase and consume `ConductResultState`; do not duplicate
-attendance or holds. Run authenticated controller/invigilator `/attendance`
-browser proof later if fictional demo credentials are supplied.
+Refresh the current browser session and continue QA against the verified shared context.
 ```

@@ -31,6 +31,7 @@ const principal: AuthenticatedPrincipal = {
     userId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
     tenantId: '11111111-1111-4111-8111-111111111111',
     membershipId: '22222222-2222-4222-8222-222222222222',
+    activeRole: 'STUDENT',
     grants: [{ role: 'STUDENT', departmentId: null }],
   },
 };
@@ -44,6 +45,7 @@ describe('auth HTTP surface', () => {
     forgotPassword: vi.fn(),
     resetPassword: vi.fn(),
     acceptInvitation: vi.fn(),
+    switchContext: vi.fn(),
     me: vi.fn(),
   };
   const contextResolver = { resolveAccessToken: vi.fn() };
@@ -92,7 +94,6 @@ describe('auth HTTP surface', () => {
       .send({
         email: 'student@example.test',
         password: 'correct password',
-        institutionSlug: 'northstar-college',
       })
       .expect(201);
     expect(response.body).toEqual({
@@ -107,6 +108,41 @@ describe('auth HTTP surface', () => {
     expect(response.headers['set-cookie'][0]).toContain('SameSite=Lax');
     expect(response.headers['set-cookie'][0]).toContain('Path=/');
     expect(JSON.stringify(response.body)).not.toContain('R'.repeat(43));
+    expect(auth.login).toHaveBeenLastCalledWith({
+      email: 'student@example.test',
+      password: 'correct password',
+    });
+  });
+
+  it('switches context only for an authenticated session', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/auth/context')
+      .send({
+        institutionId: '11111111-1111-4111-8111-111111111111',
+        role: 'AUDITOR',
+      })
+      .expect(401);
+    contextResolver.resolveAccessToken.mockResolvedValueOnce(principal);
+    auth.switchContext.mockResolvedValueOnce({
+      accessToken: 'switched-access-token',
+      expiresInSeconds: 900,
+    });
+    const response = await request(app.getHttpServer())
+      .post('/api/v1/auth/context')
+      .set('Authorization', 'Bearer access-token')
+      .send({
+        institutionId: '11111111-1111-4111-8111-111111111111',
+        role: 'AUDITOR',
+      })
+      .expect(201);
+    expect(auth.switchContext).toHaveBeenCalledWith(principal, {
+      institutionId: '11111111-1111-4111-8111-111111111111',
+      role: 'AUDITOR',
+    });
+    expect(response.body.data).toEqual({
+      accessToken: 'switched-access-token',
+      expiresInSeconds: 900,
+    });
   });
 
   it('uses the shared safe error envelope without internal error details', async () => {
@@ -197,6 +233,12 @@ describe('auth HTTP surface', () => {
     auth.me.mockReturnValueOnce({
       context: principal.context,
       sessionId: principal.identity.sessionId,
+      email: 'student@example.test',
+      institutions: [{
+        id: principal.context.kind === 'TENANT' ? principal.context.tenantId : '',
+        name: 'Northstar College',
+        slug: 'northstar-college',
+      }],
     });
     const response = await request(app.getHttpServer())
       .get('/api/v1/auth/me')
@@ -205,6 +247,12 @@ describe('auth HTTP surface', () => {
     expect(response.body.data).toEqual({
       context: principal.context,
       sessionId: principal.identity.sessionId,
+      email: 'student@example.test',
+      institutions: [{
+        id: principal.context.kind === 'TENANT' ? principal.context.tenantId : '',
+        name: 'Northstar College',
+        slug: 'northstar-college',
+      }],
     });
   });
 

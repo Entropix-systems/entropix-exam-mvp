@@ -8,7 +8,11 @@ import type {
   ForgotPasswordRequest,
   LoginRequest,
   ResetPasswordRequest,
+  SwitchAuthContextRequest,
+  TenantRole,
 } from '@entropix/contracts';
+import { ROLES } from '@entropix/contracts';
+import { isUuid } from '@entropix/domain';
 import { Inject, Injectable } from '@nestjs/common';
 import {
   type AuthenticatedPrincipal,
@@ -28,6 +32,7 @@ import {
   invalidInvitation,
   invalidRecoveryToken,
   invalidSession,
+  noInstitutionAccess,
 } from './auth.errors.js';
 import { IdentityNotificationSender } from './identity-notifications.js';
 
@@ -68,14 +73,11 @@ function normalizeEmail(value: string): string | null {
     : null;
 }
 
-function normalizeInstitutionSlug(value: string | undefined): string | null {
-  if (value === undefined) return null;
-  const normalized = value.trim().toLowerCase();
-  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(normalized) &&
-    normalized.length <= 100
-    ? normalized
-    : null;
-}
+const tenantRoles = new Set<TenantRole>(
+  Object.values(ROLES).filter(
+    (role): role is TenantRole => role !== ROLES.PLATFORM_ADMIN,
+  ),
+);
 
 function validatePassword(value: string): void {
   if (typeof value !== 'string' || value.length < 12 || value.length > 1024)
@@ -121,11 +123,6 @@ export class AuthApplicationService {
   async login(input: LoginRequest): Promise<IssuedSession> {
     const normalizedEmail =
       typeof input.email === 'string' ? normalizeEmail(input.email) : null;
-    const institutionSlug =
-      typeof input.institutionSlug === 'string' ||
-      input.institutionSlug === undefined
-        ? normalizeInstitutionSlug(input.institutionSlug)
-        : null;
     let user = null;
     try {
       user = normalizedEmail
@@ -142,7 +139,6 @@ export class AuthApplicationService {
     );
     if (
       !normalizedEmail ||
-      (input.institutionSlug !== undefined && !institutionSlug) ||
       !user ||
       !user.passwordHash ||
       !verified ||
@@ -158,7 +154,6 @@ export class AuthApplicationService {
     try {
       session = await this.repository.createLoginSession({
         userId: user.id,
-        institutionSlug,
         sessionId,
         refreshTokenId,
         refreshTokenHash: hashOpaqueToken(refreshToken),
@@ -170,8 +165,44 @@ export class AuthApplicationService {
     } catch {
       throw invalidCredentials();
     }
+    if (session.kind === 'NO_ACCESS') throw noInstitutionAccess();
     if (session.kind !== 'CREATED') throw invalidCredentials();
     return this.issue(session.identity, refreshToken);
+  }
+
+  async switchContext(
+    principal: AuthenticatedPrincipal,
+    input: SwitchAuthContextRequest,
+  ): Promise<AccessTokenResponse> {
+    const institutionId =
+      typeof input.institutionId === 'string' && isUuid(input.institutionId)
+        ? input.institutionId.toLowerCase()
+        : null;
+    const role =
+      input.role === undefined
+        ? null
+        : typeof input.role === 'string' && tenantRoles.has(input.role)
+          ? input.role
+          : undefined;
+    if (!institutionId || role === undefined)
+      throw new AuthApplicationError(
+        'VALIDATION',
+        'Institution or role selection is invalid',
+      );
+    const result = await this.repository.switchSessionContext({
+      userId: principal.context.userId,
+      sessionId: principal.identity.sessionId,
+      institutionId,
+      role,
+      now: this.clock(),
+    });
+    if (result.kind === 'SESSION_INVALID') throw invalidSession();
+    if (result.kind !== 'SWITCHED')
+      throw new AuthApplicationError(
+        'FORBIDDEN',
+        'Institution or role selection is not available',
+      );
+    return this.issueAccess(result.identity);
   }
 
   async refresh(rawRefreshToken: string): Promise<IssuedSession> {
@@ -312,10 +343,26 @@ export class AuthApplicationService {
     return { accepted: true };
   }
 
-  me(principal: AuthenticatedPrincipal): CurrentUserResponse {
+  async me(principal: AuthenticatedPrincipal): Promise<CurrentUserResponse> {
+    const access = await this.repository.currentUserAccess(
+      principal.context.userId,
+    );
+    if (!access) throw invalidSession();
     return {
       context: principal.context,
       sessionId: principal.identity.sessionId,
+      email: access.email,
+      institutions: access.institutions,
+    };
+  }
+
+  private async issueAccess(
+    identity: AccessTokenIdentity,
+  ): Promise<AccessTokenResponse> {
+    const accessToken = await this.accessTokens.sign(identity);
+    return {
+      accessToken,
+      expiresInSeconds: this.policy.accessTtlSeconds,
     };
   }
 
@@ -323,10 +370,6 @@ export class AuthApplicationService {
     identity: AccessTokenIdentity,
     refreshToken: string,
   ): Promise<IssuedSession> {
-    return {
-      accessToken: await this.accessTokens.sign(identity),
-      expiresInSeconds: this.policy.accessTtlSeconds,
-      refreshToken,
-    };
+    return { ...(await this.issueAccess(identity)), refreshToken };
   }
 }

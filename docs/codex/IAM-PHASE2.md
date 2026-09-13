@@ -1,7 +1,7 @@
 # IAM Phase 2 — Application and Browser Orchestration
 
-Status: IMPLEMENTED ON `d1-a-iam-phase2`; production persistence wiring remains
-blocked by the D1 migration lock.
+Status: IMPLEMENTED, including the production PostgreSQL adapter and the IAM QA
+context follow-up on `fix/qa-iam-context`.
 
 ## Application workflows
 
@@ -11,8 +11,12 @@ depends on `IdentityWorkflowRepository`; no production in-memory repository exis
 
 The repository adapter must make the following decisions and mutations atomic:
 
-- Login rechecks ACTIVE User, Tenant and Membership state while resolving the
-  institution slug server-side, then creates Session plus hashed REFRESH AuthToken.
+- Login rechecks ACTIVE User, Tenant and Membership state, deterministically chooses
+  the user's first active institution membership and effective role, then creates
+  Session plus hashed REFRESH AuthToken. It never accepts an institution selector.
+- Context switching locks the session, verifies the requested institution and role
+  belong to the authenticated user, and atomically updates Session plus its live
+  REFRESH AuthToken binding.
 - Refresh conditionally consumes the current token, detects reuse, creates one
   successor, and commits session-family revocation before returning `REPLAY`.
 - Reset consumes one reset token, verifies the User is still ACTIVE, changes the
@@ -34,6 +38,7 @@ The prepared controller surface under `/api/v1` is:
 POST /auth/login
 POST /auth/refresh
 POST /auth/logout
+POST /auth/context
 POST /auth/forgot-password
 POST /auth/reset-password
 POST /auth/invitations/accept
@@ -58,12 +63,20 @@ keeps the production API from advertising fake successful persistence.
 
 ## Browser shell
 
-The React shell provides login, forgot-password, reset-password, invitation
+The React shell provides credential-only login, forgot-password, reset-password, invitation
 acceptance, access-denied and authenticated-context screens. `AuthProvider` restores
 the session through refresh, holds the access token only in an `AuthApiClient`
 instance in memory, protects routes, clears state on logout/failure, and maps denied
-authority to the access-denied state. Institution selection is optional so platform
-administrators do not receive a fabricated tenant context.
+authority to the access-denied state. The authenticated sidebar shows the verified
+institution name and email, renders institution/role selectors only when multiple
+choices exist, and remounts tenant pages after a context change. Permission-sensitive
+navigation and commands use only the server-resolved active role. UUIDs remain
+internal values.
+
+The Setup & access staff directory uses bounded server-side cursor pagination,
+shows loading/error/empty states, and excludes Student identities. Page-size and
+cursor validation occur before persistence; foreign or stale cursors are not
+accepted as cross-tenant probes.
 
 Ordinary requests share one in-flight refresh promise. Refresh cookies remain
 inaccessible to JavaScript. The auth client does not use localStorage,
@@ -99,14 +112,18 @@ be claimed until those transactions and PostgreSQL concurrency tests exist.
 
 ## Verification
 
-Focused application, guard, HTTP and browser-client tests are present with explicit
-test doubles. No test double is exported to production wiring. Contracts smoke and
-typecheck, domain tests, API tests/typecheck, web tests/typecheck/lint, repository
-typecheck, and `pnpm d0:verify` pass. The full API suite contains 51 passing tests;
-the web auth shell contains 6 passing tests. The existing Argon2 test needed one
-15-second runner timeout after exceeding the default 5 seconds under concurrent
-load; its real hashing and verification assertions passed.
+Focused application, guard, HTTP, browser-client and PostgreSQL tests are present
+with explicit test doubles outside persistence coverage. No test double is exported
+to production wiring. The corrected transactional migration was applied to the
+disposable local PostgreSQL database; its schema status, Prisma validation, runtime
+smoke and tenant-RLS smoke pass. The PostgreSQL IAM suite has 9 passing tests, the
+full API suite 82, API E2E 2, Web 26, Domain 32, and Worker 2.
 
-Verification used the available Node 24.19.0 and pnpm 11.19.0 runtime. The repository
-pins Node 24.20.0 and pnpm 12.3.4, so commands emitted engine-version warnings even
-though all gates completed successfully. No Prisma generation or migration ran.
+The canonical `pnpm d0:verify` gate passes, including fixtures, contracts, all
+workspace typechecks/builds/lints/tests, storage and notification smoke tests, and
+API E2E. Verification used available Node 24.19.0 and pnpm 11.19.0; the repository
+pins Node 24.20.0 and pnpm 12.3.4, so the gate reports a non-failing engine warning.
+After explicit approval, the migration was also deployed to the shared Supabase
+demo database. Prisma reports its migration schema up to date; live login returned
+HTTP 201 and `/auth/me` resolved `admin@northstar.example.test` to Northstar College
+with active role `INSTITUTION_ADMIN`.
