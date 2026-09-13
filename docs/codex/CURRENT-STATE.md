@@ -4,17 +4,17 @@
 
 ```text
 Known-good foundation: d0-ready
+Known-good D0 verification: PASS at integration SHA 6182f80
 Shared development branch: integration
 Current sprint: D1–D3 MVP implementation
-Current day: PRE-D1
+Current day: D1 CONTRACT FREEZE
 ```
 
 ## Current Gate
 
 ```text
-Prepare shared Codex context.
-Freeze D1 contracts.
-Then begin Day 1 feature development.
+Review and commit the D1 contract freeze.
+Then create the first D1 migration.
 ```
 
 ## Completed
@@ -36,9 +36,8 @@ d0-ready tag
 ## In Progress
 
 ```text
-Shared Codex context pack
-Two-developer sprint coordination
-D1 contract preparation
+D1 shared-contract freeze
+D1 feature implementation: NOT STARTED
 ```
 
 ## Blockers
@@ -50,46 +49,42 @@ None recorded yet.
 ## Migration Lock
 
 ```text
-Owner: UNASSIGNED
-Purpose: none
+Owner: Developer B
+Purpose: first D1 migration after the contract freeze is reviewed and committed
 ```
 
 ## Shared Contract Lock
 
 ```text
-Owner: UNASSIGNED
+Owner: Developer A
 Purpose: D1 contract freeze
 ```
 
 ## Developer A
 
 ```text
-Task: PRE-D1 shared-context setup/review
+Task: D1 contract freeze
 Branch: TBD
-Status: NOT STARTED
+Status: CONTRACT FREEZE IN PROGRESS; D1 FEATURE IMPLEMENTATION NOT STARTED
 ```
 
 ## Developer B
 
 ```text
-Task: PRE-D1 shared-context setup/review
+Task: First D1 migration after contract freeze
 Branch: TBD
-Status: NOT STARTED
+Status: D1 FEATURE IMPLEMENTATION NOT STARTED
 ```
 
 ## Latest Integrated Acceptance
 
 ```text
-D0 verification only.
+Known-good D0 verification: PASS at integration SHA 6182f80.
 D1 business gate has not started.
 ```
 
 ## Next Required Action
 
 ```text
-1. Merge shared context pack.
-2. Both developers pull identical integration SHA.
-3. Jointly freeze D1 shared contracts/schema.
-4. Create D1-A and D1-B task branches.
-5. Start the three-day implementation clock.
+Review/commit contract freeze, then create first D1 migration.
 ```
