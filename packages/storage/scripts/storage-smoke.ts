@@ -9,11 +9,6 @@ import {
 } from 'node:url';
 
 import {
-  CreateBucketCommand,
-  HeadBucketCommand,
-} from '@aws-sdk/client-s3';
-
-import {
   cleanKey,
   generatedKey,
   loadStorageConfig,
@@ -38,27 +33,7 @@ const storage =
     config,
   );
 
-async function ensureBucket() {
-  try {
-    await storage.client.send(
-      new HeadBucketCommand({
-        Bucket:
-          config.bucket,
-      }),
-    );
-  } catch {
-    await storage.client.send(
-      new CreateBucketCommand({
-        Bucket:
-          config.bucket,
-      }),
-    );
-  }
-}
-
 async function main() {
-  await ensureBucket();
-
   const tenantId =
     '11111111-1111-4111-8111-111111111111';
 
@@ -233,6 +208,14 @@ async function main() {
   assert.match(
     signedUrl,
     /X-Amz-Signature=/i,
+  );
+
+  const signedDownload =
+    await fetch(signedUrl);
+
+  assert.equal(
+    signedDownload.ok,
+    true,
   );
 
   console.log(

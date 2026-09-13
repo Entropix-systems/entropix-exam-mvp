@@ -37,17 +37,13 @@ export class PrivateObjectStorage {
         forcePathStyle:
           config.forcePathStyle,
 
-        credentials:
-          config.accessKeyId &&
-          config.secretAccessKey
-            ? {
-                accessKeyId:
-                  config.accessKeyId,
+        credentials: {
+          accessKeyId:
+            config.accessKeyId,
 
-                secretAccessKey:
-                  config.secretAccessKey,
-              }
-            : undefined,
+          secretAccessKey:
+            config.secretAccessKey,
+        },
       });
   }
 
