@@ -11,6 +11,7 @@ import { ForgotPasswordPage } from './pages/forgot-password-page'
 import { HomePage } from './pages/home-page'
 import { InvitationPage } from './pages/invitation-page'
 import { LoginPage } from './pages/login-page'
+import { MastersPage } from './pages/masters-page'
 import { ResetPasswordPage } from './pages/reset-password-page'
 import { SetupAccessPage } from './pages/setup-access-page'
 import { StudentsPage } from './pages/students-page'
@@ -47,7 +48,13 @@ function Routes() {
   if (pathname === '/setup-access')
     return (
       <ProtectedRoute>
-        <SetupAccessPage client={identityClient} academicClient={academicsClient} />
+        <SetupAccessPage client={identityClient} />
+      </ProtectedRoute>
+    )
+  if (pathname === '/masters')
+    return (
+      <ProtectedRoute>
+        <MastersPage client={academicsClient} />
       </ProtectedRoute>
     )
   if (pathname === '/students')

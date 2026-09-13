@@ -30,7 +30,9 @@ describe('role-aware workspace navigation', () => {
     )
 
     expect(admin).toContain('Authenticated shell')
+    expect(admin).toContain('Academic masters')
     expect(admin).toContain('Setup &amp; access')
+    expect(student).not.toContain('Academic masters')
     expect(student).not.toContain('Setup &amp; access')
   })
 })

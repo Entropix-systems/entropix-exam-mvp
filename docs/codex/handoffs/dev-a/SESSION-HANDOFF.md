@@ -1,98 +1,89 @@
 # SESSION HANDOFF — DEV A
 
-Last updated: 2026-09-13
-Branch: `integration`
-Source commit: `37b945f` (`feat/A03-exam-registration`)
-Integration base before merge: `1165f35`
+Last updated: 2026-09-14
+Branch: `feat/masters-ui`
+Source commit: `48dac03`
+Integration base: `48dac03`
 
 ## Current Sprint Goal
 
-Working Examination ERP demo for Tuesday. A03 now supplies persisted exams,
-registration decisions and stable approved subject-roster IDs to A04/B02.
+Working Examination ERP demo for Tuesday. Academic masters now have a dedicated
+Institution Admin UI backed by the existing tenant-scoped A01 API.
 
 ## Current Task
 
-Task: A03 — Exams & Registration
-Status: MERGED INTO INTEGRATION; AUTHENTICATED BROWSER PROOF REMAINS OPTIONAL WHEN CREDENTIALS ARE AVAILABLE
+Task: Academic Masters management UI
+Status: IMPLEMENTED IN WORKTREE; NOT COMMITTED
 
 ## Implemented
 
-- Tenant-owned Exam, ExamSubject, immutable RuleVersion, Registration and
-  RegistrationSubject persistence with composite tenant-safe relationships,
-  checks, forced RLS, uniqueness and optimistic version fields.
-- Exam creation validates B01 `ResultRuleInput`, persists canonical
-  `ValidatedResultRule`, and freezes it once when registration opens.
-- Command-only registration workflow: draft, submit/resubmit, approve, reject,
-  cancel, controller eligibility, registration window open/close and auto-enrol.
-- Submission/approval rechecks active student, term/cohort, active enrolled
-  subjects and controller eligibility, retaining exact evidence in
-  `EligibilitySnapshot`.
-- Student actions resolve the Student from authenticated membership. Controller
-  actions require INSTITUTION_ADMIN or EXAM_CONTROLLER.
-- `/exams` uses real API state for controller setup/review and student
-  application; Cedar auto-enrol is a persisted controller action.
+- Added `/masters` as a dedicated Institution Admin screen using the existing
+  academic snapshot, create and update endpoints.
+- Exposed Campus, Department, Program, Academic Year, Term, Cohort and Subject
+  as selectable master categories with persisted record counts and tables.
+- Added minimal create/edit forms with the required hierarchy selectors, dates,
+  term sequence and subject credits. API validation remains authoritative.
+- Added an Institution Admin-only `Academic masters` navigation item.
+- Removed the academic summary/listing from Setup & access and deleted its
+  obsolete UI component and focused rendering test.
+- Kept the current theme and responsive layout. No delete or custom-field UI was
+  introduced.
 
 ## Stable Contracts / IDs
 
-- `packages/contracts/src/results.ts`: shared `ResultRuleInput` and
-  `ValidatedResultRule`; B01 re-exports and consumes these types.
-- `packages/contracts/src/exam.ts`: `ExamCreateInput`, `ExamRecord`,
-  `ExamSubjectRecord`, `RuleVersionRecord`, `ExamsSnapshot`.
-- `packages/contracts/src/registration.ts`: `EligibilitySnapshot`,
-  `RegistrationRecord`, `RegistrationSubjectRecord` and command inputs.
-- Downstream A04/B02 must use `RegistrationSubject.id` as the stable approved
-  roster identity and must not duplicate registration subjects.
+- No shared contract changes. The UI reuses `AcademicStructureSnapshot`,
+  `AcademicInputByResource`, `AcademicRecordByResource` and
+  `AcademicResourcePath` from `packages/contracts/src/academics.ts`.
+- Persisted UUIDs and the existing server-derived tenant scope are unchanged.
 
 ## Migration / Locks
 
-- Migration sequence: `20260913193000_exams_registration` plus canonical
-  foreign-key-name alignment `20260913194000_exams_registration_constraint_names`.
-- Both migrations are applied to the configured Supabase demo database.
-- Migration and shared-contract locks are released in `CURRENT-STATE.md`.
+- Schema/migration changes: NONE.
+- Shared contract changes: NONE.
+- No migration or shared-contract lock was required.
 
 ## Demo Data
 
-- Northstar College: one real `SUBMITTED` NS26007 application, 3 subjects.
-- Cedar School: 20 real `APPROVED` auto-enrol registrations, 60 stable
-  RegistrationSubject roster rows.
-- `pnpm seed:exams` is retry-safe for existing registrations (second run created 0).
+- Existing Northstar College and Cedar School academic seed records are shown by
+  the new screen through `GET /api/v1/academics`.
+- Create/edit actions use the existing POST/PUT API and persist to the current
+  tenant database.
 
 ## Verification
 
-- A03 service test: PASS, 6 tests (eligible submit, inactive rejection, closed
-  window, foreign ownership, controller reason, auto-enrol).
-- Full API suite: PASS, 76 tests (required elevated local listener/database access).
-- Web suite: PASS, 20 tests. Domain/B01 suite: PASS, 31 tests.
-- Contracts, Domain, DB, API and Web focused builds/typechecks: PASS.
-- Prisma format/validate/generate: PASS.
-- Both A03 migrations: APPLIED.
-- Live Prisma schema diff: PASS, no difference detected.
-- `pnpm --filter @entropix/db smoke:exams`: PASS; missing tenant exposed zero
-  rows, Northstar could not see Cedar exam, Cedar roster IDs were 60 unique UUIDs.
-- API and Web lint: PASS. React best-practices review: PASS after replacing an
-  effect-triggered synchronous load with parallel async initialization.
-- Authenticated browser flow: NOT RUN; no repository-managed demo credential.
-- Broad `pnpm d0:verify`: NOT RUN per sprint/task instructions.
+- `pnpm --filter @entropix/web typecheck`: PASS.
+- `pnpm --filter @entropix/web test`: PASS, 19 tests.
+- `pnpm --filter @entropix/web build`: PASS.
+- `pnpm --filter @entropix/web lint`: PASS.
+- `git diff --check`: PASS.
+- React best-practices focused review: PASS; data loads once, mutations reload
+  the snapshot, role gating is derived, and form labels/dialog semantics remain
+  explicit.
+- Authenticated browser/database mutation proof: NOT RUN; no repository-managed
+  demo credential is available.
+- Broad `pnpm d0:verify`: NOT RUN per sprint instructions.
 
 ## Limitations / Blockers
 
-- Authenticated controller/student UI proof needs an existing fictional login.
-- Department-scoped controller refinement is deferred; A03 controller commands
-  currently use tenant-wide INSTITUTION_ADMIN/EXAM_CONTROLLER grants.
-- No timetable, marks, publication, fees or attendance behavior is implemented here.
+- Delete remains intentionally unsupported by the A01 API.
+- Master types and fields are fixed by the current shared schema; this is not a
+  generic custom-metadata builder.
+- The worktree already contained an unrelated modification to
+  `packages/contracts/src/duties.ts`; it was preserved and not included in this
+  task.
 - No implementation blocker remains.
 
 ## Relevant Files
 
-- `packages/db/prisma/schema.prisma`
-- `packages/db/prisma/migrations/20260913193000_exams_registration/migration.sql`
-- `packages/contracts/src/{exam,registration,results}.ts`
-- `apps/api/src/modules/exams/`
-- `apps/web/src/pages/exams-page.tsx`
-- `packages/db/scripts/{seed-exams,exams-rls-smoke}.ts`
+- `apps/web/src/pages/masters-page.tsx`
+- `apps/web/src/pages/workspace-shell.tsx`
+- `apps/web/src/pages/setup-access-page.tsx`
+- `apps/web/src/App.tsx`
+- `apps/web/src/App.css`
 
 ## Next Exact Action
 
-1. A04/B02 pull integration and consume approved `RegistrationSubject.id` rows.
-2. If credentials are available, verify Northstar student save/submit and
-   controller reject/resubmit/approve plus Cedar auto-enrol at `/exams`.
+1. Sign in as a fictional Northstar or Cedar Institution Admin and open
+   `/masters` for the optional final demo smoke check.
+2. Commit only the Masters UI and handoff files; do not include the unrelated
+   `packages/contracts/src/duties.ts` work.
