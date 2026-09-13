@@ -7,7 +7,7 @@ import type {
   StudentImportRowError,
   UUID,
 } from '@entropix/contracts';
-import { isUuid } from '@entropix/domain';
+import { hasActiveRole, isUuid } from '@entropix/domain';
 import {
   ForbiddenException,
   Injectable,
@@ -40,19 +40,23 @@ function tenantContext(context: AuthenticatedContext) {
 }
 
 function mayReadDirectory(context: AuthenticatedContext): boolean {
-  return context.kind === 'TENANT' && context.grants.some((grant) =>
-    ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'FACULTY', 'STUDENT', 'AUDITOR']
-      .includes(grant.role));
+  return hasActiveRole(context, [
+    'INSTITUTION_ADMIN',
+    'EXAM_CONTROLLER',
+    'DEPARTMENT_ADMIN',
+    'FACULTY',
+    'STUDENT',
+    'AUDITOR',
+  ]);
 }
 
 function mayImport(context: AuthenticatedContext): boolean {
-  return context.kind === 'TENANT' && context.grants.some((grant) =>
-    ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(grant.role));
+  return hasActiveRole(context, ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER']);
 }
 
 function studentMembership(context: AuthenticatedContext): UUID | null {
   if (context.kind !== 'TENANT') return null;
-  return context.grants.some((grant) => grant.role === 'STUDENT')
+  return context.activeRole === 'STUDENT'
     ? context.membershipId
     : null;
 }
@@ -208,8 +212,13 @@ export class PeopleService {
 
   async listFaculty(context: AuthenticatedContext) {
     const tenant = tenantContext(context);
-    if (!tenant.grants.some((grant) =>
-      ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'FACULTY', 'AUDITOR'].includes(grant.role)))
+    if (!hasActiveRole(tenant, [
+      'INSTITUTION_ADMIN',
+      'EXAM_CONTROLLER',
+      'DEPARTMENT_ADMIN',
+      'FACULTY',
+      'AUDITOR',
+    ]))
       throw new ForbiddenException('Permission denied');
     return this.repository.listFaculty(tenant.tenantId);
   }

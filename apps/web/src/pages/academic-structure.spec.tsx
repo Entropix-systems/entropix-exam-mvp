@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { AcademicStructureContent } from './academic-structure'
 
 describe('Academic structure setup view', () => {
-  it('renders persisted Northstar hierarchy and stable subject identifiers', () => {
+  it('renders persisted Northstar hierarchy without internal identifiers', () => {
     const html = renderToStaticMarkup(
       <AcademicStructureContent structure={{
         tenant: {
@@ -27,6 +27,7 @@ describe('Academic structure setup view', () => {
     expect(html).toContain('Semester 3 · BSc Computer Science Semester 3')
     expect(html).toContain('Computer Science')
     expect(html).toContain('CS301')
-    expect(html).toContain('subject-stable-id')
+    expect(html).not.toContain('subject-stable-id')
+    expect(html).not.toContain('department-id')
   })
 })

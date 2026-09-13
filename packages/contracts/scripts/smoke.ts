@@ -54,6 +54,7 @@ assert.deepEqual(
     'login',
     'refresh',
     'logout',
+    'context-switch',
     'forgot-password',
     'reset-password',
     'invitation-acceptance',

@@ -15,6 +15,7 @@ function context(role: 'INSTITUTION_ADMIN' | 'EXAM_CONTROLLER' | 'STUDENT'): Aut
     userId: '66666666-6666-4666-8666-666666666666',
     tenantId,
     membershipId,
+    activeRole: role,
     grants: [{ role, departmentId: null }],
   };
 }

@@ -57,7 +57,12 @@ export class ApiExceptionFilter implements ExceptionFilter {
     let fieldErrors: ApiError['fieldErrors'] = [];
 
     if (exception instanceof AuthApplicationError) {
-      status = exception.kind === 'UNAUTHENTICATED' ? 401 : 422;
+      status =
+        exception.kind === 'UNAUTHENTICATED'
+          ? 401
+          : exception.kind === 'FORBIDDEN'
+            ? 403
+            : 422;
       code = codeFor(status);
       message = exception.message;
       if (exception.field)

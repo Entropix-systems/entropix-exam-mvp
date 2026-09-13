@@ -22,6 +22,7 @@ const adminContext: AuthenticatedContext = {
   tenantId,
   membershipId,
   userId,
+  activeRole: 'INSTITUTION_ADMIN',
   grants: [{ role: 'INSTITUTION_ADMIN', departmentId: null }],
 };
 
@@ -116,6 +117,7 @@ describe('AcademicsService', () => {
     const { service } = setup();
     const studentContext: AuthenticatedContext = {
       ...adminContext,
+      activeRole: 'STUDENT',
       grants: [{ role: 'STUDENT', departmentId: null }],
     };
 

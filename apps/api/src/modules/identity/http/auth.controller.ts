@@ -14,6 +14,7 @@ import type {
   ForgotPasswordRequest,
   LoginRequest,
   ResetPasswordRequest,
+  SwitchAuthContextRequest,
 } from '@entropix/contracts';
 import { AuthApplicationService } from '../application/auth.service.js';
 import type { AuthenticatedPrincipal } from '../identity.repository.js';
@@ -71,7 +72,6 @@ export class AuthController {
     const issued = await this.auth.login({
       email: body.email,
       password: body.password,
-      institutionSlug: body.institutionSlug,
     } as LoginRequest);
     this.setRefreshCookie(response, issued.refreshToken);
     const { refreshToken: _secret, ...publicResult } = issued;
@@ -143,6 +143,19 @@ export class AuthController {
   }
 
   @Authenticated()
+  @Post('context')
+  switchContext(
+    @CurrentAuthPrincipal() principal: AuthenticatedPrincipal,
+    @Body() rawBody: unknown,
+  ) {
+    const body = objectBody(rawBody);
+    return this.auth.switchContext(principal, {
+      institutionId: body.institutionId,
+      role: body.role,
+    } as SwitchAuthContextRequest);
+  }
+
+  @Authenticated()
   @Get('me')
   me(@CurrentAuthPrincipal() principal: AuthenticatedPrincipal) {
     return this.auth.me(principal);
@@ -153,4 +166,3 @@ export class AuthController {
     response.cookie(cookie.name, rawToken, cookie.options);
   }
 }
-

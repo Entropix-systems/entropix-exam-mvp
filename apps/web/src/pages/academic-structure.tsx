@@ -16,7 +16,6 @@ function codeList(records: readonly { id: string; code: string; name: string }[]
         <li key={record.id}>
           <span className="academic-code">{record.code}</span>
           <strong>{record.name}</strong>
-          <small title={record.id}>{record.id}</small>
         </li>
       ))}
     </ul>

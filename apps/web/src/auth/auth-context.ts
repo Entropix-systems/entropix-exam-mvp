@@ -1,5 +1,9 @@
 import { createContext, useContext } from 'react'
-import type { CurrentUserResponse, LoginRequest } from '@entropix/contracts'
+import type {
+  CurrentUserResponse,
+  LoginRequest,
+  TenantRole,
+} from '@entropix/contracts'
 
 export type AuthStatus =
   | 'RESTORING'
@@ -11,6 +15,8 @@ export interface AuthContextValue {
   status: AuthStatus
   currentUser: CurrentUserResponse | null
   login(input: LoginRequest): Promise<void>
+  switchInstitution(institutionId: string): Promise<void>
+  switchRole(role: TenantRole): Promise<void>
   logout(): Promise<void>
   restore(): Promise<void>
 }
@@ -22,4 +28,3 @@ export function useAuth(): AuthContextValue {
   if (!value) throw new Error('AuthProvider is required')
   return value
 }
-

@@ -6,6 +6,9 @@ import type {
 } from '@entropix/contracts';
 
 const roleValues: readonly string[] = Object.values(ROLES);
+const tenantRoleValues = roleValues.filter(
+  (role) => role !== ROLES.PLATFORM_ADMIN,
+);
 export function isUuid(value: unknown): value is string {
   return (
     typeof value === 'string' &&
@@ -49,8 +52,11 @@ export function isAuthenticatedContext(
     !('role' in value) &&
     isUuid(value.tenantId) &&
     isUuid(value.membershipId) &&
+    typeof value.activeRole === 'string' &&
+    tenantRoleValues.includes(value.activeRole) &&
     Array.isArray(value.grants) &&
-    value.grants.every(isScopedRoleGrant)
+    value.grants.every(isScopedRoleGrant) &&
+    value.grants.some((grant) => grant.role === value.activeRole)
   );
 }
 export function isAccessTokenIdentity(

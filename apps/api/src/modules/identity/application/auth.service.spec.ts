@@ -16,6 +16,8 @@ import {
   type ResetPasswordResult,
   type RotateRefreshCommand,
   type RotateRefreshResult,
+  type SwitchSessionContextCommand,
+  type SwitchSessionContextResult,
 } from '../identity.repository.js';
 import { AccessTokenCodec } from '../security/access-token.js';
 import { PasswordHasher } from '../security/password-hasher.js';
@@ -43,6 +45,7 @@ const context: AuthenticatedContext = {
   userId,
   tenantId,
   membershipId,
+  activeRole: 'STUDENT',
   grants: [{ role: 'STUDENT', departmentId: null }],
 };
 const principal: AuthenticatedPrincipal = { identity, context };
@@ -57,10 +60,12 @@ class TestRepository extends IdentityWorkflowRepository {
   };
   loginResult: LoginSessionResult = { kind: 'CREATED', identity };
   rotateResult: RotateRefreshResult = { kind: 'ROTATED', identity };
+  switchResult: SwitchSessionContextResult = { kind: 'SWITCHED', identity };
   resetResult: ResetPasswordResult = { kind: 'RESET', userId };
   invitationResult: AcceptInvitationResult = { kind: 'ACCEPTED' };
   loginCommands: LoginSessionCommand[] = [];
   rotationCommands: RotateRefreshCommand[] = [];
+  switchCommands: SwitchSessionContextCommand[] = [];
   resetTokenCommands: CreatePasswordResetCommand[] = [];
   resetCommands: ResetPasswordCommand[] = [];
   invitationCommands: AcceptInvitationCommand[] = [];
@@ -80,6 +85,16 @@ class TestRepository extends IdentityWorkflowRepository {
     if (this.failLogin) throw new Error('private repository failure');
     this.loginCommands.push(command);
     return this.loginResult;
+  }
+  async switchSessionContext(command: SwitchSessionContextCommand) {
+    this.switchCommands.push(command);
+    return this.switchResult;
+  }
+  async currentUserAccess() {
+    return {
+      email: 'student@example.test',
+      institutions: [{ id: tenantId, name: 'Northstar College', slug: 'northstar-college' }],
+    };
   }
   async rotateRefresh(command: RotateRefreshCommand) {
     this.rotationCommands.push(command);
@@ -166,13 +181,11 @@ describe('login orchestration', () => {
     const result = await service.login({
       email: '  STUDENT@Example.Test ',
       password: 'correct password',
-      institutionSlug: ' Northstar-College ',
     });
     expect(repository.lookedUpEmails).toEqual(['student@example.test']);
     expect(repository.loginCommands).toHaveLength(1);
     expect(repository.loginCommands[0]).toMatchObject({
       userId,
-      institutionSlug: 'northstar-college',
       requireActiveUser: true,
       requireActiveTenantMembership: true,
       now,
@@ -203,7 +216,6 @@ describe('login orchestration', () => {
         service.login({
           email: 'student@example.test',
           password,
-          institutionSlug: 'northstar-college',
         }),
       ).rejects.toMatchObject({
         kind: 'UNAUTHENTICATED',
@@ -214,18 +226,17 @@ describe('login orchestration', () => {
     },
   );
 
-  it('uses the same public failure when tenant membership is absent/inactive', async () => {
+  it('returns an authenticated no-access state when no usable membership exists', async () => {
     const { service, repository } = setup();
-    repository.loginResult = { kind: 'DENIED' };
+    repository.loginResult = { kind: 'NO_ACCESS' };
     await expect(
       service.login({
         email: 'student@example.test',
         password: 'correct password',
-        institutionSlug: 'northstar-college',
       }),
     ).rejects.toMatchObject({
-      kind: 'UNAUTHENTICATED',
-      message: 'Invalid credentials',
+      kind: 'FORBIDDEN',
+      message: 'No active institution access is available for this account',
     });
   });
 
@@ -239,7 +250,6 @@ describe('login orchestration', () => {
         service.login({
           email: 'student@example.test',
           password: 'correct password',
-          institutionSlug: 'northstar-college',
         }),
       ).rejects.toMatchObject({
         kind: 'UNAUTHENTICATED',
@@ -255,7 +265,6 @@ describe('refresh and revocation orchestration', () => {
     const login = await service.login({
       email: 'student@example.test',
       password: 'correct password',
-      institutionSlug: 'northstar-college',
     });
     const result = await service.refresh(login.refreshToken);
     expect(repository.rotationCommands[0]).toMatchObject({
@@ -401,7 +410,37 @@ describe('invitation acceptance orchestration', () => {
 });
 
 describe('current context', () => {
-  it('returns server-resolved context and the verified session ID', () => {
-    expect(setup().service.me(principal)).toEqual({ context, sessionId });
+  it('returns server-resolved context, identity label, and institution choices', async () => {
+    await expect(setup().service.me(principal)).resolves.toEqual({
+      context,
+      sessionId,
+      email: 'student@example.test',
+      institutions: [{ id: tenantId, name: 'Northstar College', slug: 'northstar-college' }],
+    });
+  });
+
+  it('accepts only a server-verified institution and granted role switch', async () => {
+    const { service, repository, accessTokens } = setup();
+    await expect(service.switchContext(principal, {
+      institutionId: tenantId,
+      role: 'STUDENT',
+    })).resolves.toEqual({
+      accessToken: `access:${sessionId}`,
+      expiresInSeconds: 900,
+    });
+    expect(repository.switchCommands).toEqual([{
+      userId,
+      sessionId,
+      institutionId: tenantId,
+      role: 'STUDENT',
+      now,
+    }]);
+    expect(accessTokens.signed.at(-1)).toEqual(identity);
+
+    repository.switchResult = { kind: 'FORBIDDEN' };
+    await expect(service.switchContext(principal, {
+      institutionId: '33333333-3333-4333-8333-333333333333',
+      role: 'INSTITUTION_ADMIN',
+    })).rejects.toMatchObject({ kind: 'FORBIDDEN' });
   });
 });

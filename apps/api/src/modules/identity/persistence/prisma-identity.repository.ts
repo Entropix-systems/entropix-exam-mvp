@@ -2,8 +2,10 @@ import type {
   AccessTokenIdentity,
   AuthenticatedContext,
   ScopedRoleGrant,
+  TenantRole,
   UUID,
 } from '@entropix/contracts';
+import { ROLES } from '@entropix/contracts';
 import { type Prisma, PrismaClient, withTenant } from '@entropix/db';
 import { canReplaceRoleGrants } from '@entropix/domain';
 import { Injectable } from '@nestjs/common';
@@ -26,6 +28,8 @@ import {
   type ResetPasswordResult,
   type RotateRefreshCommand,
   type RotateRefreshResult,
+  type SwitchSessionContextCommand,
+  type SwitchSessionContextResult,
 } from '../identity.repository.js';
 
 type Tx = Prisma.TransactionClient;
@@ -51,11 +55,27 @@ interface LockedSessionRow {
   kind: string;
   tenantId: string | null;
   membershipId: string | null;
+  activeRole: string | null;
   expiresAt: Date;
   revokedAt: Date | null;
 }
 
 const ACTIVE = 'ACTIVE';
+const rolePriority: readonly TenantRole[] = [
+  ROLES.INSTITUTION_ADMIN,
+  ROLES.EXAM_CONTROLLER,
+  ROLES.DEPARTMENT_ADMIN,
+  ROLES.FACULTY,
+  ROLES.INVIGILATOR,
+  ROLES.STUDENT,
+  ROLES.AUDITOR,
+];
+
+function defaultRole(
+  grants: readonly { role: string }[],
+): TenantRole | null {
+  return rolePriority.find((role) => grants.some((grant) => grant.role === role)) ?? null;
+}
 
 function grantsFrom(
   rows: readonly { role: string; departmentId: string | null }[],
@@ -72,13 +92,14 @@ function memberFrom(row: {
   status: string;
   version: number;
   user: { email: string };
+  faculty?: { name: string } | null;
   roleGrants: readonly { role: string; departmentId: string | null }[];
 }): MembershipListItem {
   return {
     id: row.id,
     userId: row.userId,
     email: row.user.email,
-    name: null,
+    name: row.faculty?.name ?? null,
     status: row.status,
     version: row.version,
     grants: grantsFrom(row.roleGrants),
@@ -88,6 +109,12 @@ function memberFrom(row: {
 async function setTenant(tx: Tx, tenantId: string): Promise<void> {
   await tx.$queryRaw<Array<{ set_config: string }>>`
     SELECT set_config('app.tenant_id', ${tenantId}, true)
+  `;
+}
+
+async function setIdentityUser(tx: Tx, userId: string): Promise<void> {
+  await tx.$queryRaw<Array<{ set_config: string }>>`
+    SELECT set_config('app.identity_user_id', ${userId}, true)
   `;
 }
 
@@ -127,7 +154,8 @@ async function lockToken(tx: Tx, hash: string, purpose: string) {
 async function lockSession(tx: Tx, sessionId: string) {
   const [session] = await tx.$queryRaw<LockedSessionRow[]>`
     SELECT id, user_id AS "userId", kind, tenant_id AS "tenantId",
-           membership_id AS "membershipId", expires_at AS "expiresAt",
+           membership_id AS "membershipId", active_role AS "activeRole",
+           expires_at AS "expiresAt",
            revoked_at AS "revokedAt"
     FROM sessions
     WHERE id = ${sessionId}::uuid
@@ -186,34 +214,39 @@ export class PrismaIdentityRepository
       const user = await lockUser(tx, command.userId);
       if (!user || user.status !== ACTIVE) return { kind: 'DENIED' };
 
-      let binding:
-        | { kind: 'PLATFORM'; tenantId: null; membershipId: null }
-        | { kind: 'TENANT'; tenantId: string; membershipId: string };
-
-      if (command.institutionSlug === null) {
-        if (user.platformRole !== 'PLATFORM_ADMIN') return { kind: 'DENIED' };
-        binding = { kind: 'PLATFORM', tenantId: null, membershipId: null };
-      } else {
-        const tenant = await tx.tenant.findUnique({
-          where: { slug: command.institutionSlug },
-          select: { id: true, status: true },
-        });
-        if (!tenant || tenant.status !== ACTIVE) return { kind: 'DENIED' };
-        await setTenant(tx, tenant.id);
-        const membership = await tx.membership.findUnique({
-          where: {
-            tenantId_userId: { tenantId: tenant.id, userId: command.userId },
-          },
-          select: { id: true, status: true },
-        });
-        if (!membership || membership.status !== ACTIVE)
-          return { kind: 'DENIED' };
-        binding = {
-          kind: 'TENANT',
-          tenantId: tenant.id,
-          membershipId: membership.id,
-        };
-      }
+      await setIdentityUser(tx, command.userId);
+      const membership = await tx.membership.findFirst({
+        where: {
+          userId: command.userId,
+          status: ACTIVE,
+          tenant: { status: ACTIVE },
+          roleGrants: { some: {} },
+        },
+        select: {
+          id: true,
+          tenantId: true,
+          roleGrants: { select: { role: true }, orderBy: { role: 'asc' } },
+        },
+        orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+      });
+      const activeRole = membership ? defaultRole(membership.roleGrants) : null;
+      const binding =
+        membership && activeRole
+          ? {
+              kind: 'TENANT' as const,
+              tenantId: membership.tenantId,
+              membershipId: membership.id,
+              activeRole,
+            }
+          : user.platformRole === ROLES.PLATFORM_ADMIN
+            ? {
+                kind: 'PLATFORM' as const,
+                tenantId: null,
+                membershipId: null,
+                activeRole: null,
+              }
+            : null;
+      if (!binding) return { kind: 'NO_ACCESS' };
 
       await tx.session.create({
         data: {
@@ -222,6 +255,7 @@ export class PrismaIdentityRepository
           kind: binding.kind,
           tenantId: binding.tenantId,
           membershipId: binding.membershipId,
+          activeRole: binding.activeRole,
           expiresAt: command.expiresAt,
           lastUsedAt: command.now,
         },
@@ -251,6 +285,104 @@ export class PrismaIdentityRepository
               }
             : {}),
         } as AccessTokenIdentity,
+      };
+    });
+  }
+
+  async switchSessionContext(
+    command: SwitchSessionContextCommand,
+  ): Promise<SwitchSessionContextResult> {
+    return this.prisma.$transaction(async (tx) => {
+      const session = await lockSession(tx, command.sessionId);
+      if (
+        !session ||
+        session.userId !== command.userId ||
+        session.revokedAt ||
+        session.expiresAt <= command.now
+      )
+        return { kind: 'SESSION_INVALID' };
+      const user = await lockUser(tx, command.userId);
+      if (!user || user.status !== ACTIVE) return { kind: 'SESSION_INVALID' };
+
+      await setIdentityUser(tx, command.userId);
+      const membership = await tx.membership.findFirst({
+        where: {
+          tenantId: command.institutionId,
+          userId: command.userId,
+          status: ACTIVE,
+          tenant: { status: ACTIVE },
+          roleGrants: command.role
+            ? { some: { role: command.role } }
+            : { some: {} },
+        },
+        select: {
+          id: true,
+          tenantId: true,
+          roleGrants: { select: { role: true }, orderBy: { role: 'asc' } },
+        },
+      });
+      if (!membership) return { kind: 'FORBIDDEN' };
+      const activeRole = command.role ?? defaultRole(membership.roleGrants);
+      if (!activeRole) return { kind: 'FORBIDDEN' };
+
+      await tx.session.update({
+        where: { id: session.id },
+        data: {
+          kind: 'TENANT',
+          tenantId: membership.tenantId,
+          membershipId: membership.id,
+          activeRole,
+          lastUsedAt: command.now,
+        },
+      });
+      await tx.authToken.updateMany({
+        where: {
+          sessionId: session.id,
+          purpose: 'REFRESH',
+          consumedAt: null,
+          revokedAt: null,
+        },
+        data: {
+          tenantId: membership.tenantId,
+          membershipId: membership.id,
+        },
+      });
+      return {
+        kind: 'SWITCHED',
+        identity: {
+          kind: 'TENANT',
+          userId: command.userId,
+          sessionId: session.id,
+          tenantId: membership.tenantId,
+          membershipId: membership.id,
+        },
+      };
+    });
+  }
+
+  async currentUserAccess(userId: UUID) {
+    return this.prisma.$transaction(async (tx) => {
+      const user = await tx.user.findFirst({
+        where: { id: userId, status: ACTIVE },
+        select: { email: true },
+      });
+      if (!user) return null;
+      await setIdentityUser(tx, userId);
+      const memberships = await tx.membership.findMany({
+        where: {
+          userId,
+          status: ACTIVE,
+          tenant: { status: ACTIVE },
+          roleGrants: { some: {} },
+        },
+        select: {
+          tenant: { select: { id: true, name: true, slug: true } },
+        },
+        orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+      });
+      return {
+        email: user.email,
+        institutions: memberships.map(({ tenant }) => tenant),
       };
     });
   }
@@ -292,10 +424,15 @@ export class PrismaIdentityRepository
       if (!user || user.status !== ACTIVE) return { kind: 'SESSION_REVOKED' };
 
       if (session.kind === 'PLATFORM') {
-        if (user.platformRole !== 'PLATFORM_ADMIN')
+        if (session.activeRole !== null || user.platformRole !== ROLES.PLATFORM_ADMIN)
           return { kind: 'SESSION_REVOKED' };
       } else {
-        if (!session.tenantId || !session.membershipId)
+        if (!session.tenantId || !session.membershipId || !session.activeRole)
+          return { kind: 'SESSION_REVOKED' };
+        if (
+          token.tenantId !== session.tenantId ||
+          token.membershipId !== session.membershipId
+        )
           return { kind: 'SESSION_REVOKED' };
         await setTenant(tx, session.tenantId);
         const authority = await tx.membership.findFirst({
@@ -305,6 +442,7 @@ export class PrismaIdentityRepository
             userId: session.userId,
             status: ACTIVE,
             tenant: { status: ACTIVE },
+            roleGrants: { some: { role: session.activeRole } },
           },
           select: { id: true },
         });
@@ -522,20 +660,60 @@ export class PrismaIdentityRepository
 
   async listMemberships(
     tenantId: UUID,
-  ): Promise<readonly MembershipListItem[]> {
+    pageSize: number,
+    cursor: UUID | null,
+  ) {
     return withTenant(this.prisma, tenantId, async (tx) => {
-      const rows = await tx.membership.findMany({
-        where: { tenantId },
-        include: {
-          user: { select: { email: true } },
-          roleGrants: {
-            select: { role: true, departmentId: true },
-            orderBy: [{ role: 'asc' }, { departmentId: 'asc' }],
+      const staffWhere: Prisma.MembershipWhereInput = {
+        tenantId,
+        student: { is: null },
+        roleGrants: { none: { role: ROLES.STUDENT } },
+      };
+      if (cursor) {
+        const cursorExists = await tx.membership.findFirst({
+          where: { ...staffWhere, id: cursor },
+          select: { id: true },
+        });
+        if (!cursorExists) return null;
+      }
+      const [institution, departments, rows] = await Promise.all([
+        tx.tenant.findFirst({
+          where: { id: tenantId, status: ACTIVE },
+          select: { name: true },
+        }),
+        tx.department.findMany({
+          where: { tenantId },
+          select: { id: true, name: true },
+          orderBy: [{ name: 'asc' }, { id: 'asc' }],
+        }),
+        tx.membership.findMany({
+          where: staffWhere,
+          include: {
+            user: { select: { email: true } },
+            faculty: { select: { name: true } },
+            roleGrants: {
+              select: { role: true, departmentId: true },
+              orderBy: [{ role: 'asc' }, { departmentId: 'asc' }],
+            },
           },
+          orderBy: { id: 'asc' },
+          take: pageSize + 1,
+          ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+        }),
+      ]);
+      if (!institution) return null;
+      const hasMore = rows.length > pageSize;
+      const visibleRows = hasMore ? rows.slice(0, pageSize) : rows;
+      return {
+        institutionName: institution.name,
+        departments,
+        memberships: {
+          items: visibleRows.map(memberFrom),
+          nextCursor: hasMore
+            ? visibleRows[visibleRows.length - 1]?.id ?? null
+            : null,
         },
-        orderBy: { createdAt: 'asc' },
-      });
-      return rows.map(memberFrom);
+      };
     });
   }
 
@@ -667,6 +845,7 @@ export class PrismaIdentityRepository
         userId: command.actorUserId,
         tenantId: command.tenantId,
         membershipId: command.actorMembershipId,
+        activeRole: ROLES.INSTITUTION_ADMIN,
         grants: grantsFrom(actorMembership.roleGrants),
       };
       if (
@@ -798,12 +977,14 @@ export class PrismaCurrentAuthorityRepository extends CurrentAuthorityRepository
     if (identity.kind === 'PLATFORM')
       return session.tenantId === null &&
         session.membershipId === null &&
+        session.activeRole === null &&
         session.user.platformRole === 'PLATFORM_ADMIN'
         ? { kind: 'PLATFORM', userId: identity.userId, role: 'PLATFORM_ADMIN' }
         : null;
     if (
       session.tenantId !== identity.tenantId ||
-      session.membershipId !== identity.membershipId
+      session.membershipId !== identity.membershipId ||
+      !session.activeRole
     )
       return null;
     return withTenant(this.prisma, identity.tenantId, async (tx) => {
@@ -819,15 +1000,18 @@ export class PrismaCurrentAuthorityRepository extends CurrentAuthorityRepository
           roleGrants: { select: { role: true, departmentId: true } },
         },
       });
-      return membership
-        ? {
-            kind: 'TENANT',
-            userId: identity.userId,
-            tenantId: identity.tenantId,
-            membershipId: identity.membershipId,
-            grants: grantsFrom(membership.roleGrants),
-          }
-        : null;
+      if (!membership) return null;
+      const grants = grantsFrom(membership.roleGrants);
+      if (!grants.some((grant) => grant.role === session.activeRole))
+        return null;
+      return {
+        kind: 'TENANT',
+        userId: identity.userId,
+        tenantId: identity.tenantId,
+        membershipId: identity.membershipId,
+        activeRole: session.activeRole as TenantRole,
+        grants,
+      };
     });
   }
 }

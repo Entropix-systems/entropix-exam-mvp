@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { AuthApiClient } from './auth/auth-client'
 import { AuthProvider } from './auth/auth-provider'
+import { useAuth } from './auth/auth-context'
+import { authContextKey } from './auth/context-key'
 import { ProtectedRoute } from './auth/protected-route'
 import { IdentityApiClient } from './identity/identity-client'
 import { AcademicsApiClient } from './academics/academics-client'
@@ -36,6 +38,8 @@ function usePathname() {
 }
 function Routes() {
   const pathname = usePathname()
+  const { currentUser } = useAuth()
+  const scopeKey = authContextKey(currentUser)
   if (pathname === '/login') return <LoginPage />
   if (pathname === '/forgot-password')
     return <ForgotPasswordPage client={authClient} />
@@ -47,24 +51,24 @@ function Routes() {
   if (pathname === '/setup-access')
     return (
       <ProtectedRoute>
-        <SetupAccessPage client={identityClient} academicClient={academicsClient} />
+        <SetupAccessPage key={scopeKey} client={identityClient} academicClient={academicsClient} />
       </ProtectedRoute>
     )
   if (pathname === '/students')
     return (
       <ProtectedRoute>
-        <StudentsPage client={peopleClient} />
+        <StudentsPage key={scopeKey} client={peopleClient} />
       </ProtectedRoute>
     )
   if (pathname === '/exams')
     return (
       <ProtectedRoute>
-        <ExamsPage client={examsClient} academicClient={academicsClient} />
+        <ExamsPage key={scopeKey} client={examsClient} academicClient={academicsClient} />
       </ProtectedRoute>
     )
   return (
     <ProtectedRoute>
-      <HomePage />
+      <HomePage key={scopeKey} />
     </ProtectedRoute>
   )
 }

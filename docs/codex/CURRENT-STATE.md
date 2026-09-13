@@ -7,17 +7,17 @@ Known-good foundation: d0-ready
 Known-good D0 verification: PASS at integration SHA 6182f80
 Shared development branch: integration
 Current sprint: D1–D3 MVP implementation
-Current day: D1 EXAMS / REGISTRATION VERTICAL SLICE MERGED
+Current day: IAM QA-01 THROUGH QA-06 FOLLOW-UP VERIFIED LOCALLY
 ```
 
 ## Current Gate
 
 ```text
-A03 Exams and Registration is merged into `integration` from
-`feat/A03-exam-registration` commit `37b945f`. Its migrations are applied;
-Northstar application and Cedar auto-enrol fixtures, focused API tests, RLS
-smoke, and Web/API/DB builds pass. Authenticated browser proof still requires a
-demo credential.
+IAM institution/role context switching, credentials-only login, staff-only
+cursor pagination and the no-UUID UI audit are complete on `fix/qa-iam-context`.
+The new transactional migration and all repository gates pass against disposable
+local PostgreSQL. It is also applied to the shared demo database after explicit
+deployment approval; live login and `/auth/me` context verification pass.
 ```
 
 ## Completed
@@ -37,35 +37,35 @@ d0-ready tag
 IAM Phase 3 PostgreSQL persistence, production API wiring and admin endpoints
 IAM browser login, membership directory, invitation, session, recovery,
 deactivation and tenant-isolation demo gate
+IAM QA-01 through QA-06 implementation and local verification
 ```
 
 ## In Progress
 
 ```text
 A04 scheduling and B02 marks may consume approved RegistrationSubject UUIDs
-after pulling the latest integration branch
+after pulling the latest integration branch.
 ```
 
 ## Blockers
 
 ```text
-Department records now exist in A01; IAM still needs a focused follow-up to consume
-them for department-scoped grant selection. IAM must not own or fabricate them.
-No repository-managed demo password exists for authenticated browser verification.
+None for the IAM QA context flow.
 ```
 
 ## Migration Lock
 
 ```text
-Owner: NONE
-Purpose: A03 migrations are merged; available for the next schema-owning lane
+Owner: FREE after IAM QA context follow-up
+Last change: `20260914100000_iam_context_switching` persists active role and
+adds restricted identity-routing RLS policies
 ```
 
 ## Shared Contract Lock
 
 ```text
-Owner: NONE
-Purpose: A03 contracts are merged; available for the next shared-contract lane
+Owner: FREE after IAM QA context follow-up
+Last change: authenticated institution/role context and paginated staff-directory contracts
 ```
 
 ## Developer A
@@ -99,11 +99,14 @@ A03 migrations `20260913193000_exams_registration` and constraint-name alignment
 `20260913194000_exams_registration_constraint_names`: both APPLIED to the configured demo database.
 A03 fixtures: Northstar 1 submitted application/3 subjects; Cedar 20 approved registrations/60 stable roster rows.
 A03 eligibility/transition tests, Prisma validation, RLS smoke, and Web/API/DB builds: PASS.
+IAM QA migration: APPLIED to disposable local PostgreSQL and the shared demo database.
+IAM PostgreSQL 9 tests, API 82 tests, API E2E 2, Web 26, Domain 32, Worker 2: PASS.
+Canonical `pnpm d0:verify`: PASS under available Node 24.19.0 (pin is 24.20.0).
+Live admin login: HTTP 201; `/auth/me`: Northstar College / INSTITUTION_ADMIN; logout: HTTP 201.
 ```
 
 ## Next Required Action
 
 ```text
-A04/B02 must pull integration before consuming RegistrationSubject IDs. Run
-authenticated controller/student browser proof later if credentials are supplied.
+Refresh the current browser session and continue QA against the verified shared context.
 ```

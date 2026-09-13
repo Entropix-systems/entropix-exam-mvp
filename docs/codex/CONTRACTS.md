@@ -37,6 +37,44 @@ OBSERVER  = INVIGILATOR with a duty/sitting assignment
 
 `HOD`, `EXAMINER`, and `OBSERVER` are not canonical MVP role bundles.
 
+## Authenticated institution and role context
+
+Login accepts credentials only. After authentication, the server chooses the
+oldest active institution membership with at least one role grant (breaking ties
+by membership UUID); a platform administrator with no such membership enters the
+platform context. A credentialed user with neither kind of access receives the
+generic forbidden/no-access result.
+
+Tenant sessions persist one `activeRole`. The resolved authorization context
+contains that role plus every currently valid grant for the selected membership,
+but permission and feature checks evaluate only the active role bundle. JWTs remain
+identity hints and never carry authoritative role state.
+
+```text
+POST /api/v1/auth/context  { institutionId, role? }
+GET  /api/v1/auth/me       → { email, context, sessionId, institutions }
+```
+
+Context switching accepts only an active institution membership belonging to the
+authenticated user and, when supplied, a role currently granted on that
+membership. A successful switch updates the session and live refresh-token
+binding atomically, then returns a replacement access token. The browser reloads
+`/auth/me` and remounts tenant screens so no tenant-local page state survives the
+switch.
+
+The staff access directory is cursor-paginated on the server:
+
+```text
+GET /api/v1/identity/memberships?cursor=<membership UUID>&pageSize=<1..100>
+→ { institutionName, departments, pageSize,
+    memberships: { items, nextCursor } }
+```
+
+The cursor must identify a visible staff membership in the active tenant.
+Memberships backed by a Student profile or any `STUDENT` grant are excluded.
+Internal user IDs are not returned in directory items; the Web UI displays names,
+emails, institution names, and role labels instead of UUIDs.
+
 ---
 
 # Academic Hierarchy

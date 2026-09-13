@@ -1,5 +1,9 @@
-import type { UUID } from './common.js';
-import type { AuthenticatedContext, ScopedRoleGrant } from './context.js';
+import type { CursorPage, UUID } from './common.js';
+import type {
+  AuthenticatedContext,
+  ScopedRoleGrant,
+  TenantRole,
+} from './context.js';
 import type { VersionedCommand } from './commands.js';
 
 export const AUTH_TOKEN_PURPOSES = {
@@ -15,6 +19,7 @@ export const AUTH_PROTOCOL_OPERATIONS = [
   'login',
   'refresh',
   'logout',
+  'context-switch',
   'forgot-password',
   'reset-password',
   'invitation-acceptance',
@@ -23,7 +28,6 @@ export const AUTH_PROTOCOL_OPERATIONS = [
 export interface LoginRequest {
   email: string;
   password: string;
-  institutionSlug?: string;
 }
 export interface ForgotPasswordRequest {
   email: string;
@@ -44,6 +48,31 @@ export interface AccessTokenResponse {
 export interface CurrentUserResponse {
   context: AuthenticatedContext;
   sessionId: UUID;
+  email: string;
+  institutions: readonly InstitutionAccessSummary[];
+}
+export interface InstitutionAccessSummary {
+  id: UUID;
+  name: string;
+  slug: string;
+}
+export interface SwitchAuthContextRequest {
+  institutionId: UUID;
+  role?: TenantRole;
+}
+export interface MembershipDirectoryItem {
+  id: UUID;
+  email: string;
+  name: string | null;
+  status: string;
+  version: number;
+  grants: readonly ScopedRoleGrant[];
+}
+export interface MembershipDirectoryResponse {
+  institutionName: string;
+  departments: readonly { id: UUID; name: string }[];
+  memberships: CursorPage<MembershipDirectoryItem>;
+  pageSize: number;
 }
 export interface CreateInvitationRequest {
   email: string;

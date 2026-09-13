@@ -23,7 +23,7 @@ const message = (reason: unknown, fallback: string) => reason instanceof AuthApi
 const dateTime = (value: string) => new Date(value).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
 
 export function ExamsPage({ client, academicClient }: { client: ExamsApiClient; academicClient: AcademicsApiClient }) {
-  const { currentUser, logout } = useAuth()
+  const { currentUser, logout, switchInstitution, switchRole } = useAuth()
   const [exams, setExams] = useState<readonly ExamRecord[]>([])
   const [academics, setAcademics] = useState<AcademicStructureSnapshot | null>(null)
   const [loading, setLoading] = useState(true)
@@ -33,8 +33,8 @@ export function ExamsPage({ client, academicClient }: { client: ExamsApiClient; 
   const [showCreate, setShowCreate] = useState(false)
   const [draftSelections, setDraftSelections] = useState<Record<string, string[]>>({})
   const [form, setForm] = useState({ code: 'SEM3-2026', name: 'Semester 3 Examination', termId: '', mode: 'APPLICATION' as 'APPLICATION' | 'AUTO_ENROL', opens: '2026-09-01T00:00', closes: '2026-12-31T23:59', subjectIds: [] as string[] })
-  const controller = currentUser?.context.kind === 'TENANT' && currentUser.context.grants.some((grant) => grant.role === 'EXAM_CONTROLLER' || grant.role === 'INSTITUTION_ADMIN')
-  const student = currentUser?.context.kind === 'TENANT' && currentUser.context.grants.some((grant) => grant.role === 'STUDENT')
+  const controller = currentUser?.context.kind === 'TENANT' && (currentUser.context.activeRole === 'EXAM_CONTROLLER' || currentUser.context.activeRole === 'INSTITUTION_ADMIN')
+  const student = currentUser?.context.kind === 'TENANT' && currentUser.context.activeRole === 'STUDENT'
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -82,7 +82,13 @@ export function ExamsPage({ client, academicClient }: { client: ExamsApiClient; 
   }
   if (!currentUser) return null
   return (
-    <WorkspaceShell currentUser={currentUser} active="exams" onLogout={logout}>
+    <WorkspaceShell
+      currentUser={currentUser}
+      active="exams"
+      onLogout={logout}
+      onSwitchInstitution={switchInstitution}
+      onSwitchRole={switchRole}
+    >
       <div className="page-heading"><div><p className="eyebrow">Exam administration</p><h1>Exams &amp; registration</h1><p>Persisted application and school auto-enrol workflows.</p></div>{controller ? <button className="primary-button" type="button" onClick={() => setShowCreate(true)}>Create exam</button> : null}</div>
       {notice ? <p className="form-message page-message">{notice}</p> : null}
       {error ? <div className="academic-error" role="alert"><p>{error}</p><button className="secondary-button" onClick={() => void load()}>Retry</button></div> : null}

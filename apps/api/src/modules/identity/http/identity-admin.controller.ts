@@ -3,7 +3,7 @@ import type {
   CreateInvitationRequest,
 } from '@entropix/contracts';
 import { IAM_PERMISSIONS } from '@entropix/contracts';
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { IdentityAdminService } from '../application/identity-admin.service.js';
 import {
   CurrentAuthContext,
@@ -22,8 +22,12 @@ export class IdentityAdminController {
 
   @RequirePermissions(IAM_PERMISSIONS.MEMBERSHIPS_READ)
   @Get('memberships')
-  list(@CurrentAuthContext() context: AuthenticatedContext) {
-    return this.identity.list(context);
+  list(
+    @CurrentAuthContext() context: AuthenticatedContext,
+    @Query('cursor') cursor?: string,
+    @Query('pageSize') pageSize?: string,
+  ) {
+    return this.identity.list(context, cursor, pageSize);
   }
 
   @RequirePermissions(IAM_PERMISSIONS.INVITATIONS_MANAGE)

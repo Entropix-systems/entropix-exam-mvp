@@ -39,6 +39,7 @@
 .tenant-box { display: grid; gap: 5px; margin-bottom: 24px; border: 1px solid #315765; border-radius: 7px; padding: 12px; background: #1a4352; }
 .tenant-box small, .nav-label { color: #91b0ba; font-size: 9px; font-weight: 800; letter-spacing: .12em; }
 .tenant-box strong { color: #fff; font-size: 13px; }
+.tenant-box select { width: 100%; border: 1px solid #52727e; border-radius: 6px; padding: 7px 8px; color: #fff; background: #123644; }
 .nav-label { margin: 0 10px 8px; }
 .workspace-sidebar nav { display: grid; gap: 4px; }
 .workspace-sidebar nav button { display: flex; gap: 11px; align-items: center; width: 100%; border: 0; border-radius: 6px; padding: 10px 12px; color: #bcd0d6; background: transparent; font: inherit; text-align: left; }
@@ -48,6 +49,9 @@
 .workspace-topbar { display: flex; align-items: center; justify-content: space-between; min-height: 64px; padding: 12px clamp(22px, 4vw, 48px); border-bottom: 1px solid #dae4e7; background: #fff; }
 .workspace-topbar > span, .context-kind { color: #657985; font-size: 12px; }
 .topbar-actions { display: flex; gap: 12px; align-items: center; }
+.topbar-actions select { border: 1px solid #cbd8dc; border-radius: 7px; padding: 8px 10px; color: #284754; background: #fff; }
+.user-email { color: #526b76; font-size: 12px; }
+.context-switch-error { margin: 0; padding: 9px clamp(22px, 4vw, 48px); color: #9d2929; background: #fff0f0; font-size: 12px; }
 .demo-notice { padding: 8px clamp(22px, 4vw, 48px); color: #496e7a; background: #e5f2f1; font-size: 12px; }
 .workspace-content { padding: clamp(24px, 4vw, 48px); }
 .page-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; max-width: 1240px; margin: 0 auto 26px; }
@@ -95,6 +99,9 @@
 .danger-link { border: 0; padding: 4px; color: #ad3d3d; background: transparent; font-weight: 750; }
 .link-button:disabled, .danger-link:disabled { opacity: .5; }
 .loading-state, .empty-state { margin: 0; padding: 30px 24px; color: #6b7d87; }
+.pagination-controls { display: flex; align-items: center; justify-content: flex-end; gap: 12px; border-top: 1px solid #e4eaec; padding: 14px 18px; color: #60747e; font-size: 12px; }
+.pagination-controls label { display: flex; align-items: center; gap: 7px; }
+.pagination-controls select { border: 1px solid #c9d6da; border-radius: 7px; padding: 8px; color: #173042; background: #fff; }
 .modal-backdrop { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(9, 34, 44, .52); }
 .access-dialog { width: min(720px, 100%); max-height: calc(100vh - 40px); overflow: auto; border-radius: 10px; background: #fff; box-shadow: 0 20px 70px rgba(8, 31, 40, .32); }
 .access-dialog > header, .access-dialog footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 22px; }
@@ -173,12 +180,15 @@
   .tenant-box, .nav-label, .sidebar-foot { display: none; }
   .workspace-sidebar nav { display: flex; overflow-x: auto; }
   .workspace-sidebar nav button { width: auto; white-space: nowrap; }
+  .topbar-actions { flex-wrap: wrap; justify-content: flex-end; }
+  .user-email { display: none; }
   .workspace-content { padding: 22px 16px; }
   .page-heading { align-items: stretch; flex-direction: column; }
   .academic-grid { grid-template-columns: 1fr; }
   .academic-summary-card { grid-row: auto; }
   .academic-facts { grid-template-columns: 1fr; }
   .grant-row { grid-template-columns: 1fr; }
+  .pagination-controls { flex-wrap: wrap; }
   .student-detail dl { grid-template-columns: 1fr; }
   .exam-stats, .exam-form { grid-template-columns: 1fr; }
   .exam-stats div { border-right: 0; border-bottom: 1px solid #e4eaec; }

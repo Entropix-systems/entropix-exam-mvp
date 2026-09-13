@@ -2,7 +2,9 @@ import type {
   AccessTokenIdentity,
   AuthenticatedContext,
   AuthTokenPurpose,
+  CursorPage,
   ScopedRoleGrant,
+  TenantRole,
   UUID,
 } from '@entropix/contracts';
 
@@ -61,7 +63,6 @@ export interface AuthenticatedPrincipal {
 
 export interface LoginSessionCommand {
   userId: UUID;
-  institutionSlug: string | null;
   sessionId: UUID;
   refreshTokenId: UUID;
   refreshTokenHash: string;
@@ -72,7 +73,30 @@ export interface LoginSessionCommand {
 }
 
 export type LoginSessionResult =
-  { kind: 'CREATED'; identity: AccessTokenIdentity } | { kind: 'DENIED' };
+  { kind: 'CREATED'; identity: AccessTokenIdentity } | { kind: 'NO_ACCESS' | 'DENIED' };
+
+export interface SwitchSessionContextCommand {
+  userId: UUID;
+  sessionId: UUID;
+  institutionId: UUID;
+  role: TenantRole | null;
+  now: Date;
+}
+
+export type SwitchSessionContextResult =
+  | { kind: 'SWITCHED'; identity: AccessTokenIdentity }
+  | { kind: 'FORBIDDEN' | 'SESSION_INVALID' };
+
+export interface InstitutionAccessRecord {
+  id: UUID;
+  name: string;
+  slug: string;
+}
+
+export interface CurrentUserAccessRecord {
+  email: string;
+  institutions: readonly InstitutionAccessRecord[];
+}
 
 export interface RotateRefreshCommand {
   currentTokenHash: string;
@@ -140,6 +164,10 @@ export abstract class IdentityWorkflowRepository {
   abstract createLoginSession(
     command: LoginSessionCommand,
   ): Promise<LoginSessionResult>;
+  abstract switchSessionContext(
+    command: SwitchSessionContextCommand,
+  ): Promise<SwitchSessionContextResult>;
+  abstract currentUserAccess(userId: UUID): Promise<CurrentUserAccessRecord | null>;
   abstract rotateRefresh(
     command: RotateRefreshCommand,
   ): Promise<RotateRefreshResult>;
@@ -235,6 +263,12 @@ export interface MembershipListItem {
   grants: readonly ScopedRoleGrant[];
 }
 
+export interface MembershipDirectoryRecord {
+  institutionName: string;
+  departments: readonly { id: UUID; name: string }[];
+  memberships: CursorPage<MembershipListItem>;
+}
+
 export interface CreateInvitationCommand {
   tenantId: UUID;
   actorMembershipId: UUID;
@@ -266,7 +300,9 @@ export type MembershipMutationResult =
 export abstract class IdentityAdminRepository {
   abstract listMemberships(
     tenantId: UUID,
-  ): Promise<readonly MembershipListItem[]>;
+    pageSize: number,
+    cursor: UUID | null,
+  ): Promise<MembershipDirectoryRecord | null>;
   abstract createInvitation(
     command: CreateInvitationCommand,
   ): Promise<CreateInvitationResult>;

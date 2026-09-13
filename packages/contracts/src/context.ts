@@ -13,6 +13,9 @@ export interface TenantAuthContext {
   readonly userId: UUID;
   readonly tenantId: UUID;
   readonly membershipId: UUID;
+  /** The server-verified role bundle currently governing authorization. */
+  readonly activeRole: TenantRole;
+  /** All grants available to this membership; activeRole selects the effective bundle. */
   readonly grants: readonly ScopedRoleGrant[];
 }
 
