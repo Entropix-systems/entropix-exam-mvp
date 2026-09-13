@@ -1,3 +1,306 @@
+# DEMO SPRINT OVERRIDE — ACTIVE UNTIL TUESDAY DEMO
+
+## Priority
+
+We are currently in a deadline-driven implementation sprint.
+
+Team:
+
+* 2 lead developers
+* heavy Codex / AI assistance
+* working demo required by EOD tomorrow
+* live product demonstration on Tuesday
+
+During this sprint:
+
+**Working end-to-end demo functionality has higher priority than normal engineering ceremony, completeness, or production hardening.**
+
+This section overrides conflicting instructions elsewhere in this file until the Tuesday demo is complete.
+
+---
+
+## Primary Objective
+
+Finish the core Examination ERP demo journey:
+
+Institution setup
+→ academics
+→ students / enrolments
+→ exam
+→ registration
+→ timetable / halls
+→ invigilator duty
+→ attendance / incidents
+→ marks entry
+→ marks submission
+→ independent approval
+→ result computation
+→ publication
+→ student result / grade card
+
+Prioritize completing this flow before secondary engineering work.
+
+Use the supplied mockup as the practical UI and interaction reference.
+
+---
+
+## Working Method Override
+
+For implementation tasks:
+
+1. Inspect only the relevant existing code.
+2. Read only the project context required for the task.
+3. Check the corresponding mockup flow when applicable.
+4. Implement the smallest complete vertical slice.
+5. Connect UI → API → database.
+6. Perform focused verification.
+7. Stop when the requested demo behavior works.
+
+Do not perform unrelated cleanup.
+
+Do not expand the task beyond what is necessary for the demo.
+
+---
+
+## No Mandatory PLAN / PROCEED Cycle
+
+The normal Plan-First Rule is suspended during the demo sprint.
+
+Unless explicitly requested:
+
+* do not respond with PLAN ONLY
+* do not wait for `PROCEED`
+* do not require approval before editing
+* do not produce lengthy architecture plans before implementation
+
+For straightforward tasks, begin implementation immediately.
+
+For risky shared-schema or shared-contract changes, briefly identify the impact and proceed using the existing lock rules.
+
+---
+
+## Context Reading Override
+
+Do not reread every file under `docs/codex/` before every task.
+
+Read only what materially affects the requested implementation.
+
+Minimum expected context:
+
+* `AGENTS.md`
+* relevant task file if one exists
+* relevant existing implementation
+* relevant section of Solution / Contracts / Current State when needed
+
+Read additional documents only when the task depends on them.
+
+Repository state remains authoritative.
+
+---
+
+## Quality Override
+
+For this sprint, a feature is considered complete when:
+
+* the UI flow works
+* API behavior works
+* required data persists
+* essential tenant / role rules work
+* core business validation works
+* the main demo path is not broken
+
+The following are **not required by default** before considering a demo task complete:
+
+* exhaustive automated tests
+* broad regression suites
+* full documentation
+* extensive refactoring
+* perfect abstractions
+* performance optimization
+* production observability
+* complete edge-case coverage
+* accessibility polish beyond obvious usability
+* full recovery testing
+* extensive handoff documentation
+
+Do not lower correctness for core examination rules.
+
+---
+
+## Core Rules That Must Not Be Simplified Away
+
+Even under the deadline, preserve:
+
+* tenant separation
+* role / assignment scoping
+* student sees only own records
+* examiner edits only assigned subjects
+* invigilator works only assigned sittings
+* marks submitter cannot approve their own batch
+* ABSENT is not zero
+* student incident may produce WITHHELD
+* hall capacity / obvious schedule conflicts are rejected
+* draft results are not visible to students
+* published results derive from approved marks
+* result calculations follow the agreed MVP rules
+
+These rules make the demo credible and must remain real application behavior.
+
+---
+
+## Infrastructure / Feature Simplification
+
+Unless a task explicitly requires them, defer or simplify:
+
+* production email delivery
+* notification retry infrastructure
+* advanced worker leasing
+* malware scanning workflows beyond existing reusable foundation
+* sophisticated document pipelines
+* advanced import reconciliation
+* performance/load testing
+* backup/restore drills
+* enterprise monitoring
+* exhaustive audit detail
+* HA concerns
+* deployment hardening
+* optional reports
+* speculative features
+
+Existing D0 infrastructure should be reused where it already works.
+
+Do not rebuild or expand D0 infrastructure merely to improve engineering quality.
+
+---
+
+## Testing Override
+
+Use the smallest verification appropriate to the change.
+
+Preferred order:
+
+1. focused test where valuable
+2. relevant package typecheck/build
+3. manual verification of the demo flow
+
+Do not automatically run `pnpm d0:verify` after every task.
+
+Run broad verification only:
+
+* before an important integration merge
+* after risky shared infrastructure changes
+* when explicitly requested
+* when there is reason to believe the shared foundation was affected
+
+High-value automated tests should focus on:
+
+* result calculations
+* self-approval denial
+* tenant isolation
+* ABSENT / WITHHELD behavior
+* schedule / hall conflicts
+* publication visibility
+
+---
+
+## Documentation / Shared Context Override
+
+Update shared repository context only when another developer genuinely needs the information to continue.
+
+Do not update documentation for:
+
+* minor UI changes
+* local implementation details
+* obvious bug fixes
+* temporary demo behavior
+* changes with no cross-lane impact
+
+Continue updating `CURRENT-STATE.md`, `CONTRACTS.md`, `DECISIONS.md`, migrations, or environment documentation when a change materially affects another active lane.
+
+Keep updates short.
+
+---
+
+## Completion Report Override
+
+The full Standard Task Completion Report is optional during the demo sprint unless:
+
+* the task changes schema
+* the task changes shared contracts
+* the task affects another developer's lane
+* the task is being handed off
+* the task is being prepared for integration merge
+
+For ordinary implementation tasks, report only:
+
+```text
+Implemented:
+- ...
+
+Verified:
+- ...
+
+Important limitations / TODO:
+- ...
+```
+
+Do not spend significant implementation time generating process documentation.
+
+---
+
+## Mockup Rule
+
+The supplied Examination ERP `index.html` mockup is the practical UX reference for the Tuesday demo.
+
+Preserve where practical:
+
+* navigation
+* page structure
+* terminology
+* status names
+* actions
+* demo fixtures
+* Northstar College
+* Cedar School
+
+Replace mock in-memory state with real application state for core workflows.
+
+Do not redesign working screens unless necessary to connect them to the application.
+
+---
+
+## Decision Rule
+
+When choosing between:
+
+```text
+simple working implementation
+vs.
+more generic / scalable / elegant implementation
+```
+
+choose the simple working implementation unless the simpler version would break a core business rule or existing D0 foundation.
+
+When production hardening is intentionally deferred, add a short TODO only if it will be useful after the demo.
+
+---
+
+## Final Sprint Principle
+
+**TUESDAY DEMO FIRST.**
+
+Working > elegant.
+
+End-to-end > isolated completeness.
+
+Reuse > rebuild.
+
+Focused verification > exhaustive verification.
+
+Core business correctness > engineering ceremony.
+
+After the Tuesday demo, remove or disable this override and return to the normal rules below.
+
 # Examination ERP — Codex Instructions
 
 ## Purpose
