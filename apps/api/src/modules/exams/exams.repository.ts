@@ -37,7 +37,7 @@ function mapExam(row: ExamRow): ExamRecord {
     registrationMode: row.registrationMode as ExamRecord['registrationMode'],
     state: row.state as ExamRecord['state'], registrationOpensAt: row.registrationOpensAt.toISOString(),
     registrationClosesAt: row.registrationClosesAt.toISOString(), version: row.version,
-    scheduleRevision: row.scheduleRevision,
+    scheduleRevision: row.scheduleRevision, inputRevision: row.inputRevision,
     ruleVersion: { id: row.ruleVersion.id, version: row.ruleVersion.version, config: row.ruleVersion.config as unknown as ValidatedResultRule, frozenAt: iso(row.ruleVersion.frozenAt) },
     subjects: row.subjects.map((entry) => ({ id: entry.id, subjectId: entry.subject.id, code: entry.subject.code, name: entry.subject.name, credits: entry.subject.credits })),
     registrations: row.registrations.map((entry) => mapRegistration(entry as RegistrationRow)),

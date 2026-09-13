@@ -29,11 +29,13 @@ export type AggregateExam = {
 export type ExamAvgAggregateOutputType = {
   version: number | null
   scheduleRevision: number | null
+  inputRevision: number | null
 }
 
 export type ExamSumAggregateOutputType = {
   version: number | null
   scheduleRevision: number | null
+  inputRevision: number | null
 }
 
 export type ExamMinAggregateOutputType = {
@@ -49,6 +51,7 @@ export type ExamMinAggregateOutputType = {
   registrationClosesAt: Date | null
   version: number | null
   scheduleRevision: number | null
+  inputRevision: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,6 +69,7 @@ export type ExamMaxAggregateOutputType = {
   registrationClosesAt: Date | null
   version: number | null
   scheduleRevision: number | null
+  inputRevision: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -83,6 +87,7 @@ export type ExamCountAggregateOutputType = {
   registrationClosesAt: number
   version: number
   scheduleRevision: number
+  inputRevision: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -92,11 +97,13 @@ export type ExamCountAggregateOutputType = {
 export type ExamAvgAggregateInputType = {
   version?: true
   scheduleRevision?: true
+  inputRevision?: true
 }
 
 export type ExamSumAggregateInputType = {
   version?: true
   scheduleRevision?: true
+  inputRevision?: true
 }
 
 export type ExamMinAggregateInputType = {
@@ -112,6 +119,7 @@ export type ExamMinAggregateInputType = {
   registrationClosesAt?: true
   version?: true
   scheduleRevision?: true
+  inputRevision?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -129,6 +137,7 @@ export type ExamMaxAggregateInputType = {
   registrationClosesAt?: true
   version?: true
   scheduleRevision?: true
+  inputRevision?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -146,6 +155,7 @@ export type ExamCountAggregateInputType = {
   registrationClosesAt?: true
   version?: true
   scheduleRevision?: true
+  inputRevision?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -250,6 +260,7 @@ export type ExamGroupByOutputType = {
   registrationClosesAt: Date
   version: number
   scheduleRevision: number
+  inputRevision: number
   createdAt: Date
   updatedAt: Date
   _count: ExamCountAggregateOutputType | null
@@ -290,6 +301,7 @@ export type ExamWhereInput = {
   registrationClosesAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   version?: Prisma.IntFilter<"Exam"> | number
   scheduleRevision?: Prisma.IntFilter<"Exam"> | number
+  inputRevision?: Prisma.IntFilter<"Exam"> | number
   createdAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -313,6 +325,7 @@ export type ExamOrderByWithRelationInput = {
   registrationClosesAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -341,6 +354,7 @@ export type ExamWhereUniqueInput = Prisma.AtLeast<{
   registrationClosesAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   version?: Prisma.IntFilter<"Exam"> | number
   scheduleRevision?: Prisma.IntFilter<"Exam"> | number
+  inputRevision?: Prisma.IntFilter<"Exam"> | number
   createdAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -364,6 +378,7 @@ export type ExamOrderByWithAggregationInput = {
   registrationClosesAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ExamCountOrderByAggregateInput
@@ -389,6 +404,7 @@ export type ExamScalarWhereWithAggregatesInput = {
   registrationClosesAt?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
   version?: Prisma.IntWithAggregatesFilter<"Exam"> | number
   scheduleRevision?: Prisma.IntWithAggregatesFilter<"Exam"> | number
+  inputRevision?: Prisma.IntWithAggregatesFilter<"Exam"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
 }
@@ -403,6 +419,7 @@ export type ExamCreateInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
@@ -426,6 +443,7 @@ export type ExamUncheckedCreateInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -443,6 +461,7 @@ export type ExamUpdateInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
@@ -466,6 +485,7 @@ export type ExamUncheckedUpdateInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -486,6 +506,7 @@ export type ExamCreateManyInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -500,6 +521,7 @@ export type ExamUpdateManyMutationInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -517,6 +539,7 @@ export type ExamUncheckedUpdateManyInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -555,6 +578,7 @@ export type ExamCountOrderByAggregateInput = {
   registrationClosesAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -562,6 +586,7 @@ export type ExamCountOrderByAggregateInput = {
 export type ExamAvgOrderByAggregateInput = {
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
 }
 
 export type ExamMaxOrderByAggregateInput = {
@@ -577,6 +602,7 @@ export type ExamMaxOrderByAggregateInput = {
   registrationClosesAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -594,6 +620,7 @@ export type ExamMinOrderByAggregateInput = {
   registrationClosesAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -601,6 +628,7 @@ export type ExamMinOrderByAggregateInput = {
 export type ExamSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
 }
 
 export type ExamScalarRelationFilter = {
@@ -786,6 +814,7 @@ export type ExamCreateWithoutTenantInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   term: Prisma.TermCreateNestedOneWithoutExamsInput
@@ -807,6 +836,7 @@ export type ExamUncheckedCreateWithoutTenantInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -856,6 +886,7 @@ export type ExamScalarWhereInput = {
   registrationClosesAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   version?: Prisma.IntFilter<"Exam"> | number
   scheduleRevision?: Prisma.IntFilter<"Exam"> | number
+  inputRevision?: Prisma.IntFilter<"Exam"> | number
   createdAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
 }
@@ -870,6 +901,7 @@ export type ExamCreateWithoutTermInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
@@ -890,6 +922,7 @@ export type ExamUncheckedCreateWithoutTermInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -933,6 +966,7 @@ export type ExamCreateWithoutRuleVersionInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
@@ -953,6 +987,7 @@ export type ExamUncheckedCreateWithoutRuleVersionInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -996,6 +1031,7 @@ export type ExamCreateWithoutSubjectsInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
@@ -1018,6 +1054,7 @@ export type ExamUncheckedCreateWithoutSubjectsInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutExamInput
@@ -1050,6 +1087,7 @@ export type ExamUpdateWithoutSubjectsInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
@@ -1072,6 +1110,7 @@ export type ExamUncheckedUpdateWithoutSubjectsInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutExamNestedInput
@@ -1088,6 +1127,7 @@ export type ExamCreateWithoutRegistrationsInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
@@ -1110,6 +1150,7 @@ export type ExamUncheckedCreateWithoutRegistrationsInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -1142,6 +1183,7 @@ export type ExamUpdateWithoutRegistrationsInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
@@ -1164,6 +1206,7 @@ export type ExamUncheckedUpdateWithoutRegistrationsInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -1180,6 +1223,7 @@ export type ExamCreateWithoutPapersInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
@@ -1202,6 +1246,7 @@ export type ExamUncheckedCreateWithoutPapersInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
@@ -1234,6 +1279,7 @@ export type ExamUpdateWithoutPapersInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
@@ -1256,6 +1302,7 @@ export type ExamUncheckedUpdateWithoutPapersInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -1274,6 +1321,7 @@ export type ExamCreateManyTenantInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1288,6 +1336,7 @@ export type ExamUpdateWithoutTenantInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   term?: Prisma.TermUpdateOneRequiredWithoutExamsNestedInput
@@ -1309,6 +1358,7 @@ export type ExamUncheckedUpdateWithoutTenantInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -1328,6 +1378,7 @@ export type ExamUncheckedUpdateManyWithoutTenantInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1343,6 +1394,7 @@ export type ExamCreateManyTermInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1357,6 +1409,7 @@ export type ExamUpdateWithoutTermInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
@@ -1377,6 +1430,7 @@ export type ExamUncheckedUpdateWithoutTermInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -1395,6 +1449,7 @@ export type ExamUncheckedUpdateManyWithoutTermInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1410,6 +1465,7 @@ export type ExamCreateManyRuleVersionInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1424,6 +1480,7 @@ export type ExamUpdateWithoutRuleVersionInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
@@ -1444,6 +1501,7 @@ export type ExamUncheckedUpdateWithoutRuleVersionInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
@@ -1462,6 +1520,7 @@ export type ExamUncheckedUpdateManyWithoutRuleVersionInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1528,6 +1587,7 @@ export type ExamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   registrationClosesAt?: boolean
   version?: boolean
   scheduleRevision?: boolean
+  inputRevision?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1552,6 +1612,7 @@ export type ExamSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   registrationClosesAt?: boolean
   version?: boolean
   scheduleRevision?: boolean
+  inputRevision?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1572,6 +1633,7 @@ export type ExamSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   registrationClosesAt?: boolean
   version?: boolean
   scheduleRevision?: boolean
+  inputRevision?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1592,11 +1654,12 @@ export type ExamSelectScalar = {
   registrationClosesAt?: boolean
   version?: boolean
   scheduleRevision?: boolean
+  inputRevision?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ExamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "termId" | "ruleVersionId" | "code" | "name" | "registrationMode" | "state" | "registrationOpensAt" | "registrationClosesAt" | "version" | "scheduleRevision" | "createdAt" | "updatedAt", ExtArgs["result"]["exam"]>
+export type ExamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "termId" | "ruleVersionId" | "code" | "name" | "registrationMode" | "state" | "registrationOpensAt" | "registrationClosesAt" | "version" | "scheduleRevision" | "inputRevision" | "createdAt" | "updatedAt", ExtArgs["result"]["exam"]>
 export type ExamInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   term?: boolean | Prisma.TermDefaultArgs<ExtArgs>
@@ -1640,6 +1703,7 @@ export type $ExamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     registrationClosesAt: Date
     version: number
     scheduleRevision: number
+    inputRevision: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["exam"]>
@@ -2083,6 +2147,7 @@ export interface ExamFieldRefs {
   readonly registrationClosesAt: Prisma.FieldRef<"Exam", 'DateTime'>
   readonly version: Prisma.FieldRef<"Exam", 'Int'>
   readonly scheduleRevision: Prisma.FieldRef<"Exam", 'Int'>
+  readonly inputRevision: Prisma.FieldRef<"Exam", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Exam", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Exam", 'DateTime'>
 }

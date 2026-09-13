@@ -79,6 +79,9 @@ export const ModelName = {
   Attendance: 'Attendance',
   Incident: 'Incident',
   IncidentStudent: 'IncidentStudent',
+  EvaluationAssignment: 'EvaluationAssignment',
+  MarksBatch: 'MarksBatch',
+  Mark: 'Mark',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -321,6 +324,7 @@ export const ExamScalarFieldEnum = {
   registrationClosesAt: 'registrationClosesAt',
   version: 'version',
   scheduleRevision: 'scheduleRevision',
+  inputRevision: 'inputRevision',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -512,6 +516,59 @@ export const IncidentStudentScalarFieldEnum = {
 } as const
 
 export type IncidentStudentScalarFieldEnum = (typeof IncidentStudentScalarFieldEnum)[keyof typeof IncidentStudentScalarFieldEnum]
+
+
+export const EvaluationAssignmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examSubjectId: 'examSubjectId',
+  facultyId: 'facultyId',
+  version: 'version',
+  assignedByMembershipId: 'assignedByMembershipId',
+  assignedAt: 'assignedAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EvaluationAssignmentScalarFieldEnum = (typeof EvaluationAssignmentScalarFieldEnum)[keyof typeof EvaluationAssignmentScalarFieldEnum]
+
+
+export const MarksBatchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examSubjectId: 'examSubjectId',
+  state: 'state',
+  version: 'version',
+  submittedByMembershipId: 'submittedByMembershipId',
+  submittedAt: 'submittedAt',
+  reviewedByMembershipId: 'reviewedByMembershipId',
+  reviewedAt: 'reviewedAt',
+  reviewReason: 'reviewReason',
+  reopenedByMembershipId: 'reopenedByMembershipId',
+  reopenedAt: 'reopenedAt',
+  reopenReason: 'reopenReason',
+  history: 'history',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarksBatchScalarFieldEnum = (typeof MarksBatchScalarFieldEnum)[keyof typeof MarksBatchScalarFieldEnum]
+
+
+export const MarkScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  marksBatchId: 'marksBatchId',
+  examSubjectId: 'examSubjectId',
+  registrationSubjectId: 'registrationSubjectId',
+  component: 'component',
+  value: 'value',
+  version: 'version',
+  updatedByMembershipId: 'updatedByMembershipId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarkScalarFieldEnum = (typeof MarkScalarFieldEnum)[keyof typeof MarkScalarFieldEnum]
 
 
 export const RoleGrantScalarFieldEnum = {

@@ -226,6 +226,7 @@ export type FacultyWhereInput = {
   membership?: Prisma.XOR<Prisma.MembershipScalarRelationFilter, Prisma.MembershipWhereInput>
   department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
   duties?: Prisma.DutyListRelationFilter
+  evaluationAssignments?: Prisma.EvaluationAssignmentListRelationFilter
 }
 
 export type FacultyOrderByWithRelationInput = {
@@ -243,6 +244,7 @@ export type FacultyOrderByWithRelationInput = {
   membership?: Prisma.MembershipOrderByWithRelationInput
   department?: Prisma.DepartmentOrderByWithRelationInput
   duties?: Prisma.DutyOrderByRelationAggregateInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentOrderByRelationAggregateInput
 }
 
 export type FacultyWhereUniqueInput = Prisma.AtLeast<{
@@ -266,6 +268,7 @@ export type FacultyWhereUniqueInput = Prisma.AtLeast<{
   membership?: Prisma.XOR<Prisma.MembershipScalarRelationFilter, Prisma.MembershipWhereInput>
   department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
   duties?: Prisma.DutyListRelationFilter
+  evaluationAssignments?: Prisma.EvaluationAssignmentListRelationFilter
 }, "id" | "tenantId_id" | "tenantId_membershipId" | "tenantId_code">
 
 export type FacultyOrderByWithAggregationInput = {
@@ -312,6 +315,7 @@ export type FacultyCreateInput = {
   membership: Prisma.MembershipCreateNestedOneWithoutFacultyInput
   department: Prisma.DepartmentCreateNestedOneWithoutFacultyInput
   duties?: Prisma.DutyCreateNestedManyWithoutFacultyInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyUncheckedCreateInput = {
@@ -326,6 +330,7 @@ export type FacultyUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   duties?: Prisma.DutyUncheckedCreateNestedManyWithoutFacultyInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUncheckedCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyUpdateInput = {
@@ -340,6 +345,7 @@ export type FacultyUpdateInput = {
   membership?: Prisma.MembershipUpdateOneRequiredWithoutFacultyNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutFacultyNestedInput
   duties?: Prisma.DutyUpdateManyWithoutFacultyNestedInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateInput = {
@@ -354,6 +360,7 @@ export type FacultyUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duties?: Prisma.DutyUncheckedUpdateManyWithoutFacultyNestedInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyCreateManyInput = {
@@ -596,6 +603,20 @@ export type FacultyUpdateOneRequiredWithoutDutiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FacultyUpdateToOneWithWhereWithoutDutiesInput, Prisma.FacultyUpdateWithoutDutiesInput>, Prisma.FacultyUncheckedUpdateWithoutDutiesInput>
 }
 
+export type FacultyCreateNestedOneWithoutEvaluationAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.FacultyCreateWithoutEvaluationAssignmentsInput, Prisma.FacultyUncheckedCreateWithoutEvaluationAssignmentsInput>
+  connectOrCreate?: Prisma.FacultyCreateOrConnectWithoutEvaluationAssignmentsInput
+  connect?: Prisma.FacultyWhereUniqueInput
+}
+
+export type FacultyUpdateOneRequiredWithoutEvaluationAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.FacultyCreateWithoutEvaluationAssignmentsInput, Prisma.FacultyUncheckedCreateWithoutEvaluationAssignmentsInput>
+  connectOrCreate?: Prisma.FacultyCreateOrConnectWithoutEvaluationAssignmentsInput
+  upsert?: Prisma.FacultyUpsertWithoutEvaluationAssignmentsInput
+  connect?: Prisma.FacultyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FacultyUpdateToOneWithWhereWithoutEvaluationAssignmentsInput, Prisma.FacultyUpdateWithoutEvaluationAssignmentsInput>, Prisma.FacultyUncheckedUpdateWithoutEvaluationAssignmentsInput>
+}
+
 export type FacultyCreateWithoutTenantInput = {
   id?: string
   code: string
@@ -607,6 +628,7 @@ export type FacultyCreateWithoutTenantInput = {
   membership: Prisma.MembershipCreateNestedOneWithoutFacultyInput
   department: Prisma.DepartmentCreateNestedOneWithoutFacultyInput
   duties?: Prisma.DutyCreateNestedManyWithoutFacultyInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyUncheckedCreateWithoutTenantInput = {
@@ -620,6 +642,7 @@ export type FacultyUncheckedCreateWithoutTenantInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   duties?: Prisma.DutyUncheckedCreateNestedManyWithoutFacultyInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUncheckedCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyCreateOrConnectWithoutTenantInput = {
@@ -675,6 +698,7 @@ export type FacultyCreateWithoutDepartmentInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutFacultyInput
   membership: Prisma.MembershipCreateNestedOneWithoutFacultyInput
   duties?: Prisma.DutyCreateNestedManyWithoutFacultyInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyUncheckedCreateWithoutDepartmentInput = {
@@ -687,6 +711,7 @@ export type FacultyUncheckedCreateWithoutDepartmentInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   duties?: Prisma.DutyUncheckedCreateNestedManyWithoutFacultyInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUncheckedCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyCreateOrConnectWithoutDepartmentInput = {
@@ -726,6 +751,7 @@ export type FacultyCreateWithoutMembershipInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutFacultyInput
   department: Prisma.DepartmentCreateNestedOneWithoutFacultyInput
   duties?: Prisma.DutyCreateNestedManyWithoutFacultyInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyUncheckedCreateWithoutMembershipInput = {
@@ -738,6 +764,7 @@ export type FacultyUncheckedCreateWithoutMembershipInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   duties?: Prisma.DutyUncheckedCreateNestedManyWithoutFacultyInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUncheckedCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyCreateOrConnectWithoutMembershipInput = {
@@ -767,6 +794,7 @@ export type FacultyUpdateWithoutMembershipInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFacultyNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutFacultyNestedInput
   duties?: Prisma.DutyUpdateManyWithoutFacultyNestedInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateWithoutMembershipInput = {
@@ -779,6 +807,7 @@ export type FacultyUncheckedUpdateWithoutMembershipInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duties?: Prisma.DutyUncheckedUpdateManyWithoutFacultyNestedInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyCreateWithoutDutiesInput = {
@@ -792,6 +821,7 @@ export type FacultyCreateWithoutDutiesInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutFacultyInput
   membership: Prisma.MembershipCreateNestedOneWithoutFacultyInput
   department: Prisma.DepartmentCreateNestedOneWithoutFacultyInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyUncheckedCreateWithoutDutiesInput = {
@@ -805,6 +835,7 @@ export type FacultyUncheckedCreateWithoutDutiesInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  evaluationAssignments?: Prisma.EvaluationAssignmentUncheckedCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyCreateOrConnectWithoutDutiesInput = {
@@ -834,6 +865,7 @@ export type FacultyUpdateWithoutDutiesInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFacultyNestedInput
   membership?: Prisma.MembershipUpdateOneRequiredWithoutFacultyNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutFacultyNestedInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateWithoutDutiesInput = {
@@ -847,6 +879,79 @@ export type FacultyUncheckedUpdateWithoutDutiesInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  evaluationAssignments?: Prisma.EvaluationAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
+}
+
+export type FacultyCreateWithoutEvaluationAssignmentsInput = {
+  id?: string
+  code: string
+  name: string
+  email: string
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutFacultyInput
+  membership: Prisma.MembershipCreateNestedOneWithoutFacultyInput
+  department: Prisma.DepartmentCreateNestedOneWithoutFacultyInput
+  duties?: Prisma.DutyCreateNestedManyWithoutFacultyInput
+}
+
+export type FacultyUncheckedCreateWithoutEvaluationAssignmentsInput = {
+  id?: string
+  tenantId: string
+  membershipId: string
+  departmentId: string
+  code: string
+  name: string
+  email: string
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  duties?: Prisma.DutyUncheckedCreateNestedManyWithoutFacultyInput
+}
+
+export type FacultyCreateOrConnectWithoutEvaluationAssignmentsInput = {
+  where: Prisma.FacultyWhereUniqueInput
+  create: Prisma.XOR<Prisma.FacultyCreateWithoutEvaluationAssignmentsInput, Prisma.FacultyUncheckedCreateWithoutEvaluationAssignmentsInput>
+}
+
+export type FacultyUpsertWithoutEvaluationAssignmentsInput = {
+  update: Prisma.XOR<Prisma.FacultyUpdateWithoutEvaluationAssignmentsInput, Prisma.FacultyUncheckedUpdateWithoutEvaluationAssignmentsInput>
+  create: Prisma.XOR<Prisma.FacultyCreateWithoutEvaluationAssignmentsInput, Prisma.FacultyUncheckedCreateWithoutEvaluationAssignmentsInput>
+  where?: Prisma.FacultyWhereInput
+}
+
+export type FacultyUpdateToOneWithWhereWithoutEvaluationAssignmentsInput = {
+  where?: Prisma.FacultyWhereInput
+  data: Prisma.XOR<Prisma.FacultyUpdateWithoutEvaluationAssignmentsInput, Prisma.FacultyUncheckedUpdateWithoutEvaluationAssignmentsInput>
+}
+
+export type FacultyUpdateWithoutEvaluationAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutFacultyNestedInput
+  membership?: Prisma.MembershipUpdateOneRequiredWithoutFacultyNestedInput
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutFacultyNestedInput
+  duties?: Prisma.DutyUpdateManyWithoutFacultyNestedInput
+}
+
+export type FacultyUncheckedUpdateWithoutEvaluationAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  membershipId?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  duties?: Prisma.DutyUncheckedUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyCreateManyTenantInput = {
@@ -872,6 +977,7 @@ export type FacultyUpdateWithoutTenantInput = {
   membership?: Prisma.MembershipUpdateOneRequiredWithoutFacultyNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutFacultyNestedInput
   duties?: Prisma.DutyUpdateManyWithoutFacultyNestedInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateWithoutTenantInput = {
@@ -885,6 +991,7 @@ export type FacultyUncheckedUpdateWithoutTenantInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duties?: Prisma.DutyUncheckedUpdateManyWithoutFacultyNestedInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateManyWithoutTenantInput = {
@@ -921,6 +1028,7 @@ export type FacultyUpdateWithoutDepartmentInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFacultyNestedInput
   membership?: Prisma.MembershipUpdateOneRequiredWithoutFacultyNestedInput
   duties?: Prisma.DutyUpdateManyWithoutFacultyNestedInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateWithoutDepartmentInput = {
@@ -933,6 +1041,7 @@ export type FacultyUncheckedUpdateWithoutDepartmentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duties?: Prisma.DutyUncheckedUpdateManyWithoutFacultyNestedInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateManyWithoutDepartmentInput = {
@@ -953,10 +1062,12 @@ export type FacultyUncheckedUpdateManyWithoutDepartmentInput = {
 
 export type FacultyCountOutputType = {
   duties: number
+  evaluationAssignments: number
 }
 
 export type FacultyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   duties?: boolean | FacultyCountOutputTypeCountDutiesArgs
+  evaluationAssignments?: boolean | FacultyCountOutputTypeCountEvaluationAssignmentsArgs
 }
 
 /**
@@ -976,6 +1087,13 @@ export type FacultyCountOutputTypeCountDutiesArgs<ExtArgs extends runtime.Types.
   where?: Prisma.DutyWhereInput
 }
 
+/**
+ * FacultyCountOutputType without action
+ */
+export type FacultyCountOutputTypeCountEvaluationAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EvaluationAssignmentWhereInput
+}
+
 
 export type FacultySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -992,6 +1110,7 @@ export type FacultySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   membership?: boolean | Prisma.MembershipDefaultArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
   duties?: boolean | Prisma.Faculty$dutiesArgs<ExtArgs>
+  evaluationAssignments?: boolean | Prisma.Faculty$evaluationAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.FacultyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["faculty"]>
 
@@ -1046,6 +1165,7 @@ export type FacultyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   membership?: boolean | Prisma.MembershipDefaultArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
   duties?: boolean | Prisma.Faculty$dutiesArgs<ExtArgs>
+  evaluationAssignments?: boolean | Prisma.Faculty$evaluationAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.FacultyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FacultyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1066,6 +1186,7 @@ export type $FacultyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     membership: Prisma.$MembershipPayload<ExtArgs>
     department: Prisma.$DepartmentPayload<ExtArgs>
     duties: Prisma.$DutyPayload<ExtArgs>[]
+    evaluationAssignments: Prisma.$EvaluationAssignmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1476,6 +1597,7 @@ export interface Prisma__FacultyClient<T, Null = never, ExtArgs extends runtime.
   membership<T extends Prisma.MembershipDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MembershipDefaultArgs<ExtArgs>>): Prisma.Prisma__MembershipClient<runtime.Types.Result.GetResult<Prisma.$MembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   department<T extends Prisma.DepartmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DepartmentDefaultArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   duties<T extends Prisma.Faculty$dutiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Faculty$dutiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DutyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  evaluationAssignments<T extends Prisma.Faculty$evaluationAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Faculty$evaluationAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1937,6 +2059,30 @@ export type Faculty$dutiesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.DutyScalarFieldEnum | Prisma.DutyScalarFieldEnum[]
+}
+
+/**
+ * Faculty.evaluationAssignments
+ */
+export type Faculty$evaluationAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EvaluationAssignment
+   */
+  select?: Prisma.EvaluationAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EvaluationAssignment
+   */
+  omit?: Prisma.EvaluationAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EvaluationAssignmentInclude<ExtArgs> | null
+  where?: Prisma.EvaluationAssignmentWhereInput
+  orderBy?: Prisma.EvaluationAssignmentOrderByWithRelationInput | Prisma.EvaluationAssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.EvaluationAssignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EvaluationAssignmentScalarFieldEnum | Prisma.EvaluationAssignmentScalarFieldEnum[]
 }
 
 /**

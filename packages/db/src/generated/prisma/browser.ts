@@ -158,6 +158,21 @@ export type Incident = Prisma.IncidentModel
  */
 export type IncidentStudent = Prisma.IncidentStudentModel
 /**
+ * Model EvaluationAssignment
+ *
+ */
+export type EvaluationAssignment = Prisma.EvaluationAssignmentModel
+/**
+ * Model MarksBatch
+ *
+ */
+export type MarksBatch = Prisma.MarksBatchModel
+/**
+ * Model Mark
+ *
+ */
+export type Mark = Prisma.MarkModel
+/**
  * Model RoleGrant
  *
  */
