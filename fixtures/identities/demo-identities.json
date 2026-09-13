@@ -40,7 +40,7 @@
       "key": "northstarExaminer",
       "email": "examiner@northstar.example.test",
       "roles": [
-        "FACULTY_EXAMINER"
+        "FACULTY"
       ],
       "tenant": "northstar-college"
     },
@@ -48,7 +48,7 @@
       "key": "northstarInvigilator",
       "email": "invigilator@northstar.example.test",
       "roles": [
-        "INVIGILATOR_OBSERVER"
+        "INVIGILATOR"
       ],
       "tenant": "northstar-college"
     },

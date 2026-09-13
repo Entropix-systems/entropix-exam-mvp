@@ -727,13 +727,13 @@ writeJson(
       {
         key: 'northstarExaminer',
         email: 'examiner@northstar.example.test',
-        roles: ['FACULTY_EXAMINER'],
+        roles: ['FACULTY'],
         tenant: 'northstar-college',
       },
       {
         key: 'northstarInvigilator',
         email: 'invigilator@northstar.example.test',
-        roles: ['INVIGILATOR_OBSERVER'],
+        roles: ['INVIGILATOR'],
         tenant: 'northstar-college',
       },
       {
