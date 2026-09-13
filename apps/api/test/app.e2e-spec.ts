@@ -63,4 +63,8 @@ describe('API health', () => {
       )
       .expect(401);
   });
+
+  it('registers scheduling with its database and authentication providers', async () => {
+    await request(app.getHttpServer()).get('/api/v1/scheduling').expect(401);
+  });
 });
