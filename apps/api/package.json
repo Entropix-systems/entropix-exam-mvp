@@ -25,6 +25,7 @@
   "dependencies": {
     "@entropix/contracts": "workspace:*",
     "@entropix/domain": "workspace:*",
+    "@entropix/notifications": "workspace:*",
     "@nestjs/common": "^12.0.1",
     "@nestjs/core": "^12.0.1",
     "@nestjs/platform-express": "^12.0.1",

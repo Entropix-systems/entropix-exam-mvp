@@ -7,14 +7,14 @@ Known-good foundation: d0-ready
 Known-good D0 verification: PASS at integration SHA 6182f80
 Shared development branch: integration
 Current sprint: D1–D3 MVP implementation
-Current day: D1 CONTRACT FREEZE
+Current day: D1 IAM IMPLEMENTATION
 ```
 
 ## Current Gate
 
 ```text
-Review and commit the D1 contract freeze.
-Then create the first D1 migration.
+Review IAM Phase 2 application/browser orchestration and complete the D1 shared
+domain/IAM migration before production identity wiring.
 ```
 
 ## Completed
@@ -36,21 +36,23 @@ d0-ready tag
 ## In Progress
 
 ```text
-D1 shared-contract freeze
-D1 feature implementation: NOT STARTED
+D1 IAM Phase 1 security foundation: branch `d1-a-iam-phase1`
+D1 IAM Phase 2 application/API/web orchestration: branch `d1-a-iam-phase2`
+D1 shared-domain migration: owned by Developer B
 ```
 
 ## Blockers
 
 ```text
-None recorded yet.
+IAM production wiring and A14 database acceptance are blocked on real
+Session/AuthToken/invitation persistence and transaction adapters.
 ```
 
 ## Migration Lock
 
 ```text
 Owner: Developer B
-Purpose: first D1 migration after the contract freeze is reviewed and committed
+Purpose: D1 shared-domain and IAM persistence migration
 ```
 
 ## Shared Contract Lock
@@ -63,9 +65,10 @@ Purpose: D1 contract freeze
 ## Developer A
 
 ```text
-Task: D1 contract freeze
-Branch: TBD
-Status: CONTRACT FREEZE IN PROGRESS; D1 FEATURE IMPLEMENTATION NOT STARTED
+Task: D1 IAM Phase 2
+Branch: d1-a-iam-phase2
+Status: APPLICATION/API/WEB ORCHESTRATION IMPLEMENTED; D0 VERIFY PASS;
+PRODUCTION WIRING BLOCKED ON MIGRATION
 ```
 
 ## Developer B
@@ -73,7 +76,7 @@ Status: CONTRACT FREEZE IN PROGRESS; D1 FEATURE IMPLEMENTATION NOT STARTED
 ```text
 Task: First D1 migration after contract freeze
 Branch: TBD
-Status: D1 FEATURE IMPLEMENTATION NOT STARTED
+Status: D1 SHARED-DOMAIN MIGRATION IN PROGRESS
 ```
 
 ## Latest Integrated Acceptance
@@ -86,5 +89,7 @@ D1 business gate has not started.
 ## Next Required Action
 
 ```text
-Review/commit contract freeze, then create first D1 migration.
+Developer B must account for the persistence handoff in `IAM-PHASE2.md`. After the
+reviewed migration merges, Developer A must resync and implement real adapters as a
+separately authorized Phase 3.
 ```

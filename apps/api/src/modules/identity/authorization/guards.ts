@@ -12,15 +12,24 @@ import type {
   PermissionScope,
 } from '@entropix/contracts';
 import { hasPermission, isAuthenticatedContext } from '@entropix/domain';
-import { AuthenticatedContextResolver } from '../identity.repository.js';
+import {
+  AuthenticatedContextResolver,
+  type AuthenticatedPrincipal,
+} from '../identity.repository.js';
 import { PUBLIC_ROUTE, REQUIRED_PERMISSIONS } from './metadata.js';
 
 // Not a public request field: body/header/context lookalikes cannot supply authority.
 const resolvedContexts = new WeakMap<object, AuthenticatedContext>();
+const resolvedPrincipals = new WeakMap<object, AuthenticatedPrincipal>();
 export function currentAuthContext(request: object): AuthenticatedContext {
   const context = resolvedContexts.get(request);
   if (!context) throw new UnauthorizedException('Authentication required');
   return context;
+}
+export function currentAuthPrincipal(request: object): AuthenticatedPrincipal {
+  const principal = resolvedPrincipals.get(request);
+  if (!principal) throw new UnauthorizedException('Authentication required');
+  return principal;
 }
 
 /** Resolve target ownership/department from server data; never trust body scope. */
@@ -43,6 +52,7 @@ export class AuthenticationGuard implements CanActivate {
   async canActivate(execution: ExecutionContext): Promise<boolean> {
     const request = execution.switchToHttp().getRequest<Request>();
     resolvedContexts.delete(request);
+    resolvedPrincipals.delete(request);
     const targets = [execution.getHandler(), execution.getClass()];
     const isPublic = this.reflector.getAllAndOverride<boolean>(
       PUBLIC_ROUTE,
@@ -58,25 +68,43 @@ export class AuthenticationGuard implements CanActivate {
     const match =
       typeof header === 'string' ? /^Bearer ([^\s]+)$/i.exec(header) : null;
     if (!match) throw new UnauthorizedException('Authentication required');
-    let context: unknown;
+    let principal: AuthenticatedPrincipal | null;
     try {
-      context = await this.resolver.resolveAccessToken(match[1]);
+      principal = await this.resolver.resolveAccessToken(match[1]);
     } catch {
       throw new UnauthorizedException('Authentication required');
     }
-    if (!isAuthenticatedContext(context))
+    if (
+      !principal ||
+      !isAuthenticatedContext(principal.context) ||
+      principal.identity.userId.toLowerCase() !==
+        principal.context.userId.toLowerCase() ||
+      (principal.identity.kind === 'TENANT') !==
+        (principal.context.kind === 'TENANT') ||
+      (principal.identity.kind === 'TENANT' &&
+        principal.context.kind === 'TENANT' &&
+        (principal.identity.tenantId.toLowerCase() !==
+          principal.context.tenantId.toLowerCase() ||
+          principal.identity.membershipId.toLowerCase() !==
+            principal.context.membershipId.toLowerCase()))
+    )
       throw new UnauthorizedException('Authentication required');
     // Detach from mutable repository objects; downstream code receives readonly data.
     const snapshot =
-      context.kind === 'TENANT'
+      principal.context.kind === 'TENANT'
         ? Object.freeze({
-            ...context,
+            ...principal.context,
             grants: Object.freeze(
-              context.grants.map((grant) => Object.freeze({ ...grant })),
+              principal.context.grants.map((grant) => Object.freeze({ ...grant })),
             ),
           })
-        : Object.freeze({ ...context });
+        : Object.freeze({ ...principal.context });
+    const principalSnapshot = Object.freeze({
+      identity: Object.freeze({ ...principal.identity }),
+      context: snapshot,
+    });
     resolvedContexts.set(request, snapshot);
+    resolvedPrincipals.set(request, principalSnapshot);
     return true;
   }
 }

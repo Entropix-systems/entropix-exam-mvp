@@ -81,6 +81,32 @@ Feature development must not weaken D0 guarantees to satisfy sprint timing.
 
 ---
 
+## DEC-006 — IAM Browser Token and CSRF Transport
+
+Status: ACCEPTED
+
+Context:
+
+The browser needs session restoration and token rotation without making a reusable
+credential readable by application JavaScript.
+
+Decision:
+
+Access tokens live only in browser memory. Refresh tokens are opaque rotating values
+delivered in the host-only HttpOnly SameSite=Lax cookie defined by IAM Phase 1.
+Cookie-authenticated mutations require an exact allowed Origin and a non-simple
+request header. Ordinary requests coordinate through one in-flight refresh promise.
+
+Consequences:
+
+Refresh/logout controllers require trusted origin configuration. A page reload uses
+the refresh cookie to restore an access token. No localStorage, sessionStorage,
+IndexedDB, cached refresh response or browser secret is part of the protocol.
+
+Related task: D1 IAM Phase 2.
+
+---
+
 ## New Decision Template
 
 ### DEC-XXX — Title

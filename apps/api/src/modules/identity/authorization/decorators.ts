@@ -9,6 +9,7 @@ import type { IamPermission } from '@entropix/contracts';
 import {
   AuthenticationGuard,
   currentAuthContext,
+  currentAuthPrincipal,
   PermissionGuard,
 } from './guards.js';
 import { PUBLIC_ROUTE, REQUIRED_PERMISSIONS } from './metadata.js';
@@ -30,4 +31,8 @@ export const RequirePermissions = (
 export const CurrentAuthContext = createParamDecorator(
   (_data: unknown, execution: ExecutionContext) =>
     currentAuthContext(execution.switchToHttp().getRequest<object>()),
+);
+export const CurrentAuthPrincipal = createParamDecorator(
+  (_data: unknown, execution: ExecutionContext) =>
+    currentAuthPrincipal(execution.switchToHttp().getRequest<object>()),
 );

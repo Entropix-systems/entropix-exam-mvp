@@ -323,3 +323,22 @@ Typed identity contracts live in `packages/contracts/src/context.ts` and `identi
 - Future User.platformRole is nullable and restricted to PLATFORM_ADMIN.
 
 No Session/AuthToken schema or persistence is implemented in Phase 1.
+
+---
+
+# D1 IAM Phase 2 Application Contract
+
+Phase 2 orchestration is recorded in `docs/codex/IAM-PHASE2.md`.
+
+- Day-1 auth routes use the shared envelope and do not require `Idempotency-Key`.
+- Unexpected server failures use `INTERNAL_ERROR` and the generic message
+  `Request failed`; database and provider details remain private.
+- The refresh credential is accepted only from the Phase 1 HttpOnly cookie.
+- Cookie-authenticated refresh/logout require a configured exact Origin and the
+  non-simple `x-csrf-protection: 1` header.
+- Access tokens remain in browser memory and each protected request re-resolves
+  current server authority. Concurrent ordinary 401 responses share one refresh.
+- A missing institution selector can resolve only a legitimate platform context;
+  platform users never receive fabricated tenant or membership identifiers.
+- The API controller is not production-wired until real Session/AuthToken and
+  invitation/reset transaction providers are available.

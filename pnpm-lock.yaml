@@ -127,6 +127,9 @@ importers:
       '@entropix/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@entropix/notifications':
+        specifier: workspace:*
+        version: link:../../packages/notifications
       '@nestjs/common':
         specifier: ^12.0.1
         version: 12.0.1(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@7.2.0)
@@ -203,6 +206,9 @@ importers:
       '@emotion/styled':
         specifier: ^11.14.1
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0)(supports-color@7.2.0))(@types/react@19.3.0)(react@19.3.0)(supports-color@7.2.0)
+      '@entropix/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
       '@hookform/resolvers':
         specifier: ^5.9.1
         version: 5.9.1(@standard-schema/spec@1.1.0)(ajv@8.20.0)(effect@3.20.0)(react-hook-form@7.87.0(react@19.3.0))(valibot@1.4.2(typescript@6.0.3))(zod@4.6.1)
@@ -264,6 +270,9 @@ importers:
       vite:
         specifier: ^8.2.2
         version: 8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)
+      vitest:
+        specifier: ^4.1.2
+        version: 4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(tsx@4.23.13))
 
   apps/worker:
     dependencies:

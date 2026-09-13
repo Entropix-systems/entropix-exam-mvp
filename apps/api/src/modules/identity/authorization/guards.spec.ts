@@ -6,6 +6,7 @@ import type { ExecutionContext } from '@nestjs/common';
 import type { Request } from 'express';
 import { IAM_PERMISSIONS as P } from '@entropix/contracts';
 import type { AuthenticatedContext } from '@entropix/contracts';
+import type { AuthenticatedPrincipal } from '../identity.repository.js';
 import {
   Authenticated,
   PublicRoute,
@@ -24,6 +25,16 @@ const context: AuthenticatedContext = {
   tenantId: '11111111-1111-4111-8111-111111111111',
   membershipId: '22222222-2222-4222-8222-222222222222',
   grants: [{ role: 'INSTITUTION_ADMIN', departmentId: null }],
+};
+const principal: AuthenticatedPrincipal = {
+  context,
+  identity: {
+    kind: 'TENANT',
+    userId: context.userId,
+    sessionId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+    tenantId: context.tenantId,
+    membershipId: context.membershipId,
+  },
 };
 
 @RequirePermissions(P.MEMBERSHIPS_READ)
@@ -73,7 +84,7 @@ describe('identity guards', () => {
     expect(resolveAccessToken).not.toHaveBeenCalled();
   });
   it('denies missing/malformed authorization and ignores request-provided context', async () => {
-    const resolveAccessToken = vi.fn().mockResolvedValue(context);
+    const resolveAccessToken = vi.fn().mockResolvedValue(principal);
     const guard = new AuthenticationGuard(reflector, { resolveAccessToken });
     for (const value of [
       undefined,
@@ -90,7 +101,7 @@ describe('identity guards', () => {
   });
   it('accepts only resolver-verified context and freezes a detached snapshot', async () => {
     const request = requestWith('Bearer test-access-token');
-    const resolveAccessToken = vi.fn().mockResolvedValue(context);
+    const resolveAccessToken = vi.fn().mockResolvedValue(principal);
     expect(
       await new AuthenticationGuard(reflector, {
         resolveAccessToken,
@@ -107,7 +118,10 @@ describe('identity guards', () => {
       { ...context, grants: [{ role: 'UNKNOWN', departmentId: null }] },
     ]) {
       const guard = new AuthenticationGuard(reflector, {
-        resolveAccessToken: async () => result as AuthenticatedContext,
+        resolveAccessToken: async () =>
+          result === null
+            ? null
+            : ({ ...principal, context: result } as AuthenticatedPrincipal),
       });
       await expect(
         guard.canActivate(execution(requestWith('Bearer test'))),
@@ -125,7 +139,7 @@ describe('identity guards', () => {
   it('re-resolves on each request and clears prior authority after revocation', async () => {
     const resolveAccessToken = vi
       .fn()
-      .mockResolvedValueOnce(context)
+      .mockResolvedValueOnce(principal)
       .mockResolvedValueOnce(null);
     const guard = new AuthenticationGuard(reflector, { resolveAccessToken });
     const request = requestWith('Bearer test');
@@ -153,7 +167,7 @@ describe('identity guards', () => {
   it('uses server-resolved resource scope, denying foreign tenant IDs', async () => {
     const request = requestWith('Bearer test');
     await new AuthenticationGuard(reflector, {
-      resolveAccessToken: async () => context,
+      resolveAccessToken: async () => principal,
     }).canActivate(execution(request));
     const valid = new PermissionGuard(reflector, {
       resolve: async () => ({
@@ -177,7 +191,7 @@ describe('identity guards', () => {
   it('denies missing resource scope, missing permission metadata, and unknown permission', async () => {
     const request = requestWith('Bearer test');
     await new AuthenticationGuard(reflector, {
-      resolveAccessToken: async () => context,
+      resolveAccessToken: async () => principal,
     }).canActivate(execution(request));
     const missing = new PermissionGuard(reflector, {
       resolve: async () => null,
@@ -207,7 +221,7 @@ describe('identity guards', () => {
       AdminController,
     );
     await new AuthenticationGuard(reflector, {
-      resolveAccessToken: async () => context,
+      resolveAccessToken: async () => principal,
     }).canActivate(exec);
     const resolve = vi.fn().mockResolvedValue({
       kind: 'TENANT',
@@ -219,7 +233,7 @@ describe('identity guards', () => {
       [P.MEMBERSHIPS_MANAGE, P.MEMBERSHIPS_READ].sort(),
     );
     const guard = new AuthenticationGuard(reflector, {
-      resolveAccessToken: async () => context,
+      resolveAccessToken: async () => principal,
     });
     await expect(
       guard.canActivate(

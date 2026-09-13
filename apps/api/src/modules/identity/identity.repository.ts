@@ -54,6 +54,116 @@ export interface MembershipAuthority {
   grants: readonly ScopedRoleGrant[];
 }
 
+export interface AuthenticatedPrincipal {
+  readonly identity: AccessTokenIdentity;
+  readonly context: AuthenticatedContext;
+}
+
+export interface LoginSessionCommand {
+  userId: UUID;
+  institutionSlug: string | null;
+  sessionId: UUID;
+  refreshTokenId: UUID;
+  refreshTokenHash: string;
+  now: Date;
+  expiresAt: Date;
+  readonly requireActiveUser: true;
+  readonly requireActiveTenantMembership: true;
+}
+
+export type LoginSessionResult =
+  | { kind: 'CREATED'; identity: AccessTokenIdentity }
+  | { kind: 'DENIED' };
+
+export interface RotateRefreshCommand {
+  currentTokenHash: string;
+  successorTokenId: UUID;
+  successorTokenHash: string;
+  now: Date;
+  expiresAt: Date;
+  readonly revokeSessionFamilyOnReplay: true;
+}
+
+/** REPLAY means the adapter committed family revocation before returning. */
+export type RotateRefreshResult =
+  | { kind: 'ROTATED'; identity: AccessTokenIdentity }
+  | { kind: 'REPLAY' | 'INVALID' | 'SESSION_REVOKED' };
+
+export interface CreatePasswordResetCommand {
+  userId: UUID;
+  tokenId: UUID;
+  tokenHash: string;
+  now: Date;
+  expiresAt: Date;
+}
+
+export interface ResetPasswordCommand {
+  tokenHash: string;
+  passwordHash: string;
+  now: Date;
+  readonly consumeOnce: true;
+  readonly requireActiveUser: true;
+  readonly revokeAllSessions: true;
+  readonly revokeRemainingResetTokens: true;
+}
+
+export type ResetPasswordResult =
+  | { kind: 'RESET'; userId: UUID }
+  | { kind: 'INVALID' | 'USER_INACTIVE' };
+
+export interface AcceptInvitationCommand {
+  tokenHash: string;
+  passwordHash: string | null;
+  now: Date;
+  readonly consumeOnce: true;
+  readonly protectExistingPassword: true;
+  readonly activateMembershipAfterValidation: true;
+}
+
+export type AcceptInvitationResult =
+  | { kind: 'ACCEPTED' }
+  | {
+      kind:
+        | 'INVALID'
+        | 'USER_INACTIVE'
+        | 'PASSWORD_NOT_ALLOWED'
+        | 'AUTHENTICATION_REQUIRED';
+    };
+
+/**
+ * Phase 2 workflow port. The Phase 3 adapter must implement each mutating method
+ * transactionally against real persistence; there is deliberately no production
+ * in-memory implementation.
+ */
+export abstract class IdentityWorkflowRepository {
+  abstract findUserByEmail(
+    normalizedEmail: string,
+  ): Promise<IdentityUserRecord | null>;
+  abstract createLoginSession(
+    command: LoginSessionCommand,
+  ): Promise<LoginSessionResult>;
+  abstract rotateRefresh(
+    command: RotateRefreshCommand,
+  ): Promise<RotateRefreshResult>;
+  abstract logoutSession(
+    userId: UUID,
+    sessionId: UUID,
+    now: Date,
+  ): Promise<void>;
+  abstract revokeUserSessions(userId: UUID, now: Date): Promise<void>;
+  abstract createPasswordReset(
+    command: CreatePasswordResetCommand,
+  ): Promise<void>;
+  /** Atomically consumes one token, updates the hash, revokes all sessions and remaining reset tokens. */
+  abstract resetPassword(
+    command: ResetPasswordCommand,
+  ): Promise<ResetPasswordResult>;
+  /** Atomically validates token/bindings, protects existing passwords and activates membership after acceptance. */
+  abstract acceptInvitation(
+    command: AcceptInvitationCommand,
+  ): Promise<AcceptInvitationResult>;
+}
+
 /** All methods operate in one database transaction, supplied by the future adapter. */
 export interface IdentityUnitOfWork {
   findUserByEmail(normalizedEmail: string): Promise<IdentityUserRecord | null>;
@@ -106,7 +216,7 @@ export interface IdentityRepository {
 export abstract class AuthenticatedContextResolver {
   abstract resolveAccessToken(
     rawAccessToken: string,
-  ): Promise<AuthenticatedContext | null>;
+  ): Promise<AuthenticatedPrincipal | null>;
 }
 
 /** Persistence-side resolver may use verified hints only as lookup keys. */

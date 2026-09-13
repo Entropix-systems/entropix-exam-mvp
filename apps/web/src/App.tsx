@@ -1,122 +1,49 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import { useEffect, useState } from 'react'
+import { AuthApiClient } from './auth/auth-client'
+import { AuthProvider } from './auth/auth-provider'
+import { ProtectedRoute } from './auth/protected-route'
+import { AccessDeniedPage } from './pages/access-denied-page'
+import { ForgotPasswordPage } from './pages/forgot-password-page'
+import { HomePage } from './pages/home-page'
+import { InvitationPage } from './pages/invitation-page'
+import { LoginPage } from './pages/login-page'
+import { ResetPasswordPage } from './pages/reset-password-page'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const authClient = new AuthApiClient(
+  import.meta.env.VITE_API_BASE_URL ?? '/api/v1',
+)
 
+function usePathname() {
+  const [pathname, setPathname] = useState(window.location.pathname)
+  useEffect(() => {
+    const update = () => setPathname(window.location.pathname)
+    window.addEventListener('popstate', update)
+    return () => window.removeEventListener('popstate', update)
+  }, [])
+  return pathname
+}
+function Routes() {
+  const pathname = usePathname()
+  if (pathname === '/login') return <LoginPage />
+  if (pathname === '/forgot-password')
+    return <ForgotPasswordPage client={authClient} />
+  if (pathname === '/reset-password')
+    return <ResetPasswordPage client={authClient} />
+  if (pathname === '/accept-invitation')
+    return <InvitationPage client={authClient} />
+  if (pathname === '/access-denied') return <AccessDeniedPage />
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    <ProtectedRoute>
+      <HomePage />
+    </ProtectedRoute>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <AuthProvider client={authClient}>
+      <Routes />
+    </AuthProvider>
+  )
+}
