@@ -1,0 +1,37 @@
+{
+  "name": "entropix-exam-mvp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Entropix Systems Examination ERP MVP",
+  "packageManager": "pnpm@12.3.4",
+  "engines": {
+    "node": "24.20.0"
+  },
+  "scripts": {
+    "dev": "concurrently -n web,api,worker \"pnpm dev:web\" \"pnpm dev:api\" \"pnpm dev:worker\"",
+    "dev:web": "pnpm --filter @entropix/web dev",
+    "dev:api": "pnpm --filter @entropix/api start:dev",
+    "dev:worker": "pnpm --filter @entropix/worker start:dev",
+    "build": "pnpm -r --if-present build",
+    "lint": "pnpm -r --if-present lint",
+    "test": "pnpm --filter @entropix/domain... build && pnpm -r --if-present test",
+    "typecheck": "pnpm --filter @entropix/domain... build && pnpm -r --if-present typecheck",
+    "fixtures:generate": "node scripts/generate-d0-fixtures.mjs",
+    "fixtures:check": "node scripts/check-d0-fixtures.mjs",
+    "seed:academics": "pnpm --filter @entropix/db seed:academics",
+    "seed:people": "pnpm --filter @entropix/db seed:people",
+    "seed:exams": "pnpm --filter @entropix/db seed:exams",
+    "seed:scheduling": "pnpm --filter @entropix/db seed:scheduling",
+    "seed:conduct": "pnpm --filter @entropix/db seed:conduct",
+    "ci:quality": "pnpm fixtures:check && pnpm --filter @entropix/contracts smoke && pnpm typecheck && pnpm build && pnpm lint && pnpm test && pnpm --filter @entropix/api test:e2e",
+    "infra:up": "bash scripts/dev/infra-up.sh",
+    "infra:down": "bash scripts/dev/infra-down.sh",
+    "dev:stop": "bash scripts/dev/stop-apps.sh",
+    "d0:verify": "pnpm fixtures:check && pnpm --filter @entropix/contracts smoke && pnpm --filter @entropix/db smoke:runtime && pnpm --filter @entropix/db smoke:tenancy && pnpm --filter @entropix/storage smoke && pnpm --filter @entropix/notifications smoke && pnpm ci:quality"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "tsx": "^4.23.13",
+    "typescript": "^6.0.3"
+  }
+}

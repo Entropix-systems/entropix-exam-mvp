@@ -1,0 +1,158 @@
+{
+  "fixtureVersion": 1,
+  "gradeBands": [
+    {
+      "grade": "A",
+      "minInclusive": 80,
+      "maxInclusive": 100,
+      "points": 10
+    },
+    {
+      "grade": "B",
+      "minInclusive": 60,
+      "maxExclusive": 80,
+      "points": 8
+    },
+    {
+      "grade": "C",
+      "minInclusive": 40,
+      "maxExclusive": 60,
+      "points": 6
+    },
+    {
+      "grade": "F",
+      "minInclusive": 0,
+      "maxExclusive": 40,
+      "points": 0
+    }
+  ],
+  "cases": [
+    {
+      "id": "R1_TWO_COMPONENT_PASS",
+      "input": {
+        "internal": {
+          "value": 32,
+          "maximum": 40,
+          "weight": 40
+        },
+        "external": {
+          "value": 42,
+          "maximum": 60,
+          "weight": 60
+        },
+        "totalPassPercentage": 40,
+        "componentPassPercentage": 40
+      },
+      "expected": {
+        "rawPercentage": 74,
+        "displayPercentage": "74.00",
+        "outcome": "PASS",
+        "grade": "B",
+        "gradePoints": 8
+      }
+    },
+    {
+      "id": "R2_COMPONENT_THRESHOLD_FAIL",
+      "input": {
+        "internal": {
+          "value": 36,
+          "maximum": 40,
+          "weight": 40
+        },
+        "external": {
+          "value": 18,
+          "maximum": 60,
+          "weight": 60
+        },
+        "totalPassPercentage": 40,
+        "componentPassPercentage": 40
+      },
+      "expected": {
+        "rawPercentage": 54,
+        "externalPercentage": 30,
+        "outcome": "FAIL",
+        "grade": "F",
+        "gradePoints": 0
+      }
+    },
+    {
+      "id": "R3_UNROUNDED_BOUNDARY_FAIL",
+      "input": {
+        "final": {
+          "value": 39.995,
+          "maximum": 100,
+          "weight": 100
+        },
+        "totalPassPercentage": 40
+      },
+      "expected": {
+        "rawPercentage": 39.995,
+        "displayPercentage": "40.00",
+        "outcome": "FAIL",
+        "grade": "F",
+        "gradePoints": 0
+      }
+    },
+    {
+      "id": "R4_ABSENT",
+      "input": {
+        "attendance": "ABSENT"
+      },
+      "expected": {
+        "outcome": "ABSENT",
+        "percentage": null,
+        "grade": null,
+        "gradePoints": 0
+      }
+    },
+    {
+      "id": "R5_WITHHELD",
+      "input": {
+        "attendance": "PRESENT",
+        "openStudentIncident": true
+      },
+      "expected": {
+        "outcome": "WITHHELD",
+        "percentage": null,
+        "grade": null,
+        "gpa": null,
+        "numericResultVisible": false
+      }
+    },
+    {
+      "id": "R6_GPA",
+      "input": {
+        "credits": [
+          3,
+          4,
+          3
+        ],
+        "gradePoints": [
+          8,
+          10,
+          6
+        ]
+      },
+      "expected": {
+        "weightedPoints": 82,
+        "totalCredits": 10,
+        "gpa": 8.2,
+        "displayGpa": "8.20"
+      }
+    }
+  ],
+  "validationCases": [
+    {
+      "id": "V1_PRESENT_MISSING_REQUIRED_MARK",
+      "input": {
+        "attendance": "PRESENT",
+        "requiredMarkPresent": false
+      },
+      "expected": {
+        "resultRunAllowed": false,
+        "publicationAllowed": false,
+        "classification": "INCOMPLETE_INPUT"
+      }
+    }
+  ]
+}

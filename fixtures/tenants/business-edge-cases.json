@@ -1,0 +1,23 @@
+{
+  "inactiveStudent": {
+    "tenant": "northstar-college",
+    "rollNo": "NS26099",
+    "expectedStatus": "INACTIVE",
+    "expectedRegistrationEligibility": false
+  },
+  "rejectedApplication": {
+    "tenant": "northstar-college",
+    "studentRollNo": "NS26098",
+    "examCode": "NS-SEM3-REG-2026",
+    "expectedState": "REJECTED",
+    "reason": "Fixture rejection for eligibility workflow testing"
+  },
+  "dualDepartmentFaculty": {
+    "tenant": "northstar-college",
+    "facultyCode": "NSF004",
+    "departmentCodes": [
+      "CSE",
+      "MATH"
+    ]
+  }
+}

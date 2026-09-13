@@ -7,3 +7,24 @@ build/
 .DS_Store
 coverage/
 *.log
+
+# Build caches
+.vite/
+.turbo/
+.cache/
+
+# TypeScript
+*.tsbuildinfo
+
+# Test artifacts
+playwright-report/
+test-results/
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Local Docker / database files
+docker-data/

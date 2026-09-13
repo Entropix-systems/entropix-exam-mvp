@@ -1,0 +1,3 @@
+roll_no,name,email,cohort_code,subject_codes
+NS26001,Duplicate Roll Example,duplicate.roll@northstar.example.test,BSC-CS-S3,CS301|MA301|EN301
+NS26101,Unknown Subject Example,unknown.subject@northstar.example.test,BSC-CS-S3,CS301|UNKNOWN999

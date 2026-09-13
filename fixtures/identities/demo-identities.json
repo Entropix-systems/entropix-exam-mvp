@@ -1,0 +1,96 @@
+{
+  "passwordsStoredInRepository": false,
+  "identities": [
+    {
+      "key": "platformAdmin",
+      "email": "platform.admin@example.test",
+      "roles": [
+        "PLATFORM_ADMIN"
+      ],
+      "tenant": null
+    },
+    {
+      "key": "northstarInstitutionAdmin",
+      "email": "admin@northstar.example.test",
+      "roles": [
+        "INSTITUTION_ADMIN"
+      ],
+      "tenant": "northstar-college"
+    },
+    {
+      "key": "northstarController",
+      "email": "controller@northstar.example.test",
+      "roles": [
+        "EXAM_CONTROLLER"
+      ],
+      "tenant": "northstar-college"
+    },
+    {
+      "key": "northstarDepartmentAdmin",
+      "email": "hod@northstar.example.test",
+      "roles": [
+        "DEPARTMENT_ADMIN"
+      ],
+      "tenant": "northstar-college",
+      "departmentScopes": [
+        "CSE"
+      ]
+    },
+    {
+      "key": "northstarExaminer",
+      "email": "examiner@northstar.example.test",
+      "roles": [
+        "FACULTY"
+      ],
+      "tenant": "northstar-college"
+    },
+    {
+      "key": "northstarInvigilator",
+      "email": "invigilator@northstar.example.test",
+      "roles": [
+        "INVIGILATOR"
+      ],
+      "tenant": "northstar-college"
+    },
+    {
+      "key": "northstarStudent",
+      "email": "student.001@northstar.example.test",
+      "roles": [
+        "STUDENT"
+      ],
+      "tenant": "northstar-college"
+    },
+    {
+      "key": "northstarAuditor",
+      "email": "auditor@northstar.example.test",
+      "roles": [
+        "AUDITOR"
+      ],
+      "tenant": "northstar-college"
+    },
+    {
+      "key": "cedarInstitutionAdmin",
+      "email": "admin@cedar.example.test",
+      "roles": [
+        "INSTITUTION_ADMIN"
+      ],
+      "tenant": "cedar-school"
+    },
+    {
+      "key": "cedarController",
+      "email": "controller@cedar.example.test",
+      "roles": [
+        "EXAM_CONTROLLER"
+      ],
+      "tenant": "cedar-school"
+    },
+    {
+      "key": "cedarStudent",
+      "email": "student.01@cedar.example.test",
+      "roles": [
+        "STUDENT"
+      ],
+      "tenant": "cedar-school"
+    }
+  ]
+}

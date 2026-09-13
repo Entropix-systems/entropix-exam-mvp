@@ -1,0 +1,147 @@
+{
+  "fixtureVersion": 1,
+  "tenant": {
+    "name": "Northstar College",
+    "slug": "northstar-college",
+    "timezone": "Asia/Kolkata",
+    "mode": "APPLICATION"
+  },
+  "academicStructure": {
+    "campus": {
+      "code": "MAIN",
+      "name": "Main Campus"
+    },
+    "academicYear": {
+      "code": "AY2026",
+      "name": "2026-27"
+    },
+    "term": {
+      "code": "SEM3",
+      "name": "Semester 3"
+    },
+    "cohort": {
+      "code": "BSC-CS-S3",
+      "name": "BSc Computer Science Semester 3"
+    },
+    "departments": [
+      {
+        "code": "CSE",
+        "name": "Computer Science"
+      },
+      {
+        "code": "MATH",
+        "name": "Mathematics"
+      },
+      {
+        "code": "ENGLISH",
+        "name": "English"
+      }
+    ],
+    "program": {
+      "code": "BSC-CS",
+      "name": "BSc Computer Science"
+    },
+    "subjects": [
+      {
+        "code": "CS301",
+        "name": "Data Structures",
+        "credits": 3
+      },
+      {
+        "code": "MA301",
+        "name": "Discrete Mathematics",
+        "credits": 4
+      },
+      {
+        "code": "EN301",
+        "name": "Technical Communication",
+        "credits": 3
+      }
+    ]
+  },
+  "faculty": [
+    {
+      "code": "NSF001",
+      "name": "Ananya Iyer",
+      "email": "ananya.iyer@northstar.example.test",
+      "departmentCodes": [
+        "CSE"
+      ]
+    },
+    {
+      "code": "NSF002",
+      "name": "Ravi Menon",
+      "email": "ravi.menon@northstar.example.test",
+      "departmentCodes": [
+        "MATH"
+      ]
+    },
+    {
+      "code": "NSF003",
+      "name": "Meera Shah",
+      "email": "meera.shah@northstar.example.test",
+      "departmentCodes": [
+        "ENGLISH"
+      ]
+    },
+    {
+      "code": "NSF004",
+      "name": "Dev Kumar",
+      "email": "dev.kumar@northstar.example.test",
+      "departmentCodes": [
+        "CSE",
+        "MATH"
+      ]
+    }
+  ],
+  "exam": {
+    "code": "NS-SEM3-REG-2026",
+    "name": "Semester 3 Regular Examination 2026",
+    "registrationMode": "APPLICATION",
+    "rule": {
+      "components": [
+        {
+          "code": "INTERNAL",
+          "maximum": 40,
+          "weight": 40,
+          "passPercentage": 40
+        },
+        {
+          "code": "EXTERNAL",
+          "maximum": 60,
+          "weight": 60,
+          "passPercentage": 40
+        }
+      ],
+      "totalPassPercentage": 40,
+      "gradeBands": [
+        {
+          "grade": "A",
+          "minInclusive": 80,
+          "maxInclusive": 100,
+          "points": 10
+        },
+        {
+          "grade": "B",
+          "minInclusive": 60,
+          "maxExclusive": 80,
+          "points": 8
+        },
+        {
+          "grade": "C",
+          "minInclusive": 40,
+          "maxExclusive": 60,
+          "points": 6
+        },
+        {
+          "grade": "F",
+          "minInclusive": 0,
+          "maxExclusive": 40,
+          "points": 0
+        }
+      ],
+      "gpaEnabled": true,
+      "graceMarks": 0
+    }
+  }
+}

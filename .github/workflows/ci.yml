@@ -1,0 +1,460 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - integration
+
+  pull_request:
+    branches:
+      - main
+      - integration
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 12.3.4
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Verify runtime pins
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "Node: $(node -v)"
+          echo "pnpm: $(pnpm -v)"
+
+          test "$(node -v)" = "v24.20.0"
+          test "$(pnpm -v)" = "12.3.4"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run quality gate
+        run: pnpm ci:quality
+
+
+  postgres-integration:
+    name: PostgreSQL + RLS + Health
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 12.3.4
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Allocate PostgreSQL host port
+        id: postgres-port
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PORT="$(
+            python3 - <<'PY'
+          import socket
+
+          with socket.socket() as sock:
+              sock.bind(("127.0.0.1", 0))
+              print(sock.getsockname()[1])
+          PY
+          )"
+
+          echo "POSTGRES_HOST_PORT=$PORT" >> "$GITHUB_ENV"
+          echo "PostgreSQL host port: $PORT"
+
+      - name: Create ephemeral CI environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+
+          BOOTSTRAP_PASSWORD="$(openssl rand -hex 24)"
+          MIGRATION_PASSWORD="$(openssl rand -hex 24)"
+          APP_PASSWORD="$(openssl rand -hex 24)"
+          ACCESS_SECRET="$(openssl rand -hex 32)"
+          REFRESH_PEPPER="$(openssl rand -hex 32)"
+
+          cat > .env.docker <<ENV
+          POSTGRES_BOOTSTRAP_PASSWORD=${BOOTSTRAP_PASSWORD}
+          EXAM_MIGRATION_PASSWORD=${MIGRATION_PASSWORD}
+          EXAM_APP_PASSWORD=${APP_PASSWORD}
+          ENV
+
+          cat > .env <<ENV
+          NODE_ENV=test
+
+          WEB_PORT=5173
+          API_PORT=3000
+          WORKER_PORT=3001
+
+          WEB_ORIGIN=http://127.0.0.1:4173
+          API_BASE_URL=http://127.0.0.1:3000/api/v1
+
+          DATABASE_URL=postgresql://exam_app:${APP_PASSWORD}@127.0.0.1:${POSTGRES_HOST_PORT}/exam_mvp?schema=public
+          DATABASE_MIGRATION_URL=postgresql://exam_migration:${MIGRATION_PASSWORD}@127.0.0.1:${POSTGRES_HOST_PORT}/exam_mvp?schema=public
+          SHADOW_DATABASE_URL=postgresql://exam_migration:${MIGRATION_PASSWORD}@127.0.0.1:${POSTGRES_HOST_PORT}/exam_mvp_shadow?schema=public
+
+          ACCESS_TOKEN_TTL_SECONDS=900
+          REFRESH_TOKEN_TTL_SECONDS=604800
+          INVITE_TTL_SECONDS=86400
+
+          ACCESS_TOKEN_SECRET=${ACCESS_SECRET}
+          REFRESH_TOKEN_PEPPER=${REFRESH_PEPPER}
+
+          STORAGE_PROVIDER=s3
+          STORAGE_ENDPOINT=http://127.0.0.1:9090
+          STORAGE_REGION=us-east-1
+          STORAGE_ACCESS_KEY_ID=test
+          STORAGE_SECRET_ACCESS_KEY=test
+          STORAGE_BUCKET=entropix-exam-mvp
+          STORAGE_FORCE_PATH_STYLE=true
+
+          S3_QUARANTINE_PREFIX=quarantine/
+          S3_CLEAN_PREFIX=clean/
+          S3_GENERATED_PREFIX=generated/
+
+          STORAGE_SIGNED_URL_TTL_SECONDS=60
+
+          SCANNER_HOST=127.0.0.1
+          SCANNER_PORT=3310
+
+          EMAIL_PROVIDER=test
+          EMAIL_FROM=no-reply@example.test
+          EMAIL_REGION=
+
+          LOG_LEVEL=info
+          ENV
+
+      - name: Start PostgreSQL
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          docker compose \
+            --env-file .env.docker \
+            up -d postgres
+
+      - name: Wait for PostgreSQL
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for attempt in $(seq 1 30); do
+            STATUS="$(
+              docker inspect \
+                entropix-exam-postgres \
+                --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' \
+                2>/dev/null \
+                || true
+            )"
+
+            echo "PostgreSQL status: ${STATUS:-unknown}"
+
+            if [ "$STATUS" = "healthy" ]; then
+              exit 0
+            fi
+
+            sleep 2
+          done
+
+          docker logs entropix-exam-postgres || true
+          exit 1
+
+      - name: Generate Prisma client
+        run: pnpm --filter @entropix/db generate
+
+      - name: Apply migrations from zero
+        run: pnpm --filter @entropix/db exec prisma migrate deploy
+
+      - name: Verify migration status
+        run: pnpm --filter @entropix/db migrate:status
+
+      - name: Runtime database smoke
+        run: pnpm --filter @entropix/db smoke:runtime
+
+      - name: Tenant and RLS adversarial smoke
+        run: pnpm --filter @entropix/db smoke:tenancy
+
+      - name: API integration test
+        run: pnpm --filter @entropix/api test:e2e
+
+      - name: Build runnable applications
+        run: pnpm build
+
+      - name: Start Web API and Worker
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -a
+          source .env
+          set +a
+
+          pnpm --filter @entropix/api start:prod \
+            > /tmp/exam-api.log 2>&1 &
+          echo $! > /tmp/exam-api.pid
+
+          pnpm --filter @entropix/worker start:prod \
+            > /tmp/exam-worker.log 2>&1 &
+          echo $! > /tmp/exam-worker.pid
+
+          pnpm --filter @entropix/web exec vite preview \
+            --host 127.0.0.1 \
+            --port 4173 \
+            > /tmp/exam-web.log 2>&1 &
+          echo $! > /tmp/exam-web.pid
+
+      - name: Verify Web API and Worker health
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          wait_for_url() {
+            NAME="$1"
+            URL="$2"
+
+            for attempt in $(seq 1 30); do
+              if curl \
+                --fail \
+                --silent \
+                --show-error \
+                "$URL" \
+                >/dev/null
+              then
+                echo "${NAME}: READY"
+                return 0
+              fi
+
+              echo "${NAME}: waiting (${attempt}/30)"
+              sleep 2
+            done
+
+            echo "${NAME}: FAILED"
+            return 1
+          }
+
+          wait_for_url \
+            "Web" \
+            "http://127.0.0.1:4173/"
+
+          wait_for_url \
+            "API live" \
+            "http://127.0.0.1:3000/api/v1/health/live"
+
+          wait_for_url \
+            "API ready" \
+            "http://127.0.0.1:3000/api/v1/health/ready"
+
+          wait_for_url \
+            "Worker live" \
+            "http://127.0.0.1:3001/health/live"
+
+          wait_for_url \
+            "Worker ready" \
+            "http://127.0.0.1:3001/health/ready"
+
+      - name: Print application logs on failure
+        if: failure()
+        shell: bash
+        run: |
+          echo "=== API ==="
+          cat /tmp/exam-api.log 2>/dev/null || true
+
+          echo "=== WORKER ==="
+          cat /tmp/exam-worker.log 2>/dev/null || true
+
+          echo "=== WEB ==="
+          cat /tmp/exam-web.log 2>/dev/null || true
+
+          echo "=== POSTGRES ==="
+          docker logs entropix-exam-postgres 2>/dev/null || true
+
+      - name: Clean PostgreSQL
+        if: always()
+        shell: bash
+        run: |
+          docker compose \
+            --env-file .env.docker \
+            down -v \
+            --remove-orphans \
+            || true
+
+
+  storage-integration:
+    name: Private Storage + Malware Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 12.3.4
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create storage CI environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+
+          cat > .env.docker <<'ENV'
+          POSTGRES_BOOTSTRAP_PASSWORD=unused-in-storage-job
+          EXAM_MIGRATION_PASSWORD=unused-in-storage-job
+          EXAM_APP_PASSWORD=unused-in-storage-job
+          ENV
+
+          cat > .env <<'ENV'
+          NODE_ENV=test
+
+          STORAGE_PROVIDER=s3
+          STORAGE_ENDPOINT=http://127.0.0.1:9090
+          STORAGE_REGION=us-east-1
+          STORAGE_ACCESS_KEY_ID=test
+          STORAGE_SECRET_ACCESS_KEY=test
+          STORAGE_BUCKET=entropix-exam-mvp
+          STORAGE_FORCE_PATH_STYLE=true
+
+          S3_QUARANTINE_PREFIX=quarantine/
+          S3_CLEAN_PREFIX=clean/
+          S3_GENERATED_PREFIX=generated/
+
+          STORAGE_SIGNED_URL_TTL_SECONDS=60
+
+          SCANNER_HOST=127.0.0.1
+          SCANNER_PORT=3310
+          ENV
+
+      - name: Start S3Mock and ClamAV
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          docker compose \
+            --env-file .env.docker \
+            up -d s3mock clamav
+
+      - name: Wait for S3Mock
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for attempt in $(seq 1 45); do
+            if curl \
+              --fail \
+              --silent \
+              "http://127.0.0.1:9090/" \
+              >/dev/null
+            then
+              echo "S3Mock: READY"
+              exit 0
+            fi
+
+            echo "S3Mock: waiting (${attempt}/45)"
+            sleep 2
+          done
+
+          docker logs entropix-exam-s3 || true
+          exit 1
+
+      - name: Wait for ClamAV
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for attempt in $(seq 1 90); do
+            STATUS="$(
+              docker inspect \
+                entropix-exam-clamav \
+                --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' \
+                2>/dev/null \
+                || true
+            )"
+
+            echo "ClamAV status: ${STATUS:-unknown}"
+
+            if [ "$STATUS" = "healthy" ]; then
+              exit 0
+            fi
+
+            sleep 2
+          done
+
+          docker logs entropix-exam-clamav || true
+          exit 1
+
+      - name: Run storage lifecycle smoke
+        run: pnpm --filter @entropix/storage smoke
+
+      - name: Print storage logs on failure
+        if: failure()
+        shell: bash
+        run: |
+          echo "=== S3MOCK ==="
+          docker logs entropix-exam-s3 2>/dev/null || true
+
+          echo "=== CLAMAV ==="
+          docker logs entropix-exam-clamav 2>/dev/null || true
+
+      - name: Clean storage infrastructure
+        if: always()
+        shell: bash
+        run: |
+          docker compose \
+            --env-file .env.docker \
+            down -v \
+            --remove-orphans \
+            || true

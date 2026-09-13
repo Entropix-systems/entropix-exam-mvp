@@ -1,0 +1,67 @@
+services:
+  postgres:
+    image: postgres@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73
+    container_name: entropix-exam-postgres
+
+    ports:
+      - "${POSTGRES_HOST_PORT:-55432}:5432"
+
+    environment:
+      POSTGRES_USER: exam_bootstrap
+      POSTGRES_PASSWORD: ${POSTGRES_BOOTSTRAP_PASSWORD}
+      POSTGRES_DB: postgres
+
+      EXAM_MIGRATION_PASSWORD: ${EXAM_MIGRATION_PASSWORD}
+      EXAM_APP_PASSWORD: ${EXAM_APP_PASSWORD}
+
+    volumes:
+      - exam_postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U exam_bootstrap -d postgres"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+    restart: unless-stopped
+
+  s3mock:
+    image: adobe/s3mock@sha256:65cf60155a2e235fe7d5bf6c633747d6fc7ed93f9f5a6727d86470026b83c2a2
+    container_name: entropix-exam-s3
+    profiles: ["ci"]
+
+    ports:
+      - "127.0.0.1:9090:9090"
+
+    environment:
+      COM_ADOBE_TESTING_S3MOCK_STORE_INITIAL_BUCKETS: entropix-exam-mvp
+      COM_ADOBE_TESTING_S3MOCK_STORE_ROOT: /data
+      COM_ADOBE_TESTING_S3MOCK_STORE_RETAIN_FILES_ON_EXIT: "true"
+
+    volumes:
+      - exam_s3_data:/data
+
+    restart: unless-stopped
+
+  clamav:
+    image: clamav/clamav-debian@sha256:4c975c439fcb7ab9cbdd72162c2802f5efcb4a11dcf5b0b37da1d746474ef20e
+    container_name: entropix-exam-clamav
+
+    ports:
+      - "127.0.0.1:3310:3310"
+
+    volumes:
+      - exam_clamav_db:/var/lib/clamav
+
+    restart: unless-stopped
+
+volumes:
+  exam_postgres_data:
+  exam_s3_data:
+  exam_clamav_db:
