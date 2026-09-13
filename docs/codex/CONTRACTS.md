@@ -259,7 +259,12 @@ actor's update.
 
 # Idempotency
 
-Retried side-effect commands use the `Idempotency-Key` header.
+Retried authenticated business/admin side-effect commands use the `Idempotency-Key` header.
+
+Login, refresh, logout, forgot-password, reset-password, and invitation acceptance
+are authentication protocol operations. They use transactional one-time-token/session
+semantics and are exempt from business idempotency. Refresh rotation must never
+replay a cached response.
 
 The idempotency key is scoped by:
 
@@ -297,3 +302,43 @@ Duty
 - [x] Scheduling entity IDs
 - [x] Migration owner — Developer B
 - [x] Contract owner — Developer A
+
+---
+
+# D1 IAM Phase 1 Security Contract
+
+The Phase 1 authorization is recorded in `docs/codex/IAM-PHASE1.md`.
+Typed identity contracts live in `packages/contracts/src/context.ts` and `identity.ts`.
+
+- `ScopedRoleGrant`: canonical tenant role plus nullable department UUID.
+- `TENANT`: user UUID, tenant UUID, membership UUID, and scoped grants.
+- `PLATFORM`: user UUID and `PLATFORM_ADMIN`; no tenant/membership fields.
+- Permissions evaluate role and department on the same grant.
+- Access tokens carry identity hints; current server authority remains mandatory.
+- Configurable defaults: access 15 minutes, refresh 7 days, invitation 24 hours.
+- Password-reset expiry is configurable. The implementation uses 30 minutes as a
+  default, not a previously frozen product requirement.
+- No 30-day absolute session lifetime is introduced.
+- Refresh cookies are HttpOnly/SameSite and Secure except explicitly local development.
+- Future User.platformRole is nullable and restricted to PLATFORM_ADMIN.
+
+No Session/AuthToken schema or persistence is implemented in Phase 1.
+
+---
+
+# D1 IAM Phase 2 Application Contract
+
+Phase 2 orchestration is recorded in `docs/codex/IAM-PHASE2.md`.
+
+- Day-1 auth routes use the shared envelope and do not require `Idempotency-Key`.
+- Unexpected server failures use `INTERNAL_ERROR` and the generic message
+  `Request failed`; database and provider details remain private.
+- The refresh credential is accepted only from the Phase 1 HttpOnly cookie.
+- Cookie-authenticated refresh/logout require a configured exact Origin and the
+  non-simple `x-csrf-protection: 1` header.
+- Access tokens remain in browser memory and each protected request re-resolves
+  current server authority. Concurrent ordinary 401 responses share one refresh.
+- A missing institution selector can resolve only a legitimate platform context;
+  platform users never receive fabricated tenant or membership identifiers.
+- The API controller is not production-wired until real Session/AuthToken and
+  invitation/reset transaction providers are available.

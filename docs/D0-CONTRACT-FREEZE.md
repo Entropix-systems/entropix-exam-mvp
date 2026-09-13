@@ -8,11 +8,14 @@ Status: FROZEN FOR THE THREE-DAY MVP
 - INSTITUTION_ADMIN
 - EXAM_CONTROLLER
 - DEPARTMENT_ADMIN
-- FACULTY_EXAMINER
-- INVIGILATOR_OBSERVER
+- FACULTY
+- INVIGILATOR
 - STUDENT
 - AUDITOR
 
+D1 IAM alignment replaces the former combined faculty/examiner and invigilator/observer names.
+HOD = DEPARTMENT_ADMIN with department scope; EXAMINER = FACULTY with evaluation assignment;
+OBSERVER = INVIGILATOR with duty assignment. These are not additional canonical roles.
 Department/HOD scope and assignment scope further restrict access.
 
 ## Registration
@@ -103,7 +106,10 @@ Cursor page size:
 
 PATCH commands require expectedVersion.
 
-Side-effecting POST commands require Idempotency-Key.
+Authenticated business/admin side-effecting POST commands require Idempotency-Key.
+D1 IAM protocol exception: login, refresh, logout, forgot-password, reset-password,
+and invitation acceptance use transactional token/session semantics, not this header.
+Never replay a cached refresh-rotation response.
 
 Idempotency keys are scoped to:
 - tenant
