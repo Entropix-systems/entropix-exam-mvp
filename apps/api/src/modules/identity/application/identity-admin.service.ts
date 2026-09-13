@@ -55,6 +55,10 @@ function checkedGrants(value: unknown): readonly ScopedRoleGrant[] {
     role: grant.role,
     departmentId: grant.departmentId?.toLowerCase() ?? null,
   }));
+  if (grants.some((grant) => grant.role === 'DEPARTMENT_ADMIN'))
+    throw new UnprocessableEntityException(
+      'Department Admin requires a department supplied by M01 Academics',
+    );
   const keys = grants.map(
     (grant) => `${grant.role}:${grant.departmentId ?? '*'}`,
   );

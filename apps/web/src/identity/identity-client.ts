@@ -26,28 +26,36 @@ export interface MembershipDirectory {
   departments: readonly DepartmentSummary[]
 }
 
+interface ApiMembershipSummary {
+  id: string
+  userId: string
+  email: string
+  name: string | null
+  status: string
+  version: number
+  grants: readonly ScopedRoleGrant[]
+}
+
 interface AuthenticatedRequester {
   request<T>(path: string, init?: RequestInit): Promise<T>
 }
 
 type MembershipDirectoryPayload =
   | MembershipDirectory
+  | { memberships: readonly ApiMembershipSummary[] }
   | readonly MembershipSummary[]
 
-function departmentsFromMemberships(
-  memberships: readonly MembershipSummary[],
-): DepartmentSummary[] {
-  const departments = new Map<string, string>()
-  memberships.forEach((membership) =>
-    membership.grants.forEach((grant) => {
-      if (grant.departmentId)
-        departments.set(
-          grant.departmentId,
-          grant.departmentName ?? grant.departmentId,
-        )
-    }),
-  )
-  return [...departments].map(([id, name]) => ({ id, name }))
+function normalizeMembership(
+  membership: MembershipSummary | ApiMembershipSummary,
+): MembershipSummary {
+  if ('user' in membership) return membership
+  return {
+    id: membership.id,
+    version: membership.version,
+    status: membership.status,
+    user: { name: membership.name, email: membership.email },
+    grants: membership.grants,
+  }
 }
 
 export class IdentityApiClient {
@@ -62,19 +70,21 @@ export class IdentityApiClient {
       '/identity/memberships',
     )
     if (Array.isArray(payload)) {
-      const memberships = payload as readonly MembershipSummary[]
+      const memberships = (payload as readonly MembershipSummary[]).map(
+        normalizeMembership,
+      )
       return {
         memberships,
-        departments: departmentsFromMemberships(memberships),
+        departments: [],
       }
     }
-    const directory = payload as MembershipDirectory
+    const directory = payload as MembershipDirectory | {
+      memberships: readonly ApiMembershipSummary[]
+    }
     return {
-      tenantName: directory.tenantName,
-      memberships: directory.memberships ?? [],
-      departments:
-        directory.departments ??
-        departmentsFromMemberships(directory.memberships ?? []),
+      tenantName: 'tenantName' in directory ? directory.tenantName : undefined,
+      memberships: (directory.memberships ?? []).map(normalizeMembership),
+      departments: 'departments' in directory ? directory.departments : [],
     }
   }
 

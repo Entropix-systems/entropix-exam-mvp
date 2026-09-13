@@ -364,5 +364,7 @@ POST /api/v1/identity/memberships/:id/activate
 These routes require a current tenant `INSTITUTION_ADMIN`. Invitation and grant
 inputs use canonical `{ role, departmentId }` grants; `PLATFORM_ADMIN` is rejected.
 Membership reads/mutations are current-tenant only, foreign IDs are inaccessible,
-and invitation responses never expose raw tokens. Developer A must pull/rebase this
-merge before final browser verification.
+and invitation responses never expose raw tokens. Until M01 Academics provides real
+Department records, `DEPARTMENT_ADMIN` grant writes are rejected and the Web UI
+disables that role when no real department choices exist. Once M01 lands, IAM must
+consume its Department source rather than introduce an IAM-owned department model.

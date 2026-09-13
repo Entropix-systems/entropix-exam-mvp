@@ -69,7 +69,14 @@ function GrantEditor({
               }
             >
               {TENANT_ROLE_OPTIONS.map((option) => (
-                <option value={option.value} key={option.value}>
+                <option
+                  value={option.value}
+                  key={option.value}
+                  disabled={
+                    option.value === 'DEPARTMENT_ADMIN' &&
+                    departments.length === 0
+                  }
+                >
                   {option.label}
                 </option>
               ))}
@@ -253,7 +260,7 @@ function AccessDialog({
             <GrantEditor grants={grants} departments={departments} onChange={onGrantsChange} />
             {departments.length === 0 ? (
               <p className="field-help dialog-help">
-                Department-scoped roles require departments returned by the membership directory.
+                Department Admin becomes available when M01 Academics provides real department records.
               </p>
             ) : null}
             {error ? <p className="form-message error" role="alert">{error}</p> : null}

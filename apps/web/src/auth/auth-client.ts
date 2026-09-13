@@ -39,10 +39,11 @@ export class AuthApiClient {
 
   constructor(
     baseUrl: string,
-    fetchImplementation: FetchImplementation = fetch,
+    fetchImplementation?: FetchImplementation,
   ) {
     this.baseUrl = baseUrl
-    this.fetchImplementation = fetchImplementation
+    this.fetchImplementation =
+      fetchImplementation ?? globalThis.fetch.bind(globalThis)
   }
 
   hasAccessToken(): boolean {
