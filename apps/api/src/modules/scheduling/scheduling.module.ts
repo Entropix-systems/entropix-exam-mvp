@@ -15,6 +15,7 @@ function required(name: string): string {
 @Injectable()
 class SchedulingDatabaseLifecycle implements OnModuleDestroy {
   constructor(private readonly prisma: PrismaClient) {}
+
   async onModuleDestroy(): Promise<void> {
     await this.prisma.$disconnect();
   }
@@ -36,6 +37,5 @@ class SchedulingDatabaseLifecycle implements OnModuleDestroy {
     SchedulingService,
     AuthenticationGuard,
   ],
-  exports: [SchedulingRepository],
 })
 export class SchedulingModule {}

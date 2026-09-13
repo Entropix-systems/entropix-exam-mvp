@@ -8,7 +8,8 @@ import type {
   UUID,
 } from '@entropix/contracts';
 import { isUuid } from '@entropix/domain';
-import { ConflictException, ForbiddenException, Injectable, NotFoundException, Optional, UnprocessableEntityException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Inject, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { AUTH_CLOCK } from '../identity/application/auth.service.js';
 import { ConductRepository } from './conduct.repository.js';
 
 function tenant(context: AuthenticatedContext) {
@@ -91,7 +92,7 @@ function dispositionInput(body: unknown): IncidentDispositionInput {
 export class ConductService {
   constructor(
     private readonly repository: ConductRepository,
-    @Optional() private readonly clock: () => Date = () => new Date(),
+    @Inject(AUTH_CLOCK) private readonly clock: () => Date = () => new Date(),
   ) {}
 
   list(context: AuthenticatedContext) {
