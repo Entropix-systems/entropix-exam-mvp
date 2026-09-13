@@ -1,15 +1,14 @@
 # SESSION HANDOFF — DEV A
 
 Last updated: 2026-09-13
-Branch: integration
-Base: 2b287e3
-Head: 2b287e3
+Branch: d1-a-academic-masters
+Base: 7ef9edd
+Head: 7ef9edd (A01 changes are uncommitted)
 
 ## Current Sprint Goal
 
-Working Examination ERP demo for Tuesday.
-
-IAM is complete in another developer's lane. Do not rebuild or re-analyze IAM unless a concrete integration blocker requires it.
+Working Examination ERP demo for Tuesday, with persisted academic masters now
+available for the first business flow.
 
 ## Lane Ownership
 
@@ -29,123 +28,159 @@ Developer B owns:
 
 ## Completed in This Lane
 
-- No business slice is complete on `integration`.
+- A01 implements Campus, Department, Program, AcademicYear, Term, Cohort, and
+  Subject as tenant-owned Prisma models with composite same-tenant relationships,
+  scoped uniqueness, checks, RLS, and restricted runtime access.
+- Migration `20260913150000_academic_masters` was applied to the configured demo DB.
+- Northstar College and Cedar School academic fixtures were persisted idempotently.
+- Authenticated API routes provide snapshot/get/create/update behavior under
+  `/api/v1/academics`; tenant scope comes only from IAM actor context.
+- The Setup & access page renders persisted institution, calendar, hierarchy,
+  department, subject, and stable UUID data.
+- Shared academic contracts and repository setup/contract documentation are current.
+
+These changes are not yet committed or merged into `integration`.
 
 ## Current Task
 
 Task: A01 — Academic Masters
-Status: NOT STARTED
+Status: IMPLEMENTED AND FOCUSED VERIFIED; AWAITING REVIEW/COMMIT/MERGE
 
-What already works:
+What works:
 
-- D0 workspace, API, database, tenant transaction/RLS, storage, notification, CI, and fictional fixtures exist.
-- Shared state enums and API conventions exist in `packages/contracts`.
-- `docs/design/index.html#setup` defines the practical demo screen.
-
-What remains:
-
-- Persist and expose Campus, Department, Program, AcademicYear, Term, Cohort, and Subject.
-- Replace the relevant mock screen with tenant-scoped UI and API behavior.
+- Both fictional tenant structures persist and reload from PostgreSQL.
+- Missing tenant context sees zero academic rows.
+- Northstar context cannot read a Cedar Subject UUID or create a Department using
+  Cedar's Campus UUID.
+- Institution administrators can create/update academic masters; tenant users can
+  read their own snapshot; platform context and non-admin writes are denied.
+- Invalid resource paths, UUIDs, names/codes, hierarchy, credits, sequence, and
+  date order are rejected through Nest exceptions and the standard API envelope.
 
 ## Stable Context for Next Session
 
 The next agent may assume:
 
-- IAM is complete in a parallel lane and should be consumed, not changed.
-- D0 foundation remains available.
-- Current business API modules are empty Nest module shells.
-- Current Prisma schema contains only Tenant, User, Membership, and RoleGrant.
-- Current web app is the Vite starter; the interactive reference is `docs/design/index.html`.
-- The demo tenants and fixtures are Northstar College and Cedar School.
-- All tenant-owned persistence must use the existing tenant transaction and RLS model.
+- IAM actor-context resolution remains unchanged and is reused by Academics.
+- A01 owns exactly one migration and no alternate academic schema exists.
+- Academic delete is intentionally absent so referenced history cannot be removed.
+- The configured remote demo DB has all four repository migrations applied.
+- No repository-managed demo password exists; do not fabricate or overwrite IAM
+  credentials merely to obtain browser proof.
 
 ## Shared Contracts / Schema That Matter
 
-- Typed contracts already define exam, registration, attendance, duty, marks-batch, and result outcome enums.
-- The exact eligibility payload is not frozen yet.
-- Developer B will consume `Exam.id`, `ExamSubject.id`, `RegistrationSubject.id`, attendance state, and incident hold state.
+- `packages/contracts/src/academics.ts` defines resource paths, records, inputs,
+  `AcademicStructureSnapshot`, `AcademicInputByResource`, and
+  `AcademicRecordByResource`.
+- Stable downstream references are `Term.id`, `Cohort.id`, and `Subject.id` UUIDs.
+- API routes are GET snapshot, GET by resource/id, POST by resource, and PUT by
+  resource/id. Request bodies never contain authoritative tenant scope.
+- A01 Departments are now the source IAM must consume in a focused follow-up for
+  department-scoped grants; IAM must not define another Department model.
 
 ## Migrations
 
-Latest relevant migration:
+Latest migration:
 
-- `20260911063050_identity_tenancy_rls`
+- `20260913150000_academic_masters`
 
 Migration lock:
 
-- DEV B, according to the current `CURRENT-STATE.md`; no D1 business migration exists on `integration`.
+- Developer A retains it until A01 is committed and merged.
 
-Required action:
+Live state:
 
-- Coordinate transfer or a single shared migration sequence before A01 edits schema.
+- `prisma migrate deploy` applied pending IAM Phase 3 and A01 migrations.
+- Final `pnpm --filter @entropix/db migrate:status` reported the schema up to date.
 
 ## Shared Contract Lock
 
 Owner:
 
-- DEV A, according to the current `CURRENT-STATE.md`.
+- Developer A.
 
 Relevant shared contract change:
 
-- Add only the academic IDs/DTOs needed by A01, then preserve or explicitly transfer the lock for dependent tasks.
+- Academic record/request/snapshot contracts are implemented and documented.
+- Keep the lock through A01 review/merge, then explicitly release or transfer it.
 
 ## Files / Modules to Continue From
 
-Read these first next session:
-
-- `docs/codex/generated/A01-academic-masters.md`
 - `packages/db/prisma/schema.prisma`
-- `packages/db/src/tenant.ts`
-- `apps/api/src/modules/academics/academics.module.ts`
-- `apps/web/src/App.tsx`
-
-Do NOT reread the whole repository.
+- `packages/db/prisma/migrations/20260913150000_academic_masters/migration.sql`
+- `packages/db/scripts/seed-academics.ts`
+- `packages/db/scripts/academic-rls-smoke.ts`
+- `packages/contracts/src/academics.ts`
+- `apps/api/src/modules/academics/`
+- `apps/web/src/academics/academics-client.ts`
+- `apps/web/src/pages/academic-structure.tsx`
+- `apps/web/src/pages/setup-access-page.tsx`
+- `docs/codex/CONTRACTS.md`
+- `docs/codex/CURRENT-STATE.md`
 
 ## Mockup Reference
 
-Relevant mock screen(s):
+Relevant mock screen:
 
 - `docs/design/index.html#setup`
 
-Expected behavior:
+Implemented behavior:
 
-- Northstar College and Cedar School academic structure loads from persisted tenant-scoped state.
+- The existing Setup & access structure and terminology are preserved while the
+  academic card now loads real Northstar/Cedar tenant data instead of mock state.
 
 ## Verified Behavior
 
-- `integration` is clean at `2b287e3`.
-- Business modules are placeholders, the result engine is empty, and the web app is still the Vite starter.
-- No implementation or runtime verification was performed during prompt generation.
+- `pnpm --filter @entropix/api exec vitest run src/modules/academics/academics.service.spec.ts` → PASS, 6 tests.
+- `pnpm --filter @entropix/web exec vitest run src/academics/academics-client.spec.ts src/pages/academic-structure.spec.tsx src/pages/setup-access-page.spec.tsx` → PASS, 4 tests.
+- Contracts, DB, API, and Web focused typechecks/builds → PASS.
+- Focused Academics oxlint and changed Web ESLint targets → PASS.
+- `pnpm --filter @entropix/db exec prisma validate` → PASS.
+- `pnpm seed:academics` → PASS for Northstar College and Cedar School.
+- `pnpm --filter @entropix/db smoke:academics` → PASS with Northstar counts
+  1/3/1/1/1/1/3, Cedar counts 1/1/1/1/1/1/3, missing-context denial,
+  foreign read denial, and foreign-parent mutation rejection.
+- Live unauthenticated `GET /api/v1/academics` → 401 standard
+  `UNAUTHENTICATED` API error envelope.
+- Browser `/setup-access` → meaningful sign-in page, no Vite overlay, non-blank.
+- `git diff --check` → PASS.
 
 ## Known Limitations / Deferred
 
-- CSV is the required demo import path; XLSX may be deferred if it would require an import framework.
-- Advanced scheduling optimization, enterprise import reconciliation, and broad hardening are deferred.
+- Authenticated Northstar/Cedar browser rendering was not executed because no demo
+  password is stored or supplied. Creating a temporary privileged IAM identity was
+  rejected and was not bypassed; the unused helper was removed.
+- Academic delete is intentionally deferred.
+- IAM department-scoped role selection still needs a follow-up to consume A01 data.
+- The full repository verification suite was not run, per A01 scope.
 
 ## Blockers
 
-- A01 schema work needs the single migration lock currently recorded as DEV B.
+- No implementation blocker remains.
+- Authenticated manual browser proof requires an existing fictional institution-admin
+  credential from the task owner.
+- Commit/merge was not authorized in this session.
 
 ## Cross-Lane Dependency
 
-Waiting on:
+Available to downstream lanes after merge:
 
-- IAM integration from the parallel developer only when an actor-context integration point is required.
+- Stable `Term.id`, `Cohort.id`, and `Subject.id` values.
+- Tenant-safe Academic snapshot and individual record queries.
+- A real Department source for the IAM department-grant follow-up.
 
-Other lane needs from us:
+Required synchronization:
 
-- A03: Exam, ExamSubject, and approved RegistrationSubject roster.
-- A05: Attendance outcomes and incident hold state.
+- Review/commit/merge A01, then all dependent branches pull/rebase `integration`
+  before consuming the migration or shared contracts.
 
 ## Next Exact Action
 
-The next Codex session should start by:
-
-1. Read `AGENTS.md`, this handoff, and `docs/codex/generated/A01-academic-masters.md`.
-2. Confirm the branch/worktree and coordinate the migration lock.
-3. Inspect the five files listed above and implement A01 immediately.
-
-Do not start by rereading all project documentation.
+1. Review `git diff` on `d1-a-academic-masters` and commit the internally consistent A01 slice.
+2. Merge through `integration`, then release the migration lock and transfer/release the contract lock.
+3. If pre-merge authenticated browser proof is required, supply an existing fictional admin credential and verify `/setup-access` for both tenant slugs.
+4. Start the IAM follow-up that reads A01 Departments for scoped role grants.
 
 ## Minimal Context Files for Next Session
 
@@ -153,10 +188,8 @@ Required:
 
 1. `AGENTS.md`
 2. this `SESSION-HANDOFF.md`
-3. `docs/codex/generated/A01-academic-masters.md`
-4. `packages/db/prisma/schema.prisma`
-5. `packages/db/src/tenant.ts`
-6. `apps/api/src/modules/academics/academics.module.ts`
-7. `apps/web/src/App.tsx`
+3. `docs/codex/CURRENT-STATE.md`
+4. `docs/codex/CONTRACTS.md`
+5. the A01 files listed above
 
-Read shared docs only if an assumption above is stale or conflicting.
+Do not reread the whole repository.

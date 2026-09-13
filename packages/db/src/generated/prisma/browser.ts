@@ -23,6 +23,41 @@ export * from './enums.js';
  */
 export type Tenant = Prisma.TenantModel
 /**
+ * Model Campus
+ *
+ */
+export type Campus = Prisma.CampusModel
+/**
+ * Model Department
+ *
+ */
+export type Department = Prisma.DepartmentModel
+/**
+ * Model Program
+ *
+ */
+export type Program = Prisma.ProgramModel
+/**
+ * Model AcademicYear
+ *
+ */
+export type AcademicYear = Prisma.AcademicYearModel
+/**
+ * Model Term
+ *
+ */
+export type Term = Prisma.TermModel
+/**
+ * Model Cohort
+ *
+ */
+export type Cohort = Prisma.CohortModel
+/**
+ * Model Subject
+ *
+ */
+export type Subject = Prisma.SubjectModel
+/**
  * Model User
  *
  */

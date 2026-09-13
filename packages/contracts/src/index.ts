@@ -1,4 +1,5 @@
 export * from './api.js';
+export * from './academics.js';
 export * from './commands.js';
 export * from './common.js';
 export * from './context.js';
