@@ -12,6 +12,7 @@ export {
 
 export type {
   TenantTransaction,
+  TenantTransactionOptions,
 } from './tenant.js';
 
 export * from './generated/prisma/client.js';

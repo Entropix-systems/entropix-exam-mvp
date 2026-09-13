@@ -12,12 +12,14 @@ import { ResultsModule } from './modules/results/results.module.js';
 import { DocumentsModule } from './modules/documents/documents.module.js';
 import { NotificationsModule } from './modules/notifications/notifications.module.js';
 import { AuditModule } from './modules/audit/audit.module.js';
+import { PeopleModule } from './modules/people/people.module.js';
 
 @Module({
   imports: [
     HealthModule,
     IdentityHttpModule,
     AcademicsModule,
+    PeopleModule,
     ExamsModule,
     SchedulingModule,
     ConductModule,

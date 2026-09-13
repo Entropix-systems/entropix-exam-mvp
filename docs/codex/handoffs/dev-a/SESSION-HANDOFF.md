@@ -1,162 +1,149 @@
 # SESSION HANDOFF — DEV A
 
 Last updated: 2026-09-13
-Branch: integration
-Base: 2b287e3
-Head: 2b287e3
+Branch: codex/start-enrolments-import-work
+Base: b2881a1 (A01 academic masters commit)
+Head: b2881a1 (A02 changes are uncommitted)
 
 ## Current Sprint Goal
 
-Working Examination ERP demo for Tuesday.
-
-IAM is complete in another developer's lane. Do not rebuild or re-analyze IAM unless a concrete integration blocker requires it.
+Working Examination ERP demo for Tuesday. Persisted academic masters, students,
+faculty, and enrolments now supply the next registration and scheduling slices.
 
 ## Lane Ownership
 
-Developer A owns:
-
-- academic masters
-- students, faculty, enrolments, and demo import
-- exams and registration
-- timetable, halls, seats, duties, attendance, and incidents
-
-Developer B owns:
-
-- result rules
-- marks entry and independent review
-- result runs and publication
-- student outputs, dashboard, reports, and demo polish
+Developer A owns academic masters, students/import, exams/registration, and
+examination operations. Developer B owns results, marks, publication, student
+outputs, dashboard, and demo polish.
 
 ## Completed in This Lane
 
-- No business slice is complete on `integration`.
+- A01 academic masters is committed at `b2881a1` on this branch.
+- A02 adds tenant-owned Student, Faculty, Enrolment, and StudentImport models
+  with same-tenant composite relationships, checks, forced RLS, and stable UUIDs.
+- Student and Faculty profiles bind to IAM Membership records; import creates a
+  passwordless IAM User/Membership and STUDENT grant when one does not exist.
+- CSV preview validates required/malformed fields, duplicate file rolls,
+  existing rolls, cohorts, and cohort-compatible subjects with source row numbers.
+- Commit revalidates, writes the whole batch transactionally, and uses a
+  tenant-scoped server SHA-256 identity for retry-safe replay.
+- `withTenant` now accepts optional Prisma transaction timing options; existing
+  callers are source-compatible and A02 uses them only for the atomic batch.
+- The authenticated People API provides student list/detail, faculty list, and
+  student import preview/commit routes.
+- `/students` now renders the persisted directory, search, student detail, and
+  real CSV preview/commit flow using the mockup terminology and structure.
+- Fictional seeds persist Northstar's 100 students and 4 faculty plus Cedar's 20
+  students and 3 faculty through the existing fixture sources.
 
 ## Current Task
 
-Task: A01 — Academic Masters
-Status: NOT STARTED
-
-What already works:
-
-- D0 workspace, API, database, tenant transaction/RLS, storage, notification, CI, and fictional fixtures exist.
-- Shared state enums and API conventions exist in `packages/contracts`.
-- `docs/design/index.html#setup` defines the practical demo screen.
-
-What remains:
-
-- Persist and expose Campus, Department, Program, AcademicYear, Term, Cohort, and Subject.
-- Replace the relevant mock screen with tenant-scoped UI and API behavior.
-
-## Stable Context for Next Session
-
-The next agent may assume:
-
-- IAM is complete in a parallel lane and should be consumed, not changed.
-- D0 foundation remains available.
-- Current business API modules are empty Nest module shells.
-- Current Prisma schema contains only Tenant, User, Membership, and RoleGrant.
-- Current web app is the Vite starter; the interactive reference is `docs/design/index.html`.
-- The demo tenants and fixtures are Northstar College and Cedar School.
-- All tenant-owned persistence must use the existing tenant transaction and RLS model.
+Task: A02 — Students, Faculty, Enrolments & Import
+Status: IMPLEMENTED AND FOCUSED VERIFIED; AWAITING REVIEW/COMMIT/MERGE
 
 ## Shared Contracts / Schema That Matter
 
-- Typed contracts already define exam, registration, attendance, duty, marks-batch, and result outcome enums.
-- The exact eligibility payload is not frozen yet.
-- Developer B will consume `Exam.id`, `ExamSubject.id`, `RegistrationSubject.id`, attendance state, and incident hold state.
+- `packages/contracts/src/people.ts` owns Student/Faculty directory DTOs and
+  import preview/commit contracts.
+- Stable downstream IDs are `Student.id`, `Faculty.id`, and `Enrolment.id`.
+- Enrolment references Student + Cohort + Subject inside one tenant; the Student
+  composite key also pins the enrolment cohort to the student's cohort.
+- Student-role directory reads include only the profile bound to the current
+  authenticated membership.
+- Current demo transport is JSON `{ fileName, sourceText }` for CSV. XLSX remains
+  deferred because no safe parser already exists in the repository.
 
 ## Migrations
 
-Latest relevant migration:
+Latest migration:
 
-- `20260911063050_identity_tenancy_rls`
+- `20260913170000_people_imports`
 
 Migration lock:
 
-- DEV B, according to the current `CURRENT-STATE.md`; no D1 business migration exists on `integration`.
+- Developer A retains it through A02 review/merge.
 
-Required action:
+Live state:
 
-- Coordinate transfer or a single shared migration sequence before A01 edits schema.
+- The A02 migration is applied to the configured demo PostgreSQL database.
+- `migrate:status` before deployment identified only A02 as pending.
 
 ## Shared Contract Lock
 
-Owner:
+Owner: Developer A.
 
-- DEV A, according to the current `CURRENT-STATE.md`.
+Relevant change:
 
-Relevant shared contract change:
-
-- Add only the academic IDs/DTOs needed by A01, then preserve or explicitly transfer the lock for dependent tasks.
+- A02 People/import DTOs are implemented and documented in `CONTRACTS.md`.
+- Retain the lock through review/merge, then release or transfer it before
+  another lane changes shared contracts.
 
 ## Files / Modules to Continue From
 
-Read these first next session:
-
-- `docs/codex/generated/A01-academic-masters.md`
 - `packages/db/prisma/schema.prisma`
-- `packages/db/src/tenant.ts`
-- `apps/api/src/modules/academics/academics.module.ts`
-- `apps/web/src/App.tsx`
-
-Do NOT reread the whole repository.
-
-## Mockup Reference
-
-Relevant mock screen(s):
-
-- `docs/design/index.html#setup`
-
-Expected behavior:
-
-- Northstar College and Cedar School academic structure loads from persisted tenant-scoped state.
+- `packages/db/prisma/migrations/20260913170000_people_imports/migration.sql`
+- `packages/db/scripts/seed-people.ts`
+- `packages/db/scripts/people-rls-smoke.ts`
+- `packages/contracts/src/people.ts`
+- `apps/api/src/modules/people/`
+- `apps/web/src/people/people-client.ts`
+- `apps/web/src/pages/students-page.tsx`
+- `docs/codex/CONTRACTS.md`
+- `docs/codex/CURRENT-STATE.md`
 
 ## Verified Behavior
 
-- `integration` is clean at `2b287e3`.
-- Business modules are placeholders, the result engine is empty, and the web app is still the Vite starter.
-- No implementation or runtime verification was performed during prompt generation.
+- `pnpm --filter @entropix/api exec vitest run src/modules/people/people.service.spec.ts` → PASS, 6 tests.
+- Contracts, DB, API, and Web focused typechecks/builds → PASS.
+- `pnpm --filter @entropix/db exec prisma validate` → PASS.
+- `prisma migrate deploy` → A02 migration APPLIED.
+- `pnpm seed:people` → PASS twice; the second pass created no duplicate records.
+- `pnpm --filter @entropix/db smoke:people` → PASS:
+  - Northstar: 100 students, 4 faculty, 300 enrolments, 1 committed import.
+  - Cedar: 20 students, 3 faculty, 60 enrolments, 1 committed import.
+  - Missing-context reads exposed zero people rows.
+  - Northstar could not read a Cedar Student UUID or enrol using a Cedar Subject UUID.
+  - Northstar student membership `NS26001` resolved exactly one Student profile.
+- Browser `/students` → redirected to meaningful sign-in UI; page had content,
+  no framework error overlay, and no captured console errors.
 
 ## Known Limitations / Deferred
 
-- CSV is the required demo import path; XLSX may be deferred if it would require an import framework.
-- Advanced scheduling optimization, enterprise import reconciliation, and broad hardening are deferred.
+- XLSX import is deferred; CSV is the working demo path.
+- Faculty currently records its primary fixture department while IAM grants retain
+  all supplied department scopes. Rich HR/faculty assignment data is deferred.
+- Authenticated post-login browser interaction was not executed because no
+  repository-managed demo password or reusable session exists. The unauthenticated
+  route gate, Web/API builds, and database paths were verified.
+- Broad repository verification was not run, per A02 task instructions.
 
 ## Blockers
 
-- A01 schema work needs the single migration lock currently recorded as DEV B.
+- No implementation blocker remains.
+- Authenticated manual `/students` browser proof requires an existing fictional
+  institution-admin/controller/student credential from the task owner.
+- Commit/merge was not authorized in this session.
 
 ## Cross-Lane Dependency
 
-Waiting on:
-
-- IAM integration from the parallel developer only when an actor-context integration point is required.
-
-Other lane needs from us:
-
-- A03: Exam, ExamSubject, and approved RegistrationSubject roster.
-- A05: Attendance outcomes and incident hold state.
+After merge, registration, scheduling, marks, and student-output lanes may consume
+stable Student and Enrolment IDs. All dependent branches must pull/rebase
+`integration` after the A01+A02 branch is merged.
 
 ## Next Exact Action
 
-The next Codex session should start by:
-
-1. Read `AGENTS.md`, this handoff, and `docs/codex/generated/A01-academic-masters.md`.
-2. Confirm the branch/worktree and coordinate the migration lock.
-3. Inspect the five files listed above and implement A01 immediately.
-
-Do not start by rereading all project documentation.
+1. Review the A02 diff and focused validation evidence.
+2. Commit the internally consistent A02 slice and merge A01+A02 through `integration`.
+3. Release/transfer the migration and contract locks.
+4. Start the exam/registration slice against the merged Student/Cohort/Subject IDs.
+5. If browser proof is required before merge, supply an existing fictional admin
+   credential and verify CSV preview/commit plus student self-view at `/students`.
 
 ## Minimal Context Files for Next Session
 
-Required:
-
 1. `AGENTS.md`
-2. this `SESSION-HANDOFF.md`
-3. `docs/codex/generated/A01-academic-masters.md`
-4. `packages/db/prisma/schema.prisma`
-5. `packages/db/src/tenant.ts`
-6. `apps/api/src/modules/academics/academics.module.ts`
-7. `apps/web/src/App.tsx`
-
-Read shared docs only if an assumption above is stale or conflicting.
+2. this handoff
+3. `docs/codex/generated/A02-students-faculty-enrolments-import.md`
+4. `docs/codex/CURRENT-STATE.md`
+5. `docs/codex/CONTRACTS.md`
+6. the A02 files listed above

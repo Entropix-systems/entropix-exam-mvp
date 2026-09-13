@@ -52,8 +52,19 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Tenant: 'Tenant',
+  Campus: 'Campus',
+  Department: 'Department',
+  Program: 'Program',
+  AcademicYear: 'AcademicYear',
+  Term: 'Term',
+  Cohort: 'Cohort',
+  Subject: 'Subject',
   User: 'User',
   Membership: 'Membership',
+  Student: 'Student',
+  Faculty: 'Faculty',
+  Enrolment: 'Enrolment',
+  StudentImport: 'StudentImport',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -89,6 +100,102 @@ export const TenantScalarFieldEnum = {
 export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
 
 
+export const CampusScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CampusScalarFieldEnum = (typeof CampusScalarFieldEnum)[keyof typeof CampusScalarFieldEnum]
+
+
+export const DepartmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  campusId: 'campusId',
+  code: 'code',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof typeof DepartmentScalarFieldEnum]
+
+
+export const ProgramScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  departmentId: 'departmentId',
+  code: 'code',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
+
+
+export const AcademicYearScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  startsOn: 'startsOn',
+  endsOn: 'endsOn',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AcademicYearScalarFieldEnum = (typeof AcademicYearScalarFieldEnum)[keyof typeof AcademicYearScalarFieldEnum]
+
+
+export const TermScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  programId: 'programId',
+  academicYearId: 'academicYearId',
+  code: 'code',
+  name: 'name',
+  startsOn: 'startsOn',
+  endsOn: 'endsOn',
+  sequence: 'sequence',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TermScalarFieldEnum = (typeof TermScalarFieldEnum)[keyof typeof TermScalarFieldEnum]
+
+
+export const CohortScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  termId: 'termId',
+  code: 'code',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CohortScalarFieldEnum = (typeof CohortScalarFieldEnum)[keyof typeof CohortScalarFieldEnum]
+
+
+export const SubjectScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  programId: 'programId',
+  code: 'code',
+  name: 'name',
+  credits: 'credits',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -113,6 +220,66 @@ export const MembershipScalarFieldEnum = {
 } as const
 
 export type MembershipScalarFieldEnum = (typeof MembershipScalarFieldEnum)[keyof typeof MembershipScalarFieldEnum]
+
+
+export const StudentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  membershipId: 'membershipId',
+  cohortId: 'cohortId',
+  rollNo: 'rollNo',
+  name: 'name',
+  email: 'email',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
+
+
+export const FacultyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  membershipId: 'membershipId',
+  departmentId: 'departmentId',
+  code: 'code',
+  name: 'name',
+  email: 'email',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FacultyScalarFieldEnum = (typeof FacultyScalarFieldEnum)[keyof typeof FacultyScalarFieldEnum]
+
+
+export const EnrolmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studentId: 'studentId',
+  cohortId: 'cohortId',
+  subjectId: 'subjectId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EnrolmentScalarFieldEnum = (typeof EnrolmentScalarFieldEnum)[keyof typeof EnrolmentScalarFieldEnum]
+
+
+export const StudentImportScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  contentHash: 'contentHash',
+  fileName: 'fileName',
+  rowCount: 'rowCount',
+  createdCount: 'createdCount',
+  enrolmentCount: 'enrolmentCount',
+  committedAt: 'committedAt'
+} as const
+
+export type StudentImportScalarFieldEnum = (typeof StudentImportScalarFieldEnum)[keyof typeof StudentImportScalarFieldEnum]
 
 
 export const RoleGrantScalarFieldEnum = {

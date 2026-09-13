@@ -27,6 +27,7 @@ pnpm infra:up
 # use the repo's existing DB scripts if already defined
 pnpm --filter @entropix/db exec prisma generate
 pnpm --filter @entropix/db exec prisma migrate deploy
+pnpm seed:academics
 
 # 7. Verify everything
 pnpm d0:verify

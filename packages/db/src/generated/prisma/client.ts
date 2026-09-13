@@ -47,6 +47,41 @@ export { Prisma }
  */
 export type Tenant = Prisma.TenantModel
 /**
+ * Model Campus
+ *
+ */
+export type Campus = Prisma.CampusModel
+/**
+ * Model Department
+ *
+ */
+export type Department = Prisma.DepartmentModel
+/**
+ * Model Program
+ *
+ */
+export type Program = Prisma.ProgramModel
+/**
+ * Model AcademicYear
+ *
+ */
+export type AcademicYear = Prisma.AcademicYearModel
+/**
+ * Model Term
+ *
+ */
+export type Term = Prisma.TermModel
+/**
+ * Model Cohort
+ *
+ */
+export type Cohort = Prisma.CohortModel
+/**
+ * Model Subject
+ *
+ */
+export type Subject = Prisma.SubjectModel
+/**
  * Model User
  *
  */
@@ -56,6 +91,26 @@ export type User = Prisma.UserModel
  *
  */
 export type Membership = Prisma.MembershipModel
+/**
+ * Model Student
+ *
+ */
+export type Student = Prisma.StudentModel
+/**
+ * Model Faculty
+ *
+ */
+export type Faculty = Prisma.FacultyModel
+/**
+ * Model Enrolment
+ *
+ */
+export type Enrolment = Prisma.EnrolmentModel
+/**
+ * Model StudentImport
+ *
+ */
+export type StudentImport = Prisma.StudentImportModel
 /**
  * Model RoleGrant
  *
