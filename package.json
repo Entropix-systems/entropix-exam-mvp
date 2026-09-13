@@ -17,7 +17,8 @@
     "test": "pnpm -r --if-present test",
     "typecheck": "pnpm -r --if-present typecheck",
     "fixtures:generate": "node scripts/generate-d0-fixtures.mjs",
-    "fixtures:check": "node scripts/check-d0-fixtures.mjs"
+    "fixtures:check": "node scripts/check-d0-fixtures.mjs",
+    "ci:quality": "pnpm fixtures:check && pnpm --filter @entropix/contracts smoke && pnpm typecheck && pnpm build && pnpm lint && pnpm test && pnpm --filter @entropix/api test:e2e"
   },
   "devDependencies": {
     "concurrently": "^10.0.5",
