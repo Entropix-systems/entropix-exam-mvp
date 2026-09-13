@@ -1,48 +1,152 @@
 # D1 Shared Contract Register
 
-This file records cross-module contracts that must be agreed before parallel implementation.
+Status: D1 CONTRACT FREEZE
 
-Do not treat this document as a replacement for typed contracts in `packages/contracts`.
+This file records the cross-module contracts agreed before parallel D1
+implementation.
 
-Typed contracts remain authoritative once implemented.
+This is the PRE-D1 documentation freeze. Typed contracts in
+`packages/contracts` must be aligned during D1 implementation while the shared
+contract lock is held.
 
 ---
 
 # Roles
 
-Proposed MVP roles include:
+The MVP has exactly eight canonical role bundles:
 
 ```text
 PLATFORM_ADMIN
 INSTITUTION_ADMIN
 EXAM_CONTROLLER
 DEPARTMENT_ADMIN
-HOD
 FACULTY
-EXAMINER
 INVIGILATOR
-OBSERVER
 STUDENT
 AUDITOR
 ```
 
-Before D1 implementation begins, confirm whether aliases such as:
+Role context is represented through scope or assignment rather than additional
+role enum values:
 
 ```text
-FACULTY / EXAMINER
-INVIGILATOR / OBSERVER
-DEPARTMENT_ADMIN / HOD
+HOD       = DEPARTMENT_ADMIN with department scope
+EXAMINER  = FACULTY with an evaluation assignment
+OBSERVER  = INVIGILATOR with a duty/sitting assignment
 ```
 
-are represented as separate enum values or one role with assignment context.
+`HOD`, `EXAMINER`, and `OBSERVER` are not canonical MVP role bundles.
 
-Do not let each feature decide independently.
+---
+
+# Academic Hierarchy
+
+The tenant-owned academic hierarchy is:
+
+```text
+Tenant → Campus → Department → Program → Term → Cohort
+```
+
+Additional ownership and join contracts are:
+
+```text
+AcademicYear owns Term.
+Subject belongs to Program.
+Enrolment joins Student + Subject + Cohort.
+Exam belongs to Term.
+ExamSubject joins Exam + Subject.
+```
+
+All entity identifiers exposed through the API use UUIDs.
+
+---
+
+# Student Import Input
+
+The frozen student-import contract remains `docs/STUDENT-IMPORT.md`.
+
+Supported formats and required columns are:
+
+```text
+CSV or XLSX
+
+roll_no
+name
+email
+cohort_code
+subject_codes
+```
+
+In CSV, `subject_codes` is pipe-delimited. Preview, atomic commit, validation,
+row-number retention, and retry semantics are those documented in the frozen
+student-import contract.
+
+---
+
+# Registration States
+
+The canonical states are:
+
+```text
+DRAFT
+SUBMITTED
+APPROVED
+REJECTED
+CANCELLED
+```
+
+The only controlled transitions currently documented for application-mode
+registration are:
+
+```text
+DRAFT → SUBMITTED
+SUBMITTED → APPROVED
+SUBMITTED → REJECTED
+REJECTED → SUBMITTED
+APPROVED → CANCELLED
+```
+
+Auto-enrol may create an `APPROVED` registration directly after eligibility
+validation. This is a validated creation path, not an arbitrary state change.
+
+All transitions are enforced server-side through commands. No other transition
+is implied by this contract.
+
+---
+
+# Exam States
+
+The canonical states are:
+
+```text
+DRAFT
+REGISTRATION_OPEN
+PREPARATION
+SCHEDULE_PUBLISHED
+EVALUATION
+PUBLISHED
+CANCELLED
+```
+
+The normal progression is:
+
+```text
+DRAFT
+→ REGISTRATION_OPEN
+→ PREPARATION
+→ SCHEDULE_PUBLISHED
+→ EVALUATION
+→ PUBLISHED
+```
+
+`CANCELLED` is entered only through an explicit cancellation command. Exam state
+changes occur through commands; there is no arbitrary state `PATCH`.
 
 ---
 
 # Attendance States
 
-Expected shared values:
+The canonical values are:
 
 ```text
 NOT_MARKED
@@ -61,54 +165,9 @@ LATE counts as attended.
 
 ---
 
-# Registration States
-
-Expected state model:
-
-```text
-DRAFT
-SUBMITTED
-APPROVED
-REJECTED
-CANCELLED
-```
-
-Expected transitions include:
-
-```text
-DRAFT → SUBMITTED
-SUBMITTED → APPROVED
-SUBMITTED → REJECTED
-REJECTED → SUBMITTED
-APPROVED → CANCELLED
-```
-
-Auto-enrol may create an APPROVED registration directly after eligibility validation.
-
-Final implementation must enforce transitions server-side.
-
----
-
-# Exam Preparation States
-
-Expected progression:
-
-```text
-DRAFT
-→ REGISTRATION_OPEN
-→ PREPARATION
-→ SCHEDULE_PUBLISHED
-```
-
-Additional later states will be confirmed as conduct/evaluation/publication implementation proceeds.
-
-No API should accept an arbitrary workflow state string.
-
----
-
 # Marks Batch States
 
-Expected values:
+The canonical values are:
 
 ```text
 DRAFT
@@ -117,7 +176,7 @@ RETURNED
 APPROVED
 ```
 
-Key invariant:
+The separation-of-duties invariant is:
 
 ```text
 submitter != approver
@@ -125,9 +184,9 @@ submitter != approver
 
 ---
 
-# Result Outcomes
+# Published Result Outcomes
 
-Expected values:
+The only published result outcomes are:
 
 ```text
 PASS
@@ -136,67 +195,105 @@ ABSENT
 WITHHELD
 ```
 
-Incomplete required result input must block result publication rather than silently
-produce a normal numeric result.
+Incomplete required result input is a validation/blocking condition. It is not a
+published outcome and must block computation/publication as applicable.
 
 ---
 
-# API Error Contract
+# Result Grading Policy
 
-Before feature implementation begins, confirm the existing shared error shape.
+Result grading policy lives in immutable, validated `RuleVersion` JSON.
 
-Target semantics:
+`RuleVersion` data is declarative configuration. General executable formulas or
+code are not accepted as grading policy.
+
+---
+
+# API Conventions
+
+The API contract uses:
+
+```text
+Base path: /api/v1
+Identifiers: UUID
+```
+
+Success responses include:
+
+```text
+data
+requestId
+```
+
+Error responses include:
+
+```text
+code
+message
+fieldErrors
+requestId
+```
+
+HTTP semantics are:
 
 ```text
 401 → unauthenticated
-403 → authenticated but forbidden action
-404 → inaccessible/not-found resource
-409 → stale/concurrent workflow state
-422 → invalid business input
+403 → forbidden
+404 → inaccessible or not found
+409 → stale or concurrent state
+422 → business validation failure
 ```
 
-Never expose raw SQL/database errors.
+Responses must not expose SQL, Prisma, or other raw database details.
 
 ---
 
 # Optimistic Concurrency
 
-Mutable workflow commands that may race should use an expected-version contract.
+Mutable aggregate commands use `expectedVersion` where concurrency matters.
 
-Do not silently overwrite another actor's update.
+The command must reject stale versions rather than silently overwrite another
+actor's update.
 
 ---
 
 # Idempotency
 
-Side-effecting commands that may be retried must have a defined idempotency strategy.
+Retried side-effect commands use the `Idempotency-Key` header.
 
-High-value examples:
+The idempotency key is scoped by:
 
 ```text
-student import commit
-registration submission
-schedule publication
-result-run request
-result publication
-PDF generation
+tenant + actor + operation
+```
+
+---
+
+# Scheduling Entity IDs
+
+The D1 scheduling foundation uses UUID identifiers for:
+
+```text
+ExamPaper
+Hall
+HallSitting
+SeatAssignment
+Duty
 ```
 
 ---
 
 # D1 Contract Freeze Checklist
 
-Before parallel D1 coding starts, both developers must agree on:
-
-- [ ] Role enum strategy
-- [ ] Academic IDs and relationships
-- [ ] Student import input shape
-- [ ] Registration states
-- [ ] Exam states
-- [ ] Eligibility result shape
-- [ ] API error envelope
-- [ ] Optimistic version field
-- [ ] Result rule schema
-- [ ] Scheduling entity IDs
-- [ ] Migration owner
-- [ ] Contract owner
+- [x] Role enum strategy
+- [x] Academic IDs and relationships
+- [x] Student import input shape
+- [x] Registration states
+- [x] Exam states
+- [ ] Eligibility result shape — eligibility behaviour and snapshot retention are documented, but no exact shared payload shape exists
+- [x] API error envelope
+- [x] Optimistic version field
+- [x] Result rule schema
+- [x] Scheduling entity IDs
+- [x] Migration owner — Developer B
+- [x] Contract owner — Developer A
