@@ -84,6 +84,25 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Allocate PostgreSQL host port
+        id: postgres-port
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PORT="$(
+            python3 - <<'PY'
+          import socket
+
+          with socket.socket() as sock:
+              sock.bind(("127.0.0.1", 0))
+              print(sock.getsockname()[1])
+          PY
+          )"
+
+          echo "POSTGRES_HOST_PORT=$PORT" >> "$GITHUB_ENV"
+          echo "PostgreSQL host port: $PORT"
+
       - name: Create ephemeral CI environment
         shell: bash
         run: |
@@ -112,9 +131,9 @@ jobs:
           WEB_ORIGIN=http://127.0.0.1:4173
           API_BASE_URL=http://127.0.0.1:3000/api/v1
 
-          DATABASE_URL=postgresql://exam_app:${APP_PASSWORD}@127.0.0.1:55432/exam_mvp?schema=public
-          DATABASE_MIGRATION_URL=postgresql://exam_migration:${MIGRATION_PASSWORD}@127.0.0.1:55432/exam_mvp?schema=public
-          SHADOW_DATABASE_URL=postgresql://exam_migration:${MIGRATION_PASSWORD}@127.0.0.1:55432/exam_mvp_shadow?schema=public
+          DATABASE_URL=postgresql://exam_app:${APP_PASSWORD}@127.0.0.1:${POSTGRES_HOST_PORT}/exam_mvp?schema=public
+          DATABASE_MIGRATION_URL=postgresql://exam_migration:${MIGRATION_PASSWORD}@127.0.0.1:${POSTGRES_HOST_PORT}/exam_mvp?schema=public
+          SHADOW_DATABASE_URL=postgresql://exam_migration:${MIGRATION_PASSWORD}@127.0.0.1:${POSTGRES_HOST_PORT}/exam_mvp_shadow?schema=public
 
           ACCESS_TOKEN_TTL_SECONDS=900
           REFRESH_TOKEN_TTL_SECONDS=604800
