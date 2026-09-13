@@ -33,6 +33,7 @@ export type FetchImplementation = typeof fetch
 export class AuthApiClient {
   private accessToken: string | null = null
   private refreshInFlight: Promise<void> | null = null
+  private readonly sessionFailureListeners = new Set<() => void>()
   private readonly baseUrl: string
   private readonly fetchImplementation: FetchImplementation
 
@@ -46,6 +47,11 @@ export class AuthApiClient {
 
   hasAccessToken(): boolean {
     return this.accessToken !== null
+  }
+
+  onSessionFailure(listener: () => void): () => void {
+    this.sessionFailureListeners.add(listener)
+    return () => this.sessionFailureListeners.delete(listener)
   }
 
   async login(input: LoginRequest): Promise<CurrentUserResponse> {
@@ -155,6 +161,7 @@ export class AuthApiClient {
       this.accessToken = issued.accessToken
     } catch (error) {
       this.clearSession()
+      this.sessionFailureListeners.forEach((listener) => listener())
       throw error
     }
   }

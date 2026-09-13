@@ -97,6 +97,23 @@ describe('AuthApiClient', () => {
     expect(client.hasAccessToken()).toBe(false)
   })
 
+  it('notifies the shell when an ordinary request cannot refresh a revoked session', async () => {
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(jsonResponse({ accessToken: 'access', expiresInSeconds: 900 }))
+      .mockResolvedValueOnce(jsonResponse(me))
+      .mockResolvedValueOnce(jsonResponse(null, 401))
+      .mockResolvedValueOnce(jsonResponse(null, 401))
+    const client = new AuthApiClient('/api/v1', fetchMock)
+    const sessionFailed = vi.fn()
+    client.onSessionFailure(sessionFailed)
+    await client.login({ email: 'a@example.test', password: 'correct password' })
+
+    await expect(client.request('/protected')).rejects.toMatchObject({ status: 401 })
+
+    expect(sessionFailed).toHaveBeenCalledOnce()
+    expect(client.hasAccessToken()).toBe(false)
+  })
+
   it('never writes access tokens to browser persistence', async () => {
     const storageNames = ['localStorage', 'sessionStorage', 'indexedDB'] as const
     const descriptors = storageNames.map((name) =>

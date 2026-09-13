@@ -35,6 +35,11 @@ export function AuthProvider({
     }
   }, [client, failSession])
 
+  useEffect(
+    () => client.onSessionFailure(() => failSession(undefined)),
+    [client, failSession],
+  )
+
   useEffect(() => {
     let active = true
     void client.restoreSession().then(
