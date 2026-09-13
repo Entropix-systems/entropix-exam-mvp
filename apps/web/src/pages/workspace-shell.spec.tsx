@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import type { CurrentUserResponse } from '@entropix/contracts'
 import { WorkspaceShell } from './workspace-shell'
 
-function context(role: 'INSTITUTION_ADMIN' | 'STUDENT'): CurrentUserResponse {
+function context(role: 'INSTITUTION_ADMIN' | 'INVIGILATOR' | 'STUDENT'): CurrentUserResponse {
   return {
     sessionId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
     context: {
@@ -32,7 +32,16 @@ describe('role-aware workspace navigation', () => {
     expect(admin).toContain('Authenticated shell')
     expect(admin).toContain('Setup &amp; access')
     expect(admin).toContain('Timetable &amp; halls')
+    expect(admin).toContain('Duties &amp; attendance')
     expect(student).not.toContain('Setup &amp; access')
     expect(student).not.toContain('Timetable &amp; halls')
+    expect(student).not.toContain('Duties &amp; attendance')
+    const invigilator = renderToStaticMarkup(
+      <WorkspaceShell currentUser={context('INVIGILATOR')} active="attendance" onLogout={vi.fn()}>
+        Assigned roster
+      </WorkspaceShell>,
+    )
+    expect(invigilator).toContain('Duties &amp; attendance')
+    expect(invigilator).not.toContain('Timetable &amp; halls')
   })
 })

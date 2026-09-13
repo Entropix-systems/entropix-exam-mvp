@@ -177,6 +177,20 @@
 .seat-plan, .unallocated-list { padding: 19px 22px; border-bottom: 1px solid #e8edef; }.seat-plan h3 { display: flex; justify-content: space-between; }.seat-plan h3 small { color: #6b7d87; font-weight: 500; }
 .seat-grid { display: grid; grid-template-columns: repeat(6, minmax(70px, 1fr)); gap: 7px; margin-top: 14px; }.seat-grid span { overflow: hidden; border: 1px solid #bddbd2; border-radius: 5px; padding: 8px 5px; color: #0c7159; background: #e9f5f0; font-size: 11px; text-align: center; white-space: nowrap; text-overflow: ellipsis; }.seat-grid span.empty { border-style: dashed; color: #93a4ab; background: #f7fafb; }
 .unallocated-list > span { display: inline-block; margin: 7px 8px 0 0; border-radius: 5px; padding: 7px 9px; color: #8b4e00; background: #fff1d9; font-size: 12px; }
+.conduct-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 16px; max-width: 1240px; margin: 0 auto 20px; border: 1px solid #dce5e8; border-radius: 9px; padding: 18px 20px; background: #fff; }
+.conduct-toolbar label, .duty-assignment label, .incident-form label { display: grid; gap: 6px; color: #526b76; font-size: 12px; font-weight: 700; }
+.conduct-toolbar select, .duty-assignment select, .incident-form select, .incident-form textarea, .attendance-table select { min-height: 40px; border: 1px solid #c9d6da; border-radius: 7px; padding: 8px 10px; color: #173042; background: #fff; }
+.conduct-toolbar select { min-width: min(560px, 72vw); }
+.conduct-stack { display: grid; gap: 20px; max-width: 1240px; margin: auto; }
+.conduct-card, .conduct-empty { overflow: hidden; border: 1px solid #dce5e8; border-radius: 9px; background: #fff; box-shadow: 0 5px 20px rgba(31, 61, 73, .05); }
+.conduct-empty { max-width: 1240px; margin: auto; padding: 32px; }
+.conduct-card > header { display: flex; justify-content: space-between; gap: 18px; padding: 20px 22px; border-bottom: 1px solid #e4eaec; }
+.conduct-card h2, .conduct-card h3 { margin: 3px 0 6px; }.conduct-card header p:last-child { margin: 0; color: #6b7d87; font-size: 13px; }
+.duty-panel { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 20px 22px; }.duty-panel p { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; }.duty-panel small, .incident-list small { display: block; width: 100%; color: #6b7d87; }
+.duty-assignment { display: flex; align-items: end; gap: 10px; }.duty-actions, .incident-actions, .conduct-actions { display: flex; align-items: center; gap: 10px; }
+.attendance-table-wrap { overflow-x: auto; }.attendance-table { width: 100%; border-collapse: collapse; }.attendance-table th { padding: 10px 18px; color: #687a84; background: #f7f9fa; font-size: 11px; text-align: left; text-transform: uppercase; }.attendance-table td { padding: 13px 18px; border-top: 1px solid #e8edef; }.attendance-table td small { display: block; margin-top: 3px; color: #6e8089; }.attendance-table select { width: 100%; min-width: 130px; }
+.conduct-actions { justify-content: flex-end; flex-wrap: wrap; padding: 16px 22px; border-top: 1px solid #e8edef; }.conduct-actions span { margin-right: auto; color: #60747e; font-size: 13px; }.conduct-locked { margin: 0; padding: 28px 22px; color: #6b7d87; }
+.incident-form { display: grid; grid-template-columns: .7fr 1fr 2fr auto; gap: 12px; align-items: end; padding: 18px 22px; border-bottom: 1px solid #e8edef; }.incident-form textarea { min-height: 66px; resize: vertical; }.incident-list { display: grid; }.incident-list > p { margin: 0; padding: 24px 22px; color: #6b7d87; }.incident-list article { display: flex; justify-content: space-between; gap: 18px; padding: 18px 22px; border-top: 1px solid #e8edef; }.incident-list article:first-child { border-top: 0; }.incident-list article p { margin: 6px 0 10px; color: #536b75; }
 
 @media (max-width: 820px) {
   .auth-layout { display: block; }
@@ -203,5 +217,11 @@
   .schedule-toolbar form, .schedule-editor { grid-template-columns: 1fr; }
   .schedule-readiness { grid-template-columns: 1fr 1fr; }.schedule-readiness div:nth-child(2) { border-right: 0; }
   .seat-grid { grid-template-columns: repeat(3, 1fr); }
+  .conduct-toolbar, .duty-panel, .incident-list article { align-items: stretch; flex-direction: column; }
+  .conduct-toolbar select { min-width: 0; width: 100%; }
+  .duty-assignment, .incident-form { grid-template-columns: 1fr; }
+  .duty-assignment { align-items: stretch; flex-direction: column; }
+  .conduct-actions { align-items: stretch; flex-direction: column; }.conduct-actions span { margin-right: 0; }
+  .attendance-table th, .attendance-table td { padding: 11px 10px; }
   .grant-row .icon-button { justify-self: end; }
 }

@@ -240,6 +240,13 @@ export type MembershipWhereInput = {
   student?: Prisma.XOR<Prisma.StudentNullableScalarRelationFilter, Prisma.StudentWhereInput> | null
   faculty?: Prisma.XOR<Prisma.FacultyNullableScalarRelationFilter, Prisma.FacultyWhereInput> | null
   reviewedRegistrations?: Prisma.RegistrationListRelationFilter
+  assignedDuties?: Prisma.DutyListRelationFilter
+  respondedDuties?: Prisma.DutyListRelationFilter
+  updatedAttendance?: Prisma.AttendanceListRelationFilter
+  submittedAttendance?: Prisma.AttendanceBatchListRelationFilter
+  reopenedAttendance?: Prisma.AttendanceBatchListRelationFilter
+  createdIncidents?: Prisma.IncidentListRelationFilter
+  disposedIncidents?: Prisma.IncidentListRelationFilter
 }
 
 export type MembershipOrderByWithRelationInput = {
@@ -258,6 +265,13 @@ export type MembershipOrderByWithRelationInput = {
   student?: Prisma.StudentOrderByWithRelationInput
   faculty?: Prisma.FacultyOrderByWithRelationInput
   reviewedRegistrations?: Prisma.RegistrationOrderByRelationAggregateInput
+  assignedDuties?: Prisma.DutyOrderByRelationAggregateInput
+  respondedDuties?: Prisma.DutyOrderByRelationAggregateInput
+  updatedAttendance?: Prisma.AttendanceOrderByRelationAggregateInput
+  submittedAttendance?: Prisma.AttendanceBatchOrderByRelationAggregateInput
+  reopenedAttendance?: Prisma.AttendanceBatchOrderByRelationAggregateInput
+  createdIncidents?: Prisma.IncidentOrderByRelationAggregateInput
+  disposedIncidents?: Prisma.IncidentOrderByRelationAggregateInput
 }
 
 export type MembershipWhereUniqueInput = Prisma.AtLeast<{
@@ -282,6 +296,13 @@ export type MembershipWhereUniqueInput = Prisma.AtLeast<{
   student?: Prisma.XOR<Prisma.StudentNullableScalarRelationFilter, Prisma.StudentWhereInput> | null
   faculty?: Prisma.XOR<Prisma.FacultyNullableScalarRelationFilter, Prisma.FacultyWhereInput> | null
   reviewedRegistrations?: Prisma.RegistrationListRelationFilter
+  assignedDuties?: Prisma.DutyListRelationFilter
+  respondedDuties?: Prisma.DutyListRelationFilter
+  updatedAttendance?: Prisma.AttendanceListRelationFilter
+  submittedAttendance?: Prisma.AttendanceBatchListRelationFilter
+  reopenedAttendance?: Prisma.AttendanceBatchListRelationFilter
+  createdIncidents?: Prisma.IncidentListRelationFilter
+  disposedIncidents?: Prisma.IncidentListRelationFilter
 }, "id" | "tenantId_userId" | "tenantId_id" | "tenantId_id_userId">
 
 export type MembershipOrderByWithAggregationInput = {
@@ -326,6 +347,13 @@ export type MembershipCreateInput = {
   student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipUncheckedCreateInput = {
@@ -342,6 +370,13 @@ export type MembershipUncheckedCreateInput = {
   student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipUpdateInput = {
@@ -358,6 +393,13 @@ export type MembershipUpdateInput = {
   student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipUncheckedUpdateInput = {
@@ -374,6 +416,13 @@ export type MembershipUncheckedUpdateInput = {
   student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipCreateManyInput = {
@@ -606,6 +655,112 @@ export type MembershipUpdateOneWithoutReviewedRegistrationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutReviewedRegistrationsInput, Prisma.MembershipUpdateWithoutReviewedRegistrationsInput>, Prisma.MembershipUncheckedUpdateWithoutReviewedRegistrationsInput>
 }
 
+export type MembershipCreateNestedOneWithoutAssignedDutiesInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutAssignedDutiesInput, Prisma.MembershipUncheckedCreateWithoutAssignedDutiesInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutAssignedDutiesInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipCreateNestedOneWithoutRespondedDutiesInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutRespondedDutiesInput, Prisma.MembershipUncheckedCreateWithoutRespondedDutiesInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutRespondedDutiesInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipUpdateOneRequiredWithoutAssignedDutiesNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutAssignedDutiesInput, Prisma.MembershipUncheckedCreateWithoutAssignedDutiesInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutAssignedDutiesInput
+  upsert?: Prisma.MembershipUpsertWithoutAssignedDutiesInput
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutAssignedDutiesInput, Prisma.MembershipUpdateWithoutAssignedDutiesInput>, Prisma.MembershipUncheckedUpdateWithoutAssignedDutiesInput>
+}
+
+export type MembershipUpdateOneWithoutRespondedDutiesNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutRespondedDutiesInput, Prisma.MembershipUncheckedCreateWithoutRespondedDutiesInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutRespondedDutiesInput
+  upsert?: Prisma.MembershipUpsertWithoutRespondedDutiesInput
+  disconnect?: Prisma.MembershipWhereInput | boolean
+  delete?: Prisma.MembershipWhereInput | boolean
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutRespondedDutiesInput, Prisma.MembershipUpdateWithoutRespondedDutiesInput>, Prisma.MembershipUncheckedUpdateWithoutRespondedDutiesInput>
+}
+
+export type MembershipCreateNestedOneWithoutSubmittedAttendanceInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutSubmittedAttendanceInput, Prisma.MembershipUncheckedCreateWithoutSubmittedAttendanceInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutSubmittedAttendanceInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipCreateNestedOneWithoutReopenedAttendanceInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutReopenedAttendanceInput, Prisma.MembershipUncheckedCreateWithoutReopenedAttendanceInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutReopenedAttendanceInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipUpdateOneWithoutSubmittedAttendanceNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutSubmittedAttendanceInput, Prisma.MembershipUncheckedCreateWithoutSubmittedAttendanceInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutSubmittedAttendanceInput
+  upsert?: Prisma.MembershipUpsertWithoutSubmittedAttendanceInput
+  disconnect?: Prisma.MembershipWhereInput | boolean
+  delete?: Prisma.MembershipWhereInput | boolean
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutSubmittedAttendanceInput, Prisma.MembershipUpdateWithoutSubmittedAttendanceInput>, Prisma.MembershipUncheckedUpdateWithoutSubmittedAttendanceInput>
+}
+
+export type MembershipUpdateOneWithoutReopenedAttendanceNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutReopenedAttendanceInput, Prisma.MembershipUncheckedCreateWithoutReopenedAttendanceInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutReopenedAttendanceInput
+  upsert?: Prisma.MembershipUpsertWithoutReopenedAttendanceInput
+  disconnect?: Prisma.MembershipWhereInput | boolean
+  delete?: Prisma.MembershipWhereInput | boolean
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutReopenedAttendanceInput, Prisma.MembershipUpdateWithoutReopenedAttendanceInput>, Prisma.MembershipUncheckedUpdateWithoutReopenedAttendanceInput>
+}
+
+export type MembershipCreateNestedOneWithoutUpdatedAttendanceInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutUpdatedAttendanceInput, Prisma.MembershipUncheckedCreateWithoutUpdatedAttendanceInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutUpdatedAttendanceInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipUpdateOneRequiredWithoutUpdatedAttendanceNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutUpdatedAttendanceInput, Prisma.MembershipUncheckedCreateWithoutUpdatedAttendanceInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutUpdatedAttendanceInput
+  upsert?: Prisma.MembershipUpsertWithoutUpdatedAttendanceInput
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutUpdatedAttendanceInput, Prisma.MembershipUpdateWithoutUpdatedAttendanceInput>, Prisma.MembershipUncheckedUpdateWithoutUpdatedAttendanceInput>
+}
+
+export type MembershipCreateNestedOneWithoutCreatedIncidentsInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutCreatedIncidentsInput, Prisma.MembershipUncheckedCreateWithoutCreatedIncidentsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutCreatedIncidentsInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipCreateNestedOneWithoutDisposedIncidentsInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutDisposedIncidentsInput, Prisma.MembershipUncheckedCreateWithoutDisposedIncidentsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutDisposedIncidentsInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipUpdateOneRequiredWithoutCreatedIncidentsNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutCreatedIncidentsInput, Prisma.MembershipUncheckedCreateWithoutCreatedIncidentsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutCreatedIncidentsInput
+  upsert?: Prisma.MembershipUpsertWithoutCreatedIncidentsInput
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutCreatedIncidentsInput, Prisma.MembershipUpdateWithoutCreatedIncidentsInput>, Prisma.MembershipUncheckedUpdateWithoutCreatedIncidentsInput>
+}
+
+export type MembershipUpdateOneWithoutDisposedIncidentsNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutDisposedIncidentsInput, Prisma.MembershipUncheckedCreateWithoutDisposedIncidentsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutDisposedIncidentsInput
+  upsert?: Prisma.MembershipUpsertWithoutDisposedIncidentsInput
+  disconnect?: Prisma.MembershipWhereInput | boolean
+  delete?: Prisma.MembershipWhereInput | boolean
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutDisposedIncidentsInput, Prisma.MembershipUpdateWithoutDisposedIncidentsInput>, Prisma.MembershipUncheckedUpdateWithoutDisposedIncidentsInput>
+}
+
 export type MembershipCreateNestedOneWithoutRoleGrantsInput = {
   create?: Prisma.XOR<Prisma.MembershipCreateWithoutRoleGrantsInput, Prisma.MembershipUncheckedCreateWithoutRoleGrantsInput>
   connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutRoleGrantsInput
@@ -665,6 +820,13 @@ export type MembershipCreateWithoutTenantInput = {
   student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipUncheckedCreateWithoutTenantInput = {
@@ -680,6 +842,13 @@ export type MembershipUncheckedCreateWithoutTenantInput = {
   student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipCreateOrConnectWithoutTenantInput = {
@@ -734,6 +903,13 @@ export type MembershipCreateWithoutUserInput = {
   student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipUncheckedCreateWithoutUserInput = {
@@ -749,6 +925,13 @@ export type MembershipUncheckedCreateWithoutUserInput = {
   student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipCreateOrConnectWithoutUserInput = {
@@ -790,6 +973,13 @@ export type MembershipCreateWithoutStudentInput = {
   authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
   faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipUncheckedCreateWithoutStudentInput = {
@@ -805,6 +995,13 @@ export type MembershipUncheckedCreateWithoutStudentInput = {
   authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
   faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipCreateOrConnectWithoutStudentInput = {
@@ -836,6 +1033,13 @@ export type MembershipUpdateWithoutStudentInput = {
   authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutStudentInput = {
@@ -851,6 +1055,13 @@ export type MembershipUncheckedUpdateWithoutStudentInput = {
   authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipCreateWithoutFacultyInput = {
@@ -866,6 +1077,13 @@ export type MembershipCreateWithoutFacultyInput = {
   authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
   student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipUncheckedCreateWithoutFacultyInput = {
@@ -881,6 +1099,13 @@ export type MembershipUncheckedCreateWithoutFacultyInput = {
   authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
   student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipCreateOrConnectWithoutFacultyInput = {
@@ -912,6 +1137,13 @@ export type MembershipUpdateWithoutFacultyInput = {
   authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
   student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutFacultyInput = {
@@ -927,6 +1159,13 @@ export type MembershipUncheckedUpdateWithoutFacultyInput = {
   authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
   student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipCreateWithoutReviewedRegistrationsInput = {
@@ -942,6 +1181,13 @@ export type MembershipCreateWithoutReviewedRegistrationsInput = {
   authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
   student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipUncheckedCreateWithoutReviewedRegistrationsInput = {
@@ -957,6 +1203,13 @@ export type MembershipUncheckedCreateWithoutReviewedRegistrationsInput = {
   authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
   student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipCreateOrConnectWithoutReviewedRegistrationsInput = {
@@ -988,6 +1241,13 @@ export type MembershipUpdateWithoutReviewedRegistrationsInput = {
   authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
   student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutReviewedRegistrationsInput = {
@@ -1003,6 +1263,741 @@ export type MembershipUncheckedUpdateWithoutReviewedRegistrationsInput = {
   authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
   student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipCreateWithoutAssignedDutiesInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
+}
+
+export type MembershipUncheckedCreateWithoutAssignedDutiesInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
+}
+
+export type MembershipCreateOrConnectWithoutAssignedDutiesInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutAssignedDutiesInput, Prisma.MembershipUncheckedCreateWithoutAssignedDutiesInput>
+}
+
+export type MembershipCreateWithoutRespondedDutiesInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
+}
+
+export type MembershipUncheckedCreateWithoutRespondedDutiesInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
+}
+
+export type MembershipCreateOrConnectWithoutRespondedDutiesInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutRespondedDutiesInput, Prisma.MembershipUncheckedCreateWithoutRespondedDutiesInput>
+}
+
+export type MembershipUpsertWithoutAssignedDutiesInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutAssignedDutiesInput, Prisma.MembershipUncheckedUpdateWithoutAssignedDutiesInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutAssignedDutiesInput, Prisma.MembershipUncheckedCreateWithoutAssignedDutiesInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutAssignedDutiesInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutAssignedDutiesInput, Prisma.MembershipUncheckedUpdateWithoutAssignedDutiesInput>
+}
+
+export type MembershipUpdateWithoutAssignedDutiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutAssignedDutiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipUpsertWithoutRespondedDutiesInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutRespondedDutiesInput, Prisma.MembershipUncheckedUpdateWithoutRespondedDutiesInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutRespondedDutiesInput, Prisma.MembershipUncheckedCreateWithoutRespondedDutiesInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutRespondedDutiesInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutRespondedDutiesInput, Prisma.MembershipUncheckedUpdateWithoutRespondedDutiesInput>
+}
+
+export type MembershipUpdateWithoutRespondedDutiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutRespondedDutiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipCreateWithoutSubmittedAttendanceInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
+}
+
+export type MembershipUncheckedCreateWithoutSubmittedAttendanceInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
+}
+
+export type MembershipCreateOrConnectWithoutSubmittedAttendanceInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutSubmittedAttendanceInput, Prisma.MembershipUncheckedCreateWithoutSubmittedAttendanceInput>
+}
+
+export type MembershipCreateWithoutReopenedAttendanceInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
+}
+
+export type MembershipUncheckedCreateWithoutReopenedAttendanceInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
+}
+
+export type MembershipCreateOrConnectWithoutReopenedAttendanceInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutReopenedAttendanceInput, Prisma.MembershipUncheckedCreateWithoutReopenedAttendanceInput>
+}
+
+export type MembershipUpsertWithoutSubmittedAttendanceInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutSubmittedAttendanceInput, Prisma.MembershipUncheckedUpdateWithoutSubmittedAttendanceInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutSubmittedAttendanceInput, Prisma.MembershipUncheckedCreateWithoutSubmittedAttendanceInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutSubmittedAttendanceInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutSubmittedAttendanceInput, Prisma.MembershipUncheckedUpdateWithoutSubmittedAttendanceInput>
+}
+
+export type MembershipUpdateWithoutSubmittedAttendanceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutSubmittedAttendanceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipUpsertWithoutReopenedAttendanceInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutReopenedAttendanceInput, Prisma.MembershipUncheckedUpdateWithoutReopenedAttendanceInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutReopenedAttendanceInput, Prisma.MembershipUncheckedCreateWithoutReopenedAttendanceInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutReopenedAttendanceInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutReopenedAttendanceInput, Prisma.MembershipUncheckedUpdateWithoutReopenedAttendanceInput>
+}
+
+export type MembershipUpdateWithoutReopenedAttendanceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutReopenedAttendanceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipCreateWithoutUpdatedAttendanceInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
+}
+
+export type MembershipUncheckedCreateWithoutUpdatedAttendanceInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
+}
+
+export type MembershipCreateOrConnectWithoutUpdatedAttendanceInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutUpdatedAttendanceInput, Prisma.MembershipUncheckedCreateWithoutUpdatedAttendanceInput>
+}
+
+export type MembershipUpsertWithoutUpdatedAttendanceInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutUpdatedAttendanceInput, Prisma.MembershipUncheckedUpdateWithoutUpdatedAttendanceInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutUpdatedAttendanceInput, Prisma.MembershipUncheckedCreateWithoutUpdatedAttendanceInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutUpdatedAttendanceInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutUpdatedAttendanceInput, Prisma.MembershipUncheckedUpdateWithoutUpdatedAttendanceInput>
+}
+
+export type MembershipUpdateWithoutUpdatedAttendanceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutUpdatedAttendanceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipCreateWithoutCreatedIncidentsInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
+}
+
+export type MembershipUncheckedCreateWithoutCreatedIncidentsInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
+}
+
+export type MembershipCreateOrConnectWithoutCreatedIncidentsInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutCreatedIncidentsInput, Prisma.MembershipUncheckedCreateWithoutCreatedIncidentsInput>
+}
+
+export type MembershipCreateWithoutDisposedIncidentsInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+}
+
+export type MembershipUncheckedCreateWithoutDisposedIncidentsInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type MembershipCreateOrConnectWithoutDisposedIncidentsInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutDisposedIncidentsInput, Prisma.MembershipUncheckedCreateWithoutDisposedIncidentsInput>
+}
+
+export type MembershipUpsertWithoutCreatedIncidentsInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutCreatedIncidentsInput, Prisma.MembershipUncheckedUpdateWithoutCreatedIncidentsInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutCreatedIncidentsInput, Prisma.MembershipUncheckedCreateWithoutCreatedIncidentsInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutCreatedIncidentsInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutCreatedIncidentsInput, Prisma.MembershipUncheckedUpdateWithoutCreatedIncidentsInput>
+}
+
+export type MembershipUpdateWithoutCreatedIncidentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutCreatedIncidentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
+}
+
+export type MembershipUpsertWithoutDisposedIncidentsInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutDisposedIncidentsInput, Prisma.MembershipUncheckedUpdateWithoutDisposedIncidentsInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutDisposedIncidentsInput, Prisma.MembershipUncheckedCreateWithoutDisposedIncidentsInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutDisposedIncidentsInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutDisposedIncidentsInput, Prisma.MembershipUncheckedUpdateWithoutDisposedIncidentsInput>
+}
+
+export type MembershipUpdateWithoutDisposedIncidentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutDisposedIncidentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type MembershipCreateWithoutRoleGrantsInput = {
@@ -1018,6 +2013,13 @@ export type MembershipCreateWithoutRoleGrantsInput = {
   student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipUncheckedCreateWithoutRoleGrantsInput = {
@@ -1033,6 +2035,13 @@ export type MembershipUncheckedCreateWithoutRoleGrantsInput = {
   student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipCreateOrConnectWithoutRoleGrantsInput = {
@@ -1064,6 +2073,13 @@ export type MembershipUpdateWithoutRoleGrantsInput = {
   student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutRoleGrantsInput = {
@@ -1079,6 +2095,13 @@ export type MembershipUncheckedUpdateWithoutRoleGrantsInput = {
   student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipCreateWithoutSessionsInput = {
@@ -1094,6 +2117,13 @@ export type MembershipCreateWithoutSessionsInput = {
   student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipUncheckedCreateWithoutSessionsInput = {
@@ -1109,6 +2139,13 @@ export type MembershipUncheckedCreateWithoutSessionsInput = {
   student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipCreateOrConnectWithoutSessionsInput = {
@@ -1140,6 +2177,13 @@ export type MembershipUpdateWithoutSessionsInput = {
   student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutSessionsInput = {
@@ -1155,6 +2199,13 @@ export type MembershipUncheckedUpdateWithoutSessionsInput = {
   student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipCreateWithoutAuthTokensInput = {
@@ -1170,6 +2221,13 @@ export type MembershipCreateWithoutAuthTokensInput = {
   student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipUncheckedCreateWithoutAuthTokensInput = {
@@ -1185,6 +2243,13 @@ export type MembershipUncheckedCreateWithoutAuthTokensInput = {
   student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
   faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
 }
 
 export type MembershipCreateOrConnectWithoutAuthTokensInput = {
@@ -1216,6 +2281,13 @@ export type MembershipUpdateWithoutAuthTokensInput = {
   student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutAuthTokensInput = {
@@ -1231,6 +2303,13 @@ export type MembershipUncheckedUpdateWithoutAuthTokensInput = {
   student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipCreateManyTenantInput = {
@@ -1255,6 +2334,13 @@ export type MembershipUpdateWithoutTenantInput = {
   student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutTenantInput = {
@@ -1270,6 +2356,13 @@ export type MembershipUncheckedUpdateWithoutTenantInput = {
   student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipUncheckedUpdateManyWithoutTenantInput = {
@@ -1303,6 +2396,13 @@ export type MembershipUpdateWithoutUserInput = {
   student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutUserInput = {
@@ -1318,6 +2418,13 @@ export type MembershipUncheckedUpdateWithoutUserInput = {
   student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
   faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
   reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
 }
 
 export type MembershipUncheckedUpdateManyWithoutUserInput = {
@@ -1339,6 +2446,13 @@ export type MembershipCountOutputType = {
   sessions: number
   authTokens: number
   reviewedRegistrations: number
+  assignedDuties: number
+  respondedDuties: number
+  updatedAttendance: number
+  submittedAttendance: number
+  reopenedAttendance: number
+  createdIncidents: number
+  disposedIncidents: number
 }
 
 export type MembershipCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1346,6 +2460,13 @@ export type MembershipCountOutputTypeSelect<ExtArgs extends runtime.Types.Extens
   sessions?: boolean | MembershipCountOutputTypeCountSessionsArgs
   authTokens?: boolean | MembershipCountOutputTypeCountAuthTokensArgs
   reviewedRegistrations?: boolean | MembershipCountOutputTypeCountReviewedRegistrationsArgs
+  assignedDuties?: boolean | MembershipCountOutputTypeCountAssignedDutiesArgs
+  respondedDuties?: boolean | MembershipCountOutputTypeCountRespondedDutiesArgs
+  updatedAttendance?: boolean | MembershipCountOutputTypeCountUpdatedAttendanceArgs
+  submittedAttendance?: boolean | MembershipCountOutputTypeCountSubmittedAttendanceArgs
+  reopenedAttendance?: boolean | MembershipCountOutputTypeCountReopenedAttendanceArgs
+  createdIncidents?: boolean | MembershipCountOutputTypeCountCreatedIncidentsArgs
+  disposedIncidents?: boolean | MembershipCountOutputTypeCountDisposedIncidentsArgs
 }
 
 /**
@@ -1386,6 +2507,55 @@ export type MembershipCountOutputTypeCountReviewedRegistrationsArgs<ExtArgs exte
   where?: Prisma.RegistrationWhereInput
 }
 
+/**
+ * MembershipCountOutputType without action
+ */
+export type MembershipCountOutputTypeCountAssignedDutiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DutyWhereInput
+}
+
+/**
+ * MembershipCountOutputType without action
+ */
+export type MembershipCountOutputTypeCountRespondedDutiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DutyWhereInput
+}
+
+/**
+ * MembershipCountOutputType without action
+ */
+export type MembershipCountOutputTypeCountUpdatedAttendanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AttendanceWhereInput
+}
+
+/**
+ * MembershipCountOutputType without action
+ */
+export type MembershipCountOutputTypeCountSubmittedAttendanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AttendanceBatchWhereInput
+}
+
+/**
+ * MembershipCountOutputType without action
+ */
+export type MembershipCountOutputTypeCountReopenedAttendanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AttendanceBatchWhereInput
+}
+
+/**
+ * MembershipCountOutputType without action
+ */
+export type MembershipCountOutputTypeCountCreatedIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IncidentWhereInput
+}
+
+/**
+ * MembershipCountOutputType without action
+ */
+export type MembershipCountOutputTypeCountDisposedIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IncidentWhereInput
+}
+
 
 export type MembershipSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1403,6 +2573,13 @@ export type MembershipSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   student?: boolean | Prisma.Membership$studentArgs<ExtArgs>
   faculty?: boolean | Prisma.Membership$facultyArgs<ExtArgs>
   reviewedRegistrations?: boolean | Prisma.Membership$reviewedRegistrationsArgs<ExtArgs>
+  assignedDuties?: boolean | Prisma.Membership$assignedDutiesArgs<ExtArgs>
+  respondedDuties?: boolean | Prisma.Membership$respondedDutiesArgs<ExtArgs>
+  updatedAttendance?: boolean | Prisma.Membership$updatedAttendanceArgs<ExtArgs>
+  submittedAttendance?: boolean | Prisma.Membership$submittedAttendanceArgs<ExtArgs>
+  reopenedAttendance?: boolean | Prisma.Membership$reopenedAttendanceArgs<ExtArgs>
+  createdIncidents?: boolean | Prisma.Membership$createdIncidentsArgs<ExtArgs>
+  disposedIncidents?: boolean | Prisma.Membership$disposedIncidentsArgs<ExtArgs>
   _count?: boolean | Prisma.MembershipCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["membership"]>
 
@@ -1450,6 +2627,13 @@ export type MembershipInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   student?: boolean | Prisma.Membership$studentArgs<ExtArgs>
   faculty?: boolean | Prisma.Membership$facultyArgs<ExtArgs>
   reviewedRegistrations?: boolean | Prisma.Membership$reviewedRegistrationsArgs<ExtArgs>
+  assignedDuties?: boolean | Prisma.Membership$assignedDutiesArgs<ExtArgs>
+  respondedDuties?: boolean | Prisma.Membership$respondedDutiesArgs<ExtArgs>
+  updatedAttendance?: boolean | Prisma.Membership$updatedAttendanceArgs<ExtArgs>
+  submittedAttendance?: boolean | Prisma.Membership$submittedAttendanceArgs<ExtArgs>
+  reopenedAttendance?: boolean | Prisma.Membership$reopenedAttendanceArgs<ExtArgs>
+  createdIncidents?: boolean | Prisma.Membership$createdIncidentsArgs<ExtArgs>
+  disposedIncidents?: boolean | Prisma.Membership$disposedIncidentsArgs<ExtArgs>
   _count?: boolean | Prisma.MembershipCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MembershipIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1472,6 +2656,13 @@ export type $MembershipPayload<ExtArgs extends runtime.Types.Extensions.Internal
     student: Prisma.$StudentPayload<ExtArgs> | null
     faculty: Prisma.$FacultyPayload<ExtArgs> | null
     reviewedRegistrations: Prisma.$RegistrationPayload<ExtArgs>[]
+    assignedDuties: Prisma.$DutyPayload<ExtArgs>[]
+    respondedDuties: Prisma.$DutyPayload<ExtArgs>[]
+    updatedAttendance: Prisma.$AttendancePayload<ExtArgs>[]
+    submittedAttendance: Prisma.$AttendanceBatchPayload<ExtArgs>[]
+    reopenedAttendance: Prisma.$AttendanceBatchPayload<ExtArgs>[]
+    createdIncidents: Prisma.$IncidentPayload<ExtArgs>[]
+    disposedIncidents: Prisma.$IncidentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1883,6 +3074,13 @@ export interface Prisma__MembershipClient<T, Null = never, ExtArgs extends runti
   student<T extends Prisma.Membership$studentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$studentArgs<ExtArgs>>): Prisma.Prisma__StudentClient<runtime.Types.Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   faculty<T extends Prisma.Membership$facultyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$facultyArgs<ExtArgs>>): Prisma.Prisma__FacultyClient<runtime.Types.Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   reviewedRegistrations<T extends Prisma.Membership$reviewedRegistrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$reviewedRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignedDuties<T extends Prisma.Membership$assignedDutiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$assignedDutiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DutyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  respondedDuties<T extends Prisma.Membership$respondedDutiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$respondedDutiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DutyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  updatedAttendance<T extends Prisma.Membership$updatedAttendanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$updatedAttendanceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  submittedAttendance<T extends Prisma.Membership$submittedAttendanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$submittedAttendanceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendanceBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reopenedAttendance<T extends Prisma.Membership$reopenedAttendanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$reopenedAttendanceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendanceBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdIncidents<T extends Prisma.Membership$createdIncidentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$createdIncidentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  disposedIncidents<T extends Prisma.Membership$disposedIncidentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$disposedIncidentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2451,6 +3649,174 @@ export type Membership$reviewedRegistrationsArgs<ExtArgs extends runtime.Types.E
   take?: number
   skip?: number
   distinct?: Prisma.RegistrationScalarFieldEnum | Prisma.RegistrationScalarFieldEnum[]
+}
+
+/**
+ * Membership.assignedDuties
+ */
+export type Membership$assignedDutiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Duty
+   */
+  select?: Prisma.DutySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Duty
+   */
+  omit?: Prisma.DutyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DutyInclude<ExtArgs> | null
+  where?: Prisma.DutyWhereInput
+  orderBy?: Prisma.DutyOrderByWithRelationInput | Prisma.DutyOrderByWithRelationInput[]
+  cursor?: Prisma.DutyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DutyScalarFieldEnum | Prisma.DutyScalarFieldEnum[]
+}
+
+/**
+ * Membership.respondedDuties
+ */
+export type Membership$respondedDutiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Duty
+   */
+  select?: Prisma.DutySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Duty
+   */
+  omit?: Prisma.DutyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DutyInclude<ExtArgs> | null
+  where?: Prisma.DutyWhereInput
+  orderBy?: Prisma.DutyOrderByWithRelationInput | Prisma.DutyOrderByWithRelationInput[]
+  cursor?: Prisma.DutyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DutyScalarFieldEnum | Prisma.DutyScalarFieldEnum[]
+}
+
+/**
+ * Membership.updatedAttendance
+ */
+export type Membership$updatedAttendanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Attendance
+   */
+  select?: Prisma.AttendanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Attendance
+   */
+  omit?: Prisma.AttendanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AttendanceInclude<ExtArgs> | null
+  where?: Prisma.AttendanceWhereInput
+  orderBy?: Prisma.AttendanceOrderByWithRelationInput | Prisma.AttendanceOrderByWithRelationInput[]
+  cursor?: Prisma.AttendanceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AttendanceScalarFieldEnum | Prisma.AttendanceScalarFieldEnum[]
+}
+
+/**
+ * Membership.submittedAttendance
+ */
+export type Membership$submittedAttendanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AttendanceBatch
+   */
+  select?: Prisma.AttendanceBatchSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AttendanceBatch
+   */
+  omit?: Prisma.AttendanceBatchOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AttendanceBatchInclude<ExtArgs> | null
+  where?: Prisma.AttendanceBatchWhereInput
+  orderBy?: Prisma.AttendanceBatchOrderByWithRelationInput | Prisma.AttendanceBatchOrderByWithRelationInput[]
+  cursor?: Prisma.AttendanceBatchWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AttendanceBatchScalarFieldEnum | Prisma.AttendanceBatchScalarFieldEnum[]
+}
+
+/**
+ * Membership.reopenedAttendance
+ */
+export type Membership$reopenedAttendanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AttendanceBatch
+   */
+  select?: Prisma.AttendanceBatchSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AttendanceBatch
+   */
+  omit?: Prisma.AttendanceBatchOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AttendanceBatchInclude<ExtArgs> | null
+  where?: Prisma.AttendanceBatchWhereInput
+  orderBy?: Prisma.AttendanceBatchOrderByWithRelationInput | Prisma.AttendanceBatchOrderByWithRelationInput[]
+  cursor?: Prisma.AttendanceBatchWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AttendanceBatchScalarFieldEnum | Prisma.AttendanceBatchScalarFieldEnum[]
+}
+
+/**
+ * Membership.createdIncidents
+ */
+export type Membership$createdIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Incident
+   */
+  select?: Prisma.IncidentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Incident
+   */
+  omit?: Prisma.IncidentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IncidentInclude<ExtArgs> | null
+  where?: Prisma.IncidentWhereInput
+  orderBy?: Prisma.IncidentOrderByWithRelationInput | Prisma.IncidentOrderByWithRelationInput[]
+  cursor?: Prisma.IncidentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.IncidentScalarFieldEnum | Prisma.IncidentScalarFieldEnum[]
+}
+
+/**
+ * Membership.disposedIncidents
+ */
+export type Membership$disposedIncidentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Incident
+   */
+  select?: Prisma.IncidentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Incident
+   */
+  omit?: Prisma.IncidentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IncidentInclude<ExtArgs> | null
+  where?: Prisma.IncidentWhereInput
+  orderBy?: Prisma.IncidentOrderByWithRelationInput | Prisma.IncidentOrderByWithRelationInput[]
+  cursor?: Prisma.IncidentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.IncidentScalarFieldEnum | Prisma.IncidentScalarFieldEnum[]
 }
 
 /**

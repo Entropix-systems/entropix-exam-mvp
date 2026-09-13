@@ -157,6 +157,31 @@ export type HallSitting = Prisma.HallSittingModel
  */
 export type SeatAssignment = Prisma.SeatAssignmentModel
 /**
+ * Model Duty
+ *
+ */
+export type Duty = Prisma.DutyModel
+/**
+ * Model AttendanceBatch
+ *
+ */
+export type AttendanceBatch = Prisma.AttendanceBatchModel
+/**
+ * Model Attendance
+ *
+ */
+export type Attendance = Prisma.AttendanceModel
+/**
+ * Model Incident
+ *
+ */
+export type Incident = Prisma.IncidentModel
+/**
+ * Model IncidentStudent
+ *
+ */
+export type IncidentStudent = Prisma.IncidentStudentModel
+/**
  * Model RoleGrant
  *
  */

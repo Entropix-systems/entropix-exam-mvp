@@ -13,11 +13,12 @@ Current day: D1 EXAMS / REGISTRATION VERTICAL SLICE MERGED
 ## Current Gate
 
 ```text
-A04 Timetable, Halls & Seats is implemented on `feat/A04-Timetable-Halls&Seats`
-from integration base `48dac03`. Both A04 migrations are applied with no live
-schema drift; Cedar has 3 published papers, 2 halls and 60 deterministic seats.
-Focused rules tests, RLS smoke, DB/API typechecks, Web build and API/Web lint pass.
-Authenticated browser proof still requires a demo credential.
+A05 Duties, Attendance & Incidents is implemented on
+`feat/A05-duties-attendance-incidents`, stacked on A04 commit `3d697d9` from
+integration base `48dac03`. A05 migrations are applied with no live schema drift.
+Cedar has 3 invigilators and 3 pending duties. Focused conduct tests, RLS smoke,
+DB/API/Web typechecks, API/Web builds and lint pass. Authenticated browser proof
+still requires a demo credential.
 ```
 
 ## Completed
@@ -42,8 +43,9 @@ deactivation and tenant-isolation demo gate
 ## In Progress
 
 ```text
-A04 is ready for review/integration. B02 marks remains independent; B04/duties
-must wait for A04 migration and typed scheduling contracts to merge.
+A04 remains first in the stacked merge order. A05 is implemented and awaits
+review after A04 integration. B02/B03 must consume the authoritative A05
+`ConductResultState` attendance/hold contract after A05 merges.
 ```
 
 ## Blockers
@@ -57,23 +59,23 @@ No repository-managed demo password exists for authenticated browser verificatio
 ## Migration Lock
 
 ```text
-Owner: Developer A — A04 Timetable, Halls & Seats
-Purpose: Held through A04 review/merge for ExamPaper, Hall, HallSitting and SeatAssignment persistence
+Owner: Developer A — A05 Duties, Attendance & Incidents
+Purpose: Held through stacked A04/A05 review and merge for conduct persistence
 ```
 
 ## Shared Contract Lock
 
 ```text
-Owner: Developer A — A04 Timetable, Halls & Seats
-Purpose: Held through A04 review/merge for scheduling snapshot, allocation and publication contracts
+Owner: Developer A — A05 Duties, Attendance & Incidents
+Purpose: Held through stacked A04/A05 review and merge for ConductResultState and conduct commands
 ```
 
 ## Developer A
 
 ```text
-Task: A04 Timetable, Halls & Seats
-Branch: feat/A04-Timetable-Halls&Seats
-Status: IMPLEMENTED AND VERIFIED; READY FOR REVIEW/MERGE; LOCKS HELD UNTIL MERGE
+Task: A05 Duties, Attendance & Incidents
+Branch: feat/A05-duties-attendance-incidents
+Status: IMPLEMENTED; FOCUSED VERIFICATION PASS; STACKED REVIEW REQUIRED; LOCKS HELD UNTIL MERGE
 ```
 
 ## Developer B
@@ -105,12 +107,19 @@ A04 Cedar fixture: 3 published papers, 2 halls, 60 deterministic seat assignment
 retry-safe seed and tenant-isolation smoke PASS.
 A04 focused schedule/allocation rules: 7 tests PASS; DB/API typechecks, Web build,
 API/Web lint and controller-only timetable navigation test PASS.
+A05 migrations `20260914020000_conduct_duties_attendance_incidents`,
+`20260914021000_conduct_constraint_names` and
+`20260914022000_attendance_sitting_integrity`: APPLIED; live Prisma schema diff PASS.
+A05 Cedar fixture: 3 invigilators and 3 pending duties; retry-safe seed and
+conduct tenant-isolation smoke PASS. Focused conduct rules: 7 tests PASS; API,
+Web, DB and contracts typechecks/builds plus API/Web lint PASS.
 ```
 
 ## Next Required Action
 
 ```text
-Review and merge A04 into integration, then release both locks and have B04/duty
-lanes pull/rebase before consuming scheduling IDs. Run authenticated controller
-browser proof later if a fictional demo credential is supplied.
+Review and merge A04 first. Review/rebase and merge A05 second, then release both
+locks. B02/B03 pull/rebase and consume `ConductResultState`; do not duplicate
+attendance or holds. Run authenticated controller/invigilator `/attendance`
+browser proof later if fictional demo credentials are supplied.
 ```

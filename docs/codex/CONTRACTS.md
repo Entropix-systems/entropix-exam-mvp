@@ -390,6 +390,49 @@ POST /scheduling/exams/:examId/publish
 
 ---
 
+# Conduct, Attendance and Result-Hold Contract
+
+Typed A05 contracts live in `packages/contracts/src/duties.ts`; canonical row
+attendance values remain in `packages/contracts/src/evaluation.ts`.
+
+```text
+GET  /conduct
+POST /conduct/sittings/:hallSittingId/duties
+POST /conduct/duties/:dutyId/accept
+POST /conduct/duties/:dutyId/decline
+PUT  /conduct/sittings/:hallSittingId/attendance
+POST /conduct/sittings/:hallSittingId/attendance/submit
+POST /conduct/sittings/:hallSittingId/attendance/reopen
+POST /conduct/sittings/:hallSittingId/incidents
+POST /conduct/incidents/:incidentId/disposition
+GET  /conduct/exams/:examId/result-state
+```
+
+- Invigilator authority is the server-resolved `AuthenticatedContext.membershipId`.
+  Only its accepted `Duty` may read the roster, and only during the half-open
+  paper conduct window may it save or submit attendance. Pending/declined duties
+  never expose roster rows.
+- `AttendanceBatch.version` is `0` before first save. Draft saves use
+  `expectedVersion`; submission requires a persisted row for every allocated
+  `SeatAssignment` and rejects any `NOT_MARKED` row. Submitted batches are locked
+  until a controller reopens with an audit reason.
+- `ConductResultState.attendance` is emitted only from submitted batches and is
+  keyed by stable `RegistrationSubject.id`. `ABSENT` remains an explicit
+  nonnumeric state with `attended=false`; `LATE` has `attended=true`.
+- Incident dispositions are `OPEN`, `CLEARED`, `RETAIN_WITHHELD`, and
+  `NO_RESULT_IMPACT`. Every affected student is a tenant-safe relational link to
+  `RegistrationSubject`. `OPEN` and `RETAIN_WITHHELD` emit a result hold keyed by
+  `studentId`; `CLEARED` and `NO_RESULT_IMPACT` do not.
+- A hall incident without affected students is unresolved until a controller
+  chooses `NO_RESULT_IMPACT`. `ConductResultState.ready` is false while a sitting
+  lacks an accepted duty/submitted attendance or such a hall incident remains.
+- Published results freeze attendance and incident disposition; the controller
+  must withdraw publication before changing conduct state.
+- B02/B03 must consume `GET /conduct/exams/:examId/result-state` (or the same
+  `ConductResultState` type) and must not create duplicate attendance/hold tables.
+
+---
+
 # D1 Contract Freeze Checklist
 
 - [x] Role enum strategy
