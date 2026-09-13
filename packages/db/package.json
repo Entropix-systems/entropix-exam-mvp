@@ -33,12 +33,14 @@
     "seed:people": "tsx scripts/seed-people.ts",
     "seed:exams": "tsx scripts/seed-exams.ts",
     "seed:scheduling": "tsx scripts/seed-scheduling.ts",
+    "seed:conduct": "tsx scripts/seed-conduct.ts",
     "typecheck": "tsc --noEmit",
     "smoke:runtime": "tsx scripts/runtime-smoke.ts",
     "smoke:academics": "tsx scripts/academic-rls-smoke.ts",
     "smoke:people": "tsx scripts/people-rls-smoke.ts",
     "smoke:exams": "tsx scripts/exams-rls-smoke.ts",
     "smoke:scheduling": "tsx scripts/scheduling-rls-smoke.ts",
+    "smoke:conduct": "tsx scripts/conduct-rls-smoke.ts",
     "smoke:tenancy": "tsx scripts/tenant-rls-smoke.ts"
   }
 }

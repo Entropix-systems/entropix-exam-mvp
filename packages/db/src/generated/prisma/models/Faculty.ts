@@ -225,6 +225,7 @@ export type FacultyWhereInput = {
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   membership?: Prisma.XOR<Prisma.MembershipScalarRelationFilter, Prisma.MembershipWhereInput>
   department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
+  duties?: Prisma.DutyListRelationFilter
 }
 
 export type FacultyOrderByWithRelationInput = {
@@ -241,6 +242,7 @@ export type FacultyOrderByWithRelationInput = {
   tenant?: Prisma.TenantOrderByWithRelationInput
   membership?: Prisma.MembershipOrderByWithRelationInput
   department?: Prisma.DepartmentOrderByWithRelationInput
+  duties?: Prisma.DutyOrderByRelationAggregateInput
 }
 
 export type FacultyWhereUniqueInput = Prisma.AtLeast<{
@@ -263,6 +265,7 @@ export type FacultyWhereUniqueInput = Prisma.AtLeast<{
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   membership?: Prisma.XOR<Prisma.MembershipScalarRelationFilter, Prisma.MembershipWhereInput>
   department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
+  duties?: Prisma.DutyListRelationFilter
 }, "id" | "tenantId_id" | "tenantId_membershipId" | "tenantId_code">
 
 export type FacultyOrderByWithAggregationInput = {
@@ -308,6 +311,7 @@ export type FacultyCreateInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutFacultyInput
   membership: Prisma.MembershipCreateNestedOneWithoutFacultyInput
   department: Prisma.DepartmentCreateNestedOneWithoutFacultyInput
+  duties?: Prisma.DutyCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyUncheckedCreateInput = {
@@ -321,6 +325,7 @@ export type FacultyUncheckedCreateInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  duties?: Prisma.DutyUncheckedCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyUpdateInput = {
@@ -334,6 +339,7 @@ export type FacultyUpdateInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFacultyNestedInput
   membership?: Prisma.MembershipUpdateOneRequiredWithoutFacultyNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutFacultyNestedInput
+  duties?: Prisma.DutyUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateInput = {
@@ -347,6 +353,7 @@ export type FacultyUncheckedUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  duties?: Prisma.DutyUncheckedUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyCreateManyInput = {
@@ -452,6 +459,11 @@ export type FacultyMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type FacultyScalarRelationFilter = {
+  is?: Prisma.FacultyWhereInput
+  isNot?: Prisma.FacultyWhereInput
 }
 
 export type FacultyCreateNestedManyWithoutTenantInput = {
@@ -570,6 +582,20 @@ export type FacultyUncheckedUpdateOneWithoutMembershipNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FacultyUpdateToOneWithWhereWithoutMembershipInput, Prisma.FacultyUpdateWithoutMembershipInput>, Prisma.FacultyUncheckedUpdateWithoutMembershipInput>
 }
 
+export type FacultyCreateNestedOneWithoutDutiesInput = {
+  create?: Prisma.XOR<Prisma.FacultyCreateWithoutDutiesInput, Prisma.FacultyUncheckedCreateWithoutDutiesInput>
+  connectOrCreate?: Prisma.FacultyCreateOrConnectWithoutDutiesInput
+  connect?: Prisma.FacultyWhereUniqueInput
+}
+
+export type FacultyUpdateOneRequiredWithoutDutiesNestedInput = {
+  create?: Prisma.XOR<Prisma.FacultyCreateWithoutDutiesInput, Prisma.FacultyUncheckedCreateWithoutDutiesInput>
+  connectOrCreate?: Prisma.FacultyCreateOrConnectWithoutDutiesInput
+  upsert?: Prisma.FacultyUpsertWithoutDutiesInput
+  connect?: Prisma.FacultyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FacultyUpdateToOneWithWhereWithoutDutiesInput, Prisma.FacultyUpdateWithoutDutiesInput>, Prisma.FacultyUncheckedUpdateWithoutDutiesInput>
+}
+
 export type FacultyCreateWithoutTenantInput = {
   id?: string
   code: string
@@ -580,6 +606,7 @@ export type FacultyCreateWithoutTenantInput = {
   updatedAt?: Date | string
   membership: Prisma.MembershipCreateNestedOneWithoutFacultyInput
   department: Prisma.DepartmentCreateNestedOneWithoutFacultyInput
+  duties?: Prisma.DutyCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyUncheckedCreateWithoutTenantInput = {
@@ -592,6 +619,7 @@ export type FacultyUncheckedCreateWithoutTenantInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  duties?: Prisma.DutyUncheckedCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyCreateOrConnectWithoutTenantInput = {
@@ -646,6 +674,7 @@ export type FacultyCreateWithoutDepartmentInput = {
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutFacultyInput
   membership: Prisma.MembershipCreateNestedOneWithoutFacultyInput
+  duties?: Prisma.DutyCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyUncheckedCreateWithoutDepartmentInput = {
@@ -657,6 +686,7 @@ export type FacultyUncheckedCreateWithoutDepartmentInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  duties?: Prisma.DutyUncheckedCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyCreateOrConnectWithoutDepartmentInput = {
@@ -695,6 +725,7 @@ export type FacultyCreateWithoutMembershipInput = {
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutFacultyInput
   department: Prisma.DepartmentCreateNestedOneWithoutFacultyInput
+  duties?: Prisma.DutyCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyUncheckedCreateWithoutMembershipInput = {
@@ -706,6 +737,7 @@ export type FacultyUncheckedCreateWithoutMembershipInput = {
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  duties?: Prisma.DutyUncheckedCreateNestedManyWithoutFacultyInput
 }
 
 export type FacultyCreateOrConnectWithoutMembershipInput = {
@@ -734,10 +766,80 @@ export type FacultyUpdateWithoutMembershipInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFacultyNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutFacultyNestedInput
+  duties?: Prisma.DutyUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateWithoutMembershipInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  duties?: Prisma.DutyUncheckedUpdateManyWithoutFacultyNestedInput
+}
+
+export type FacultyCreateWithoutDutiesInput = {
+  id?: string
+  code: string
+  name: string
+  email: string
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutFacultyInput
+  membership: Prisma.MembershipCreateNestedOneWithoutFacultyInput
+  department: Prisma.DepartmentCreateNestedOneWithoutFacultyInput
+}
+
+export type FacultyUncheckedCreateWithoutDutiesInput = {
+  id?: string
+  tenantId: string
+  membershipId: string
+  departmentId: string
+  code: string
+  name: string
+  email: string
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FacultyCreateOrConnectWithoutDutiesInput = {
+  where: Prisma.FacultyWhereUniqueInput
+  create: Prisma.XOR<Prisma.FacultyCreateWithoutDutiesInput, Prisma.FacultyUncheckedCreateWithoutDutiesInput>
+}
+
+export type FacultyUpsertWithoutDutiesInput = {
+  update: Prisma.XOR<Prisma.FacultyUpdateWithoutDutiesInput, Prisma.FacultyUncheckedUpdateWithoutDutiesInput>
+  create: Prisma.XOR<Prisma.FacultyCreateWithoutDutiesInput, Prisma.FacultyUncheckedCreateWithoutDutiesInput>
+  where?: Prisma.FacultyWhereInput
+}
+
+export type FacultyUpdateToOneWithWhereWithoutDutiesInput = {
+  where?: Prisma.FacultyWhereInput
+  data: Prisma.XOR<Prisma.FacultyUpdateWithoutDutiesInput, Prisma.FacultyUncheckedUpdateWithoutDutiesInput>
+}
+
+export type FacultyUpdateWithoutDutiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutFacultyNestedInput
+  membership?: Prisma.MembershipUpdateOneRequiredWithoutFacultyNestedInput
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutFacultyNestedInput
+}
+
+export type FacultyUncheckedUpdateWithoutDutiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  membershipId?: Prisma.StringFieldUpdateOperationsInput | string
   departmentId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -769,6 +871,7 @@ export type FacultyUpdateWithoutTenantInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   membership?: Prisma.MembershipUpdateOneRequiredWithoutFacultyNestedInput
   department?: Prisma.DepartmentUpdateOneRequiredWithoutFacultyNestedInput
+  duties?: Prisma.DutyUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateWithoutTenantInput = {
@@ -781,6 +884,7 @@ export type FacultyUncheckedUpdateWithoutTenantInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  duties?: Prisma.DutyUncheckedUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateManyWithoutTenantInput = {
@@ -816,6 +920,7 @@ export type FacultyUpdateWithoutDepartmentInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFacultyNestedInput
   membership?: Prisma.MembershipUpdateOneRequiredWithoutFacultyNestedInput
+  duties?: Prisma.DutyUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateWithoutDepartmentInput = {
@@ -827,6 +932,7 @@ export type FacultyUncheckedUpdateWithoutDepartmentInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  duties?: Prisma.DutyUncheckedUpdateManyWithoutFacultyNestedInput
 }
 
 export type FacultyUncheckedUpdateManyWithoutDepartmentInput = {
@@ -840,6 +946,35 @@ export type FacultyUncheckedUpdateManyWithoutDepartmentInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type FacultyCountOutputType
+ */
+
+export type FacultyCountOutputType = {
+  duties: number
+}
+
+export type FacultyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  duties?: boolean | FacultyCountOutputTypeCountDutiesArgs
+}
+
+/**
+ * FacultyCountOutputType without action
+ */
+export type FacultyCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FacultyCountOutputType
+   */
+  select?: Prisma.FacultyCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * FacultyCountOutputType without action
+ */
+export type FacultyCountOutputTypeCountDutiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DutyWhereInput
+}
 
 
 export type FacultySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -856,6 +991,8 @@ export type FacultySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   membership?: boolean | Prisma.MembershipDefaultArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
+  duties?: boolean | Prisma.Faculty$dutiesArgs<ExtArgs>
+  _count?: boolean | Prisma.FacultyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["faculty"]>
 
 export type FacultySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -908,6 +1045,8 @@ export type FacultyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   membership?: boolean | Prisma.MembershipDefaultArgs<ExtArgs>
   department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
+  duties?: boolean | Prisma.Faculty$dutiesArgs<ExtArgs>
+  _count?: boolean | Prisma.FacultyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FacultyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -926,6 +1065,7 @@ export type $FacultyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     tenant: Prisma.$TenantPayload<ExtArgs>
     membership: Prisma.$MembershipPayload<ExtArgs>
     department: Prisma.$DepartmentPayload<ExtArgs>
+    duties: Prisma.$DutyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1335,6 +1475,7 @@ export interface Prisma__FacultyClient<T, Null = never, ExtArgs extends runtime.
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   membership<T extends Prisma.MembershipDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MembershipDefaultArgs<ExtArgs>>): Prisma.Prisma__MembershipClient<runtime.Types.Result.GetResult<Prisma.$MembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   department<T extends Prisma.DepartmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DepartmentDefaultArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  duties<T extends Prisma.Faculty$dutiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Faculty$dutiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DutyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1772,6 +1913,30 @@ export type FacultyDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Faculties to delete.
    */
   limit?: number
+}
+
+/**
+ * Faculty.duties
+ */
+export type Faculty$dutiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Duty
+   */
+  select?: Prisma.DutySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Duty
+   */
+  omit?: Prisma.DutyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DutyInclude<ExtArgs> | null
+  where?: Prisma.DutyWhereInput
+  orderBy?: Prisma.DutyOrderByWithRelationInput | Prisma.DutyOrderByWithRelationInput[]
+  cursor?: Prisma.DutyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DutyScalarFieldEnum | Prisma.DutyScalarFieldEnum[]
 }
 
 /**

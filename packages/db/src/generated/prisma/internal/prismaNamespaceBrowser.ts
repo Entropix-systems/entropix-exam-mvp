@@ -74,6 +74,11 @@ export const ModelName = {
   Hall: 'Hall',
   HallSitting: 'HallSitting',
   SeatAssignment: 'SeatAssignment',
+  Duty: 'Duty',
+  AttendanceBatch: 'AttendanceBatch',
+  Attendance: 'Attendance',
+  Incident: 'Incident',
+  IncidentStudent: 'IncidentStudent',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -424,6 +429,89 @@ export const SeatAssignmentScalarFieldEnum = {
 } as const
 
 export type SeatAssignmentScalarFieldEnum = (typeof SeatAssignmentScalarFieldEnum)[keyof typeof SeatAssignmentScalarFieldEnum]
+
+
+export const DutyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  hallSittingId: 'hallSittingId',
+  facultyId: 'facultyId',
+  state: 'state',
+  version: 'version',
+  declineReason: 'declineReason',
+  replacesDutyId: 'replacesDutyId',
+  assignedByMembershipId: 'assignedByMembershipId',
+  respondedByMembershipId: 'respondedByMembershipId',
+  respondedAt: 'respondedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DutyScalarFieldEnum = (typeof DutyScalarFieldEnum)[keyof typeof DutyScalarFieldEnum]
+
+
+export const AttendanceBatchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  hallSittingId: 'hallSittingId',
+  state: 'state',
+  version: 'version',
+  submittedByMembershipId: 'submittedByMembershipId',
+  submittedAt: 'submittedAt',
+  reopenedByMembershipId: 'reopenedByMembershipId',
+  reopenedAt: 'reopenedAt',
+  reopenReason: 'reopenReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceBatchScalarFieldEnum = (typeof AttendanceBatchScalarFieldEnum)[keyof typeof AttendanceBatchScalarFieldEnum]
+
+
+export const AttendanceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  attendanceBatchId: 'attendanceBatchId',
+  hallSittingId: 'hallSittingId',
+  seatAssignmentId: 'seatAssignmentId',
+  state: 'state',
+  version: 'version',
+  updatedByMembershipId: 'updatedByMembershipId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
+
+
+export const IncidentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  hallSittingId: 'hallSittingId',
+  kind: 'kind',
+  description: 'description',
+  disposition: 'disposition',
+  version: 'version',
+  createdByMembershipId: 'createdByMembershipId',
+  disposedByMembershipId: 'disposedByMembershipId',
+  dispositionReason: 'dispositionReason',
+  disposedAt: 'disposedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IncidentScalarFieldEnum = (typeof IncidentScalarFieldEnum)[keyof typeof IncidentScalarFieldEnum]
+
+
+export const IncidentStudentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  incidentId: 'incidentId',
+  registrationSubjectId: 'registrationSubjectId',
+  createdAt: 'createdAt'
+} as const
+
+export type IncidentStudentScalarFieldEnum = (typeof IncidentStudentScalarFieldEnum)[keyof typeof IncidentStudentScalarFieldEnum]
 
 
 export const RoleGrantScalarFieldEnum = {

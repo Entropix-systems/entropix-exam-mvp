@@ -244,6 +244,7 @@ export type SeatAssignmentWhereInput = {
   examPaper?: Prisma.XOR<Prisma.ExamPaperScalarRelationFilter, Prisma.ExamPaperWhereInput>
   hallSitting?: Prisma.XOR<Prisma.HallSittingScalarRelationFilter, Prisma.HallSittingWhereInput>
   registrationSubject?: Prisma.XOR<Prisma.RegistrationSubjectScalarRelationFilter, Prisma.RegistrationSubjectWhereInput>
+  attendance?: Prisma.XOR<Prisma.AttendanceNullableScalarRelationFilter, Prisma.AttendanceWhereInput> | null
 }
 
 export type SeatAssignmentOrderByWithRelationInput = {
@@ -259,11 +260,13 @@ export type SeatAssignmentOrderByWithRelationInput = {
   examPaper?: Prisma.ExamPaperOrderByWithRelationInput
   hallSitting?: Prisma.HallSittingOrderByWithRelationInput
   registrationSubject?: Prisma.RegistrationSubjectOrderByWithRelationInput
+  attendance?: Prisma.AttendanceOrderByWithRelationInput
 }
 
 export type SeatAssignmentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   tenantId_id?: Prisma.SeatAssignmentTenantIdIdCompoundUniqueInput
+  tenantId_id_hallSittingId?: Prisma.SeatAssignmentTenantIdIdHallSittingIdCompoundUniqueInput
   tenantId_examPaperId_registrationSubjectId?: Prisma.SeatAssignmentTenantIdExamPaperIdRegistrationSubjectIdCompoundUniqueInput
   tenantId_hallSittingId_seatNumber?: Prisma.SeatAssignmentTenantIdHallSittingIdSeatNumberCompoundUniqueInput
   AND?: Prisma.SeatAssignmentWhereInput | Prisma.SeatAssignmentWhereInput[]
@@ -280,7 +283,8 @@ export type SeatAssignmentWhereUniqueInput = Prisma.AtLeast<{
   examPaper?: Prisma.XOR<Prisma.ExamPaperScalarRelationFilter, Prisma.ExamPaperWhereInput>
   hallSitting?: Prisma.XOR<Prisma.HallSittingScalarRelationFilter, Prisma.HallSittingWhereInput>
   registrationSubject?: Prisma.XOR<Prisma.RegistrationSubjectScalarRelationFilter, Prisma.RegistrationSubjectWhereInput>
-}, "id" | "tenantId_id" | "tenantId_examPaperId_registrationSubjectId" | "tenantId_hallSittingId_seatNumber">
+  attendance?: Prisma.XOR<Prisma.AttendanceNullableScalarRelationFilter, Prisma.AttendanceWhereInput> | null
+}, "id" | "tenantId_id" | "tenantId_id_hallSittingId" | "tenantId_examPaperId_registrationSubjectId" | "tenantId_hallSittingId_seatNumber">
 
 export type SeatAssignmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -320,6 +324,7 @@ export type SeatAssignmentCreateInput = {
   examPaper: Prisma.ExamPaperCreateNestedOneWithoutSeatAssignmentsInput
   hallSitting: Prisma.HallSittingCreateNestedOneWithoutSeatAssignmentsInput
   registrationSubject: Prisma.RegistrationSubjectCreateNestedOneWithoutSeatAssignmentsInput
+  attendance?: Prisma.AttendanceCreateNestedOneWithoutSeatAssignmentInput
 }
 
 export type SeatAssignmentUncheckedCreateInput = {
@@ -331,6 +336,7 @@ export type SeatAssignmentUncheckedCreateInput = {
   registrationSubjectId: string
   seatNumber: number
   createdAt?: Date | string
+  attendance?: Prisma.AttendanceUncheckedCreateNestedOneWithoutSeatAssignmentInput
 }
 
 export type SeatAssignmentUpdateInput = {
@@ -341,6 +347,7 @@ export type SeatAssignmentUpdateInput = {
   examPaper?: Prisma.ExamPaperUpdateOneRequiredWithoutSeatAssignmentsNestedInput
   hallSitting?: Prisma.HallSittingUpdateOneRequiredWithoutSeatAssignmentsNestedInput
   registrationSubject?: Prisma.RegistrationSubjectUpdateOneRequiredWithoutSeatAssignmentsNestedInput
+  attendance?: Prisma.AttendanceUpdateOneWithoutSeatAssignmentNestedInput
 }
 
 export type SeatAssignmentUncheckedUpdateInput = {
@@ -352,6 +359,7 @@ export type SeatAssignmentUncheckedUpdateInput = {
   registrationSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
   seatNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attendance?: Prisma.AttendanceUncheckedUpdateOneWithoutSeatAssignmentNestedInput
 }
 
 export type SeatAssignmentCreateManyInput = {
@@ -395,6 +403,12 @@ export type SeatAssignmentOrderByRelationAggregateInput = {
 export type SeatAssignmentTenantIdIdCompoundUniqueInput = {
   tenantId: string
   id: string
+}
+
+export type SeatAssignmentTenantIdIdHallSittingIdCompoundUniqueInput = {
+  tenantId: string
+  id: string
+  hallSittingId: string
 }
 
 export type SeatAssignmentTenantIdExamPaperIdRegistrationSubjectIdCompoundUniqueInput = {
@@ -448,6 +462,11 @@ export type SeatAssignmentMinOrderByAggregateInput = {
 
 export type SeatAssignmentSumOrderByAggregateInput = {
   seatNumber?: Prisma.SortOrder
+}
+
+export type SeatAssignmentScalarRelationFilter = {
+  is?: Prisma.SeatAssignmentWhereInput
+  isNot?: Prisma.SeatAssignmentWhereInput
 }
 
 export type SeatAssignmentCreateNestedManyWithoutTenantInput = {
@@ -618,6 +637,20 @@ export type SeatAssignmentUncheckedUpdateManyWithoutHallSittingNestedInput = {
   deleteMany?: Prisma.SeatAssignmentScalarWhereInput | Prisma.SeatAssignmentScalarWhereInput[]
 }
 
+export type SeatAssignmentCreateNestedOneWithoutAttendanceInput = {
+  create?: Prisma.XOR<Prisma.SeatAssignmentCreateWithoutAttendanceInput, Prisma.SeatAssignmentUncheckedCreateWithoutAttendanceInput>
+  connectOrCreate?: Prisma.SeatAssignmentCreateOrConnectWithoutAttendanceInput
+  connect?: Prisma.SeatAssignmentWhereUniqueInput
+}
+
+export type SeatAssignmentUpdateOneRequiredWithoutAttendanceNestedInput = {
+  create?: Prisma.XOR<Prisma.SeatAssignmentCreateWithoutAttendanceInput, Prisma.SeatAssignmentUncheckedCreateWithoutAttendanceInput>
+  connectOrCreate?: Prisma.SeatAssignmentCreateOrConnectWithoutAttendanceInput
+  upsert?: Prisma.SeatAssignmentUpsertWithoutAttendanceInput
+  connect?: Prisma.SeatAssignmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SeatAssignmentUpdateToOneWithWhereWithoutAttendanceInput, Prisma.SeatAssignmentUpdateWithoutAttendanceInput>, Prisma.SeatAssignmentUncheckedUpdateWithoutAttendanceInput>
+}
+
 export type SeatAssignmentCreateWithoutTenantInput = {
   id?: string
   seatNumber: number
@@ -625,6 +658,7 @@ export type SeatAssignmentCreateWithoutTenantInput = {
   examPaper: Prisma.ExamPaperCreateNestedOneWithoutSeatAssignmentsInput
   hallSitting: Prisma.HallSittingCreateNestedOneWithoutSeatAssignmentsInput
   registrationSubject: Prisma.RegistrationSubjectCreateNestedOneWithoutSeatAssignmentsInput
+  attendance?: Prisma.AttendanceCreateNestedOneWithoutSeatAssignmentInput
 }
 
 export type SeatAssignmentUncheckedCreateWithoutTenantInput = {
@@ -635,6 +669,7 @@ export type SeatAssignmentUncheckedCreateWithoutTenantInput = {
   registrationSubjectId: string
   seatNumber: number
   createdAt?: Date | string
+  attendance?: Prisma.AttendanceUncheckedCreateNestedOneWithoutSeatAssignmentInput
 }
 
 export type SeatAssignmentCreateOrConnectWithoutTenantInput = {
@@ -684,6 +719,7 @@ export type SeatAssignmentCreateWithoutRegistrationSubjectInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutSeatAssignmentsInput
   examPaper: Prisma.ExamPaperCreateNestedOneWithoutSeatAssignmentsInput
   hallSitting: Prisma.HallSittingCreateNestedOneWithoutSeatAssignmentsInput
+  attendance?: Prisma.AttendanceCreateNestedOneWithoutSeatAssignmentInput
 }
 
 export type SeatAssignmentUncheckedCreateWithoutRegistrationSubjectInput = {
@@ -692,6 +728,7 @@ export type SeatAssignmentUncheckedCreateWithoutRegistrationSubjectInput = {
   hallSittingId: string
   seatNumber: number
   createdAt?: Date | string
+  attendance?: Prisma.AttendanceUncheckedCreateNestedOneWithoutSeatAssignmentInput
 }
 
 export type SeatAssignmentCreateOrConnectWithoutRegistrationSubjectInput = {
@@ -727,6 +764,7 @@ export type SeatAssignmentCreateWithoutExamPaperInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutSeatAssignmentsInput
   hallSitting: Prisma.HallSittingCreateNestedOneWithoutSeatAssignmentsInput
   registrationSubject: Prisma.RegistrationSubjectCreateNestedOneWithoutSeatAssignmentsInput
+  attendance?: Prisma.AttendanceCreateNestedOneWithoutSeatAssignmentInput
 }
 
 export type SeatAssignmentUncheckedCreateWithoutExamPaperInput = {
@@ -735,6 +773,7 @@ export type SeatAssignmentUncheckedCreateWithoutExamPaperInput = {
   registrationSubjectId: string
   seatNumber: number
   createdAt?: Date | string
+  attendance?: Prisma.AttendanceUncheckedCreateNestedOneWithoutSeatAssignmentInput
 }
 
 export type SeatAssignmentCreateOrConnectWithoutExamPaperInput = {
@@ -770,6 +809,7 @@ export type SeatAssignmentCreateWithoutHallSittingInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutSeatAssignmentsInput
   examPaper: Prisma.ExamPaperCreateNestedOneWithoutSeatAssignmentsInput
   registrationSubject: Prisma.RegistrationSubjectCreateNestedOneWithoutSeatAssignmentsInput
+  attendance?: Prisma.AttendanceCreateNestedOneWithoutSeatAssignmentInput
 }
 
 export type SeatAssignmentUncheckedCreateWithoutHallSittingInput = {
@@ -778,6 +818,7 @@ export type SeatAssignmentUncheckedCreateWithoutHallSittingInput = {
   registrationSubjectId: string
   seatNumber: number
   createdAt?: Date | string
+  attendance?: Prisma.AttendanceUncheckedCreateNestedOneWithoutSeatAssignmentInput
 }
 
 export type SeatAssignmentCreateOrConnectWithoutHallSittingInput = {
@@ -806,6 +847,64 @@ export type SeatAssignmentUpdateManyWithWhereWithoutHallSittingInput = {
   data: Prisma.XOR<Prisma.SeatAssignmentUpdateManyMutationInput, Prisma.SeatAssignmentUncheckedUpdateManyWithoutHallSittingInput>
 }
 
+export type SeatAssignmentCreateWithoutAttendanceInput = {
+  id?: string
+  seatNumber: number
+  createdAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutSeatAssignmentsInput
+  examPaper: Prisma.ExamPaperCreateNestedOneWithoutSeatAssignmentsInput
+  hallSitting: Prisma.HallSittingCreateNestedOneWithoutSeatAssignmentsInput
+  registrationSubject: Prisma.RegistrationSubjectCreateNestedOneWithoutSeatAssignmentsInput
+}
+
+export type SeatAssignmentUncheckedCreateWithoutAttendanceInput = {
+  id?: string
+  tenantId: string
+  examPaperId: string
+  examSubjectId: string
+  hallSittingId: string
+  registrationSubjectId: string
+  seatNumber: number
+  createdAt?: Date | string
+}
+
+export type SeatAssignmentCreateOrConnectWithoutAttendanceInput = {
+  where: Prisma.SeatAssignmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.SeatAssignmentCreateWithoutAttendanceInput, Prisma.SeatAssignmentUncheckedCreateWithoutAttendanceInput>
+}
+
+export type SeatAssignmentUpsertWithoutAttendanceInput = {
+  update: Prisma.XOR<Prisma.SeatAssignmentUpdateWithoutAttendanceInput, Prisma.SeatAssignmentUncheckedUpdateWithoutAttendanceInput>
+  create: Prisma.XOR<Prisma.SeatAssignmentCreateWithoutAttendanceInput, Prisma.SeatAssignmentUncheckedCreateWithoutAttendanceInput>
+  where?: Prisma.SeatAssignmentWhereInput
+}
+
+export type SeatAssignmentUpdateToOneWithWhereWithoutAttendanceInput = {
+  where?: Prisma.SeatAssignmentWhereInput
+  data: Prisma.XOR<Prisma.SeatAssignmentUpdateWithoutAttendanceInput, Prisma.SeatAssignmentUncheckedUpdateWithoutAttendanceInput>
+}
+
+export type SeatAssignmentUpdateWithoutAttendanceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seatNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutSeatAssignmentsNestedInput
+  examPaper?: Prisma.ExamPaperUpdateOneRequiredWithoutSeatAssignmentsNestedInput
+  hallSitting?: Prisma.HallSittingUpdateOneRequiredWithoutSeatAssignmentsNestedInput
+  registrationSubject?: Prisma.RegistrationSubjectUpdateOneRequiredWithoutSeatAssignmentsNestedInput
+}
+
+export type SeatAssignmentUncheckedUpdateWithoutAttendanceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  examPaperId?: Prisma.StringFieldUpdateOperationsInput | string
+  examSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  hallSittingId?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  seatNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type SeatAssignmentCreateManyTenantInput = {
   id?: string
   examPaperId: string
@@ -823,6 +922,7 @@ export type SeatAssignmentUpdateWithoutTenantInput = {
   examPaper?: Prisma.ExamPaperUpdateOneRequiredWithoutSeatAssignmentsNestedInput
   hallSitting?: Prisma.HallSittingUpdateOneRequiredWithoutSeatAssignmentsNestedInput
   registrationSubject?: Prisma.RegistrationSubjectUpdateOneRequiredWithoutSeatAssignmentsNestedInput
+  attendance?: Prisma.AttendanceUpdateOneWithoutSeatAssignmentNestedInput
 }
 
 export type SeatAssignmentUncheckedUpdateWithoutTenantInput = {
@@ -833,6 +933,7 @@ export type SeatAssignmentUncheckedUpdateWithoutTenantInput = {
   registrationSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
   seatNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attendance?: Prisma.AttendanceUncheckedUpdateOneWithoutSeatAssignmentNestedInput
 }
 
 export type SeatAssignmentUncheckedUpdateManyWithoutTenantInput = {
@@ -860,6 +961,7 @@ export type SeatAssignmentUpdateWithoutRegistrationSubjectInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSeatAssignmentsNestedInput
   examPaper?: Prisma.ExamPaperUpdateOneRequiredWithoutSeatAssignmentsNestedInput
   hallSitting?: Prisma.HallSittingUpdateOneRequiredWithoutSeatAssignmentsNestedInput
+  attendance?: Prisma.AttendanceUpdateOneWithoutSeatAssignmentNestedInput
 }
 
 export type SeatAssignmentUncheckedUpdateWithoutRegistrationSubjectInput = {
@@ -868,6 +970,7 @@ export type SeatAssignmentUncheckedUpdateWithoutRegistrationSubjectInput = {
   hallSittingId?: Prisma.StringFieldUpdateOperationsInput | string
   seatNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attendance?: Prisma.AttendanceUncheckedUpdateOneWithoutSeatAssignmentNestedInput
 }
 
 export type SeatAssignmentUncheckedUpdateManyWithoutRegistrationSubjectInput = {
@@ -893,6 +996,7 @@ export type SeatAssignmentUpdateWithoutExamPaperInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSeatAssignmentsNestedInput
   hallSitting?: Prisma.HallSittingUpdateOneRequiredWithoutSeatAssignmentsNestedInput
   registrationSubject?: Prisma.RegistrationSubjectUpdateOneRequiredWithoutSeatAssignmentsNestedInput
+  attendance?: Prisma.AttendanceUpdateOneWithoutSeatAssignmentNestedInput
 }
 
 export type SeatAssignmentUncheckedUpdateWithoutExamPaperInput = {
@@ -901,6 +1005,7 @@ export type SeatAssignmentUncheckedUpdateWithoutExamPaperInput = {
   registrationSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
   seatNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attendance?: Prisma.AttendanceUncheckedUpdateOneWithoutSeatAssignmentNestedInput
 }
 
 export type SeatAssignmentUncheckedUpdateManyWithoutExamPaperInput = {
@@ -926,6 +1031,7 @@ export type SeatAssignmentUpdateWithoutHallSittingInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSeatAssignmentsNestedInput
   examPaper?: Prisma.ExamPaperUpdateOneRequiredWithoutSeatAssignmentsNestedInput
   registrationSubject?: Prisma.RegistrationSubjectUpdateOneRequiredWithoutSeatAssignmentsNestedInput
+  attendance?: Prisma.AttendanceUpdateOneWithoutSeatAssignmentNestedInput
 }
 
 export type SeatAssignmentUncheckedUpdateWithoutHallSittingInput = {
@@ -934,6 +1040,7 @@ export type SeatAssignmentUncheckedUpdateWithoutHallSittingInput = {
   registrationSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
   seatNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attendance?: Prisma.AttendanceUncheckedUpdateOneWithoutSeatAssignmentNestedInput
 }
 
 export type SeatAssignmentUncheckedUpdateManyWithoutHallSittingInput = {
@@ -959,6 +1066,7 @@ export type SeatAssignmentSelect<ExtArgs extends runtime.Types.Extensions.Intern
   examPaper?: boolean | Prisma.ExamPaperDefaultArgs<ExtArgs>
   hallSitting?: boolean | Prisma.HallSittingDefaultArgs<ExtArgs>
   registrationSubject?: boolean | Prisma.RegistrationSubjectDefaultArgs<ExtArgs>
+  attendance?: boolean | Prisma.SeatAssignment$attendanceArgs<ExtArgs>
 }, ExtArgs["result"]["seatAssignment"]>
 
 export type SeatAssignmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1008,6 +1116,7 @@ export type SeatAssignmentInclude<ExtArgs extends runtime.Types.Extensions.Inter
   examPaper?: boolean | Prisma.ExamPaperDefaultArgs<ExtArgs>
   hallSitting?: boolean | Prisma.HallSittingDefaultArgs<ExtArgs>
   registrationSubject?: boolean | Prisma.RegistrationSubjectDefaultArgs<ExtArgs>
+  attendance?: boolean | Prisma.SeatAssignment$attendanceArgs<ExtArgs>
 }
 export type SeatAssignmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1029,6 +1138,7 @@ export type $SeatAssignmentPayload<ExtArgs extends runtime.Types.Extensions.Inte
     examPaper: Prisma.$ExamPaperPayload<ExtArgs>
     hallSitting: Prisma.$HallSittingPayload<ExtArgs>
     registrationSubject: Prisma.$RegistrationSubjectPayload<ExtArgs>
+    attendance: Prisma.$AttendancePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1437,6 +1547,7 @@ export interface Prisma__SeatAssignmentClient<T, Null = never, ExtArgs extends r
   examPaper<T extends Prisma.ExamPaperDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamPaperDefaultArgs<ExtArgs>>): Prisma.Prisma__ExamPaperClient<runtime.Types.Result.GetResult<Prisma.$ExamPaperPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   hallSitting<T extends Prisma.HallSittingDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HallSittingDefaultArgs<ExtArgs>>): Prisma.Prisma__HallSittingClient<runtime.Types.Result.GetResult<Prisma.$HallSittingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   registrationSubject<T extends Prisma.RegistrationSubjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RegistrationSubjectDefaultArgs<ExtArgs>>): Prisma.Prisma__RegistrationSubjectClient<runtime.Types.Result.GetResult<Prisma.$RegistrationSubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  attendance<T extends Prisma.SeatAssignment$attendanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SeatAssignment$attendanceArgs<ExtArgs>>): Prisma.Prisma__AttendanceClient<runtime.Types.Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1872,6 +1983,25 @@ export type SeatAssignmentDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many SeatAssignments to delete.
    */
   limit?: number
+}
+
+/**
+ * SeatAssignment.attendance
+ */
+export type SeatAssignment$attendanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Attendance
+   */
+  select?: Prisma.AttendanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Attendance
+   */
+  omit?: Prisma.AttendanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AttendanceInclude<ExtArgs> | null
+  where?: Prisma.AttendanceWhereInput
 }
 
 /**

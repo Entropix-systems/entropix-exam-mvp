@@ -135,6 +135,26 @@ Related task: A04 Timetable, Halls & Seats.
 
 ---
 
+## DEC-008 — Conduct Owns Attendance and Result Holds
+
+Status: ACCEPTED
+
+Attendance is a versioned batch per persisted `HallSitting`; its rows reference
+the existing deterministic `SeatAssignment` roster. Result consumers use only
+submitted attendance and retain the explicit `ABSENT`/`LATE` states rather than
+converting them to marks.
+
+Incidents link affected students through `RegistrationSubject`. An `OPEN` or
+`RETAIN_WITHHELD` incident is the authoritative result hold; clearing requires a
+controller reason, and a hall-wide incident without affected students requires
+an explicit `NO_RESULT_IMPACT` closure.
+
+Affected modules: Conduct, Evaluation/Marks, Results, Publication.
+
+Related task: A05 Duties, Attendance & Incidents.
+
+---
+
 ## New Decision Template
 
 ### DEC-XXX — Title

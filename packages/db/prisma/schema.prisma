@@ -38,6 +38,11 @@ model Tenant {
   halls                Hall[]
   hallSittings         HallSitting[]
   seatAssignments      SeatAssignment[]
+  duties               Duty[]
+  attendanceBatches    AttendanceBatch[]
+  attendanceRows       Attendance[]
+  incidents            Incident[]
+  incidentStudents     IncidentStudent[]
 
   @@map("tenants")
 }
@@ -217,14 +222,21 @@ model Membership {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  tenant                Tenant         @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  user                  User           @relation(fields: [userId], references: [id], onDelete: Restrict)
+  tenant                Tenant            @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  user                  User              @relation(fields: [userId], references: [id], onDelete: Restrict)
   roleGrants            RoleGrant[]
   sessions              Session[]
   authTokens            AuthToken[]
   student               Student?
   faculty               Faculty?
-  reviewedRegistrations Registration[] @relation("RegistrationReviewer")
+  reviewedRegistrations Registration[]    @relation("RegistrationReviewer")
+  assignedDuties        Duty[]            @relation("DutyAssigner")
+  respondedDuties       Duty[]            @relation("DutyResponder")
+  updatedAttendance     Attendance[]      @relation("AttendanceUpdater")
+  submittedAttendance   AttendanceBatch[] @relation("AttendanceSubmitter")
+  reopenedAttendance    AttendanceBatch[] @relation("AttendanceReopener")
+  createdIncidents      Incident[]        @relation("IncidentCreator")
+  disposedIncidents     Incident[]        @relation("IncidentDisposer")
 
   @@unique([tenantId, userId], map: "memberships_tenant_user_key")
   @@unique([tenantId, id], map: "memberships_tenant_id_id_key")
@@ -275,6 +287,7 @@ model Faculty {
   tenant     Tenant     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   membership Membership @relation(fields: [tenantId, membershipId], references: [tenantId, id], onDelete: Restrict)
   department Department @relation(fields: [tenantId, departmentId], references: [tenantId, id], onDelete: Restrict)
+  duties     Duty[]
 
   @@unique([tenantId, id], map: "faculty_tenant_id_id_key")
   @@unique([tenantId, membershipId], map: "faculty_tenant_membership_key")
@@ -428,11 +441,12 @@ model RegistrationSubject {
   enrolmentId    String   @map("enrolment_id") @db.Uuid
   createdAt      DateTime @default(now()) @map("created_at")
 
-  tenant          Tenant           @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  registration    Registration     @relation(fields: [tenantId, registrationId, examId], references: [tenantId, id, examId], onDelete: Cascade)
-  examSubject     ExamSubject      @relation(fields: [tenantId, examSubjectId, examId], references: [tenantId, id, examId], onDelete: Restrict)
-  enrolment       Enrolment        @relation(fields: [tenantId, enrolmentId], references: [tenantId, id], onDelete: Restrict)
-  seatAssignments SeatAssignment[]
+  tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  registration     Registration      @relation(fields: [tenantId, registrationId, examId], references: [tenantId, id, examId], onDelete: Cascade)
+  examSubject      ExamSubject       @relation(fields: [tenantId, examSubjectId, examId], references: [tenantId, id, examId], onDelete: Restrict)
+  enrolment        Enrolment         @relation(fields: [tenantId, enrolmentId], references: [tenantId, id], onDelete: Restrict)
+  seatAssignments  SeatAssignment[]
+  incidentStudents IncidentStudent[]
 
   @@unique([tenantId, id], map: "registration_subjects_tenant_id_id_key")
   @@unique([tenantId, id, examSubjectId], map: "registration_subjects_tenant_id_exam_subject_id_key")
@@ -501,6 +515,9 @@ model HallSitting {
   examPaper       ExamPaper        @relation(fields: [tenantId, examPaperId], references: [tenantId, id], onDelete: Cascade)
   hall            Hall             @relation(fields: [tenantId, hallId], references: [tenantId, id], onDelete: Restrict)
   seatAssignments SeatAssignment[]
+  duties          Duty[]
+  attendanceBatch AttendanceBatch?
+  incidents       Incident[]
 
   @@unique([tenantId, id], map: "hall_sittings_tenant_id_id_key")
   @@unique([tenantId, id, examPaperId], map: "hall_sittings_tenant_id_exam_paper_id_key")
@@ -524,12 +541,137 @@ model SeatAssignment {
   examPaper           ExamPaper           @relation(fields: [tenantId, examPaperId, examSubjectId], references: [tenantId, id, examSubjectId], onDelete: Cascade)
   hallSitting         HallSitting         @relation(fields: [tenantId, hallSittingId, examPaperId], references: [tenantId, id, examPaperId], onDelete: Cascade)
   registrationSubject RegistrationSubject @relation(fields: [tenantId, registrationSubjectId, examSubjectId], references: [tenantId, id, examSubjectId], onDelete: Restrict)
+  attendance          Attendance?
 
   @@unique([tenantId, id], map: "seat_assignments_tenant_id_id_key")
+  @@unique([tenantId, id, hallSittingId], map: "seat_assignments_tenant_id_sitting_key")
   @@unique([tenantId, examPaperId, registrationSubjectId], map: "seat_assignments_tenant_paper_registration_subject_key")
   @@unique([tenantId, hallSittingId, seatNumber], map: "seat_assignments_tenant_sitting_seat_key")
   @@index([tenantId, registrationSubjectId])
   @@map("seat_assignments")
+}
+
+model Duty {
+  id                      String    @id @default(uuid()) @db.Uuid
+  tenantId                String    @map("tenant_id") @db.Uuid
+  hallSittingId           String    @map("hall_sitting_id") @db.Uuid
+  facultyId               String    @map("faculty_id") @db.Uuid
+  state                   String    @default("PENDING")
+  version                 Int       @default(1)
+  declineReason           String?   @map("decline_reason")
+  replacesDutyId          String?   @map("replaces_duty_id") @db.Uuid
+  assignedByMembershipId  String    @map("assigned_by_membership_id") @db.Uuid
+  respondedByMembershipId String?   @map("responded_by_membership_id") @db.Uuid
+  respondedAt             DateTime? @map("responded_at")
+  createdAt               DateTime  @default(now()) @map("created_at")
+  updatedAt               DateTime  @updatedAt @map("updated_at")
+
+  tenant       Tenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  hallSitting  HallSitting @relation(fields: [tenantId, hallSittingId], references: [tenantId, id], onDelete: Cascade)
+  faculty      Faculty     @relation(fields: [tenantId, facultyId], references: [tenantId, id], onDelete: Restrict)
+  assigner     Membership  @relation("DutyAssigner", fields: [tenantId, assignedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+  responder    Membership? @relation("DutyResponder", fields: [tenantId, respondedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+  replaces     Duty?       @relation("DutyReplacement", fields: [tenantId, replacesDutyId], references: [tenantId, id], onDelete: Restrict)
+  replacements Duty[]      @relation("DutyReplacement")
+
+  @@unique([tenantId, id], map: "duties_tenant_id_id_key")
+  @@unique([tenantId, replacesDutyId], map: "duties_tenant_replaces_key")
+  @@index([tenantId, hallSittingId, state])
+  @@index([tenantId, facultyId, state])
+  @@map("duties")
+}
+
+model AttendanceBatch {
+  id                      String    @id @default(uuid()) @db.Uuid
+  tenantId                String    @map("tenant_id") @db.Uuid
+  hallSittingId           String    @map("hall_sitting_id") @db.Uuid
+  state                   String    @default("DRAFT")
+  version                 Int       @default(1)
+  submittedByMembershipId String?   @map("submitted_by_membership_id") @db.Uuid
+  submittedAt             DateTime? @map("submitted_at")
+  reopenedByMembershipId  String?   @map("reopened_by_membership_id") @db.Uuid
+  reopenedAt              DateTime? @map("reopened_at")
+  reopenReason            String?   @map("reopen_reason")
+  createdAt               DateTime  @default(now()) @map("created_at")
+  updatedAt               DateTime  @updatedAt @map("updated_at")
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  hallSitting HallSitting  @relation(fields: [tenantId, hallSittingId], references: [tenantId, id], onDelete: Cascade)
+  submitter   Membership?  @relation("AttendanceSubmitter", fields: [tenantId, submittedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+  reopener    Membership?  @relation("AttendanceReopener", fields: [tenantId, reopenedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+  rows        Attendance[]
+
+  @@unique([tenantId, id], map: "attendance_batches_tenant_id_id_key")
+  @@unique([tenantId, id, hallSittingId], map: "attendance_batches_tenant_id_sitting_key")
+  @@unique([tenantId, hallSittingId], map: "attendance_batches_tenant_sitting_key")
+  @@map("attendance_batches")
+}
+
+model Attendance {
+  id                    String   @id @default(uuid()) @db.Uuid
+  tenantId              String   @map("tenant_id") @db.Uuid
+  attendanceBatchId     String   @map("attendance_batch_id") @db.Uuid
+  hallSittingId         String   @map("hall_sitting_id") @db.Uuid
+  seatAssignmentId      String   @map("seat_assignment_id") @db.Uuid
+  state                 String   @default("NOT_MARKED")
+  version               Int      @default(1)
+  updatedByMembershipId String   @map("updated_by_membership_id") @db.Uuid
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  tenant         Tenant          @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  batch          AttendanceBatch @relation(fields: [tenantId, attendanceBatchId, hallSittingId], references: [tenantId, id, hallSittingId], onDelete: Cascade)
+  seatAssignment SeatAssignment  @relation(fields: [tenantId, seatAssignmentId, hallSittingId], references: [tenantId, id, hallSittingId], onDelete: Restrict, map: "attendance_tenant_seat_sitting_fkey")
+  updater        Membership      @relation("AttendanceUpdater", fields: [tenantId, updatedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, id], map: "attendance_tenant_id_id_key")
+  @@unique([tenantId, seatAssignmentId], map: "attendance_tenant_seat_key")
+  @@unique([tenantId, seatAssignmentId, hallSittingId], map: "attendance_tenant_seat_sitting_key")
+  @@index([tenantId, hallSittingId, state])
+  @@map("attendance")
+}
+
+model Incident {
+  id                     String    @id @default(uuid()) @db.Uuid
+  tenantId               String    @map("tenant_id") @db.Uuid
+  hallSittingId          String    @map("hall_sitting_id") @db.Uuid
+  kind                   String
+  description            String
+  disposition            String    @default("OPEN")
+  version                Int       @default(1)
+  createdByMembershipId  String    @map("created_by_membership_id") @db.Uuid
+  disposedByMembershipId String?   @map("disposed_by_membership_id") @db.Uuid
+  dispositionReason      String?   @map("disposition_reason")
+  disposedAt             DateTime? @map("disposed_at")
+  createdAt              DateTime  @default(now()) @map("created_at")
+  updatedAt              DateTime  @updatedAt @map("updated_at")
+
+  tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  hallSitting      HallSitting       @relation(fields: [tenantId, hallSittingId], references: [tenantId, id], onDelete: Cascade)
+  creator          Membership        @relation("IncidentCreator", fields: [tenantId, createdByMembershipId], references: [tenantId, id], onDelete: Restrict)
+  disposer         Membership?       @relation("IncidentDisposer", fields: [tenantId, disposedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+  affectedStudents IncidentStudent[]
+
+  @@unique([tenantId, id], map: "incidents_tenant_id_id_key")
+  @@index([tenantId, hallSittingId, disposition])
+  @@map("incidents")
+}
+
+model IncidentStudent {
+  id                    String   @id @default(uuid()) @db.Uuid
+  tenantId              String   @map("tenant_id") @db.Uuid
+  incidentId            String   @map("incident_id") @db.Uuid
+  registrationSubjectId String   @map("registration_subject_id") @db.Uuid
+  createdAt             DateTime @default(now()) @map("created_at")
+
+  tenant              Tenant              @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  incident            Incident            @relation(fields: [tenantId, incidentId], references: [tenantId, id], onDelete: Cascade)
+  registrationSubject RegistrationSubject @relation(fields: [tenantId, registrationSubjectId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, id], map: "incident_students_tenant_id_id_key")
+  @@unique([tenantId, incidentId, registrationSubjectId], map: "incident_students_tenant_incident_registration_key")
+  @@index([tenantId, registrationSubjectId])
+  @@map("incident_students")
 }
 
 model RoleGrant {
