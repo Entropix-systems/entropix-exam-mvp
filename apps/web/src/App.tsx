@@ -10,6 +10,7 @@ import { PeopleApiClient } from './people/people-client'
 import { ExamsApiClient } from './exams/exams-client'
 import { SchedulingApiClient } from './scheduling/scheduling-client'
 import { ConductApiClient } from './conduct/conduct-client'
+import { EvaluationApiClient } from './evaluation/evaluation-client'
 import { AccessDeniedPage } from './pages/access-denied-page'
 import { ForgotPasswordPage } from './pages/forgot-password-page'
 import { HomePage } from './pages/home-page'
@@ -22,6 +23,7 @@ import { StudentsPage } from './pages/students-page'
 import { ExamsPage } from './pages/exams-page'
 import { SchedulingPage } from './pages/scheduling-page'
 import { ConductPage } from './pages/conduct-page'
+import { EvaluationPage } from './pages/evaluation-page'
 import './App.css'
 
 const authClient = new AuthApiClient(
@@ -33,6 +35,7 @@ const peopleClient = new PeopleApiClient(authClient)
 const examsClient = new ExamsApiClient(authClient)
 const schedulingClient = new SchedulingApiClient(authClient)
 const conductClient = new ConductApiClient(authClient)
+const evaluationClient = new EvaluationApiClient(authClient)
 
 function usePathname() {
   const [pathname, setPathname] = useState(window.location.pathname)
@@ -89,6 +92,12 @@ function Routes() {
     return (
       <ProtectedRoute>
         <ConductPage key={scopeKey} client={conductClient} />
+      </ProtectedRoute>
+    )
+  if (pathname === '/marks')
+    return (
+      <ProtectedRoute>
+        <EvaluationPage key={scopeKey} client={evaluationClient} />
       </ProtectedRoute>
     )
   return (

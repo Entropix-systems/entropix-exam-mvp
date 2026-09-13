@@ -217,6 +217,28 @@
 .attendance-table-wrap { overflow-x: auto; }.attendance-table { width: 100%; border-collapse: collapse; }.attendance-table th { padding: 10px 18px; color: #687a84; background: #f7f9fa; font-size: 11px; text-align: left; text-transform: uppercase; }.attendance-table td { padding: 13px 18px; border-top: 1px solid #e8edef; }.attendance-table td small { display: block; margin-top: 3px; color: #6e8089; }.attendance-table select { width: 100%; min-width: 130px; }
 .conduct-actions { justify-content: flex-end; flex-wrap: wrap; padding: 16px 22px; border-top: 1px solid #e8edef; }.conduct-actions span { margin-right: auto; color: #60747e; font-size: 13px; }.conduct-locked { margin: 0; padding: 28px 22px; color: #6b7d87; }
 .incident-form { display: grid; grid-template-columns: .7fr 1fr 2fr auto; gap: 12px; align-items: end; padding: 18px 22px; border-bottom: 1px solid #e8edef; }.incident-form textarea { min-height: 66px; resize: vertical; }.incident-list { display: grid; }.incident-list > p { margin: 0; padding: 24px 22px; color: #6b7d87; }.incident-list article { display: flex; justify-content: space-between; gap: 18px; padding: 18px 22px; border-top: 1px solid #e8edef; }.incident-list article:first-child { border-top: 0; }.incident-list article p { margin: 6px 0 10px; color: #536b75; }
+.evaluation-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 16px; max-width: 1240px; margin: 0 auto 20px; border: 1px solid #dce5e8; border-radius: 9px; padding: 18px 20px; background: #fff; }
+.evaluation-toolbar label, .evaluation-assignment label { display: grid; gap: 6px; color: #526b76; font-size: 12px; font-weight: 700; }
+.evaluation-toolbar select, .evaluation-assignment select { min-height: 40px; border: 1px solid #c9d6da; border-radius: 7px; padding: 8px 10px; color: #173042; background: #fff; }
+.evaluation-toolbar select { min-width: min(560px, 72vw); }
+.evaluation-stack { display: grid; gap: 20px; max-width: 1240px; margin: auto; }
+.evaluation-card, .evaluation-empty { overflow: hidden; border: 1px solid #dce5e8; border-radius: 9px; background: #fff; box-shadow: 0 5px 20px rgba(31, 61, 73, .05); }
+.evaluation-empty { max-width: 1240px; margin: auto; padding: 32px; }
+.evaluation-card > header { display: flex; justify-content: space-between; gap: 18px; padding: 20px 22px; border-bottom: 1px solid #e4eaec; }
+.evaluation-card h2, .evaluation-card h3 { margin: 3px 0 6px; }
+.evaluation-card header p:last-child, .evaluation-assignment p { margin: 0; color: #6b7d87; font-size: 13px; }
+.evaluation-assignment { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 20px 22px; }
+.evaluation-assignment > div:last-child { display: flex; align-items: end; gap: 10px; }
+.evaluation-table-wrap { overflow-x: auto; }
+.evaluation-table { width: 100%; border-collapse: collapse; }
+.evaluation-table th { padding: 10px 18px; color: #687a84; background: #f7f9fa; font-size: 11px; text-align: left; text-transform: uppercase; }
+.evaluation-table td { padding: 13px 18px; border-top: 1px solid #e8edef; }
+.evaluation-table td small { display: block; margin-top: 3px; color: #6e8089; }
+.evaluation-table input { width: 100%; min-width: 100px; border: 1px solid #c9d6da; border-radius: 7px; padding: 9px 10px; color: #173042; background: #fff; }
+.evaluation-table input:disabled { color: #7b8b92; background: #f2f5f6; }
+.evaluation-note { padding: 13px 22px; color: #526f79; background: #eef6f7; font-size: 12px; }
+.evaluation-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 10px; padding: 16px 22px; border-top: 1px solid #e8edef; }
+.evaluation-actions span { margin-right: auto; color: #60747e; font-size: 13px; }
 
 @media (max-width: 820px) {
   .auth-layout { display: block; }
@@ -257,5 +279,8 @@
   .duty-assignment { align-items: stretch; flex-direction: column; }
   .conduct-actions { align-items: stretch; flex-direction: column; }.conduct-actions span { margin-right: 0; }
   .attendance-table th, .attendance-table td { padding: 11px 10px; }
+  .evaluation-toolbar, .evaluation-assignment, .evaluation-assignment > div:last-child, .evaluation-actions { align-items: stretch; flex-direction: column; }
+  .evaluation-toolbar select { min-width: 0; width: 100%; }
+  .evaluation-actions span { margin-right: 0; }
   .grant-row .icon-button { justify-self: end; }
 }

@@ -471,6 +471,48 @@ GET  /conduct/exams/:examId/result-state
 
 ---
 
+# Evaluation, Marks Entry and Independent Review Contract
+
+Typed B02 contracts live in `packages/contracts/src/evaluation.ts`. The
+evaluation snapshot consumes the stable A03 `RegistrationSubject.id` roster and
+the submitted A05 attendance/incident state.
+
+```text
+GET  /evaluation
+PUT  /evaluation/subjects/:examSubjectId/assignment
+PUT  /evaluation/subjects/:examSubjectId/marks
+POST /evaluation/subjects/:examSubjectId/submit
+POST /evaluation/subjects/:examSubjectId/return
+POST /evaluation/subjects/:examSubjectId/approve
+POST /evaluation/subjects/:examSubjectId/reopen
+```
+
+- `EvaluationAssignment` is the exact examiner authority for one `ExamSubject`.
+  Examiner commands require the session-selected `FACULTY` role, use the
+  server-resolved membership, and never accept an actor identity from the request
+  body. A `FACULTY` grant alone does not grant access to an unassigned subject.
+- Assignment and marks mutations use `expectedVersion`. A missing batch has
+  version `0`; persisted assignment and batch versions start at `1`.
+- Component columns and maxima come from the exam's frozen `RuleVersion`.
+  Decimal values are strings at the HTTP boundary and are persisted as
+  `DECIMAL(12,4)` after component, range and roster validation.
+- Submission requires every approved roster row to have submitted attendance,
+  no unresolved hall incident, and every configured mark for an attending
+  student. `ABSENT` keeps external/final blank; incident-held students retain
+  marks while downstream numeric results remain hidden.
+- Batch states are `DRAFT`, `SUBMITTED`, `RETURNED`, and `APPROVED`. Only the
+  assigned examiner in an active `FACULTY` context may edit `DRAFT`/`RETURNED`;
+  return and approval require an active controller role or department
+  administrator role scoped to the subject department.
+  Approval also requires a reviewer membership distinct from the submitter and
+  rechecks the authoritative roster, conduct state and mark completeness.
+- Only an institution administrator or exam controller may reopen an approved
+  batch, and a 5–500 character reason is required. Marks/review mutations update
+  `Exam.inputRevision`, which B03 must capture and recheck before committing a
+  result run.
+
+---
+
 # D1 Contract Freeze Checklist
 
 - [x] Role enum strategy

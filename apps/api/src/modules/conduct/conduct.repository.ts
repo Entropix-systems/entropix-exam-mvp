@@ -240,7 +240,7 @@ export class ConductRepository {
       if (affectedCount !== uniqueIds.length) throw new Error('INVALID_ROSTER_ROW');
       return tx.incident.create({ data: {
         tenantId, hallSittingId: sittingId, kind: input.kind, description: input.description, createdByMembershipId: actor.membershipId,
-        affectedStudents: { create: uniqueIds.map((registrationSubjectId) => ({ tenantId, registrationSubjectId })) },
+        affectedStudents: { create: uniqueIds.map((registrationSubjectId) => ({ registrationSubjectId })) },
       } });
     });
   }

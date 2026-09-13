@@ -14,7 +14,7 @@ export function WorkspaceShell({
   children,
 }: PropsWithChildren<{
   currentUser: CurrentUserResponse
-  active: 'overview' | 'setup-access' | 'masters' | 'students' | 'exams' | 'schedule' | 'attendance'
+  active: 'overview' | 'setup-access' | 'masters' | 'students' | 'exams' | 'schedule' | 'attendance' | 'marks'
   onLogout(): Promise<void>
   onSwitchInstitution(institutionId: string): Promise<void>
   onSwitchRole(role: TenantRole): Promise<void>
@@ -114,6 +114,11 @@ export function WorkspaceShell({
               <span aria-hidden="true">✓</span> Duties &amp; attendance
             </button>
           ) : null}
+          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'FACULTY'].includes(tenant.activeRole) ? (
+            <button type="button" className={active === 'marks' ? 'active' : ''} onClick={() => navigate('/marks')}>
+              <span aria-hidden="true">≡</span> Marks &amp; review
+            </button>
+          ) : null}
           {tenant && [
             'INSTITUTION_ADMIN',
             'EXAM_CONTROLLER',
@@ -147,7 +152,7 @@ export function WorkspaceShell({
       </aside>
       <div className="workspace-main">
         <header className="workspace-topbar">
-          <span>Workspace / {active === 'overview' ? 'Overview' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : 'Setup & access'}</span>
+          <span>Workspace / {active === 'overview' ? 'Overview' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : active === 'marks' ? 'Marks & review' : 'Setup & access'}</span>
           <div className="topbar-actions">
             <span className="user-email">{currentUser.email}</span>
             {tenant && availableRoles.length > 1 ? (

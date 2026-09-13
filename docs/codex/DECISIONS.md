@@ -185,6 +185,40 @@ Related task: QA-01 through QA-06 IAM context follow-up.
 
 ---
 
+## DEC-010 — Evaluation Assignment and Exam Input Revision Are Authoritative
+
+Status: ACCEPTED
+
+Context:
+
+Marks entry needs assignment-scoped authority, an independently reviewed batch,
+and a stable way for result computation to detect changed inputs without
+duplicating the A03 roster or A05 conduct state.
+
+Decision:
+
+`EvaluationAssignment`, evaluated while the session's active role is `FACULTY`,
+is the exact examiner authority for an `ExamSubject`.
+`MarksBatch` owns the versioned DRAFT → SUBMITTED → RETURNED/APPROVED lifecycle
+and its component `Mark` rows. Reviewer scope comes from controller authority or
+the subject department, and approval is denied when reviewer and submitter
+memberships match. `Exam.inputRevision` is the canonical result-input
+invalidation token and advances when mark data, review state, or an approved
+batch reopen changes the candidate inputs.
+
+Consequences:
+
+B03 must compute only from approved marks plus authoritative submitted conduct
+state, capture `Exam.inputRevision`, and recheck the revision before committing a
+result run. Reopening approved marks requires a controller reason and invalidates
+any candidate result computation that captured an earlier revision.
+
+Affected modules: Evaluation/Marks, Conduct, Results, Publication.
+
+Related task: B02 Marks Entry & Independent Review.
+
+---
+
 ## New Decision Template
 
 ### DEC-XXX — Title
