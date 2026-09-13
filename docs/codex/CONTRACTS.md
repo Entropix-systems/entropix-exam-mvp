@@ -154,6 +154,32 @@ APPROVED → CANCELLED
 Auto-enrol may create an `APPROVED` registration directly after eligibility
 validation. This is a validated creation path, not an arbitrary state change.
 
+A03 defines `EligibilitySnapshot` in `packages/contracts/src/registration.ts`.
+It retains `evaluatedAt`, the aggregate `eligible` decision, per-check results
+for active student, correct term/cohort, active enrolments and the
+controller-managed eligibility flag, plus the exact ExamSubject and Enrolment
+UUIDs evaluated. `RegistrationSubject.id` is the stable approved-roster UUID
+consumed by scheduling and evaluation.
+
+The authenticated command surface is:
+
+```text
+GET  /api/v1/exams
+POST /api/v1/exams
+POST /api/v1/exams/:id/open-registration
+POST /api/v1/exams/:id/close-registration
+POST /api/v1/exams/:id/auto-enrol
+PUT  /api/v1/exams/:id/my-registration
+POST /api/v1/exams/registrations/:id/submit
+POST /api/v1/exams/registrations/:id/approve
+POST /api/v1/exams/registrations/:id/reject
+POST /api/v1/exams/registrations/:id/cancel
+POST /api/v1/exams/registrations/:id/eligibility
+```
+
+Student commands always resolve the Student profile from the authenticated
+membership. Tenant and student authority are never accepted from request data.
+
 All transitions are enforced server-side through commands. No other transition
 is implied by this contract.
 
@@ -252,6 +278,12 @@ Result grading policy lives in immutable, validated `RuleVersion` JSON.
 `RuleVersion` data is declarative configuration. General executable formulas or
 code are not accepted as grading policy.
 
+The shared input and canonical validated shapes are `ResultRuleInput` and
+`ValidatedResultRule` in `packages/contracts/src/results.ts`. B01 validates the
+input once; A03 persists only the canonical `VALIDATED_RESULT_RULE` snapshot.
+The config cannot be mutated, and opening registration sets its one-time
+`frozenAt` timestamp.
+
 ---
 
 # API Conventions
@@ -340,7 +372,7 @@ Duty
 - [x] Student import input shape
 - [x] Registration states
 - [x] Exam states
-- [ ] Eligibility result shape — eligibility behaviour and snapshot retention are documented, but no exact shared payload shape exists
+- [x] Eligibility result shape — `EligibilitySnapshot` and per-check evidence
 - [x] API error envelope
 - [x] Optimistic version field
 - [x] Result rule schema

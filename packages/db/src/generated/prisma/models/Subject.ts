@@ -243,6 +243,7 @@ export type SubjectWhereInput = {
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
   enrolments?: Prisma.EnrolmentListRelationFilter
+  examSubjects?: Prisma.ExamSubjectListRelationFilter
 }
 
 export type SubjectOrderByWithRelationInput = {
@@ -257,6 +258,7 @@ export type SubjectOrderByWithRelationInput = {
   tenant?: Prisma.TenantOrderByWithRelationInput
   program?: Prisma.ProgramOrderByWithRelationInput
   enrolments?: Prisma.EnrolmentOrderByRelationAggregateInput
+  examSubjects?: Prisma.ExamSubjectOrderByRelationAggregateInput
 }
 
 export type SubjectWhereUniqueInput = Prisma.AtLeast<{
@@ -276,6 +278,7 @@ export type SubjectWhereUniqueInput = Prisma.AtLeast<{
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
   enrolments?: Prisma.EnrolmentListRelationFilter
+  examSubjects?: Prisma.ExamSubjectListRelationFilter
 }, "id" | "tenantId_id" | "tenantId_programId_code">
 
 export type SubjectOrderByWithAggregationInput = {
@@ -318,6 +321,7 @@ export type SubjectCreateInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutSubjectsInput
   program: Prisma.ProgramCreateNestedOneWithoutSubjectsInput
   enrolments?: Prisma.EnrolmentCreateNestedManyWithoutSubjectInput
+  examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutSubjectInput
 }
 
 export type SubjectUncheckedCreateInput = {
@@ -330,6 +334,7 @@ export type SubjectUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   enrolments?: Prisma.EnrolmentUncheckedCreateNestedManyWithoutSubjectInput
+  examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutSubjectInput
 }
 
 export type SubjectUpdateInput = {
@@ -342,6 +347,7 @@ export type SubjectUpdateInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSubjectsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutSubjectsNestedInput
   enrolments?: Prisma.EnrolmentUpdateManyWithoutSubjectNestedInput
+  examSubjects?: Prisma.ExamSubjectUpdateManyWithoutSubjectNestedInput
 }
 
 export type SubjectUncheckedUpdateInput = {
@@ -354,6 +360,7 @@ export type SubjectUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrolments?: Prisma.EnrolmentUncheckedUpdateManyWithoutSubjectNestedInput
+  examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutSubjectNestedInput
 }
 
 export type SubjectCreateManyInput = {
@@ -552,6 +559,20 @@ export type SubjectUpdateOneRequiredWithoutEnrolmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SubjectUpdateToOneWithWhereWithoutEnrolmentsInput, Prisma.SubjectUpdateWithoutEnrolmentsInput>, Prisma.SubjectUncheckedUpdateWithoutEnrolmentsInput>
 }
 
+export type SubjectCreateNestedOneWithoutExamSubjectsInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutExamSubjectsInput, Prisma.SubjectUncheckedCreateWithoutExamSubjectsInput>
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutExamSubjectsInput
+  connect?: Prisma.SubjectWhereUniqueInput
+}
+
+export type SubjectUpdateOneRequiredWithoutExamSubjectsNestedInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutExamSubjectsInput, Prisma.SubjectUncheckedCreateWithoutExamSubjectsInput>
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutExamSubjectsInput
+  upsert?: Prisma.SubjectUpsertWithoutExamSubjectsInput
+  connect?: Prisma.SubjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SubjectUpdateToOneWithWhereWithoutExamSubjectsInput, Prisma.SubjectUpdateWithoutExamSubjectsInput>, Prisma.SubjectUncheckedUpdateWithoutExamSubjectsInput>
+}
+
 export type SubjectCreateWithoutTenantInput = {
   id?: string
   code: string
@@ -561,6 +582,7 @@ export type SubjectCreateWithoutTenantInput = {
   updatedAt?: Date | string
   program: Prisma.ProgramCreateNestedOneWithoutSubjectsInput
   enrolments?: Prisma.EnrolmentCreateNestedManyWithoutSubjectInput
+  examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutSubjectInput
 }
 
 export type SubjectUncheckedCreateWithoutTenantInput = {
@@ -572,6 +594,7 @@ export type SubjectUncheckedCreateWithoutTenantInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   enrolments?: Prisma.EnrolmentUncheckedCreateNestedManyWithoutSubjectInput
+  examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutSubjectInput
 }
 
 export type SubjectCreateOrConnectWithoutTenantInput = {
@@ -623,6 +646,7 @@ export type SubjectCreateWithoutProgramInput = {
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSubjectsInput
   enrolments?: Prisma.EnrolmentCreateNestedManyWithoutSubjectInput
+  examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutSubjectInput
 }
 
 export type SubjectUncheckedCreateWithoutProgramInput = {
@@ -633,6 +657,7 @@ export type SubjectUncheckedCreateWithoutProgramInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   enrolments?: Prisma.EnrolmentUncheckedCreateNestedManyWithoutSubjectInput
+  examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutSubjectInput
 }
 
 export type SubjectCreateOrConnectWithoutProgramInput = {
@@ -670,6 +695,7 @@ export type SubjectCreateWithoutEnrolmentsInput = {
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSubjectsInput
   program: Prisma.ProgramCreateNestedOneWithoutSubjectsInput
+  examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutSubjectInput
 }
 
 export type SubjectUncheckedCreateWithoutEnrolmentsInput = {
@@ -681,6 +707,7 @@ export type SubjectUncheckedCreateWithoutEnrolmentsInput = {
   credits: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutSubjectInput
 }
 
 export type SubjectCreateOrConnectWithoutEnrolmentsInput = {
@@ -708,6 +735,7 @@ export type SubjectUpdateWithoutEnrolmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSubjectsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutSubjectsNestedInput
+  examSubjects?: Prisma.ExamSubjectUpdateManyWithoutSubjectNestedInput
 }
 
 export type SubjectUncheckedUpdateWithoutEnrolmentsInput = {
@@ -719,6 +747,71 @@ export type SubjectUncheckedUpdateWithoutEnrolmentsInput = {
   credits?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+}
+
+export type SubjectCreateWithoutExamSubjectsInput = {
+  id?: string
+  code: string
+  name: string
+  credits: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutSubjectsInput
+  program: Prisma.ProgramCreateNestedOneWithoutSubjectsInput
+  enrolments?: Prisma.EnrolmentCreateNestedManyWithoutSubjectInput
+}
+
+export type SubjectUncheckedCreateWithoutExamSubjectsInput = {
+  id?: string
+  tenantId: string
+  programId: string
+  code: string
+  name: string
+  credits: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enrolments?: Prisma.EnrolmentUncheckedCreateNestedManyWithoutSubjectInput
+}
+
+export type SubjectCreateOrConnectWithoutExamSubjectsInput = {
+  where: Prisma.SubjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.SubjectCreateWithoutExamSubjectsInput, Prisma.SubjectUncheckedCreateWithoutExamSubjectsInput>
+}
+
+export type SubjectUpsertWithoutExamSubjectsInput = {
+  update: Prisma.XOR<Prisma.SubjectUpdateWithoutExamSubjectsInput, Prisma.SubjectUncheckedUpdateWithoutExamSubjectsInput>
+  create: Prisma.XOR<Prisma.SubjectCreateWithoutExamSubjectsInput, Prisma.SubjectUncheckedCreateWithoutExamSubjectsInput>
+  where?: Prisma.SubjectWhereInput
+}
+
+export type SubjectUpdateToOneWithWhereWithoutExamSubjectsInput = {
+  where?: Prisma.SubjectWhereInput
+  data: Prisma.XOR<Prisma.SubjectUpdateWithoutExamSubjectsInput, Prisma.SubjectUncheckedUpdateWithoutExamSubjectsInput>
+}
+
+export type SubjectUpdateWithoutExamSubjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  credits?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutSubjectsNestedInput
+  program?: Prisma.ProgramUpdateOneRequiredWithoutSubjectsNestedInput
+  enrolments?: Prisma.EnrolmentUpdateManyWithoutSubjectNestedInput
+}
+
+export type SubjectUncheckedUpdateWithoutExamSubjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  credits?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enrolments?: Prisma.EnrolmentUncheckedUpdateManyWithoutSubjectNestedInput
 }
 
 export type SubjectCreateManyTenantInput = {
@@ -740,6 +833,7 @@ export type SubjectUpdateWithoutTenantInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   program?: Prisma.ProgramUpdateOneRequiredWithoutSubjectsNestedInput
   enrolments?: Prisma.EnrolmentUpdateManyWithoutSubjectNestedInput
+  examSubjects?: Prisma.ExamSubjectUpdateManyWithoutSubjectNestedInput
 }
 
 export type SubjectUncheckedUpdateWithoutTenantInput = {
@@ -751,6 +845,7 @@ export type SubjectUncheckedUpdateWithoutTenantInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrolments?: Prisma.EnrolmentUncheckedUpdateManyWithoutSubjectNestedInput
+  examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutSubjectNestedInput
 }
 
 export type SubjectUncheckedUpdateManyWithoutTenantInput = {
@@ -781,6 +876,7 @@ export type SubjectUpdateWithoutProgramInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSubjectsNestedInput
   enrolments?: Prisma.EnrolmentUpdateManyWithoutSubjectNestedInput
+  examSubjects?: Prisma.ExamSubjectUpdateManyWithoutSubjectNestedInput
 }
 
 export type SubjectUncheckedUpdateWithoutProgramInput = {
@@ -791,6 +887,7 @@ export type SubjectUncheckedUpdateWithoutProgramInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrolments?: Prisma.EnrolmentUncheckedUpdateManyWithoutSubjectNestedInput
+  examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutSubjectNestedInput
 }
 
 export type SubjectUncheckedUpdateManyWithoutProgramInput = {
@@ -809,10 +906,12 @@ export type SubjectUncheckedUpdateManyWithoutProgramInput = {
 
 export type SubjectCountOutputType = {
   enrolments: number
+  examSubjects: number
 }
 
 export type SubjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enrolments?: boolean | SubjectCountOutputTypeCountEnrolmentsArgs
+  examSubjects?: boolean | SubjectCountOutputTypeCountExamSubjectsArgs
 }
 
 /**
@@ -832,6 +931,13 @@ export type SubjectCountOutputTypeCountEnrolmentsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.EnrolmentWhereInput
 }
 
+/**
+ * SubjectCountOutputType without action
+ */
+export type SubjectCountOutputTypeCountExamSubjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExamSubjectWhereInput
+}
+
 
 export type SubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -845,6 +951,7 @@ export type SubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   enrolments?: boolean | Prisma.Subject$enrolmentsArgs<ExtArgs>
+  examSubjects?: boolean | Prisma.Subject$examSubjectsArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subject"]>
 
@@ -890,6 +997,7 @@ export type SubjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   enrolments?: boolean | Prisma.Subject$enrolmentsArgs<ExtArgs>
+  examSubjects?: boolean | Prisma.Subject$examSubjectsArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SubjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -907,6 +1015,7 @@ export type $SubjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     tenant: Prisma.$TenantPayload<ExtArgs>
     program: Prisma.$ProgramPayload<ExtArgs>
     enrolments: Prisma.$EnrolmentPayload<ExtArgs>[]
+    examSubjects: Prisma.$ExamSubjectPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1314,6 +1423,7 @@ export interface Prisma__SubjectClient<T, Null = never, ExtArgs extends runtime.
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   program<T extends Prisma.ProgramDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProgramDefaultArgs<ExtArgs>>): Prisma.Prisma__ProgramClient<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   enrolments<T extends Prisma.Subject$enrolmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subject$enrolmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrolmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  examSubjects<T extends Prisma.Subject$examSubjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subject$examSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1773,6 +1883,30 @@ export type Subject$enrolmentsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.EnrolmentScalarFieldEnum | Prisma.EnrolmentScalarFieldEnum[]
+}
+
+/**
+ * Subject.examSubjects
+ */
+export type Subject$examSubjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ExamSubject
+   */
+  select?: Prisma.ExamSubjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ExamSubject
+   */
+  omit?: Prisma.ExamSubjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExamSubjectInclude<ExtArgs> | null
+  where?: Prisma.ExamSubjectWhereInput
+  orderBy?: Prisma.ExamSubjectOrderByWithRelationInput | Prisma.ExamSubjectOrderByWithRelationInput[]
+  cursor?: Prisma.ExamSubjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExamSubjectScalarFieldEnum | Prisma.ExamSubjectScalarFieldEnum[]
 }
 
 /**

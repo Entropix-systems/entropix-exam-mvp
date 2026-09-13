@@ -7,16 +7,17 @@ Known-good foundation: d0-ready
 Known-good D0 verification: PASS at integration SHA 6182f80
 Shared development branch: integration
 Current sprint: D1–D3 MVP implementation
-Current day: D1 PEOPLE / IMPORT VERTICAL SLICE COMPLETE
+Current day: D1 EXAMS / REGISTRATION VERTICAL SLICE MERGED
 ```
 
 ## Current Gate
 
 ```text
-A01 Academic Masters and A02 Students/Faculty/Enrolments are implemented on
-`codex/start-enrolments-import-work`. A02 migration, fixtures, RLS smoke, focused API tests,
-and Web/API/DB builds pass. Authenticated browser proof still requires an
-existing demo credential.
+A03 Exams and Registration is merged into `integration` from
+`feat/A03-exam-registration` commit `37b945f`. Its migrations are applied;
+Northstar application and Cedar auto-enrol fixtures, focused API tests, RLS
+smoke, and Web/API/DB builds pass. Authenticated browser proof still requires a
+demo credential.
 ```
 
 ## Completed
@@ -41,8 +42,8 @@ deactivation and tenant-isolation demo gate
 ## In Progress
 
 ```text
-M01 Academics Department records and IAM department-source integration
-A02 review/commit/merge from d1-a-academic-masters
+A04 scheduling and B02 marks may consume approved RegistrationSubject UUIDs
+after pulling the latest integration branch
 ```
 
 ## Blockers
@@ -56,31 +57,31 @@ No repository-managed demo password exists for authenticated browser verificatio
 ## Migration Lock
 
 ```text
-Owner: Developer A
-Purpose: A02 people/import migration applied; retain until branch merge
+Owner: NONE
+Purpose: A03 migrations are merged; available for the next schema-owning lane
 ```
 
 ## Shared Contract Lock
 
 ```text
-Owner: Developer A
-Purpose: D1 contract freeze
+Owner: NONE
+Purpose: A03 contracts are merged; available for the next shared-contract lane
 ```
 
 ## Developer A
 
 ```text
-Task: A02 Students, Faculty, Enrolments & Import
-Branch: codex/start-enrolments-import-work
-Status: IMPLEMENTED AND FOCUSED VERIFIED; AWAITING REVIEW/COMMIT/MERGE
+Task: A03 Exams & Registration
+Branch: feat/A03-exam-registration
+Status: MERGED INTO INTEGRATION; AUTHENTICATED BROWSER PROOF REMAINS OPTIONAL WHEN CREDENTIALS ARE AVAILABLE
 ```
 
 ## Developer B
 
 ```text
-Task: IAM Phase 3 Backend/DB
-Branch: `d1-b-iam-phase3`
-Status: MERGED INTO INTEGRATION
+Task: B01 Result Rules / Pure Engine
+Branch: `codex/implement-pure-result-rules-engine`
+Status: MERGED INTO INTEGRATION AT `e5f2250`
 ```
 
 ## Latest Integrated Acceptance
@@ -94,12 +95,15 @@ A01 API/Web unit tests, relevant builds/typechecks/lints: PASS.
 A02 migration `20260913170000_people_imports`: APPLIED to configured demo DB.
 A02 fixtures: Northstar 100 students/4 faculty/300 enrolments; Cedar 20/3/60.
 A02 valid/invalid/atomic/retry/self-scope tests and database isolation smoke: PASS.
+A03 migrations `20260913193000_exams_registration` and constraint-name alignment
+`20260913194000_exams_registration_constraint_names`: both APPLIED to the configured demo database.
+A03 fixtures: Northstar 1 submitted application/3 subjects; Cedar 20 approved registrations/60 stable roster rows.
+A03 eligibility/transition tests, Prisma validation, RLS smoke, and Web/API/DB builds: PASS.
 ```
 
 ## Next Required Action
 
 ```text
-Review and commit the A01+A02 branch, merge it through integration, then release
-or transfer the migration and contract locks. Dependent registration/scheduling
-lanes must pull/rebase before consuming Student, Enrolment, Cohort, or Subject IDs.
+A04/B02 must pull integration before consuming RegistrationSubject IDs. Run
+authenticated controller/student browser proof later if credentials are supplied.
 ```

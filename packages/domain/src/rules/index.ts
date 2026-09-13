@@ -8,60 +8,27 @@ import {
   toCanonicalDecimal,
   type DecimalInput,
 } from './decimal.js';
+import {
+  RESULT_COMPONENTS,
+  type GradeBandInput,
+  type ResultComponentRuleInput,
+  type ResultRuleInput,
+  type ValidatedGradeBand,
+  type ValidatedResultRule,
+} from '@entropix/contracts';
+/* Shared API/persistence types are re-exported here for existing B01 callers. */
+export {
+  RESULT_COMPONENTS,
+  type GradeBandInput,
+  type ResultComponent,
+  type ResultComponentRuleInput,
+  type ResultRuleInput,
+  type ValidatedResultComponentRule,
+  type ValidatedGradeBand,
+  type ValidatedResultRule,
+} from '@entropix/contracts';
 
 export type { DecimalInput } from './decimal.js';
-
-export const RESULT_COMPONENTS = {
-  FINAL: 'FINAL',
-  INTERNAL: 'INTERNAL',
-  EXTERNAL: 'EXTERNAL',
-} as const;
-
-export type ResultComponent =
-  (typeof RESULT_COMPONENTS)[keyof typeof RESULT_COMPONENTS];
-
-export interface ResultComponentRuleInput {
-  readonly component: ResultComponent;
-  readonly maximum: DecimalInput;
-  readonly weight: DecimalInput;
-  readonly minimumPassPercentage?: DecimalInput;
-}
-
-export interface GradeBandInput {
-  readonly grade: string;
-  readonly minInclusive: DecimalInput;
-  readonly maxExclusive?: DecimalInput;
-  readonly maxInclusive?: DecimalInput;
-  readonly points: DecimalInput;
-}
-
-export interface ResultRuleInput {
-  readonly components: readonly ResultComponentRuleInput[];
-  readonly totalPassPercentage: DecimalInput;
-  readonly gradeBands: readonly GradeBandInput[];
-}
-
-export interface ValidatedResultComponentRule {
-  readonly component: ResultComponent;
-  readonly maximum: string;
-  readonly weight: string;
-  readonly minimumPassPercentage: string | null;
-}
-
-export interface ValidatedGradeBand {
-  readonly grade: string;
-  readonly minInclusive: string;
-  readonly maxExclusive: string | null;
-  readonly maxInclusive: string | null;
-  readonly points: string;
-}
-
-export interface ValidatedResultRule {
-  readonly kind: 'VALIDATED_RESULT_RULE';
-  readonly components: readonly ValidatedResultComponentRule[];
-  readonly totalPassPercentage: string;
-  readonly gradeBands: readonly ValidatedGradeBand[];
-}
 
 export type RuleValidationErrorCode =
   | 'INVALID_COMPONENTS'

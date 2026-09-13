@@ -17,18 +17,23 @@ model Tenant {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  memberships   Membership[]
-  campuses      Campus[]
-  departments   Department[]
-  programs      Program[]
-  academicYears AcademicYear[]
-  terms         Term[]
-  cohorts       Cohort[]
-  subjects      Subject[]
-  students      Student[]
-  faculty       Faculty[]
-  enrolments    Enrolment[]
-  studentImports StudentImport[]
+  memberships          Membership[]
+  campuses             Campus[]
+  departments          Department[]
+  programs             Program[]
+  academicYears        AcademicYear[]
+  terms                Term[]
+  cohorts              Cohort[]
+  subjects             Subject[]
+  students             Student[]
+  faculty              Faculty[]
+  enrolments           Enrolment[]
+  studentImports       StudentImport[]
+  ruleVersions         RuleVersion[]
+  exams                Exam[]
+  examSubjects         ExamSubject[]
+  registrations        Registration[]
+  registrationSubjects RegistrationSubject[]
 
   @@map("tenants")
 }
@@ -128,6 +133,7 @@ model Term {
   program      Program      @relation(fields: [tenantId, programId], references: [tenantId, id], onDelete: Restrict)
   academicYear AcademicYear @relation(fields: [tenantId, academicYearId], references: [tenantId, id], onDelete: Restrict)
   cohorts      Cohort[]
+  exams        Exam[]
 
   @@unique([tenantId, id], map: "terms_tenant_id_id_key")
   @@unique([tenantId, programId, academicYearId, code], map: "terms_tenant_program_year_code_key")
@@ -147,8 +153,8 @@ model Cohort {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  term   Term   @relation(fields: [tenantId, termId], references: [tenantId, id], onDelete: Restrict)
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  term       Term        @relation(fields: [tenantId, termId], references: [tenantId, id], onDelete: Restrict)
   students   Student[]
   enrolments Enrolment[]
 
@@ -169,9 +175,10 @@ model Subject {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  program Program @relation(fields: [tenantId, programId], references: [tenantId, id], onDelete: Restrict)
-  enrolments Enrolment[]
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  program      Program       @relation(fields: [tenantId, programId], references: [tenantId, id], onDelete: Restrict)
+  enrolments   Enrolment[]
+  examSubjects ExamSubject[]
 
   @@unique([tenantId, id], map: "subjects_tenant_id_id_key")
   @@unique([tenantId, programId, code], map: "subjects_tenant_program_code_key")
@@ -205,13 +212,14 @@ model Membership {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  user       User        @relation(fields: [userId], references: [id], onDelete: Restrict)
-  roleGrants RoleGrant[]
-  sessions   Session[]
-  authTokens AuthToken[]
-  student    Student?
-  faculty    Faculty?
+  tenant                Tenant         @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  user                  User           @relation(fields: [userId], references: [id], onDelete: Restrict)
+  roleGrants            RoleGrant[]
+  sessions              Session[]
+  authTokens            AuthToken[]
+  student               Student?
+  faculty               Faculty?
+  reviewedRegistrations Registration[] @relation("RegistrationReviewer")
 
   @@unique([tenantId, userId], map: "memberships_tenant_user_key")
   @@unique([tenantId, id], map: "memberships_tenant_id_id_key")
@@ -233,10 +241,11 @@ model Student {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  tenant     Tenant     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  membership Membership @relation(fields: [tenantId, membershipId], references: [tenantId, id], onDelete: Restrict)
-  cohort     Cohort     @relation(fields: [tenantId, cohortId], references: [tenantId, id], onDelete: Restrict)
-  enrolments Enrolment[]
+  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  membership    Membership     @relation(fields: [tenantId, membershipId], references: [tenantId, id], onDelete: Restrict)
+  cohort        Cohort         @relation(fields: [tenantId, cohortId], references: [tenantId, id], onDelete: Restrict)
+  enrolments    Enrolment[]
+  registrations Registration[]
 
   @@unique([tenantId, id], map: "students_tenant_id_id_key")
   @@unique([tenantId, id, cohortId], map: "students_tenant_id_cohort_id_key")
@@ -279,12 +288,14 @@ model Enrolment {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  student Student @relation(fields: [tenantId, studentId, cohortId], references: [tenantId, id, cohortId], onDelete: Restrict)
-  cohort  Cohort  @relation(fields: [tenantId, cohortId], references: [tenantId, id], onDelete: Restrict)
-  subject Subject @relation(fields: [tenantId, subjectId], references: [tenantId, id], onDelete: Restrict)
+  tenant               Tenant                @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  student              Student               @relation(fields: [tenantId, studentId, cohortId], references: [tenantId, id, cohortId], onDelete: Restrict)
+  cohort               Cohort                @relation(fields: [tenantId, cohortId], references: [tenantId, id], onDelete: Restrict)
+  subject              Subject               @relation(fields: [tenantId, subjectId], references: [tenantId, id], onDelete: Restrict)
+  registrationSubjects RegistrationSubject[]
 
   @@unique([tenantId, studentId, subjectId, cohortId], map: "enrolments_tenant_student_subject_cohort_key")
+  @@unique([tenantId, id], map: "enrolments_tenant_id_id_key")
   @@index([tenantId, cohortId, subjectId])
   @@map("enrolments")
 }
@@ -305,6 +316,119 @@ model StudentImport {
   @@unique([tenantId, contentHash], map: "student_imports_tenant_content_hash_key")
   @@index([tenantId, committedAt])
   @@map("student_imports")
+}
+
+model RuleVersion {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  version   Int
+  config    Json
+  frozenAt  DateTime? @map("frozen_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  exams  Exam[]
+
+  @@unique([tenantId, id], map: "rule_versions_tenant_id_id_key")
+  @@unique([tenantId, version], map: "rule_versions_tenant_version_key")
+  @@index([tenantId])
+  @@map("rule_versions")
+}
+
+model Exam {
+  id                   String   @id @default(uuid()) @db.Uuid
+  tenantId             String   @map("tenant_id") @db.Uuid
+  termId               String   @map("term_id") @db.Uuid
+  ruleVersionId        String   @map("rule_version_id") @db.Uuid
+  code                 String
+  name                 String
+  registrationMode     String   @map("registration_mode")
+  state                String   @default("DRAFT")
+  registrationOpensAt  DateTime @map("registration_opens_at")
+  registrationClosesAt DateTime @map("registration_closes_at")
+  version              Int      @default(1)
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  term          Term           @relation(fields: [tenantId, termId], references: [tenantId, id], onDelete: Restrict)
+  ruleVersion   RuleVersion    @relation(fields: [tenantId, ruleVersionId], references: [tenantId, id], onDelete: Restrict)
+  subjects      ExamSubject[]
+  registrations Registration[]
+
+  @@unique([tenantId, id], map: "exams_tenant_id_id_key")
+  @@unique([tenantId, termId, code], map: "exams_tenant_term_code_key")
+  @@index([tenantId, termId])
+  @@map("exams")
+}
+
+model ExamSubject {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  examId    String   @map("exam_id") @db.Uuid
+  subjectId String   @map("subject_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant               Tenant                @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  exam                 Exam                  @relation(fields: [tenantId, examId], references: [tenantId, id], onDelete: Restrict)
+  subject              Subject               @relation(fields: [tenantId, subjectId], references: [tenantId, id], onDelete: Restrict)
+  registrationSubjects RegistrationSubject[]
+
+  @@unique([tenantId, id], map: "exam_subjects_tenant_id_id_key")
+  @@unique([tenantId, id, examId], map: "exam_subjects_tenant_id_exam_id_key")
+  @@unique([tenantId, examId, subjectId], map: "exam_subjects_tenant_exam_subject_key")
+  @@index([tenantId, subjectId])
+  @@map("exam_subjects")
+}
+
+model Registration {
+  id                          String    @id @default(uuid()) @db.Uuid
+  tenantId                    String    @map("tenant_id") @db.Uuid
+  examId                      String    @map("exam_id") @db.Uuid
+  studentId                   String    @map("student_id") @db.Uuid
+  state                       String    @default("DRAFT")
+  version                     Int       @default(1)
+  controllerEligible          Boolean   @default(true) @map("controller_eligible")
+  controllerEligibilityReason String?   @map("controller_eligibility_reason")
+  eligibilitySnapshot         Json?     @map("eligibility_snapshot")
+  submittedAt                 DateTime? @map("submitted_at")
+  reviewedByMembershipId      String?   @map("reviewed_by_membership_id") @db.Uuid
+  reviewedAt                  DateTime? @map("reviewed_at")
+  decisionReason              String?   @map("decision_reason")
+  createdAt                   DateTime  @default(now()) @map("created_at")
+  updatedAt                   DateTime  @updatedAt @map("updated_at")
+
+  tenant   Tenant                @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  exam     Exam                  @relation(fields: [tenantId, examId], references: [tenantId, id], onDelete: Restrict)
+  student  Student               @relation(fields: [tenantId, studentId], references: [tenantId, id], onDelete: Restrict)
+  reviewer Membership?           @relation("RegistrationReviewer", fields: [tenantId, reviewedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+  subjects RegistrationSubject[]
+
+  @@unique([tenantId, id], map: "registrations_tenant_id_id_key")
+  @@unique([tenantId, id, examId], map: "registrations_tenant_id_exam_id_key")
+  @@unique([tenantId, examId, studentId], map: "registrations_tenant_exam_student_key")
+  @@index([tenantId, state])
+  @@map("registrations")
+}
+
+model RegistrationSubject {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  registrationId String   @map("registration_id") @db.Uuid
+  examId         String   @map("exam_id") @db.Uuid
+  examSubjectId  String   @map("exam_subject_id") @db.Uuid
+  enrolmentId    String   @map("enrolment_id") @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  tenant       Tenant       @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  registration Registration @relation(fields: [tenantId, registrationId, examId], references: [tenantId, id, examId], onDelete: Cascade)
+  examSubject  ExamSubject  @relation(fields: [tenantId, examSubjectId, examId], references: [tenantId, id, examId], onDelete: Restrict)
+  enrolment    Enrolment    @relation(fields: [tenantId, enrolmentId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, id], map: "registration_subjects_tenant_id_id_key")
+  @@unique([tenantId, registrationId, examSubjectId], map: "registration_subjects_tenant_registration_exam_subject_key")
+  @@index([tenantId, examId, examSubjectId])
+  @@map("registration_subjects")
 }
 
 model RoleGrant {
