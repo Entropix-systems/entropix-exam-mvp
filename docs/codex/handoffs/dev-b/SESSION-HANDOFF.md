@@ -1,9 +1,9 @@
 # SESSION HANDOFF — DEV B
 
 Last updated: 2026-09-13
-Branch: integration
-Base: 2b287e3
-Head: 2b287e3
+Branch: `codex/implement-pure-result-rules-engine`
+Base: `7ef9edd`
+Head: `7ef9edd` plus the uncommitted B01 working-tree changes listed below
 
 ## Current Sprint Goal
 
@@ -29,98 +29,96 @@ Developer A owns:
 
 ## Completed in This Lane
 
-- No business slice is complete on `integration`.
+- B01 pure result rule validation and result computation are implemented and focused-test verified in the current working tree.
+- The implementation is not yet committed or merged into `integration`.
 
 ## Current Task
 
 Task: B01 — Result Rules / Pure Engine
-Status: NOT STARTED
+Status: IMPLEMENTED AND FOCUSED-VERIFIED; AWAITING REVIEW/COMMIT
 
-What already works:
+Public pure API exported by `@entropix/domain`:
 
-- D0 workspace and deterministic result fixtures exist.
-- Result outcome and attendance enums exist in `packages/contracts`.
-- `fixtures/results/result-engine-fixtures.json` contains the key arithmetic cases.
+- `validateResultRule(input)` validates and freezes a normalized FINAL or INTERNAL+EXTERNAL rule.
+- `computeSubjectResult(rule, input)` computes exact threshold decisions, display percentage, grade, grade points, and ABSENT/WITHHELD behavior.
+- `calculateCurrentExamGpa(input)` computes exact current-exam credit-weighted GPA.
+- `computeStudentAggregate(input)` applies WITHHELD > ABSENT > FAIL precedence, equal-subject overall percentage, and optional current-exam GPA.
+- `RuleValidationError` and `ResultInputError` expose stable local error codes, including `INCOMPLETE_INPUT`.
 
-What remains:
-
-- Implement decimal-safe rule validation, subject results, aggregate outcomes, and GPA in `packages/domain`.
-- Add focused tests for every supplied result fixture.
+The engine uses an internal `bigint` rational representation. Threshold decisions never use binary floating-point or rounded display values. Returned raw numbers are accompanied by an exact fraction for aggregate reuse; display values round half-up to two decimals.
 
 ## Stable Context for Next Session
 
 The next agent may assume:
 
-- IAM is complete in a parallel lane and should be consumed, not changed.
-- D0 foundation remains available.
-- `packages/domain/src/results/index.ts` and `packages/domain/src/rules/index.ts` are empty.
-- Current business API modules are empty Nest module shells.
-- Current web app is the Vite starter; the interactive reference is `docs/design/index.html`.
-- Threshold decisions use unrounded decimal values; display rounding is half-up to two decimals.
-- ABSENT produces no numeric result; WITHHELD hides numeric results and GPA.
+- B01 has no database, API, Worker, UI, environment, or migration changes.
+- Rule inputs accept decimal strings or finite numbers; normalized validated values are immutable decimal strings.
+- Grade bands may be supplied in any order but must form exact contiguous `[min, max)` bands from 0, with the final band including 100.
+- A present student must have every required component mark. Missing marks throw `ResultInputError` with `code: 'INCOMPLETE_INPUT'`.
+- Component failure forces the lowest grade label and zero points even when the total percentage is otherwise passing.
+- ABSENT hides subject percentage/grade and contributes zero GPA points. WITHHELD hides subject and aggregate numeric output and suppresses GPA.
+- Aggregate overall percentage is equally weighted by subject. GPA is weighted by positive subject credits and includes failed/absent subjects with zero points.
 
 ## Shared Contracts / Schema That Matter
 
-- `RESULT_OUTCOMES`, `ATTENDANCE_STATES`, and marks component/state enums already exist.
-- Developer B must consume Developer A's `Exam`, `ExamSubject`, approved `RegistrationSubject`, attendance, and incident-hold records rather than duplicate them.
+Schema changes: NONE.
+
+Shared contract changes: NONE.
+
+- B01 consumes the existing `ResultOutcome`/`RESULT_OUTCOMES` contract without modifying it.
+- Engine rule/value types remain local to `packages/domain`.
+- If A03 needs a persisted/exported RuleVersion DTO, coordinate the typed shared contract with DEV A under the contract lock instead of duplicating this local input shape.
 
 ## Migrations
 
-Latest relevant migration:
-
-- `20260911063050_identity_tenancy_rls`
-
-Migration lock:
-
-- DEV B, according to the current `CURRENT-STATE.md`; B01 itself needs no migration.
-
-Required action:
-
-- Coordinate transfer to DEV A for A01, or retain it only for an agreed single shared migration sequence.
+- B01 creates or modifies no migration.
+- Migration-lock ownership was not re-read because it is irrelevant to this pure-domain task; consult current shared state before any later schema work.
 
 ## Shared Contract Lock
 
-Owner:
-
-- DEV A, according to the current `CURRENT-STATE.md`.
-
-Relevant shared contract change:
-
-- B01 should stay inside `packages/domain` unless a reviewed RuleVersion/result DTO contract is coordinated with DEV A.
+- B01 did not acquire or modify the shared contract lock.
+- Current lock ownership was not re-read because no shared contract changed.
 
 ## Files / Modules to Continue From
 
-Read these first next session:
-
-- `docs/codex/generated/B01-result-engine.md`
-- `packages/domain/src/results/index.ts`
+- `packages/domain/src/rules/decimal.ts`
 - `packages/domain/src/rules/index.ts`
-- `packages/contracts/src/results.ts`
-- `fixtures/results/result-engine-fixtures.json`
-
-Do NOT reread the whole repository.
+- `packages/domain/src/results/index.ts`
+- `packages/domain/src/results/results.spec.ts`
+- `packages/domain/src/index.ts` already exports both result and rule modules.
+- `fixtures/results/result-engine-fixtures.json` remains the executable fixture source.
 
 ## Mockup Reference
 
-Relevant mock screen(s):
+Relevant mock screens:
 
-- `docs/design/index.html#results`
 - `docs/design/index.html#marks`
+- `docs/design/index.html#results`
 
-Expected behavior:
+Supported terminology/behavior:
 
-- The engine's outcomes and displayed values match the fixtures later shown by these screens.
+- PASS, FAIL, ABSENT, WITHHELD
+- unrounded decisions with two-decimal display percentages
+- component minimum failure forcing F/zero points
+- current-exam GPA
+- withheld results showing no numeric result
+
+No UI terminology was moved into the domain.
 
 ## Verified Behavior
 
-- `integration` is clean at `2b287e3`.
-- Result and rule domain modules are empty; no result computation is implemented.
-- No implementation or runtime verification was performed during prompt generation.
+- `pnpm --filter @entropix/contracts build` → PASS (existing workspace dependency prerequisite)
+- `pnpm --filter @entropix/domain exec vitest run src/results/results.spec.ts` → PASS, 1 file / 17 tests
+- `pnpm --filter @entropix/domain typecheck` → PASS
+- `pnpm fixtures:check` → PASS, including `Result R1-R6 fixtures: READY`
+- Fixture assertions cover R1–R6 and V1 directly from `fixtures/results/result-engine-fixtures.json`.
+- Invalid component shapes, exact weight totals, non-positive maxima, thresholds, grade-band gaps/overlap/endpoints, marks, credits, and GPA inputs are covered.
 
 ## Known Limitations / Deferred
 
-- Historic CGPA, grace marks, arbitrary executable formulas, and cross-exam aggregation are outside MVP.
-- B02 cannot complete roster/attendance integration until A03/A05 contracts exist.
+- Historic CGPA, grace marks, cross-exam aggregation, and arbitrary executable grading formulas are intentionally not implemented.
+- Persistence, rule snapshots/versioning, result runs/publication, API serialization, and UI formatting beyond display percentage/GPA strings remain outside B01.
+- The pure engine accepts only PRESENT or ABSENT for subject computation; upstream attendance integration must resolve any additional workflow states before invoking it.
 
 ## Blockers
 
@@ -131,21 +129,17 @@ Expected behavior:
 Waiting on:
 
 - A03 for Exam, ExamSubject, and approved RegistrationSubject roster before B02 full integration.
-- A05 for attendance outcomes and incident hold state before B02/B03 completion.
+- A05 for finalized attendance outcomes and incident-hold state before B02/B03 completion.
 
 Other lane needs from us:
 
-- A03 needs the validated grading-policy shape consumed by the result engine; coordinate it under the shared contract lock.
+- A03 may consume the B01 validated grading-policy semantics. A shared RuleVersion DTO still requires coordination under the contract lock.
 
 ## Next Exact Action
 
-The next Codex session should start by:
-
-1. Read `AGENTS.md`, this handoff, and `docs/codex/generated/B01-result-engine.md`.
-2. Confirm the branch/worktree.
-3. Inspect the five files listed above and implement B01 immediately.
-
-Do not start by rereading all project documentation.
+1. Review `git diff` for the four B01 implementation/test files and this handoff.
+2. Commit the verified B01 slice on `codex/implement-pure-result-rules-engine` and merge it through `integration` when approved.
+3. Start B02 only after refreshing the A03/A05 shared state needed for roster, attendance, and incident integration.
 
 ## Minimal Context Files for Next Session
 
@@ -153,10 +147,10 @@ Required:
 
 1. `AGENTS.md`
 2. this `SESSION-HANDOFF.md`
-3. `docs/codex/generated/B01-result-engine.md`
+3. `packages/domain/src/rules/index.ts`
 4. `packages/domain/src/results/index.ts`
-5. `packages/domain/src/rules/index.ts`
+5. `packages/domain/src/results/results.spec.ts`
 6. `packages/contracts/src/results.ts`
 7. `fixtures/results/result-engine-fixtures.json`
 
-Read shared docs only if an assumption above is stale or conflicting.
+Read shared docs only if starting B02, coordinating a shared DTO, or a recorded assumption above has changed.
