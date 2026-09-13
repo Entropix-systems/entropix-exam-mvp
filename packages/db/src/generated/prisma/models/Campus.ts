@@ -192,6 +192,7 @@ export type CampusWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Campus"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   departments?: Prisma.DepartmentListRelationFilter
+  halls?: Prisma.HallListRelationFilter
 }
 
 export type CampusOrderByWithRelationInput = {
@@ -203,6 +204,7 @@ export type CampusOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   departments?: Prisma.DepartmentOrderByRelationAggregateInput
+  halls?: Prisma.HallOrderByRelationAggregateInput
 }
 
 export type CampusWhereUniqueInput = Prisma.AtLeast<{
@@ -219,6 +221,7 @@ export type CampusWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Campus"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   departments?: Prisma.DepartmentListRelationFilter
+  halls?: Prisma.HallListRelationFilter
 }, "id" | "tenantId_id" | "tenantId_code">
 
 export type CampusOrderByWithAggregationInput = {
@@ -253,6 +256,7 @@ export type CampusCreateInput = {
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCampusesInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutCampusInput
+  halls?: Prisma.HallCreateNestedManyWithoutCampusInput
 }
 
 export type CampusUncheckedCreateInput = {
@@ -263,6 +267,7 @@ export type CampusUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCampusInput
+  halls?: Prisma.HallUncheckedCreateNestedManyWithoutCampusInput
 }
 
 export type CampusUpdateInput = {
@@ -273,6 +278,7 @@ export type CampusUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCampusesNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutCampusNestedInput
+  halls?: Prisma.HallUpdateManyWithoutCampusNestedInput
 }
 
 export type CampusUncheckedUpdateInput = {
@@ -283,6 +289,7 @@ export type CampusUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCampusNestedInput
+  halls?: Prisma.HallUncheckedUpdateManyWithoutCampusNestedInput
 }
 
 export type CampusCreateManyInput = {
@@ -419,6 +426,20 @@ export type CampusUpdateOneRequiredWithoutDepartmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CampusUpdateToOneWithWhereWithoutDepartmentsInput, Prisma.CampusUpdateWithoutDepartmentsInput>, Prisma.CampusUncheckedUpdateWithoutDepartmentsInput>
 }
 
+export type CampusCreateNestedOneWithoutHallsInput = {
+  create?: Prisma.XOR<Prisma.CampusCreateWithoutHallsInput, Prisma.CampusUncheckedCreateWithoutHallsInput>
+  connectOrCreate?: Prisma.CampusCreateOrConnectWithoutHallsInput
+  connect?: Prisma.CampusWhereUniqueInput
+}
+
+export type CampusUpdateOneRequiredWithoutHallsNestedInput = {
+  create?: Prisma.XOR<Prisma.CampusCreateWithoutHallsInput, Prisma.CampusUncheckedCreateWithoutHallsInput>
+  connectOrCreate?: Prisma.CampusCreateOrConnectWithoutHallsInput
+  upsert?: Prisma.CampusUpsertWithoutHallsInput
+  connect?: Prisma.CampusWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampusUpdateToOneWithWhereWithoutHallsInput, Prisma.CampusUpdateWithoutHallsInput>, Prisma.CampusUncheckedUpdateWithoutHallsInput>
+}
+
 export type CampusCreateWithoutTenantInput = {
   id?: string
   code: string
@@ -426,6 +447,7 @@ export type CampusCreateWithoutTenantInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   departments?: Prisma.DepartmentCreateNestedManyWithoutCampusInput
+  halls?: Prisma.HallCreateNestedManyWithoutCampusInput
 }
 
 export type CampusUncheckedCreateWithoutTenantInput = {
@@ -435,6 +457,7 @@ export type CampusUncheckedCreateWithoutTenantInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCampusInput
+  halls?: Prisma.HallUncheckedCreateNestedManyWithoutCampusInput
 }
 
 export type CampusCreateOrConnectWithoutTenantInput = {
@@ -482,6 +505,7 @@ export type CampusCreateWithoutDepartmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCampusesInput
+  halls?: Prisma.HallCreateNestedManyWithoutCampusInput
 }
 
 export type CampusUncheckedCreateWithoutDepartmentsInput = {
@@ -491,6 +515,7 @@ export type CampusUncheckedCreateWithoutDepartmentsInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  halls?: Prisma.HallUncheckedCreateNestedManyWithoutCampusInput
 }
 
 export type CampusCreateOrConnectWithoutDepartmentsInput = {
@@ -516,6 +541,7 @@ export type CampusUpdateWithoutDepartmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCampusesNestedInput
+  halls?: Prisma.HallUpdateManyWithoutCampusNestedInput
 }
 
 export type CampusUncheckedUpdateWithoutDepartmentsInput = {
@@ -525,6 +551,63 @@ export type CampusUncheckedUpdateWithoutDepartmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  halls?: Prisma.HallUncheckedUpdateManyWithoutCampusNestedInput
+}
+
+export type CampusCreateWithoutHallsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCampusesInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutCampusInput
+}
+
+export type CampusUncheckedCreateWithoutHallsInput = {
+  id?: string
+  tenantId: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCampusInput
+}
+
+export type CampusCreateOrConnectWithoutHallsInput = {
+  where: Prisma.CampusWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampusCreateWithoutHallsInput, Prisma.CampusUncheckedCreateWithoutHallsInput>
+}
+
+export type CampusUpsertWithoutHallsInput = {
+  update: Prisma.XOR<Prisma.CampusUpdateWithoutHallsInput, Prisma.CampusUncheckedUpdateWithoutHallsInput>
+  create: Prisma.XOR<Prisma.CampusCreateWithoutHallsInput, Prisma.CampusUncheckedCreateWithoutHallsInput>
+  where?: Prisma.CampusWhereInput
+}
+
+export type CampusUpdateToOneWithWhereWithoutHallsInput = {
+  where?: Prisma.CampusWhereInput
+  data: Prisma.XOR<Prisma.CampusUpdateWithoutHallsInput, Prisma.CampusUncheckedUpdateWithoutHallsInput>
+}
+
+export type CampusUpdateWithoutHallsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCampusesNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutCampusNestedInput
+}
+
+export type CampusUncheckedUpdateWithoutHallsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCampusNestedInput
 }
 
 export type CampusCreateManyTenantInput = {
@@ -542,6 +625,7 @@ export type CampusUpdateWithoutTenantInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   departments?: Prisma.DepartmentUpdateManyWithoutCampusNestedInput
+  halls?: Prisma.HallUpdateManyWithoutCampusNestedInput
 }
 
 export type CampusUncheckedUpdateWithoutTenantInput = {
@@ -551,6 +635,7 @@ export type CampusUncheckedUpdateWithoutTenantInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCampusNestedInput
+  halls?: Prisma.HallUncheckedUpdateManyWithoutCampusNestedInput
 }
 
 export type CampusUncheckedUpdateManyWithoutTenantInput = {
@@ -568,10 +653,12 @@ export type CampusUncheckedUpdateManyWithoutTenantInput = {
 
 export type CampusCountOutputType = {
   departments: number
+  halls: number
 }
 
 export type CampusCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   departments?: boolean | CampusCountOutputTypeCountDepartmentsArgs
+  halls?: boolean | CampusCountOutputTypeCountHallsArgs
 }
 
 /**
@@ -591,6 +678,13 @@ export type CampusCountOutputTypeCountDepartmentsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.DepartmentWhereInput
 }
 
+/**
+ * CampusCountOutputType without action
+ */
+export type CampusCountOutputTypeCountHallsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HallWhereInput
+}
+
 
 export type CampusSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -601,6 +695,7 @@ export type CampusSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   departments?: boolean | Prisma.Campus$departmentsArgs<ExtArgs>
+  halls?: boolean | Prisma.Campus$hallsArgs<ExtArgs>
   _count?: boolean | Prisma.CampusCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["campus"]>
 
@@ -637,6 +732,7 @@ export type CampusOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type CampusInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   departments?: boolean | Prisma.Campus$departmentsArgs<ExtArgs>
+  halls?: boolean | Prisma.Campus$hallsArgs<ExtArgs>
   _count?: boolean | Prisma.CampusCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CampusIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -651,6 +747,7 @@ export type $CampusPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     tenant: Prisma.$TenantPayload<ExtArgs>
     departments: Prisma.$DepartmentPayload<ExtArgs>[]
+    halls: Prisma.$HallPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1055,6 +1152,7 @@ export interface Prisma__CampusClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   departments<T extends Prisma.Campus$departmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campus$departmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  halls<T extends Prisma.Campus$hallsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campus$hallsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HallPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1512,6 +1610,30 @@ export type Campus$departmentsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.DepartmentScalarFieldEnum | Prisma.DepartmentScalarFieldEnum[]
+}
+
+/**
+ * Campus.halls
+ */
+export type Campus$hallsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Hall
+   */
+  select?: Prisma.HallSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Hall
+   */
+  omit?: Prisma.HallOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HallInclude<ExtArgs> | null
+  where?: Prisma.HallWhereInput
+  orderBy?: Prisma.HallOrderByWithRelationInput | Prisma.HallOrderByWithRelationInput[]
+  cursor?: Prisma.HallWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HallScalarFieldEnum | Prisma.HallScalarFieldEnum[]
 }
 
 /**

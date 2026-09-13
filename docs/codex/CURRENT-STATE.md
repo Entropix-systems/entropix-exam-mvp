@@ -13,11 +13,11 @@ Current day: D1 EXAMS / REGISTRATION VERTICAL SLICE MERGED
 ## Current Gate
 
 ```text
-A03 Exams and Registration is merged into `integration` from
-`feat/A03-exam-registration` commit `37b945f`. Its migrations are applied;
-Northstar application and Cedar auto-enrol fixtures, focused API tests, RLS
-smoke, and Web/API/DB builds pass. Authenticated browser proof still requires a
-demo credential.
+A04 Timetable, Halls & Seats is implemented on `feat/A04-Timetable-Halls&Seats`
+from integration base `48dac03`. Both A04 migrations are applied with no live
+schema drift; Cedar has 3 published papers, 2 halls and 60 deterministic seats.
+Focused rules tests, RLS smoke, DB/API typechecks, Web build and API/Web lint pass.
+Authenticated browser proof still requires a demo credential.
 ```
 
 ## Completed
@@ -42,8 +42,8 @@ deactivation and tenant-isolation demo gate
 ## In Progress
 
 ```text
-A04 scheduling and B02 marks may consume approved RegistrationSubject UUIDs
-after pulling the latest integration branch
+A04 is ready for review/integration. B02 marks remains independent; B04/duties
+must wait for A04 migration and typed scheduling contracts to merge.
 ```
 
 ## Blockers
@@ -57,23 +57,23 @@ No repository-managed demo password exists for authenticated browser verificatio
 ## Migration Lock
 
 ```text
-Owner: NONE
-Purpose: A03 migrations are merged; available for the next schema-owning lane
+Owner: Developer A — A04 Timetable, Halls & Seats
+Purpose: Held through A04 review/merge for ExamPaper, Hall, HallSitting and SeatAssignment persistence
 ```
 
 ## Shared Contract Lock
 
 ```text
-Owner: NONE
-Purpose: A03 contracts are merged; available for the next shared-contract lane
+Owner: Developer A — A04 Timetable, Halls & Seats
+Purpose: Held through A04 review/merge for scheduling snapshot, allocation and publication contracts
 ```
 
 ## Developer A
 
 ```text
-Task: A03 Exams & Registration
-Branch: feat/A03-exam-registration
-Status: MERGED INTO INTEGRATION; AUTHENTICATED BROWSER PROOF REMAINS OPTIONAL WHEN CREDENTIALS ARE AVAILABLE
+Task: A04 Timetable, Halls & Seats
+Branch: feat/A04-Timetable-Halls&Seats
+Status: IMPLEMENTED AND VERIFIED; READY FOR REVIEW/MERGE; LOCKS HELD UNTIL MERGE
 ```
 
 ## Developer B
@@ -99,11 +99,18 @@ A03 migrations `20260913193000_exams_registration` and constraint-name alignment
 `20260913194000_exams_registration_constraint_names`: both APPLIED to the configured demo database.
 A03 fixtures: Northstar 1 submitted application/3 subjects; Cedar 20 approved registrations/60 stable roster rows.
 A03 eligibility/transition tests, Prisma validation, RLS smoke, and Web/API/DB builds: PASS.
+A04 migrations `20260914010000_timetable_halls_seats` and
+`20260914011000_timetable_constraint_names`: APPLIED; live Prisma schema diff PASS.
+A04 Cedar fixture: 3 published papers, 2 halls, 60 deterministic seat assignments;
+retry-safe seed and tenant-isolation smoke PASS.
+A04 focused schedule/allocation rules: 7 tests PASS; DB/API typechecks, Web build,
+API/Web lint and controller-only timetable navigation test PASS.
 ```
 
 ## Next Required Action
 
 ```text
-A04/B02 must pull integration before consuming RegistrationSubject IDs. Run
-authenticated controller/student browser proof later if credentials are supplied.
+Review and merge A04 into integration, then release both locks and have B04/duty
+lanes pull/rebase before consuming scheduling IDs. Run authenticated controller
+browser proof later if a fictional demo credential is supplied.
 ```

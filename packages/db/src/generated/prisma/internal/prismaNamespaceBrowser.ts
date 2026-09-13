@@ -70,6 +70,10 @@ export const ModelName = {
   ExamSubject: 'ExamSubject',
   Registration: 'Registration',
   RegistrationSubject: 'RegistrationSubject',
+  ExamPaper: 'ExamPaper',
+  Hall: 'Hall',
+  HallSitting: 'HallSitting',
+  SeatAssignment: 'SeatAssignment',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -311,6 +315,7 @@ export const ExamScalarFieldEnum = {
   registrationOpensAt: 'registrationOpensAt',
   registrationClosesAt: 'registrationClosesAt',
   version: 'version',
+  scheduleRevision: 'scheduleRevision',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -361,6 +366,64 @@ export const RegistrationSubjectScalarFieldEnum = {
 } as const
 
 export type RegistrationSubjectScalarFieldEnum = (typeof RegistrationSubjectScalarFieldEnum)[keyof typeof RegistrationSubjectScalarFieldEnum]
+
+
+export const ExamPaperScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examId: 'examId',
+  examSubjectId: 'examSubjectId',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExamPaperScalarFieldEnum = (typeof ExamPaperScalarFieldEnum)[keyof typeof ExamPaperScalarFieldEnum]
+
+
+export const HallScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  campusId: 'campusId',
+  code: 'code',
+  name: 'name',
+  capacity: 'capacity',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HallScalarFieldEnum = (typeof HallScalarFieldEnum)[keyof typeof HallScalarFieldEnum]
+
+
+export const HallSittingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examPaperId: 'examPaperId',
+  hallId: 'hallId',
+  roomOrder: 'roomOrder',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HallSittingScalarFieldEnum = (typeof HallSittingScalarFieldEnum)[keyof typeof HallSittingScalarFieldEnum]
+
+
+export const SeatAssignmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examPaperId: 'examPaperId',
+  examSubjectId: 'examSubjectId',
+  hallSittingId: 'hallSittingId',
+  registrationSubjectId: 'registrationSubjectId',
+  seatNumber: 'seatNumber',
+  createdAt: 'createdAt'
+} as const
+
+export type SeatAssignmentScalarFieldEnum = (typeof SeatAssignmentScalarFieldEnum)[keyof typeof SeatAssignmentScalarFieldEnum]
 
 
 export const RoleGrantScalarFieldEnum = {

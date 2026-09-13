@@ -51,6 +51,7 @@ export interface ExamRecord {
   registrationOpensAt: string;
   registrationClosesAt: string;
   version: number;
+  scheduleRevision: number;
   ruleVersion: RuleVersionRecord;
   subjects: readonly ExamSubjectRecord[];
   registrations: readonly RegistrationRecord[];

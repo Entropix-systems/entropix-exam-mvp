@@ -34,6 +34,10 @@ model Tenant {
   examSubjects         ExamSubject[]
   registrations        Registration[]
   registrationSubjects RegistrationSubject[]
+  examPapers           ExamPaper[]
+  halls                Hall[]
+  hallSittings         HallSitting[]
+  seatAssignments      SeatAssignment[]
 
   @@map("tenants")
 }
@@ -48,6 +52,7 @@ model Campus {
 
   tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   departments Department[]
+  halls       Hall[]
 
   @@unique([tenantId, id], map: "campuses_tenant_id_id_key")
   @@unique([tenantId, code], map: "campuses_tenant_code_key")
@@ -347,6 +352,7 @@ model Exam {
   registrationOpensAt  DateTime @map("registration_opens_at")
   registrationClosesAt DateTime @map("registration_closes_at")
   version              Int      @default(1)
+  scheduleRevision     Int      @default(0) @map("schedule_revision")
   createdAt            DateTime @default(now()) @map("created_at")
   updatedAt            DateTime @updatedAt @map("updated_at")
 
@@ -355,6 +361,7 @@ model Exam {
   ruleVersion   RuleVersion    @relation(fields: [tenantId, ruleVersionId], references: [tenantId, id], onDelete: Restrict)
   subjects      ExamSubject[]
   registrations Registration[]
+  papers        ExamPaper[]
 
   @@unique([tenantId, id], map: "exams_tenant_id_id_key")
   @@unique([tenantId, termId, code], map: "exams_tenant_term_code_key")
@@ -373,6 +380,7 @@ model ExamSubject {
   exam                 Exam                  @relation(fields: [tenantId, examId], references: [tenantId, id], onDelete: Restrict)
   subject              Subject               @relation(fields: [tenantId, subjectId], references: [tenantId, id], onDelete: Restrict)
   registrationSubjects RegistrationSubject[]
+  paper                ExamPaper?
 
   @@unique([tenantId, id], map: "exam_subjects_tenant_id_id_key")
   @@unique([tenantId, id, examId], map: "exam_subjects_tenant_id_exam_id_key")
@@ -420,15 +428,108 @@ model RegistrationSubject {
   enrolmentId    String   @map("enrolment_id") @db.Uuid
   createdAt      DateTime @default(now()) @map("created_at")
 
-  tenant       Tenant       @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  registration Registration @relation(fields: [tenantId, registrationId, examId], references: [tenantId, id, examId], onDelete: Cascade)
-  examSubject  ExamSubject  @relation(fields: [tenantId, examSubjectId, examId], references: [tenantId, id, examId], onDelete: Restrict)
-  enrolment    Enrolment    @relation(fields: [tenantId, enrolmentId], references: [tenantId, id], onDelete: Restrict)
+  tenant          Tenant           @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  registration    Registration     @relation(fields: [tenantId, registrationId, examId], references: [tenantId, id, examId], onDelete: Cascade)
+  examSubject     ExamSubject      @relation(fields: [tenantId, examSubjectId, examId], references: [tenantId, id, examId], onDelete: Restrict)
+  enrolment       Enrolment        @relation(fields: [tenantId, enrolmentId], references: [tenantId, id], onDelete: Restrict)
+  seatAssignments SeatAssignment[]
 
   @@unique([tenantId, id], map: "registration_subjects_tenant_id_id_key")
+  @@unique([tenantId, id, examSubjectId], map: "registration_subjects_tenant_id_exam_subject_id_key")
   @@unique([tenantId, registrationId, examSubjectId], map: "registration_subjects_tenant_registration_exam_subject_key")
   @@index([tenantId, examId, examSubjectId])
   @@map("registration_subjects")
+}
+
+model ExamPaper {
+  id            String    @id @default(uuid()) @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  examId        String    @map("exam_id") @db.Uuid
+  examSubjectId String    @map("exam_subject_id") @db.Uuid
+  startsAt      DateTime? @map("starts_at")
+  endsAt        DateTime? @map("ends_at")
+  version       Int       @default(1)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  tenant          Tenant           @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  exam            Exam             @relation(fields: [tenantId, examId], references: [tenantId, id], onDelete: Restrict)
+  examSubject     ExamSubject      @relation(fields: [tenantId, examSubjectId, examId], references: [tenantId, id, examId], onDelete: Restrict)
+  hallSittings    HallSitting[]
+  seatAssignments SeatAssignment[]
+
+  @@unique([tenantId, id], map: "exam_papers_tenant_id_id_key")
+  @@unique([tenantId, id, examSubjectId], map: "exam_papers_tenant_id_exam_subject_id_key")
+  @@unique([tenantId, examSubjectId, examId], map: "exam_papers_tenant_exam_subject_exam_key")
+  @@unique([tenantId, examSubjectId], map: "exam_papers_tenant_exam_subject_key")
+  @@index([tenantId, examId, startsAt, endsAt])
+  @@map("exam_papers")
+}
+
+model Hall {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  campusId  String   @map("campus_id") @db.Uuid
+  code      String
+  name      String
+  capacity  Int
+  version   Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant   Tenant        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  campus   Campus        @relation(fields: [tenantId, campusId], references: [tenantId, id], onDelete: Restrict)
+  sittings HallSitting[]
+
+  @@unique([tenantId, id], map: "halls_tenant_id_id_key")
+  @@unique([tenantId, campusId, code], map: "halls_tenant_campus_code_key")
+  @@index([tenantId, campusId])
+  @@map("halls")
+}
+
+model HallSitting {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  examPaperId String   @map("exam_paper_id") @db.Uuid
+  hallId      String   @map("hall_id") @db.Uuid
+  roomOrder   Int      @map("room_order")
+  version     Int      @default(1)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tenant          Tenant           @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  examPaper       ExamPaper        @relation(fields: [tenantId, examPaperId], references: [tenantId, id], onDelete: Cascade)
+  hall            Hall             @relation(fields: [tenantId, hallId], references: [tenantId, id], onDelete: Restrict)
+  seatAssignments SeatAssignment[]
+
+  @@unique([tenantId, id], map: "hall_sittings_tenant_id_id_key")
+  @@unique([tenantId, id, examPaperId], map: "hall_sittings_tenant_id_exam_paper_id_key")
+  @@unique([tenantId, examPaperId, hallId], map: "hall_sittings_tenant_paper_hall_key")
+  @@unique([tenantId, examPaperId, roomOrder], map: "hall_sittings_tenant_paper_room_order_key")
+  @@index([tenantId, hallId])
+  @@map("hall_sittings")
+}
+
+model SeatAssignment {
+  id                    String   @id @default(uuid()) @db.Uuid
+  tenantId              String   @map("tenant_id") @db.Uuid
+  examPaperId           String   @map("exam_paper_id") @db.Uuid
+  examSubjectId         String   @map("exam_subject_id") @db.Uuid
+  hallSittingId         String   @map("hall_sitting_id") @db.Uuid
+  registrationSubjectId String   @map("registration_subject_id") @db.Uuid
+  seatNumber            Int      @map("seat_number")
+  createdAt             DateTime @default(now()) @map("created_at")
+
+  tenant              Tenant              @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  examPaper           ExamPaper           @relation(fields: [tenantId, examPaperId, examSubjectId], references: [tenantId, id, examSubjectId], onDelete: Cascade)
+  hallSitting         HallSitting         @relation(fields: [tenantId, hallSittingId, examPaperId], references: [tenantId, id, examPaperId], onDelete: Cascade)
+  registrationSubject RegistrationSubject @relation(fields: [tenantId, registrationSubjectId, examSubjectId], references: [tenantId, id, examSubjectId], onDelete: Restrict)
+
+  @@unique([tenantId, id], map: "seat_assignments_tenant_id_id_key")
+  @@unique([tenantId, examPaperId, registrationSubjectId], map: "seat_assignments_tenant_paper_registration_subject_key")
+  @@unique([tenantId, hallSittingId, seatNumber], map: "seat_assignments_tenant_sitting_seat_key")
+  @@index([tenantId, registrationSubjectId])
+  @@map("seat_assignments")
 }
 
 model RoleGrant {

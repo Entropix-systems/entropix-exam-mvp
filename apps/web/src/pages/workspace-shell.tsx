@@ -10,7 +10,7 @@ export function WorkspaceShell({
   children,
 }: PropsWithChildren<{
   currentUser: CurrentUserResponse
-  active: 'overview' | 'setup-access' | 'students' | 'exams'
+  active: 'overview' | 'setup-access' | 'students' | 'exams' | 'schedule'
   onLogout(): Promise<void>
 }>) {
   const tenantContext = currentUser.context.kind === 'TENANT'
@@ -44,6 +44,13 @@ export function WorkspaceShell({
             </button>
           ) : null}
           {currentUser.context.kind === 'TENANT' && currentUser.context.grants.some(
+            (grant) => ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(grant.role),
+          ) ? (
+            <button type="button" className={active === 'schedule' ? 'active' : ''} onClick={() => navigate('/schedule')}>
+              <span aria-hidden="true">▦</span> Timetable &amp; halls
+            </button>
+          ) : null}
+          {currentUser.context.kind === 'TENANT' && currentUser.context.grants.some(
             (grant) => ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'FACULTY', 'STUDENT', 'AUDITOR'].includes(grant.role),
           ) ? (
             <button
@@ -66,7 +73,7 @@ export function WorkspaceShell({
       </aside>
       <div className="workspace-main">
         <header className="workspace-topbar">
-          <span>Workspace / {active === 'overview' ? 'Overview' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : 'Setup & access'}</span>
+          <span>Workspace / {active === 'overview' ? 'Overview' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : 'Setup & access'}</span>
           <div className="topbar-actions">
             <span className="context-kind">{currentUser.context.kind}</span>
             <button type="button" className="secondary-button" onClick={() => void onLogout()}>
