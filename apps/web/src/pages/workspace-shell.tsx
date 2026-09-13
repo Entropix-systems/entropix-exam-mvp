@@ -10,7 +10,7 @@ export function WorkspaceShell({
   children,
 }: PropsWithChildren<{
   currentUser: CurrentUserResponse
-  active: 'overview' | 'setup-access' | 'students' | 'exams' | 'schedule'
+  active: 'overview' | 'setup-access' | 'masters' | 'students' | 'exams' | 'schedule'
   onLogout(): Promise<void>
 }>) {
   const tenantContext = currentUser.context.kind === 'TENANT'
@@ -34,6 +34,15 @@ export function WorkspaceShell({
           >
             <span aria-hidden="true">◫</span> Overview
           </button>
+          {canManageIdentity(currentUser) ? (
+            <button
+              type="button"
+              className={active === 'masters' ? 'active' : ''}
+              onClick={() => navigate('/masters')}
+            >
+              <span aria-hidden="true">▦</span> Academic masters
+            </button>
+          ) : null}
           {canManageIdentity(currentUser) ? (
             <button
               type="button"
@@ -73,7 +82,7 @@ export function WorkspaceShell({
       </aside>
       <div className="workspace-main">
         <header className="workspace-topbar">
-          <span>Workspace / {active === 'overview' ? 'Overview' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : 'Setup & access'}</span>
+          <span>Workspace / {active === 'overview' ? 'Overview' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : 'Setup & access'}</span>
           <div className="topbar-actions">
             <span className="context-kind">{currentUser.context.kind}</span>
             <button type="button" className="secondary-button" onClick={() => void onLogout()}>

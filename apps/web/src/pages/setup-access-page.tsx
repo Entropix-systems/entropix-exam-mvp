@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import type { ScopedRoleGrant, TenantRole } from '@entropix/contracts'
 import { AuthApiError } from '../auth/auth-client'
-import { AcademicsApiClient } from '../academics/academics-client'
 import { useAuth } from '../auth/auth-context'
 import {
   TENANT_ROLE_OPTIONS,
@@ -18,7 +17,6 @@ import type {
 import { IdentityApiClient } from '../identity/identity-client'
 import { AccessDeniedPage } from './access-denied-page'
 import { WorkspaceShell } from './workspace-shell'
-import { AcademicStructure } from './academic-structure'
 
 function requestError(reason: unknown, fallback: string): string {
   return reason instanceof AuthApiError ? reason.message : fallback
@@ -281,10 +279,8 @@ function AccessDialog({
 
 export function SetupAccessPage({
   client,
-  academicClient,
 }: {
   client: IdentityApiClient
-  academicClient: AcademicsApiClient
 }) {
   const { currentUser, logout } = useAuth()
   const [directory, setDirectory] = useState<MembershipDirectory | null>(null)
@@ -426,13 +422,12 @@ export function SetupAccessPage({
         <div>
           <p className="eyebrow">Institution administration</p>
           <h1>Setup &amp; access</h1>
-          <p>Manage persisted academic masters, people, and fixed tenant roles for {directory?.tenantName ?? 'this institution'}.</p>
+          <p>Manage people and fixed tenant roles for {directory?.tenantName ?? 'this institution'}.</p>
         </div>
         <button type="button" className="primary-button" onClick={openInvite}>Invite user</button>
       </div>
       {success ? <p className="form-message success page-message" role="status">{success}</p> : null}
       {pageError ? <p className="form-message error page-message" role="alert">{pageError}</p> : null}
-      <AcademicStructure client={academicClient} />
       <section className="directory-card" aria-labelledby="membership-title">
         <header>
           <div>
