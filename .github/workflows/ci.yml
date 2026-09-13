@@ -142,18 +142,19 @@ jobs:
           ACCESS_TOKEN_SECRET=${ACCESS_SECRET}
           REFRESH_TOKEN_PEPPER=${REFRESH_PEPPER}
 
-          S3_REGION=us-east-1
-          S3_ENDPOINT=http://127.0.0.1:9090
-          S3_BUCKET=entropix-exam-mvp
-          S3_ACCESS_KEY_ID=test
-          S3_SECRET_ACCESS_KEY=test
-          S3_FORCE_PATH_STYLE=true
+          STORAGE_PROVIDER=s3
+          STORAGE_ENDPOINT=http://127.0.0.1:9090
+          STORAGE_REGION=us-east-1
+          STORAGE_ACCESS_KEY_ID=test
+          STORAGE_SECRET_ACCESS_KEY=test
+          STORAGE_BUCKET=entropix-exam-mvp
+          STORAGE_FORCE_PATH_STYLE=true
 
           S3_QUARANTINE_PREFIX=quarantine/
           S3_CLEAN_PREFIX=clean/
           S3_GENERATED_PREFIX=generated/
 
-          SIGNED_URL_TTL_SECONDS=60
+          STORAGE_SIGNED_URL_TTL_SECONDS=60
 
           SCANNER_HOST=127.0.0.1
           SCANNER_PORT=3310
@@ -359,18 +360,19 @@ jobs:
           cat > .env <<'ENV'
           NODE_ENV=test
 
-          S3_REGION=us-east-1
-          S3_ENDPOINT=http://127.0.0.1:9090
-          S3_BUCKET=entropix-exam-mvp
-          S3_ACCESS_KEY_ID=test
-          S3_SECRET_ACCESS_KEY=test
-          S3_FORCE_PATH_STYLE=true
+          STORAGE_PROVIDER=s3
+          STORAGE_ENDPOINT=http://127.0.0.1:9090
+          STORAGE_REGION=us-east-1
+          STORAGE_ACCESS_KEY_ID=test
+          STORAGE_SECRET_ACCESS_KEY=test
+          STORAGE_BUCKET=entropix-exam-mvp
+          STORAGE_FORCE_PATH_STYLE=true
 
           S3_QUARANTINE_PREFIX=quarantine/
           S3_CLEAN_PREFIX=clean/
           S3_GENERATED_PREFIX=generated/
 
-          SIGNED_URL_TTL_SECONDS=60
+          STORAGE_SIGNED_URL_TTL_SECONDS=60
 
           SCANNER_HOST=127.0.0.1
           SCANNER_PORT=3310

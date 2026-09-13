@@ -1,10 +1,10 @@
 export interface StorageConfig {
   region: string;
-  endpoint?: string;
+  endpoint: string;
   bucket: string;
 
-  accessKeyId?: string;
-  secretAccessKey?: string;
+  accessKeyId: string;
+  secretAccessKey: string;
   forcePathStyle: boolean;
 
   quarantinePrefix: string;
@@ -42,35 +42,40 @@ function prefix(value: string): string {
 export function loadStorageConfig(
   env: NodeJS.ProcessEnv = process.env,
 ): StorageConfig {
-  const accessKeyId =
-    env.S3_ACCESS_KEY_ID || undefined;
-
-  const secretAccessKey =
-    env.S3_SECRET_ACCESS_KEY || undefined;
-
   if (
-    Boolean(accessKeyId) !==
-    Boolean(secretAccessKey)
+    env.STORAGE_PROVIDER &&
+    env.STORAGE_PROVIDER !== 's3'
   ) {
     throw new Error(
-      'S3 access key and secret must be configured together',
+      'Unsupported storage provider',
     );
   }
 
   return {
-    region: required(env, 'S3_REGION'),
+    region:
+      required(env, 'STORAGE_REGION'),
 
     endpoint:
-      env.S3_ENDPOINT || undefined,
+      required(env, 'STORAGE_ENDPOINT'),
 
     bucket:
-      required(env, 'S3_BUCKET'),
+      required(env, 'STORAGE_BUCKET'),
 
-    accessKeyId,
-    secretAccessKey,
+    accessKeyId:
+      required(
+        env,
+        'STORAGE_ACCESS_KEY_ID',
+      ),
+
+    secretAccessKey:
+      required(
+        env,
+        'STORAGE_SECRET_ACCESS_KEY',
+      ),
 
     forcePathStyle:
-      env.S3_FORCE_PATH_STYLE === 'true',
+      env.STORAGE_FORCE_PATH_STYLE !==
+      'false',
 
     quarantinePrefix:
       prefix(
@@ -92,7 +97,7 @@ export function loadStorageConfig(
 
     signedUrlTtlSeconds:
       Number(
-        env.SIGNED_URL_TTL_SECONDS ||
+        env.STORAGE_SIGNED_URL_TTL_SECONDS ||
           '60',
       ),
 
