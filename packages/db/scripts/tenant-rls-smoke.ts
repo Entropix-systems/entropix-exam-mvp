@@ -17,7 +17,13 @@ if (!connectionString) {
   throw new Error('DATABASE_URL is required');
 }
 
-const prisma = createPrismaClient(connectionString);
+const prisma = createPrismaClient(
+  connectionString,
+  {
+    sslCaPath:
+      process.env.DATABASE_SSL_CA_PATH,
+  },
+);
 
 const TENANT_A_ID =
   '11111111-1111-4111-8111-111111111111';

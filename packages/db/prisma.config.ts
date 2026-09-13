@@ -3,7 +3,9 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig, env } from 'prisma/config';
 
 dotenv.config({
-  path: fileURLToPath(new URL('../../.env', import.meta.url)),
+  path: fileURLToPath(
+    new URL('../../.env', import.meta.url),
+  ),
 });
 
 export default defineConfig({
@@ -15,6 +17,9 @@ export default defineConfig({
 
   datasource: {
     url: env('DATABASE_MIGRATION_URL'),
-    shadowDatabaseUrl: env('SHADOW_DATABASE_URL'),
+
+    shadowDatabaseUrl:
+      process.env.SHADOW_DATABASE_URL ||
+      undefined,
   },
 });
