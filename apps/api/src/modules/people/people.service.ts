@@ -186,15 +186,39 @@ function validateRows(rows: readonly ParsedRow[], context: ImportValidationConte
 export class PeopleService {
   constructor(private readonly repository: PeopleRepository) {}
 
-  async listStudents(context: AuthenticatedContext, search = '') {
+  async listStudents(
+    context: AuthenticatedContext,
+    search = '',
+    cursorValue?: unknown,
+    pageSizeValue?: unknown,
+  ) {
     if (!mayReadDirectory(context)) throw new ForbiddenException('Permission denied');
     const tenant = tenantContext(context);
-    const students = await this.repository.listStudents(
+    const cursor =
+      cursorValue === undefined || cursorValue === ''
+        ? null
+        : typeof cursorValue === 'string' && isUuid(cursorValue)
+          ? cursorValue.toLowerCase()
+          : (() => {
+              throw new UnprocessableEntityException('Student cursor is invalid');
+            })();
+    const pageSize =
+      pageSizeValue === undefined || pageSizeValue === ''
+        ? 25
+        : typeof pageSizeValue === 'string' && /^\d+$/.test(pageSizeValue)
+          ? Number(pageSizeValue)
+          : Number.NaN;
+    if (!Number.isSafeInteger(pageSize) || pageSize < 1 || pageSize > 100)
+      throw new UnprocessableEntityException('Student page size is invalid');
+    const directory = await this.repository.listStudents(
       tenant.tenantId,
       studentMembership(context),
       search.trim().slice(0, 100),
+      pageSize,
+      cursor,
     );
-    return { students, total: students.length };
+    if (!directory) throw new NotFoundException('Student page not found');
+    return { ...directory, pageSize };
   }
 
   async getStudent(context: AuthenticatedContext, id: string) {

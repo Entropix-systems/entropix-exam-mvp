@@ -146,7 +146,7 @@ The typed A02 records and import results are defined in
 `packages/contracts/src/people.ts`. The authenticated API surface is:
 
 ```text
-GET  /api/v1/people/students
+GET  /api/v1/people/students?search=<text>&cursor=<student UUID>&pageSize=<1..100>
 GET  /api/v1/people/students/:id
 GET  /api/v1/people/faculty
 POST /api/v1/people/student-imports/preview
@@ -159,6 +159,11 @@ replays return the original result without creating students or enrolments.
 Students with the `STUDENT` grant are scoped to the Student profile bound to
 their current membership. Tenant scope and membership authority are never
 accepted from the request.
+
+The student directory is cursor-paginated by roll number and stable student ID.
+Its response is `{ students, total, nextCursor, pageSize }`; `total` counts all
+records matching the active tenant, role scope, and search rather than only the
+current page. The default page size is 25.
 
 `withTenant` accepts an optional transaction-options argument for bounded
 long-running atomic work. Existing callers are unchanged; the A02 import commit

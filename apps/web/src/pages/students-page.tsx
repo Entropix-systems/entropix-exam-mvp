@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type {
   StudentDirectoryRecord,
   StudentImportPreview,
@@ -19,6 +19,10 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
+  const [total, setTotal] = useState(0)
+  const [nextCursor, setNextCursor] = useState<string | null>(null)
+  const [cursorHistory, setCursorHistory] = useState<(string | null)[]>([null])
+  const [pageSize, setPageSize] = useState(25)
   const [selected, setSelected] = useState<StudentDirectoryRecord | null>(null)
   const [importInput, setImportInput] = useState<StudentImportRequest | null>(null)
   const [preview, setPreview] = useState<StudentImportPreview | null>(null)
@@ -29,26 +33,39 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
   const canImport = currentUser?.context.kind === 'TENANT' &&
     (currentUser.context.activeRole === 'INSTITUTION_ADMIN' ||
       currentUser.context.activeRole === 'EXAM_CONTROLLER')
+  const currentCursor = cursorHistory[cursorHistory.length - 1] ?? null
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (
+    cursor = currentCursor,
+    requestedPageSize = pageSize,
+    requestedSearch = search,
+  ) => {
     setLoading(true)
     try {
-      const directory = await client.listStudents()
+      const directory = await client.listStudents({
+        search: requestedSearch,
+        cursor,
+        pageSize: requestedPageSize,
+      })
       setStudents(directory.students)
+      setTotal(directory.total)
+      setNextCursor(directory.nextCursor)
       setError(null)
     } catch (reason) {
       setError(message(reason, 'Student directory could not be loaded.'))
     } finally {
       setLoading(false)
     }
-  }, [client])
+  }, [client, currentCursor, pageSize, search])
 
   useEffect(() => {
     let active = true
-    void client.listStudents().then(
+    void client.listStudents({ search, cursor: currentCursor, pageSize }).then(
       (directory) => {
         if (!active) return
         setStudents(directory.students)
+        setTotal(directory.total)
+        setNextCursor(directory.nextCursor)
         setError(null)
         setLoading(false)
       },
@@ -59,15 +76,7 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
       },
     )
     return () => { active = false }
-  }, [client])
-
-  const visible = useMemo(() => {
-    const query = search.trim().toLowerCase()
-    return query
-      ? students.filter((student) =>
-          `${student.rollNo} ${student.name} ${student.email}`.toLowerCase().includes(query))
-      : students
-  }, [search, students])
+  }, [client, currentCursor, pageSize, search])
 
   async function chooseFile(file: File | undefined) {
     if (!file) return
@@ -96,7 +105,8 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
         : `${result.createdCount} students and ${result.enrolmentCount} enrolments imported.`)
       setPreview(null)
       setImportInput(null)
-      await load()
+      if (currentCursor) setCursorHistory([null])
+      else await load()
     } catch (reason) {
       setNotice(message(reason, 'Import could not be committed.'))
     } finally {
@@ -150,7 +160,7 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
         <header>
           <div>
             <h2 id="student-directory-title">Student directory</h2>
-            <p>{students.length} students · roll numbers unique within this institution</p>
+            <p>{total} students · roll numbers unique within this institution</p>
           </div>
           <span className="status-badge active">ACTIVE COHORT</span>
         </header>
@@ -159,16 +169,21 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
             aria-label="Search students"
             placeholder="Search name, email or roll number"
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) => {
+              if (event.target.value === search) return
+              setLoading(true)
+              setSearch(event.target.value)
+              setCursorHistory([null])
+            }}
           />
-          <span>{visible.length} shown</span>
+          <span>{students.length} shown</span>
         </div>
         {loading ? <p className="loading-state">Loading students…</p> : (
           <div className="membership-table-wrap">
             <table className="membership-table student-table">
               <thead><tr><th>Student</th><th>Cohort</th><th>Subjects</th><th>Status</th></tr></thead>
               <tbody>
-                {visible.map((student) => (
+                {students.map((student) => (
                   <tr key={student.id} onClick={() => setSelected(student)}>
                     <td><strong>{student.name}</strong><small>{student.rollNo} · {student.email}</small></td>
                     <td>{student.cohort.name}<small>{student.cohort.code}</small></td>
@@ -178,9 +193,56 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
                 ))}
               </tbody>
             </table>
-            {visible.length === 0 ? <p className="empty-state">No students match this search.</p> : null}
+            {students.length === 0 ? <p className="empty-state">No students match this search.</p> : null}
           </div>
         )}
+        {!loading ? (
+          <div className="pagination-controls" aria-label="Student pagination">
+            <span>Page {cursorHistory.length}</span>
+            <label>
+              Rows
+              <select
+                aria-label="Student page size"
+                value={pageSize}
+                onChange={(event) => {
+                  const nextPageSize = Number(event.target.value)
+                  if (nextPageSize === pageSize) return
+                  setLoading(true)
+                  setPageSize(nextPageSize)
+                  setCursorHistory([null])
+                }}
+              >
+                {[10, 25, 50].map((size) => (
+                  <option key={size} value={size}>{size}</option>
+                ))}
+              </select>
+            </label>
+            <button
+              type="button"
+              className="secondary-button"
+              disabled={cursorHistory.length === 1}
+              onClick={() => {
+                setLoading(true)
+                setCursorHistory((history) => history.slice(0, -1))
+              }}
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              className="secondary-button"
+              disabled={!nextCursor}
+              onClick={() => {
+                if (nextCursor) {
+                  setLoading(true)
+                  setCursorHistory((history) => [...history, nextCursor])
+                }
+              }}
+            >
+              Next
+            </button>
+          </div>
+        ) : null}
       </section>
       {selected ? (
         <div className="modal-backdrop" role="presentation" onMouseDown={() => setSelected(null)}>
