@@ -1,9 +1,9 @@
 # SESSION HANDOFF - DEV B
 
 Last updated: 2026-09-14
-Branch: `feat/B04-student-portal-documents`
-Base: `eea1b18` (`integration`, includes merged B03)
-Head: `eea1b18` plus uncommitted B04 working-tree changes
+Branch: `integration`
+B04 feature commit: `ee55fa0`
+B04 local integration merge: `536fac9`
 
 ## Current Sprint Goal
 
@@ -14,7 +14,7 @@ published result, and eligible printable grade card.
 ## Current Task
 
 Task: B04 - Student Portal, Admit Card & Grade Card
-Status: IMPLEMENTED AND FOCUSED-VERIFIED; REVIEW/COMMIT/MERGE PENDING
+Status: INTEGRATED LOCALLY; FOCUSED-VERIFIED; REMOTE PUSH NOT PERFORMED
 
 The student workflow now:
 
@@ -62,7 +62,7 @@ Typed contracts:
   student result route also returns only a hold message for WITHHELD.
 - `docs/codex/CONTRACTS.md` records the `/api/v1/me/*` authority, visibility,
   invalidation, and printable-document rules.
-- Shared contract lock: Developer B for B04 until reviewed and merged.
+- Shared contract lock: RELEASED after local integration merge `536fac9`.
 
 ## Main Files
 
@@ -135,21 +135,21 @@ core conduct-window and independent-approval rules must not be bypassed.
 
 ## Next Exact Action
 
-1. Review the `/api/v1/me/*` authorization filters and WITHHELD union change.
-2. Commit/merge B04 and release the shared contract lock in `CURRENT-STATE.md`.
-3. After the Cedar sitting windows, complete accepted duties, attendance,
-   examiner submission, independent approval, compute, and publish through the
-   normal workflow; then rerun the real student grade-card print check.
-4. If a grade card must be shown before those sittings finish, obtain an explicit
-   product decision for a separate historical fictional exam fixture instead of
-   pre-publishing ANNUAL-2026.
+1. Implement
+   `docs/codex/generated/B04A-full-flow-demo-seed-test.md` on a short-lived branch.
+2. Preserve Cedar `ANNUAL-2026`; create a separate historical fictional exam for
+   the published-result/grade-card journey.
+3. Merge the verified full-flow fixture through `integration`.
+4. Start `docs/codex/generated/B05-dashboard-reports-demo-polish.md` using the
+   authoritative seeded readiness and publication data.
 
 ## Minimal Context for the Next Session
 
 1. `AGENTS.md`
 2. this handoff
 3. `docs/codex/CURRENT-STATE.md`
-4. `docs/codex/CONTRACTS.md` - Student Portal and Current Document section
-5. `packages/contracts/src/student-portal.ts`
-6. `apps/api/src/modules/documents/student-portal.repository.ts`
-7. `apps/web/src/pages/student-portal-page.tsx`
+4. `docs/codex/generated/B04A-full-flow-demo-seed-test.md`
+5. `docs/codex/CONTRACTS.md` - Student Portal and Current Document section
+6. `packages/contracts/src/student-portal.ts`
+7. `apps/api/src/modules/documents/student-portal.repository.ts`
+8. `apps/web/src/pages/student-portal-page.tsx`

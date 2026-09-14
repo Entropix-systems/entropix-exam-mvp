@@ -5,18 +5,18 @@
 ```text
 Known-good foundation: d0-ready
 Shared development branch: integration
-Current integration SHA: eea1b18
+Current B04 integration merge: 536fac9
 Current sprint: D1-D3 MVP implementation
-Current day: B03 INTEGRATED; B04 IMPLEMENTED ON FEATURE BRANCH
+Current day: B04 INTEGRATED LOCALLY; FULL-FLOW DEMO SEED QUEUED BEFORE B05
 ```
 
 ## Current Gate
 
-`integration` at `eea1b18` includes B03 Result Runs & Publication plus the
-previously integrated academics, people, exams, scheduling, conduct, evaluation,
-and IAM vertical slices. B04 Student Portal, Admit Card & Grade Card is
-implemented on `feat/B04-student-portal-documents` from that exact baseline and
-is in focused verification/handoff.
+Local `integration` includes B04 Student Portal, Admit Card & Grade Card at merge
+commit `536fac9`, on top of the previously integrated IAM and A01-B03 vertical
+slices. B04 is focused-verified. The next prerequisite before B05 is the guarded,
+idempotent historical full-flow demo seed described in
+`docs/codex/generated/B04A-full-flow-demo-seed-test.md`.
 
 ## Completed
 
@@ -31,15 +31,15 @@ A05 Duties, Attendance & Incidents
 B01 Pure Result Rules
 B02 Marks Entry & Independent Review (merged by PR #8 at 9720aea)
 B03 Result Runs & Publication (merged by PR #9 at eea1b18)
+B04 Student Portal, Admit Card & Grade Card (merged locally at 536fac9)
 ```
 
 ## In Progress
 
 ```text
-B04 Student Portal, Admit Card & Grade Card
-Branch: feat/B04-student-portal-documents
-Base: eea1b18
-Status: IMPLEMENTED; FOCUSED TESTS/BUILDS AND PRINT UI CHECK PASS
+B04A Full-Flow Demo Seed & End-to-End Test
+Prompt: docs/codex/generated/B04A-full-flow-demo-seed-test.md
+Status: QUEUED; REQUIRED BEFORE B05
 ```
 
 ## Blockers
@@ -62,9 +62,8 @@ Last integrated migration: 20260914143000_result_runs_publication
 ## Shared Contract Lock
 
 ```text
-Owner: Developer B - B04 Student Portal, Admit Card & Grade Card
-Purpose: authenticated own-registration/timetable/result reads, current document
-metadata, and strict WITHHELD response privacy
+Owner: NONE
+Purpose: B04 contracts are integrated locally; available for B04A/B05
 ```
 
 ## Developer A
@@ -77,9 +76,9 @@ Status: MERGED; LOCKS RELEASED
 ## Developer B
 
 ```text
-Task: B04 Student Portal, Admit Card & Grade Card
-Branch: feat/B04-student-portal-documents
-Status: IMPLEMENTED; FOCUSED VERIFIED; HANDOFF/REVIEW PENDING
+Last delivered task: B04 Student Portal, Admit Card & Grade Card
+Merge: 536fac9 on local integration
+Next queued task: B04A Full-Flow Demo Seed & End-to-End Test
 ```
 
 ## Current B03 Acceptance Evidence (Integrated)
@@ -113,7 +112,7 @@ Status: IMPLEMENTED; FOCUSED VERIFIED; HANDOFF/REVIEW PENDING
   verification, and teardown path; the documented `pnpm setup:local` sequence
   passes against disposable local PostgreSQL.
 
-## Current B04 Acceptance Evidence (Feature Branch)
+## Current B04 Acceptance Evidence (Integrated Locally)
 
 - `pnpm verify:b04` passes: 13 focused API result/portal tests, 4 focused Web
   navigation/client tests, contracts build, API/Web typechecks, and API/Web lint.
@@ -144,8 +143,8 @@ Status: IMPLEMENTED; FOCUSED VERIFIED; HANDOFF/REVIEW PENDING
 
 ## Next Required Action
 
-Review B04's scoped `/api/v1/me/*` queries, typed contracts, portal/print UI,
-and focused evidence, then commit/merge B04 and release its contract lock. The
-real Cedar grade-card proof can run only after the 15-17 September conduct
-windows, marks submission, independent approval, computation, and publication,
-or after the team explicitly approves a separate historical demo fixture.
+Implement and verify
+`docs/codex/generated/B04A-full-flow-demo-seed-test.md` on a short-lived branch,
+merge it through `integration`, then start B05 against the resulting authoritative
+historical publication/readiness data. Push of local integration remains a
+separate explicit action.
