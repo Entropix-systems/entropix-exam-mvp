@@ -48,7 +48,7 @@ export function planDeterministicSeats(
 }
 
 async function lockScheduling(tx: TenantTransaction, tenantId: UUID) {
-  await tx.$queryRaw<Array<{ pg_advisory_xact_lock: unknown }>>`
+  await tx.$executeRaw`
     SELECT pg_advisory_xact_lock(hashtextextended(${tenantId}, 0))
   `;
 }

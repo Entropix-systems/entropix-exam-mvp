@@ -1,159 +1,153 @@
 # SESSION HANDOFF - DEV B
 
 Last updated: 2026-09-14
-Branch: `integration`
-B04 feature commit: `ee55fa0`
-B04 local integration merge: `536fac9`
-
-## Current Sprint Goal
-
-Deliver the Tuesday demo's authenticated student closeout journey: own approved
-registration, current published timetable/seat, printable admit card, current
-published result, and eligible printable grade card.
+Branch: `feat/FULL-APPLICATION-demo-seed-and-flow-test`
+Base: `origin/integration` at `1d7ed58`
+Starting HEAD: `ecbf2ec`
 
 ## Current Task
 
-Task: B04 - Student Portal, Admit Card & Grade Card
-Status: INTEGRATED LOCALLY; FOCUSED-VERIFIED; REMOTE PUSH NOT PERFORMED
+Task: Full Application Demo Seed, Role Credentials & End-to-End Flow Test
+Status: IMPLEMENTED AND VERIFIED ON DISPOSABLE LOCAL POSTGRESQL; REVIEW/MERGE PENDING
 
-The student workflow now:
+This gate makes IAM plus A01-A05 and B01-B04 reproducible before B05. It adds
+historical completed exams without changing Cedar's future `ANNUAL-2026`
+schedule, provisions fictional role credentials through the real reset path,
+and verifies server-resolved role access plus student documents.
 
-1. Resolves tenant and Student exclusively from the verified active membership.
-2. Returns only the caller's approved registrations through `/api/v1/me/*`.
-3. Returns timetable/hall/seat only while the schedule remains published and
-   complete for that registration.
-4. Binds the current printable admit-card issue ID to registration ID plus
-   `Exam.scheduleRevision`; schedule editing removes access until republished.
-5. Returns result data only from the active current publication and only while
-   the student's registration remains approved.
-6. Returns a dedicated WITHHELD hold-message response with no items, components,
-   percentages, GPA, credits, or grade-card reference.
-7. Allows PASS, FAIL, and ABSENT to render a grade card from the immutable
-   `StudentResult`/`ResultItem` snapshot, with ABSENT never displayed as zero.
-8. Uses one-page printable HTML previews; no public URL or stored artifact is
-   created for the demo.
+## Commands
 
-## Portal UI
+```bash
+pnpm seed:demo:full-application
+pnpm smoke:demo:full-application
+pnpm test:demo:roles
+pnpm test:demo:journey
+pnpm test:demo:bulk-imports
+```
 
-- Student sessions land on the mockup-aligned student workspace at `/student`
-  (and the authenticated root) with `Student portal` navigation.
-- The page shows verified institution/student/cohort identity, registration,
-  subjects, first paper, hall/seat, full local-time timetable, and current result.
-- Admit and grade previews include stable issue IDs and authoritative schedule or
-  publication versions. Print CSS isolates the document from the application
-  shell and produces one-page output in the focused browser check.
-- Existing student directory and exam/registration navigation remains available
-  so the A03 registration journey is not hidden.
+The seed defaults to local PostgreSQL and refuses production. A non-local
+fictional shared demo additionally requires both:
 
-## Shared Contracts / Schema
+```bash
+DEMO_SEED_TARGET=shared DEMO_SEED_ACK=<host:port>/<exact-database-name> \
+  pnpm seed:demo:full-application
+```
 
-Schema / migration:
+The shared target was not applied or verified in this task.
 
-- NONE. Existing approved Registration, schedule state/revision, seat assignment,
-  immutable result snapshots, and current Publication are sufficient.
-- Migration lock is available; B04 does not acquire it.
+## Seeded Journeys
 
-Typed contracts:
+```text
+CEDAR-HIST-2026
+  20 students
+  PASS 18 / ABSENT 1 / WITHHELD 1
+  three published historical sittings and 60 exact seats
+  accepted duties and submitted attendance
+  three independently approved marks batches
+  exactly one current publication
 
-- `packages/contracts/src/student-portal.ts` adds own-registration,
-  own-timetable, own-published-result, current-document metadata, and aggregate
-  portal DTOs.
-- `CurrentStudentResultRecord` is now a discriminated union so the legacy B03
-  student result route also returns only a hold message for WITHHELD.
-- `docs/codex/CONTRACTS.md` records the `/api/v1/me/*` authority, visibility,
-  invalidation, and printable-document rules.
-- Shared contract lock: RELEASED after local integration merge `536fac9`.
+NORTHSTAR-HIST-2026
+  two approved students plus one rejected application fixture
+  PASS 1 / FAIL 1
+  three published historical sittings and six exact seats
+  accepted duties and submitted attendance
+  three independently approved marks batches
+  exactly one current publication
+```
 
-## Main Files
+Cedar `ANNUAL-2026` remains schedule revision 1 with its three 15-17 September
+2026 sittings and existing hall/seat/admit-card behavior.
 
-- `packages/contracts/src/student-portal.ts`
-- `packages/contracts/src/results.ts`
-- `apps/api/src/modules/documents/`
-- `apps/api/src/modules/results/results.repository.ts`
-- `apps/api/scripts/student-portal-smoke.ts`
-- `apps/web/src/student-portal/`
-- `apps/web/src/pages/student-portal-page.tsx`
-- `apps/web/src/pages/results-page.tsx`
-- `apps/web/src/pages/workspace-shell.tsx`
-- `apps/web/src/App.tsx`
-- `apps/web/src/App.css`
-- `docs/codex/CONTRACTS.md`
-- `docs/codex/CURRENT-STATE.md`
-- `README.md` and package scripts
+## Credentials and Bulk Imports
 
-## Verification Evidence
+- Shared fictional role reference:
+  `docs/codex/SEEDED-ROLE-TEST-CREDENTIALS.md`
+- 13 usable role/student credentials and one expected suspended denial are
+  provisioned through the real reset/password-hashing workflow.
+- Bulk CSV pack: `fixtures/imports/bulk/`
+  - clean 12-row Northstar upload
+  - clean 12-row Cedar upload
+  - seven-row negative/reconciliation preview file
+- The original 100-row Northstar and 20-row Cedar CSVs remain the baseline seed
+  fixtures; the upload pack is not auto-committed into the authoritative roster.
 
-- `pnpm verify:b04` -> PASS: contracts build; 13 focused API portal/result tests;
-  4 focused Web navigation/client tests; API/Web typechecks; API/Web lint.
-- `pnpm --filter @entropix/api build` -> PASS.
-- `pnpm --filter @entropix/web build` -> PASS; student portal remains a lazy
-  route chunk and all production chunks remain under 500 kB.
-- API startup -> PASS; all five `/api/v1/me/*` routes mapped.
-- Local live HTTP gate -> health 200; unauthenticated student portal read 401.
-- `pnpm smoke:student-portal` -> PASS against the configured database using the
-  restricted tenant transaction: one Northstar student was resolved from their
-  membership and only their approved registration was returned.
-- `PORTAL_SMOKE_TENANT_SLUG=cedar-school pnpm smoke:student-portal` -> PASS for
-  two scoped Cedar students; Student 03 has one approved registration, one
-  published timetable with three papers, and no current result.
-- Browser render/print check -> PASS using local response fixtures because no
-  demo login credential is stored in the repository: portal survives reload,
-  shows revision 3 / publication v2 data, has no Vite overlay/page errors, and
-  produces one-page admit and grade PDF output with issue/version metadata.
-- Real browser/API check -> PASS for Cedar Student 03 after provisioning the
-  fictional account through the one-time password-reset workflow. Login,
-  refresh-cookie restoration, own approved registration, all three timetable
-  rows, Hall A seat 03, admit-card preview, and logout work with no page error or
-  Vite overlay. The real admit-card PDF is one page and includes schedule
-  revision 1 plus its stable issue ID. No credential was written to Git.
+## Browser Evidence
 
-## Actual Shared-Demo Data State
+Eight screenshots and their index live under
+`docs/codex/evidence/full-application-demo/`. They cover:
 
-The configured shared database gives the scoped Cedar Student 03 one approved
-registration, a published three-paper timetable for 15-17 September 2026, and a
-current admit card. It has no current publication. Read-only result readiness
-reports 63 incomplete conduct items and three unapproved marks batches. The
-student credential was created through the normal reset-token workflow; no exam,
-conduct, marks, result, or publication record was bypassed or directly patched.
+1. Cedar Student 03 PASS portal.
+2. Historical admit card.
+3. One-page grade card.
+4. Controller future timetable/hall allocation.
+5. Controller historical result publication.
+6. Assigned faculty marks.
+7. Invigilator duty/submitted attendance.
+8. Cedar Student 02 WITHHELD privacy.
 
-## Known Limitations / Deferred
+The browser used real API authentication. The final console had no page or Vite
+errors. No screenshots contain credentials, tokens, cookies, database details,
+or developer tooling.
 
-- Printable HTML is used instead of stored/generated PDFs, as allowed for the
-  Tuesday demo. There is no document download endpoint or historical document
-  archive.
-- The portal currently presents the newest approved registration as the primary
-  examination card while retaining all approved registrations in the API DTO.
-- The real authenticated schedule/admit-card path passes. A real grade-card path
-  remains pending completed conduct, marks submission, independent approval,
-  computation, and publication.
+## Verification
 
-## Blockers
+- Full seed on disposable local PostgreSQL -> PASS.
+- Identical repeated seed -> PASS; historical publication IDs and counts stable.
+- `pnpm smoke:demo:full-application` -> PASS.
+- `pnpm test:demo:roles` -> PASS for live credential/authority/logout checks and
+  focused identity, guard, conduct, evaluation, and portal authorization tests.
+- `pnpm test:demo:journey` -> PASS for Cedar PASS/ABSENT/WITHHELD privacy and
+  Northstar PASS through the persisted portal repository.
+- `pnpm verify:b04` -> PASS: 13 API tests, 4 Web tests, build/typecheck/lint gate.
+- API and DB typechecks -> PASS.
+- API and Web production builds -> PASS; Web chunks remain under 500 kB.
+- Real Student 03 grade-card print -> PASS; one Letter-size PDF page.
+- API and Worker health endpoints -> PASS in the seeded local environment.
+- Local S3 mock/ClamAV storage lifecycle, infected promotion denial, generated
+  private object, and signed download -> PASS.
+- Notification ACCEPT/FAIL visibility and business-state isolation -> PASS.
+- Bulk CSV artifact parsing, five-column shape inspection, and rendering -> PASS.
 
-Implementation is not blocked. Full shared-demo grade-card evidence is sequence-
-blocked: the Cedar exam sittings are scheduled for 15-17 September 2026, and the
-core conduct-window and independent-approval rules must not be bypassed.
+## Schema / Contracts / Environment
+
+- Schema/migration: NONE.
+- Shared contracts: NONE.
+- Architectural decisions: NONE.
+- New required environment variables: NONE. Optional `DEMO_LOCAL_DATABASE_NAME`
+  and `DEMO_LOCAL_DATABASE_PORT` identify a differently configured disposable
+  local database. `DEMO_SEED_TARGET` and `DEMO_SEED_ACK` acknowledge all other
+  mutation targets.
+- Runtime fix: scheduling advisory locks use `$executeRaw` because the lock query
+  has no result row; historical replay passes explicit repository clocks for
+  registration transitions.
+
+## Limitations / B05 Dependency
+
+- Shared demo application and live shared role checks were not attempted.
+- Printable HTML remains the private, version-bound B04 document mechanism; no
+  public or stored document URL was added.
+- Existing application commands do not create a persistent audit history for
+  these seeded actions. B05 must treat persistent audit data as an explicit
+  dependency and must not infer it from terminal-state records.
+- The invalid scheduling/capacity/overlap and student-import fixtures remain
+  reusable validation inputs; the seed does not persist invalid final states.
 
 ## Next Exact Action
 
-1. Implement
-   `docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md` on a
-   short-lived branch.
-2. Populate and commit `docs/codex/SEEDED-ROLE-TEST-CREDENTIALS.md` with verified
-   working `example.test` identities for every canonical role and
-   PASS/ABSENT/WITHHELD student scenarios.
-3. Preserve Cedar `ANNUAL-2026`, and verify the full school and college journeys
-   across all implemented application modules.
-4. Merge the verified full-application fixture through `integration`, then start
-   `docs/codex/generated/B05-dashboard-reports-demo-polish.md`.
+1. Review the branch diff and merge it through `integration`.
+2. Pull/rebase affected work onto the updated integration baseline.
+3. If authorized, run the guarded seed and all four gates against the exact
+   shared-demo target and update current state with the actual outcome.
+4. Start `docs/codex/generated/B05-dashboard-reports-demo-polish.md` using the
+   authoritative non-empty historical data.
 
 ## Minimal Context for the Next Session
 
 1. `AGENTS.md`
 2. this handoff
 3. `docs/codex/CURRENT-STATE.md`
-4. `docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md`
-5. `docs/codex/SEEDED-ROLE-TEST-CREDENTIALS.md`
-6. `docs/codex/CONTRACTS.md`
-7. `packages/contracts/src/student-portal.ts`
-8. `apps/api/src/modules/documents/student-portal.repository.ts`
-9. `apps/web/src/pages/student-portal-page.tsx`
+4. `docs/codex/SEEDED-ROLE-TEST-CREDENTIALS.md`
+5. `docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md`
+6. `apps/api/scripts/full-application-demo.ts`
+7. `fixtures/imports/bulk/README.md`
+8. `docs/codex/evidence/full-application-demo/README.md`

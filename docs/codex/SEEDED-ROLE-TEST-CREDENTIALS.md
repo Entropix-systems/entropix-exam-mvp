@@ -1,65 +1,75 @@
 # Seeded Role Test Credentials
 
-> **Status: PENDING FULL-APPLICATION SEED**
->
-> This tracked file is the shared credential reference for developers testing the
-> fictional demo dataset. It may contain intentionally public test passwords only
-> for `example.test` identities created by the guarded demo seed. These values must
-> never be reused for production, staging accounts containing real data, or any
-> non-fictional person. The seed must refuse to provision them in production.
+> Fictional local-demo accounts only. Every identity ends in `example.test`, and
+> the shared password is intentionally public test data. Never reuse it outside
+> a disposable local or explicitly acknowledged fictional demo database.
 
-Do not replace `PENDING` values until the full-application seed has provisioned
-the account through the real authentication path and the corresponding login and
-role assertion have passed. Never record database URLs, access or refresh tokens,
-cookies, invitation/reset tokens, password hashes, or real-person credentials.
+Do not record database URLs, access/refresh/reset tokens, cookies, or password
+hashes here. The seed provisions these passwords through the real one-time reset
+and Argon2 hashing workflow; it never inserts plaintext or a fabricated hash.
 
 ## Dataset
 
 | Field | Value |
 | --- | --- |
-| Generated at | `PENDING` |
-| Database target | `PENDING — disposable local or explicitly acknowledged fictional shared demo` |
-| Seed version | `PENDING` |
+| Verified at | `2026-09-14` |
+| Verified database target | Disposable local PostgreSQL (`exam_mvp`) |
+| Shared demo target | **NOT APPLIED / NOT VERIFIED** |
+| Seed version | `full-application-v1` |
 | Seed command | `pnpm seed:demo:full-application` |
-| Verification status | `PENDING` |
+| Verification | Seed twice, structural smoke, role matrix, journeys, bulk-import preview/commit/replay, and browser evidence passed |
 
 ## Role Accounts
 
-| Scenario | Email | Password | Institution | Active role | Scope | Expected route/state | Verified |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Platform administration | `PENDING@example.test` | `PENDING` | Platform | `PLATFORM_ADMIN` | Global | `PENDING` | `PENDING` |
-| Northstar administration | `PENDING@example.test` | `PENDING` | Northstar College | `INSTITUTION_ADMIN` | Tenant | `PENDING` | `PENDING` |
-| Cedar administration | `PENDING@example.test` | `PENDING` | Cedar School | `INSTITUTION_ADMIN` | Tenant | `PENDING` | `PENDING` |
-| Result publication | `PENDING@example.test` | `PENDING` | `PENDING` | `EXAM_CONTROLLER` | Tenant/exam | `PENDING` | `PENDING` |
-| Department review | `PENDING@example.test` | `PENDING` | `PENDING` | `DEPARTMENT_ADMIN` | `PENDING department` | `PENDING` | `PENDING` |
-| Marks entry | `PENDING@example.test` | `PENDING` | `PENDING` | `FACULTY` | `PENDING department and subject` | `PENDING` | `PENDING` |
-| Conduct | `PENDING@example.test` | `PENDING` | `PENDING` | `INVIGILATOR` | `PENDING sitting` | `PENDING` | `PENDING` |
-| Read-only audit | `PENDING@example.test` | `PENDING` | `PENDING` | `AUDITOR` | Tenant | `PENDING` | `PENDING` |
-| Context switch | `PENDING@example.test` | `PENDING` | `PENDING` | `PENDING roles` | `PENDING contexts` | `PENDING` | `PENDING` |
+All usable accounts use password `DemoOnly!2026`.
+
+| Fixture scenario | Email | Password | Institution | Active role | Scope | Expected landing | Expected result | Verified |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Platform administration | `platform.admin@demo.example.test` | `DemoOnly!2026` | Platform | `PLATFORM_ADMIN` | Global only; no tenant context | `/platform` | Platform context without tenant authority | PASS |
+| Northstar administration | `institution.admin@northstar.example.test` | `DemoOnly!2026` | Northstar College | `INSTITUTION_ADMIN` | Tenant | `/academics` | Authorized Northstar administration | PASS |
+| Cedar administration | `institution.admin@cedar.example.test` | `DemoOnly!2026` | Cedar School | `INSTITUTION_ADMIN` | Tenant | `/academics` | Authorized Cedar administration | PASS |
+| Exam configuration/publication | `exam.controller@cedar.example.test` | `DemoOnly!2026` | Cedar School | `EXAM_CONTROLLER` | Tenant; `CEDAR-HIST-2026` | `/results` | Published v1 historical result | PASS |
+| Department review | `department.admin@northstar.example.test` | `DemoOnly!2026` | Northstar College | `DEPARTMENT_ADMIN` | `CSE` department | `/evaluation` | Department-scoped independent review | PASS |
+| Assigned marks entry | `ananya.iyer@northstar.example.test` | `DemoOnly!2026` | Northstar College | `FACULTY` | `CSE`; assigned `NORTHSTAR-HIST-2026` subjects | `/evaluation` | Assigned marks visible; unassigned writes denied | PASS |
+| Assigned conduct | `nisha.rao@cedar.example.test` | `DemoOnly!2026` | Cedar School | `INVIGILATOR` | Accepted historical sitting; legitimate `FACULTY`/`INVIGILATOR` contexts | `/conduct` | Assigned roster visible; unassigned writes denied | PASS |
+| Read-only institution access | `auditor@northstar.example.test` | `DemoOnly!2026` | Northstar College | `AUDITOR` | Tenant read-only | `/` | Read access without mutation authority | PASS |
+| Context switch | `context.switch@northstar.example.test` | `DemoOnly!2026` | Northstar College | `EXAM_CONTROLLER` | Legitimate `EXAM_CONTROLLER` and `AUDITOR` grants | `/results` | Both server-authorized contexts selectable | PASS |
 
 ## Student Outcomes
 
-| Scenario | Email | Password | Institution | Roll number | Expected outcome | Document expectation | Verified |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Normal published result | `PENDING@example.test` | `PENDING` | Cedar School | `PENDING` | `PASS` | Admit card and grade card | `PENDING` |
-| Explicit absence | `PENDING@example.test` | `PENDING` | Cedar School | `PENDING` | `ABSENT` | No numeric-zero substitution | `PENDING` |
-| Held result | `PENDING@example.test` | `PENDING` | Cedar School | `PENDING` | `WITHHELD` | Hold message only; no grade card | `PENDING` |
-| College pass | `PENDING@example.test` | `PENDING` | Northstar College | `PENDING` | `PASS` | Current result and grade card | `PENDING` |
-| College fail | `PENDING@example.test` | `PENDING` | Northstar College | `PENDING` | `FAIL` | Current result and labelled grade card | `PENDING` |
+All student accounts use password `DemoOnly!2026` and land on `/student`.
+
+| Fixture scenario | Email | Password | Institution | Active role | Roll number | Expected landing | Expected result | Document expectation | Verified |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Normal published result | `student.03@cedar.example.test` | `DemoOnly!2026` | Cedar School | `STUDENT` | `CED10A03` | `/student` | `PASS`, 75%, GPA 8 | Admit card and one-page grade card | PASS |
+| Explicit absence | `student.01@cedar.example.test` | `DemoOnly!2026` | Cedar School | `STUDENT` | `CED10A01` | `/student` | `ABSENT` | Grade card labels absence; never numeric zero | PASS |
+| Held result | `student.02@cedar.example.test` | `DemoOnly!2026` | Cedar School | `STUDENT` | `CED10A02` | `/student` | `WITHHELD` | Hold message only; no marks, percentage, GPA, or grade card | PASS |
+| College pass | `student.001@northstar.example.test` | `DemoOnly!2026` | Northstar College | `STUDENT` | `NS26001` | `/student` | `PASS` | Current result and grade card | PASS |
+
+`NS26002` is the Northstar `FAIL` API/result fixture. It intentionally has no
+documented login credential because the minimum role/student matrix is already
+covered by the four identities above.
 
 ## Negative Credential
 
 | Scenario | Email | Password | Expected denial | Verified |
 | --- | --- | --- | --- | --- |
-| Suspended/inactive user | `PENDING@example.test` | `PENDING` | Login or live authority recheck denied | `PENDING` |
+| Suspended user | `suspended@cedar.example.test` | `DemoOnly!2026` | Authentication denied before tenant authority is granted | PASS |
 
 ## Verification Notes
 
-- Role test: `PENDING`
-- School journey: `PENDING`
-- College journey: `PENDING`
-- Student portal/browser verification: `PENDING`
+- `pnpm smoke:demo:full-application` verifies the two historical publications,
+  exact seats, accepted duties, submitted attendance, approved marks, outcome
+  counts, credential graph, and the unchanged Cedar future timetable.
+- `pnpm test:demo:roles` authenticates every declared credential, switches the
+  multi-role contexts, verifies live server-resolved authority, expected
+  suspended denial, logout/refresh revocation, tenant isolation, and focused
+  service guardrails for student ownership, unassigned marks/sittings,
+  independent review, and read-only role enforcement.
+- `pnpm test:demo:journey` verifies Cedar PASS/ABSENT/WITHHELD privacy plus the
+  Northstar PASS path through the real persisted portal repository.
+- Browser evidence is indexed under
+  `docs/codex/evidence/full-application-demo/README.md`.
 
-When the seed intentionally changes a shared test password, update this file in
-the same commit and re-run the affected login checks so repository documentation
-and the seeded database cannot silently diverge.
+An intentional password rotation must update the seed and this file in the same
+change and rerun every affected login assertion.
