@@ -82,6 +82,10 @@ export const ModelName = {
   EvaluationAssignment: 'EvaluationAssignment',
   MarksBatch: 'MarksBatch',
   Mark: 'Mark',
+  ResultRun: 'ResultRun',
+  ResultItem: 'ResultItem',
+  StudentResult: 'StudentResult',
+  Publication: 'Publication',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -569,6 +573,86 @@ export const MarkScalarFieldEnum = {
 } as const
 
 export type MarkScalarFieldEnum = (typeof MarkScalarFieldEnum)[keyof typeof MarkScalarFieldEnum]
+
+
+export const ResultRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examId: 'examId',
+  ruleVersionId: 'ruleVersionId',
+  inputRevision: 'inputRevision',
+  checksum: 'checksum',
+  studentCount: 'studentCount',
+  itemCount: 'itemCount',
+  passCount: 'passCount',
+  failCount: 'failCount',
+  absentCount: 'absentCount',
+  withheldCount: 'withheldCount',
+  computedByMembershipId: 'computedByMembershipId',
+  computedAt: 'computedAt'
+} as const
+
+export type ResultRunScalarFieldEnum = (typeof ResultRunScalarFieldEnum)[keyof typeof ResultRunScalarFieldEnum]
+
+
+export const ResultItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  resultRunId: 'resultRunId',
+  examId: 'examId',
+  registrationSubjectId: 'registrationSubjectId',
+  examSubjectId: 'examSubjectId',
+  studentId: 'studentId',
+  subjectCode: 'subjectCode',
+  subjectName: 'subjectName',
+  credits: 'credits',
+  outcome: 'outcome',
+  percentage: 'percentage',
+  components: 'components',
+  grade: 'grade',
+  gradePoints: 'gradePoints',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type ResultItemScalarFieldEnum = (typeof ResultItemScalarFieldEnum)[keyof typeof ResultItemScalarFieldEnum]
+
+
+export const StudentResultScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  resultRunId: 'resultRunId',
+  examId: 'examId',
+  studentId: 'studentId',
+  rollNo: 'rollNo',
+  studentName: 'studentName',
+  outcome: 'outcome',
+  percentage: 'percentage',
+  gpa: 'gpa',
+  totalCredits: 'totalCredits',
+  weightedPoints: 'weightedPoints',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type StudentResultScalarFieldEnum = (typeof StudentResultScalarFieldEnum)[keyof typeof StudentResultScalarFieldEnum]
+
+
+export const PublicationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examId: 'examId',
+  resultRunId: 'resultRunId',
+  version: 'version',
+  isCurrent: 'isCurrent',
+  publishedByMembershipId: 'publishedByMembershipId',
+  publishedAt: 'publishedAt',
+  withdrawnByMembershipId: 'withdrawnByMembershipId',
+  withdrawnAt: 'withdrawnAt',
+  withdrawReason: 'withdrawReason'
+} as const
+
+export type PublicationScalarFieldEnum = (typeof PublicationScalarFieldEnum)[keyof typeof PublicationScalarFieldEnum]
 
 
 export const RoleGrantScalarFieldEnum = {

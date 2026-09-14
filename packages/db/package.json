@@ -21,13 +21,14 @@
     "@prisma/adapter-pg": "7.10.0",
     "@prisma/client": "7.10.0",
     "dotenv": "^17.4.2",
-    "pg": "^8.23.0"
+    "pg": "8.18.0"
   },
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "generate": "prisma generate",
     "migrate:dev": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy",
     "migrate:status": "prisma migrate status",
     "seed:academics": "tsx scripts/seed-academics.ts",
     "seed:people": "tsx scripts/seed-people.ts",

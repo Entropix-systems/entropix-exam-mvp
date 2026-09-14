@@ -21,7 +21,7 @@ export function incidentCreatesHold(disposition: string): boolean {
 }
 
 async function lockConduct(tx: TenantTransaction, tenantId: UUID) {
-  await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${'conduct:' + tenantId}, 0))`;
+  await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${'conduct:' + tenantId}, 0))`;
 }
 
 function inConductWindow(startsAt: Date | null, endsAt: Date | null, now: Date) {
@@ -195,6 +195,7 @@ export class ConductRepository {
           update: { state: row.state, updatedByMembershipId: membershipId, version: { increment: 1 } },
         });
       }
+      await tx.exam.update({ where: { id: sitting.examPaper.exam.id }, data: { inputRevision: { increment: 1 } } });
       return batch;
     });
   }
@@ -202,14 +203,16 @@ export class ConductRepository {
   submitAttendance(tenantId: UUID, membershipId: UUID, sittingId: UUID, expectedVersion: number, now: Date) {
     return withTenant(this.prisma, tenantId, async (tx) => {
       await lockConduct(tx, tenantId);
-      await editableSitting(tx, tenantId, sittingId, membershipId, now);
+      const sitting = await editableSitting(tx, tenantId, sittingId, membershipId, now);
       const [batch, seatCount] = await Promise.all([
         tx.attendanceBatch.findFirst({ where: { tenantId, hallSittingId: sittingId }, include: { rows: true } }),
         tx.seatAssignment.count({ where: { tenantId, hallSittingId: sittingId } }),
       ]);
       if (!batch || batch.version !== expectedVersion) throw new Error('STALE_VERSION');
       if (batch.rows.length !== seatCount || batch.rows.some((row) => row.state === 'NOT_MARKED')) throw new Error('NOT_MARKED_REMAINS');
-      return tx.attendanceBatch.update({ where: { id: batch.id }, data: { state: 'SUBMITTED', submittedByMembershipId: membershipId, submittedAt: now, version: { increment: 1 } } });
+      const updated = await tx.attendanceBatch.update({ where: { id: batch.id }, data: { state: 'SUBMITTED', submittedByMembershipId: membershipId, submittedAt: now, version: { increment: 1 } } });
+      await tx.exam.update({ where: { id: sitting.examPaper.exam.id }, data: { inputRevision: { increment: 1 } } });
+      return updated;
     });
   }
 
@@ -221,7 +224,9 @@ export class ConductRepository {
       if (batch.hallSitting.examPaper.exam.state === 'PUBLISHED') throw new Error('RESULTS_PUBLISHED');
       if (batch.state !== 'SUBMITTED') throw new Error('INVALID_ATTENDANCE_STATE');
       if (batch.version !== expectedVersion) throw new Error('STALE_VERSION');
-      return tx.attendanceBatch.update({ where: { id: batch.id }, data: { state: 'DRAFT', reopenedByMembershipId: membershipId, reopenedAt: now, reopenReason: reason, version: { increment: 1 } } });
+      const updated = await tx.attendanceBatch.update({ where: { id: batch.id }, data: { state: 'DRAFT', reopenedByMembershipId: membershipId, reopenedAt: now, reopenReason: reason, version: { increment: 1 } } });
+      await tx.exam.update({ where: { id: batch.hallSitting.examPaper.exam.id }, data: { inputRevision: { increment: 1 } } });
+      return updated;
     });
   }
 
@@ -238,10 +243,12 @@ export class ConductRepository {
       if (uniqueIds.length !== input.registrationSubjectIds.length) throw new Error('INVALID_ROSTER_ROW');
       const affectedCount = await tx.seatAssignment.count({ where: { tenantId, hallSittingId: sittingId, registrationSubjectId: { in: uniqueIds } } });
       if (affectedCount !== uniqueIds.length) throw new Error('INVALID_ROSTER_ROW');
-      return tx.incident.create({ data: {
+      const created = await tx.incident.create({ data: {
         tenantId, hallSittingId: sittingId, kind: input.kind, description: input.description, createdByMembershipId: actor.membershipId,
         affectedStudents: { create: uniqueIds.map((registrationSubjectId) => ({ registrationSubjectId })) },
       } });
+      await tx.exam.update({ where: { id: sitting.examPaper.exam.id }, data: { inputRevision: { increment: 1 } } });
+      return created;
     });
   }
 
@@ -255,7 +262,9 @@ export class ConductRepository {
       if (incident.version !== expectedVersion) throw new Error('STALE_VERSION');
       if (incident.affectedStudents.length === 0 && disposition !== 'NO_RESULT_IMPACT') throw new Error('HALL_IMPACT_REQUIRED');
       if (incident.affectedStudents.length > 0 && disposition === 'NO_RESULT_IMPACT') throw new Error('INVALID_DISPOSITION');
-      return tx.incident.update({ where: { id: incident.id }, data: { disposition, dispositionReason: reason, disposedByMembershipId: membershipId, disposedAt: now, version: { increment: 1 } } });
+      const updated = await tx.incident.update({ where: { id: incident.id }, data: { disposition, dispositionReason: reason, disposedByMembershipId: membershipId, disposedAt: now, version: { increment: 1 } } });
+      await tx.exam.update({ where: { id: incident.hallSitting.examPaper.exam.id }, data: { inputRevision: { increment: 1 } } });
+      return updated;
     });
   }
 

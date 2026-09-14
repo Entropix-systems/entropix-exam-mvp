@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { AuthApiClient } from './auth/auth-client'
 import { AuthProvider } from './auth/auth-provider'
 import { useAuth } from './auth/auth-context'
@@ -11,20 +11,23 @@ import { ExamsApiClient } from './exams/exams-client'
 import { SchedulingApiClient } from './scheduling/scheduling-client'
 import { ConductApiClient } from './conduct/conduct-client'
 import { EvaluationApiClient } from './evaluation/evaluation-client'
-import { AccessDeniedPage } from './pages/access-denied-page'
-import { ForgotPasswordPage } from './pages/forgot-password-page'
-import { HomePage } from './pages/home-page'
-import { InvitationPage } from './pages/invitation-page'
-import { LoginPage } from './pages/login-page'
-import { MastersPage } from './pages/masters-page'
-import { ResetPasswordPage } from './pages/reset-password-page'
-import { SetupAccessPage } from './pages/setup-access-page'
-import { StudentsPage } from './pages/students-page'
-import { ExamsPage } from './pages/exams-page'
-import { SchedulingPage } from './pages/scheduling-page'
-import { ConductPage } from './pages/conduct-page'
-import { EvaluationPage } from './pages/evaluation-page'
+import { ResultsApiClient } from './results/results-client'
 import './App.css'
+
+const AccessDeniedPage = lazy(() => import('./pages/access-denied-page').then((module) => ({ default: module.AccessDeniedPage })))
+const ForgotPasswordPage = lazy(() => import('./pages/forgot-password-page').then((module) => ({ default: module.ForgotPasswordPage })))
+const HomePage = lazy(() => import('./pages/home-page').then((module) => ({ default: module.HomePage })))
+const InvitationPage = lazy(() => import('./pages/invitation-page').then((module) => ({ default: module.InvitationPage })))
+const LoginPage = lazy(() => import('./pages/login-page').then((module) => ({ default: module.LoginPage })))
+const MastersPage = lazy(() => import('./pages/masters-page').then((module) => ({ default: module.MastersPage })))
+const ResetPasswordPage = lazy(() => import('./pages/reset-password-page').then((module) => ({ default: module.ResetPasswordPage })))
+const SetupAccessPage = lazy(() => import('./pages/setup-access-page').then((module) => ({ default: module.SetupAccessPage })))
+const StudentsPage = lazy(() => import('./pages/students-page').then((module) => ({ default: module.StudentsPage })))
+const ExamsPage = lazy(() => import('./pages/exams-page').then((module) => ({ default: module.ExamsPage })))
+const SchedulingPage = lazy(() => import('./pages/scheduling-page').then((module) => ({ default: module.SchedulingPage })))
+const ConductPage = lazy(() => import('./pages/conduct-page').then((module) => ({ default: module.ConductPage })))
+const EvaluationPage = lazy(() => import('./pages/evaluation-page').then((module) => ({ default: module.EvaluationPage })))
+const ResultsPage = lazy(() => import('./pages/results-page').then((module) => ({ default: module.ResultsPage })))
 
 const authClient = new AuthApiClient(
   import.meta.env.VITE_API_BASE_URL ?? '/api/v1',
@@ -36,6 +39,7 @@ const examsClient = new ExamsApiClient(authClient)
 const schedulingClient = new SchedulingApiClient(authClient)
 const conductClient = new ConductApiClient(authClient)
 const evaluationClient = new EvaluationApiClient(authClient)
+const resultsClient = new ResultsApiClient(authClient)
 
 function usePathname() {
   const [pathname, setPathname] = useState(window.location.pathname)
@@ -100,6 +104,12 @@ function Routes() {
         <EvaluationPage key={scopeKey} client={evaluationClient} />
       </ProtectedRoute>
     )
+  if (pathname === '/results')
+    return (
+      <ProtectedRoute>
+        <ResultsPage key={scopeKey} client={resultsClient} />
+      </ProtectedRoute>
+    )
   return (
     <ProtectedRoute>
       <HomePage key={scopeKey} />
@@ -110,7 +120,9 @@ function Routes() {
 export default function App() {
   return (
     <AuthProvider client={authClient}>
-      <Routes />
+      <Suspense fallback={<p className="evaluation-empty">Loading workspace…</p>}>
+        <Routes />
+      </Suspense>
     </AuthProvider>
   )
 }

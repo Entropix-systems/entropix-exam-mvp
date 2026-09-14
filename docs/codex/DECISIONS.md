@@ -219,6 +219,39 @@ Related task: B02 Marks Entry & Independent Review.
 
 ---
 
+## DEC-011 — Immutable Result Runs and Single Current Publication
+
+Status: ACCEPTED
+
+Context:
+
+Result review needs reproducible evidence while correction workflows must not
+silently change an already reviewed candidate or expose draft data to students.
+
+Decision:
+
+Every computation persists an immutable `ResultRun` plus per-subject
+`ResultItem` and per-student `StudentResult` snapshots. The run captures the
+frozen rule version, `Exam.inputRevision`, and a canonical input checksum.
+Publication rechecks all three under a tenant/exam transaction lock. An exam has
+at most one current `Publication`; withdrawal clears current visibility, and a
+corrected publication creates the next version rather than overwriting history.
+
+Consequences:
+
+Result-input changes in Evaluation or Conduct advance `Exam.inputRevision` and
+make earlier candidates unpublishable. Compute and publish retries are
+idempotent for unchanged input. Students resolve only their own row from the
+current publication; candidate, historical, and withdrawn snapshots remain
+controller-only. PostgreSQL triggers deny update/delete of immutable result
+snapshots, and a partial unique index enforces one current publication per exam.
+
+Affected modules: Conduct, Evaluation/Marks, Results, Publication, Student UI.
+
+Related task: B03 Result Runs & Publication.
+
+---
+
 ## New Decision Template
 
 ### DEC-XXX — Title

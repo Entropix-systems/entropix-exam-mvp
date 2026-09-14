@@ -252,6 +252,9 @@ export type MembershipWhereInput = {
   reviewedMarksBatches?: Prisma.MarksBatchListRelationFilter
   reopenedMarksBatches?: Prisma.MarksBatchListRelationFilter
   updatedMarks?: Prisma.MarkListRelationFilter
+  computedResultRuns?: Prisma.ResultRunListRelationFilter
+  publishedResults?: Prisma.PublicationListRelationFilter
+  withdrawnResults?: Prisma.PublicationListRelationFilter
 }
 
 export type MembershipOrderByWithRelationInput = {
@@ -282,6 +285,9 @@ export type MembershipOrderByWithRelationInput = {
   reviewedMarksBatches?: Prisma.MarksBatchOrderByRelationAggregateInput
   reopenedMarksBatches?: Prisma.MarksBatchOrderByRelationAggregateInput
   updatedMarks?: Prisma.MarkOrderByRelationAggregateInput
+  computedResultRuns?: Prisma.ResultRunOrderByRelationAggregateInput
+  publishedResults?: Prisma.PublicationOrderByRelationAggregateInput
+  withdrawnResults?: Prisma.PublicationOrderByRelationAggregateInput
 }
 
 export type MembershipWhereUniqueInput = Prisma.AtLeast<{
@@ -318,6 +324,9 @@ export type MembershipWhereUniqueInput = Prisma.AtLeast<{
   reviewedMarksBatches?: Prisma.MarksBatchListRelationFilter
   reopenedMarksBatches?: Prisma.MarksBatchListRelationFilter
   updatedMarks?: Prisma.MarkListRelationFilter
+  computedResultRuns?: Prisma.ResultRunListRelationFilter
+  publishedResults?: Prisma.PublicationListRelationFilter
+  withdrawnResults?: Prisma.PublicationListRelationFilter
 }, "id" | "tenantId_userId" | "tenantId_id" | "tenantId_id_userId">
 
 export type MembershipOrderByWithAggregationInput = {
@@ -374,6 +383,9 @@ export type MembershipCreateInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateInput = {
@@ -402,6 +414,9 @@ export type MembershipUncheckedCreateInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUpdateInput = {
@@ -430,6 +445,9 @@ export type MembershipUpdateInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateInput = {
@@ -458,6 +476,9 @@ export type MembershipUncheckedUpdateInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateManyInput = {
@@ -872,6 +893,50 @@ export type MembershipUpdateOneRequiredWithoutUpdatedMarksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutUpdatedMarksInput, Prisma.MembershipUpdateWithoutUpdatedMarksInput>, Prisma.MembershipUncheckedUpdateWithoutUpdatedMarksInput>
 }
 
+export type MembershipCreateNestedOneWithoutComputedResultRunsInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutComputedResultRunsInput, Prisma.MembershipUncheckedCreateWithoutComputedResultRunsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutComputedResultRunsInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipUpdateOneRequiredWithoutComputedResultRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutComputedResultRunsInput, Prisma.MembershipUncheckedCreateWithoutComputedResultRunsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutComputedResultRunsInput
+  upsert?: Prisma.MembershipUpsertWithoutComputedResultRunsInput
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutComputedResultRunsInput, Prisma.MembershipUpdateWithoutComputedResultRunsInput>, Prisma.MembershipUncheckedUpdateWithoutComputedResultRunsInput>
+}
+
+export type MembershipCreateNestedOneWithoutPublishedResultsInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutPublishedResultsInput, Prisma.MembershipUncheckedCreateWithoutPublishedResultsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutPublishedResultsInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipCreateNestedOneWithoutWithdrawnResultsInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutWithdrawnResultsInput, Prisma.MembershipUncheckedCreateWithoutWithdrawnResultsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutWithdrawnResultsInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipUpdateOneRequiredWithoutPublishedResultsNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutPublishedResultsInput, Prisma.MembershipUncheckedCreateWithoutPublishedResultsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutPublishedResultsInput
+  upsert?: Prisma.MembershipUpsertWithoutPublishedResultsInput
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutPublishedResultsInput, Prisma.MembershipUpdateWithoutPublishedResultsInput>, Prisma.MembershipUncheckedUpdateWithoutPublishedResultsInput>
+}
+
+export type MembershipUpdateOneWithoutWithdrawnResultsNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutWithdrawnResultsInput, Prisma.MembershipUncheckedCreateWithoutWithdrawnResultsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutWithdrawnResultsInput
+  upsert?: Prisma.MembershipUpsertWithoutWithdrawnResultsInput
+  disconnect?: Prisma.MembershipWhereInput | boolean
+  delete?: Prisma.MembershipWhereInput | boolean
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutWithdrawnResultsInput, Prisma.MembershipUpdateWithoutWithdrawnResultsInput>, Prisma.MembershipUncheckedUpdateWithoutWithdrawnResultsInput>
+}
+
 export type MembershipCreateNestedOneWithoutRoleGrantsInput = {
   create?: Prisma.XOR<Prisma.MembershipCreateWithoutRoleGrantsInput, Prisma.MembershipUncheckedCreateWithoutRoleGrantsInput>
   connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutRoleGrantsInput
@@ -943,6 +1008,9 @@ export type MembershipCreateWithoutTenantInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutTenantInput = {
@@ -970,6 +1038,9 @@ export type MembershipUncheckedCreateWithoutTenantInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutTenantInput = {
@@ -1036,6 +1107,9 @@ export type MembershipCreateWithoutUserInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutUserInput = {
@@ -1063,6 +1137,9 @@ export type MembershipUncheckedCreateWithoutUserInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutUserInput = {
@@ -1116,6 +1193,9 @@ export type MembershipCreateWithoutStudentInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutStudentInput = {
@@ -1143,6 +1223,9 @@ export type MembershipUncheckedCreateWithoutStudentInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutStudentInput = {
@@ -1186,6 +1269,9 @@ export type MembershipUpdateWithoutStudentInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutStudentInput = {
@@ -1213,6 +1299,9 @@ export type MembershipUncheckedUpdateWithoutStudentInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateWithoutFacultyInput = {
@@ -1240,6 +1329,9 @@ export type MembershipCreateWithoutFacultyInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutFacultyInput = {
@@ -1267,6 +1359,9 @@ export type MembershipUncheckedCreateWithoutFacultyInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutFacultyInput = {
@@ -1310,6 +1405,9 @@ export type MembershipUpdateWithoutFacultyInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutFacultyInput = {
@@ -1337,6 +1435,9 @@ export type MembershipUncheckedUpdateWithoutFacultyInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateWithoutReviewedRegistrationsInput = {
@@ -1364,6 +1465,9 @@ export type MembershipCreateWithoutReviewedRegistrationsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutReviewedRegistrationsInput = {
@@ -1391,6 +1495,9 @@ export type MembershipUncheckedCreateWithoutReviewedRegistrationsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutReviewedRegistrationsInput = {
@@ -1434,6 +1541,9 @@ export type MembershipUpdateWithoutReviewedRegistrationsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutReviewedRegistrationsInput = {
@@ -1461,6 +1571,9 @@ export type MembershipUncheckedUpdateWithoutReviewedRegistrationsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateWithoutAssignedDutiesInput = {
@@ -1488,6 +1601,9 @@ export type MembershipCreateWithoutAssignedDutiesInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutAssignedDutiesInput = {
@@ -1515,6 +1631,9 @@ export type MembershipUncheckedCreateWithoutAssignedDutiesInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutAssignedDutiesInput = {
@@ -1547,6 +1666,9 @@ export type MembershipCreateWithoutRespondedDutiesInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutRespondedDutiesInput = {
@@ -1574,6 +1696,9 @@ export type MembershipUncheckedCreateWithoutRespondedDutiesInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutRespondedDutiesInput = {
@@ -1617,6 +1742,9 @@ export type MembershipUpdateWithoutAssignedDutiesInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutAssignedDutiesInput = {
@@ -1644,6 +1772,9 @@ export type MembershipUncheckedUpdateWithoutAssignedDutiesInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUpsertWithoutRespondedDutiesInput = {
@@ -1682,6 +1813,9 @@ export type MembershipUpdateWithoutRespondedDutiesInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutRespondedDutiesInput = {
@@ -1709,6 +1843,9 @@ export type MembershipUncheckedUpdateWithoutRespondedDutiesInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateWithoutSubmittedAttendanceInput = {
@@ -1736,6 +1873,9 @@ export type MembershipCreateWithoutSubmittedAttendanceInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutSubmittedAttendanceInput = {
@@ -1763,6 +1903,9 @@ export type MembershipUncheckedCreateWithoutSubmittedAttendanceInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutSubmittedAttendanceInput = {
@@ -1795,6 +1938,9 @@ export type MembershipCreateWithoutReopenedAttendanceInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutReopenedAttendanceInput = {
@@ -1822,6 +1968,9 @@ export type MembershipUncheckedCreateWithoutReopenedAttendanceInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutReopenedAttendanceInput = {
@@ -1865,6 +2014,9 @@ export type MembershipUpdateWithoutSubmittedAttendanceInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutSubmittedAttendanceInput = {
@@ -1892,6 +2044,9 @@ export type MembershipUncheckedUpdateWithoutSubmittedAttendanceInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUpsertWithoutReopenedAttendanceInput = {
@@ -1930,6 +2085,9 @@ export type MembershipUpdateWithoutReopenedAttendanceInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutReopenedAttendanceInput = {
@@ -1957,6 +2115,9 @@ export type MembershipUncheckedUpdateWithoutReopenedAttendanceInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateWithoutUpdatedAttendanceInput = {
@@ -1984,6 +2145,9 @@ export type MembershipCreateWithoutUpdatedAttendanceInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutUpdatedAttendanceInput = {
@@ -2011,6 +2175,9 @@ export type MembershipUncheckedCreateWithoutUpdatedAttendanceInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutUpdatedAttendanceInput = {
@@ -2054,6 +2221,9 @@ export type MembershipUpdateWithoutUpdatedAttendanceInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutUpdatedAttendanceInput = {
@@ -2081,6 +2251,9 @@ export type MembershipUncheckedUpdateWithoutUpdatedAttendanceInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateWithoutCreatedIncidentsInput = {
@@ -2108,6 +2281,9 @@ export type MembershipCreateWithoutCreatedIncidentsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutCreatedIncidentsInput = {
@@ -2135,6 +2311,9 @@ export type MembershipUncheckedCreateWithoutCreatedIncidentsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutCreatedIncidentsInput = {
@@ -2167,6 +2346,9 @@ export type MembershipCreateWithoutDisposedIncidentsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutDisposedIncidentsInput = {
@@ -2194,6 +2376,9 @@ export type MembershipUncheckedCreateWithoutDisposedIncidentsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutDisposedIncidentsInput = {
@@ -2237,6 +2422,9 @@ export type MembershipUpdateWithoutCreatedIncidentsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutCreatedIncidentsInput = {
@@ -2264,6 +2452,9 @@ export type MembershipUncheckedUpdateWithoutCreatedIncidentsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUpsertWithoutDisposedIncidentsInput = {
@@ -2302,6 +2493,9 @@ export type MembershipUpdateWithoutDisposedIncidentsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutDisposedIncidentsInput = {
@@ -2329,6 +2523,9 @@ export type MembershipUncheckedUpdateWithoutDisposedIncidentsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateWithoutAssignedEvaluationsInput = {
@@ -2356,6 +2553,9 @@ export type MembershipCreateWithoutAssignedEvaluationsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutAssignedEvaluationsInput = {
@@ -2383,6 +2583,9 @@ export type MembershipUncheckedCreateWithoutAssignedEvaluationsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutAssignedEvaluationsInput = {
@@ -2426,6 +2629,9 @@ export type MembershipUpdateWithoutAssignedEvaluationsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutAssignedEvaluationsInput = {
@@ -2453,6 +2659,9 @@ export type MembershipUncheckedUpdateWithoutAssignedEvaluationsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateWithoutSubmittedMarksBatchesInput = {
@@ -2480,6 +2689,9 @@ export type MembershipCreateWithoutSubmittedMarksBatchesInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutSubmittedMarksBatchesInput = {
@@ -2507,6 +2719,9 @@ export type MembershipUncheckedCreateWithoutSubmittedMarksBatchesInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutSubmittedMarksBatchesInput = {
@@ -2539,6 +2754,9 @@ export type MembershipCreateWithoutReviewedMarksBatchesInput = {
   submittedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutSubmitterInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutReviewedMarksBatchesInput = {
@@ -2566,6 +2784,9 @@ export type MembershipUncheckedCreateWithoutReviewedMarksBatchesInput = {
   submittedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutSubmitterInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutReviewedMarksBatchesInput = {
@@ -2598,6 +2819,9 @@ export type MembershipCreateWithoutReopenedMarksBatchesInput = {
   submittedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutSubmitterInput
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutReopenedMarksBatchesInput = {
@@ -2625,6 +2849,9 @@ export type MembershipUncheckedCreateWithoutReopenedMarksBatchesInput = {
   submittedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutSubmitterInput
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutReopenedMarksBatchesInput = {
@@ -2668,6 +2895,9 @@ export type MembershipUpdateWithoutSubmittedMarksBatchesInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutSubmittedMarksBatchesInput = {
@@ -2695,6 +2925,9 @@ export type MembershipUncheckedUpdateWithoutSubmittedMarksBatchesInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUpsertWithoutReviewedMarksBatchesInput = {
@@ -2733,6 +2966,9 @@ export type MembershipUpdateWithoutReviewedMarksBatchesInput = {
   submittedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutSubmitterNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutReviewedMarksBatchesInput = {
@@ -2760,6 +2996,9 @@ export type MembershipUncheckedUpdateWithoutReviewedMarksBatchesInput = {
   submittedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutSubmitterNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUpsertWithoutReopenedMarksBatchesInput = {
@@ -2798,6 +3037,9 @@ export type MembershipUpdateWithoutReopenedMarksBatchesInput = {
   submittedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutSubmitterNestedInput
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutReopenedMarksBatchesInput = {
@@ -2825,6 +3067,9 @@ export type MembershipUncheckedUpdateWithoutReopenedMarksBatchesInput = {
   submittedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutSubmitterNestedInput
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateWithoutUpdatedMarksInput = {
@@ -2852,6 +3097,9 @@ export type MembershipCreateWithoutUpdatedMarksInput = {
   submittedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutSubmitterInput
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutUpdatedMarksInput = {
@@ -2879,6 +3127,9 @@ export type MembershipUncheckedCreateWithoutUpdatedMarksInput = {
   submittedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutSubmitterInput
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutUpdatedMarksInput = {
@@ -2922,6 +3173,9 @@ export type MembershipUpdateWithoutUpdatedMarksInput = {
   submittedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutSubmitterNestedInput
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutUpdatedMarksInput = {
@@ -2949,6 +3203,417 @@ export type MembershipUncheckedUpdateWithoutUpdatedMarksInput = {
   submittedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutSubmitterNestedInput
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+}
+
+export type MembershipCreateWithoutComputedResultRunsInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentCreateNestedManyWithoutAssignerInput
+  submittedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutSubmitterInput
+  reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
+  reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
+  updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+}
+
+export type MembershipUncheckedCreateWithoutComputedResultRunsInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentUncheckedCreateNestedManyWithoutAssignerInput
+  submittedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
+  reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
+  updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+}
+
+export type MembershipCreateOrConnectWithoutComputedResultRunsInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutComputedResultRunsInput, Prisma.MembershipUncheckedCreateWithoutComputedResultRunsInput>
+}
+
+export type MembershipUpsertWithoutComputedResultRunsInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutComputedResultRunsInput, Prisma.MembershipUncheckedUpdateWithoutComputedResultRunsInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutComputedResultRunsInput, Prisma.MembershipUncheckedCreateWithoutComputedResultRunsInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutComputedResultRunsInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutComputedResultRunsInput, Prisma.MembershipUncheckedUpdateWithoutComputedResultRunsInput>
+}
+
+export type MembershipUpdateWithoutComputedResultRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentUpdateManyWithoutAssignerNestedInput
+  submittedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutSubmitterNestedInput
+  reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
+  reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
+  updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutComputedResultRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentUncheckedUpdateManyWithoutAssignerNestedInput
+  submittedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
+  reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+}
+
+export type MembershipCreateWithoutPublishedResultsInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentCreateNestedManyWithoutAssignerInput
+  submittedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutSubmitterInput
+  reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
+  reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
+  updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+}
+
+export type MembershipUncheckedCreateWithoutPublishedResultsInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentUncheckedCreateNestedManyWithoutAssignerInput
+  submittedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
+  reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
+  updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+}
+
+export type MembershipCreateOrConnectWithoutPublishedResultsInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutPublishedResultsInput, Prisma.MembershipUncheckedCreateWithoutPublishedResultsInput>
+}
+
+export type MembershipCreateWithoutWithdrawnResultsInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentCreateNestedManyWithoutAssignerInput
+  submittedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutSubmitterInput
+  reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
+  reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
+  updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+}
+
+export type MembershipUncheckedCreateWithoutWithdrawnResultsInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentUncheckedCreateNestedManyWithoutAssignerInput
+  submittedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
+  reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
+  updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+}
+
+export type MembershipCreateOrConnectWithoutWithdrawnResultsInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutWithdrawnResultsInput, Prisma.MembershipUncheckedCreateWithoutWithdrawnResultsInput>
+}
+
+export type MembershipUpsertWithoutPublishedResultsInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutPublishedResultsInput, Prisma.MembershipUncheckedUpdateWithoutPublishedResultsInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutPublishedResultsInput, Prisma.MembershipUncheckedCreateWithoutPublishedResultsInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutPublishedResultsInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutPublishedResultsInput, Prisma.MembershipUncheckedUpdateWithoutPublishedResultsInput>
+}
+
+export type MembershipUpdateWithoutPublishedResultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentUpdateManyWithoutAssignerNestedInput
+  submittedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutSubmitterNestedInput
+  reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
+  reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
+  updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutPublishedResultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentUncheckedUpdateManyWithoutAssignerNestedInput
+  submittedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
+  reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+}
+
+export type MembershipUpsertWithoutWithdrawnResultsInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutWithdrawnResultsInput, Prisma.MembershipUncheckedUpdateWithoutWithdrawnResultsInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutWithdrawnResultsInput, Prisma.MembershipUncheckedCreateWithoutWithdrawnResultsInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutWithdrawnResultsInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutWithdrawnResultsInput, Prisma.MembershipUncheckedUpdateWithoutWithdrawnResultsInput>
+}
+
+export type MembershipUpdateWithoutWithdrawnResultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentUpdateManyWithoutAssignerNestedInput
+  submittedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutSubmitterNestedInput
+  reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
+  reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
+  updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutWithdrawnResultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentUncheckedUpdateManyWithoutAssignerNestedInput
+  submittedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
+  reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
 }
 
 export type MembershipCreateWithoutRoleGrantsInput = {
@@ -2976,6 +3641,9 @@ export type MembershipCreateWithoutRoleGrantsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutRoleGrantsInput = {
@@ -3003,6 +3671,9 @@ export type MembershipUncheckedCreateWithoutRoleGrantsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutRoleGrantsInput = {
@@ -3046,6 +3717,9 @@ export type MembershipUpdateWithoutRoleGrantsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutRoleGrantsInput = {
@@ -3073,6 +3747,9 @@ export type MembershipUncheckedUpdateWithoutRoleGrantsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateWithoutSessionsInput = {
@@ -3100,6 +3777,9 @@ export type MembershipCreateWithoutSessionsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutSessionsInput = {
@@ -3127,6 +3807,9 @@ export type MembershipUncheckedCreateWithoutSessionsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutSessionsInput = {
@@ -3170,6 +3853,9 @@ export type MembershipUpdateWithoutSessionsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutSessionsInput = {
@@ -3197,6 +3883,9 @@ export type MembershipUncheckedUpdateWithoutSessionsInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateWithoutAuthTokensInput = {
@@ -3224,6 +3913,9 @@ export type MembershipCreateWithoutAuthTokensInput = {
   reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipUncheckedCreateWithoutAuthTokensInput = {
@@ -3251,6 +3943,9 @@ export type MembershipUncheckedCreateWithoutAuthTokensInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
 }
 
 export type MembershipCreateOrConnectWithoutAuthTokensInput = {
@@ -3294,6 +3989,9 @@ export type MembershipUpdateWithoutAuthTokensInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutAuthTokensInput = {
@@ -3321,6 +4019,9 @@ export type MembershipUncheckedUpdateWithoutAuthTokensInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateManyTenantInput = {
@@ -3357,6 +4058,9 @@ export type MembershipUpdateWithoutTenantInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutTenantInput = {
@@ -3384,6 +4088,9 @@ export type MembershipUncheckedUpdateWithoutTenantInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateManyWithoutTenantInput = {
@@ -3429,6 +4136,9 @@ export type MembershipUpdateWithoutUserInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutUserInput = {
@@ -3456,6 +4166,9 @@ export type MembershipUncheckedUpdateWithoutUserInput = {
   reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
   reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipUncheckedUpdateManyWithoutUserInput = {
@@ -3489,6 +4202,9 @@ export type MembershipCountOutputType = {
   reviewedMarksBatches: number
   reopenedMarksBatches: number
   updatedMarks: number
+  computedResultRuns: number
+  publishedResults: number
+  withdrawnResults: number
 }
 
 export type MembershipCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3508,6 +4224,9 @@ export type MembershipCountOutputTypeSelect<ExtArgs extends runtime.Types.Extens
   reviewedMarksBatches?: boolean | MembershipCountOutputTypeCountReviewedMarksBatchesArgs
   reopenedMarksBatches?: boolean | MembershipCountOutputTypeCountReopenedMarksBatchesArgs
   updatedMarks?: boolean | MembershipCountOutputTypeCountUpdatedMarksArgs
+  computedResultRuns?: boolean | MembershipCountOutputTypeCountComputedResultRunsArgs
+  publishedResults?: boolean | MembershipCountOutputTypeCountPublishedResultsArgs
+  withdrawnResults?: boolean | MembershipCountOutputTypeCountWithdrawnResultsArgs
 }
 
 /**
@@ -3632,6 +4351,27 @@ export type MembershipCountOutputTypeCountUpdatedMarksArgs<ExtArgs extends runti
   where?: Prisma.MarkWhereInput
 }
 
+/**
+ * MembershipCountOutputType without action
+ */
+export type MembershipCountOutputTypeCountComputedResultRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ResultRunWhereInput
+}
+
+/**
+ * MembershipCountOutputType without action
+ */
+export type MembershipCountOutputTypeCountPublishedResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PublicationWhereInput
+}
+
+/**
+ * MembershipCountOutputType without action
+ */
+export type MembershipCountOutputTypeCountWithdrawnResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PublicationWhereInput
+}
+
 
 export type MembershipSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3661,6 +4401,9 @@ export type MembershipSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   reviewedMarksBatches?: boolean | Prisma.Membership$reviewedMarksBatchesArgs<ExtArgs>
   reopenedMarksBatches?: boolean | Prisma.Membership$reopenedMarksBatchesArgs<ExtArgs>
   updatedMarks?: boolean | Prisma.Membership$updatedMarksArgs<ExtArgs>
+  computedResultRuns?: boolean | Prisma.Membership$computedResultRunsArgs<ExtArgs>
+  publishedResults?: boolean | Prisma.Membership$publishedResultsArgs<ExtArgs>
+  withdrawnResults?: boolean | Prisma.Membership$withdrawnResultsArgs<ExtArgs>
   _count?: boolean | Prisma.MembershipCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["membership"]>
 
@@ -3720,6 +4463,9 @@ export type MembershipInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   reviewedMarksBatches?: boolean | Prisma.Membership$reviewedMarksBatchesArgs<ExtArgs>
   reopenedMarksBatches?: boolean | Prisma.Membership$reopenedMarksBatchesArgs<ExtArgs>
   updatedMarks?: boolean | Prisma.Membership$updatedMarksArgs<ExtArgs>
+  computedResultRuns?: boolean | Prisma.Membership$computedResultRunsArgs<ExtArgs>
+  publishedResults?: boolean | Prisma.Membership$publishedResultsArgs<ExtArgs>
+  withdrawnResults?: boolean | Prisma.Membership$withdrawnResultsArgs<ExtArgs>
   _count?: boolean | Prisma.MembershipCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MembershipIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3754,6 +4500,9 @@ export type $MembershipPayload<ExtArgs extends runtime.Types.Extensions.Internal
     reviewedMarksBatches: Prisma.$MarksBatchPayload<ExtArgs>[]
     reopenedMarksBatches: Prisma.$MarksBatchPayload<ExtArgs>[]
     updatedMarks: Prisma.$MarkPayload<ExtArgs>[]
+    computedResultRuns: Prisma.$ResultRunPayload<ExtArgs>[]
+    publishedResults: Prisma.$PublicationPayload<ExtArgs>[]
+    withdrawnResults: Prisma.$PublicationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4177,6 +4926,9 @@ export interface Prisma__MembershipClient<T, Null = never, ExtArgs extends runti
   reviewedMarksBatches<T extends Prisma.Membership$reviewedMarksBatchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$reviewedMarksBatchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarksBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reopenedMarksBatches<T extends Prisma.Membership$reopenedMarksBatchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$reopenedMarksBatchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarksBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   updatedMarks<T extends Prisma.Membership$updatedMarksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$updatedMarksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  computedResultRuns<T extends Prisma.Membership$computedResultRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$computedResultRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResultRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  publishedResults<T extends Prisma.Membership$publishedResultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$publishedResultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  withdrawnResults<T extends Prisma.Membership$withdrawnResultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$withdrawnResultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5033,6 +5785,78 @@ export type Membership$updatedMarksArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.MarkScalarFieldEnum | Prisma.MarkScalarFieldEnum[]
+}
+
+/**
+ * Membership.computedResultRuns
+ */
+export type Membership$computedResultRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ResultRun
+   */
+  select?: Prisma.ResultRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ResultRun
+   */
+  omit?: Prisma.ResultRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ResultRunInclude<ExtArgs> | null
+  where?: Prisma.ResultRunWhereInput
+  orderBy?: Prisma.ResultRunOrderByWithRelationInput | Prisma.ResultRunOrderByWithRelationInput[]
+  cursor?: Prisma.ResultRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ResultRunScalarFieldEnum | Prisma.ResultRunScalarFieldEnum[]
+}
+
+/**
+ * Membership.publishedResults
+ */
+export type Membership$publishedResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Publication
+   */
+  select?: Prisma.PublicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Publication
+   */
+  omit?: Prisma.PublicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PublicationInclude<ExtArgs> | null
+  where?: Prisma.PublicationWhereInput
+  orderBy?: Prisma.PublicationOrderByWithRelationInput | Prisma.PublicationOrderByWithRelationInput[]
+  cursor?: Prisma.PublicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PublicationScalarFieldEnum | Prisma.PublicationScalarFieldEnum[]
+}
+
+/**
+ * Membership.withdrawnResults
+ */
+export type Membership$withdrawnResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Publication
+   */
+  select?: Prisma.PublicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Publication
+   */
+  omit?: Prisma.PublicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PublicationInclude<ExtArgs> | null
+  where?: Prisma.PublicationWhereInput
+  orderBy?: Prisma.PublicationOrderByWithRelationInput | Prisma.PublicationOrderByWithRelationInput[]
+  cursor?: Prisma.PublicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PublicationScalarFieldEnum | Prisma.PublicationScalarFieldEnum[]
 }
 
 /**

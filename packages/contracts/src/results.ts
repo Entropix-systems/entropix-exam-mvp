@@ -1,3 +1,5 @@
+import type { UUID } from './common.js';
+
 export const RESULT_OUTCOMES = {
   PASS: 'PASS',
   FAIL: 'FAIL',
@@ -60,4 +62,118 @@ export interface ValidatedResultRule {
   readonly components: readonly ValidatedResultComponentRule[];
   readonly totalPassPercentage: string;
   readonly gradeBands: readonly ValidatedGradeBand[];
+}
+
+export const RESULT_BLOCKER_CODES = {
+  CONDUCT_INCOMPLETE: 'CONDUCT_INCOMPLETE',
+  MARKS_NOT_APPROVED: 'MARKS_NOT_APPROVED',
+  MISSING_REQUIRED_DATA: 'MISSING_REQUIRED_DATA',
+  PUBLICATION_ACTIVE: 'PUBLICATION_ACTIVE',
+} as const;
+
+export type ResultBlockerCode =
+  (typeof RESULT_BLOCKER_CODES)[keyof typeof RESULT_BLOCKER_CODES];
+
+export interface ResultBlocker {
+  code: ResultBlockerCode;
+  message: string;
+  count: number;
+}
+
+export interface ResultComponentSnapshot {
+  component: ResultComponent;
+  mark: string | null;
+  maximum: string;
+  weight: string;
+  percentage: string | null;
+}
+
+export interface ResultItemRecord {
+  id: UUID;
+  registrationSubjectId: UUID;
+  examSubjectId: UUID;
+  subjectCode: string;
+  subjectName: string;
+  credits: number;
+  outcome: ResultOutcome;
+  percentage: string | null;
+  components: readonly ResultComponentSnapshot[];
+  grade: string | null;
+  gradePoints: string | null;
+  reason: string | null;
+}
+
+export interface StudentResultRecord {
+  id: UUID;
+  studentId: UUID;
+  rollNo: string;
+  studentName: string;
+  outcome: ResultOutcome;
+  percentage: string | null;
+  gpa: string | null;
+  totalCredits: string;
+  weightedPoints: string | null;
+  reason: string | null;
+  items: readonly ResultItemRecord[];
+}
+
+export interface ResultRunRecord {
+  id: UUID;
+  examId: UUID;
+  examCode: string;
+  examName: string;
+  inputRevision: number;
+  ruleVersion: number;
+  checksum: string;
+  studentCount: number;
+  itemCount: number;
+  passCount: number;
+  failCount: number;
+  absentCount: number;
+  withheldCount: number;
+  computedAt: string;
+  students: readonly StudentResultRecord[];
+}
+
+export interface PublicationRecord {
+  id: UUID;
+  examId: UUID;
+  resultRunId: UUID;
+  version: number;
+  isCurrent: boolean;
+  publishedAt: string;
+  withdrawnAt: string | null;
+  withdrawReason: string | null;
+}
+
+export interface ResultsExamRecord {
+  examId: UUID;
+  examCode: string;
+  examName: string;
+  examState: import('./exam.js').ExamState;
+  inputRevision: number;
+  ruleVersion: number;
+  studentCount: number;
+  subjectCount: number;
+  approvedSubjectCount: number;
+  blockers: readonly ResultBlocker[];
+  candidateRun: ResultRunRecord | null;
+  currentPublication: PublicationRecord | null;
+}
+
+export interface ResultsSnapshot {
+  exams: readonly ResultsExamRecord[];
+}
+
+export interface ResultWithdrawalInput {
+  reason: string;
+}
+
+export interface CurrentStudentResultRecord {
+  publication: PublicationRecord;
+  examId: UUID;
+  examCode: string;
+  examName: string;
+  ruleVersion: number;
+  result: StudentResultRecord;
 }
