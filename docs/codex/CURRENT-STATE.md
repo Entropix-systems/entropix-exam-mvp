@@ -6,17 +6,19 @@
 Known-good foundation: d0-ready
 Shared development branch: integration
 Current B05 integration merge: 5d021ed
-Current sprint: D1-D3 MVP implementation
-Current day: B05 INTEGRATED; CONFIGURED SUPABASE MIGRATION APPLIED
+Current release-evidence implementation: 88141c6
+Current sprint: MVP release verification
+Current day: CANONICAL A01-A15 PASS; LOCAL RELEASE GATE GO
 ```
 
 ## Current Gate
 
-B05 dashboard, reports, audit, and demo polish is integrated at `5d021ed` from
-implementation commit `6cd45a4` and verified against disposable local
-PostgreSQL. The configured Supabase target now reports all 16 migrations current,
-including `20260914150000_audit_events`; shared-target data and browser journeys
-were not rerun.
+The release-evidence implementation is committed at `88141c6`. All canonical
+A01-A15 assertions pass against disposable local PostgreSQL and private object
+storage. A fresh clean checkout of that commit passed frozen installation with
+the repository-pinned Node 24.20.0 and pnpm 12.3.4, all 17 local migrations,
+the complete configured automated suite, `smoke:release`, seeded workflows, and
+the release browser matrix. See `FINAL-RELEASE-VERIFICATION.md`.
 
 ## Completed
 
@@ -60,17 +62,18 @@ Bulk import pack: 12 Northstar rows, 12 Cedar rows, 7 negative/reconciliation ro
 
 ## Blockers
 
-No implementation blocker remains for B05. The configured Supabase schema is
-current, but its audit history, dashboard data, exports, and browser journeys
-were not reverified after migration deployment.
+No local release blocker remains. The configured Supabase target was not changed
+during release-evidence closure and has not been verified with
+`20260914160000_worker_recovery`; shared-target deployment remains a separate,
+explicitly authorized operation.
 
 ## Migration Lock
 
 ```text
-Owner: Codex release-evidence closure
-Purpose: A13 durable worker lease and unique-output acceptance foundation
-Last integrated migration: 20260914150000_audit_events
-Configured Supabase target: APPLIED AND STATUS VERIFIED (16/16)
+Owner: NONE
+Purpose: Release-evidence closure complete
+Last integrated migration: 20260914160000_worker_recovery
+Configured Supabase target: 20260914160000 NOT APPLIED / NOT VERIFIED
 ```
 
 ## Shared Contract Lock
@@ -220,9 +223,31 @@ Status: MERGED; LOCKS RELEASED
 - No schema, migration, contract, permission, readiness-rule, or result-semantic
   change was introduced by this remediation.
 
+## Final Release-Evidence Closure
+
+- The four seed-coupled legacy RLS smokes now scope fixture assertions to their
+  owning exam/hall data while retaining missing-context, foreign-tenant, and
+  composite-foreign-key denial checks.
+- A06 induces real concurrent student, seat, hall, and invigilator races and
+  proves one winner without duplicate allocation.
+- A12 exercises pending/infected/quarantined, time-window, assignment, role,
+  tenant, and expired-signed-URL denial through the private-document
+  authorization surface.
+- A13 kills a claimed worker, recovers its expired lease, denies the stale owner,
+  and proves idempotent retry produces one business-key output.
+- A15 restores a real database dump into a new database, restores a deleted
+  referenced private object, compares tenant-table counts, publication identity,
+  version and checksums, and rechecks missing-context RLS.
+- A clean checkout at `88141c6` passed the repository-pinned runtime, frozen
+  install, migration status/deploy, the full configured automated gate,
+  `smoke:release`, seeded workflow suites, and fresh browser verification.
+- BUG-002 remains the approved `SPEC-CLARIFICATION-001 / NO DEFECT` behavior;
+  no result rule, result repository, payload, publication, or grade-card
+  eligibility semantics changed.
+
 ## Next Required Action
 
-Affected developers should pull/rebase from updated `integration` and reread
-`DEC-012`. Rerun the focused B05 checks plus the two authenticated institution
-journeys against the configured Supabase target before treating its application
-data as demo-verified.
+Review and merge the two release-evidence commits. Apply and verify
+`20260914160000_worker_recovery` on a shared target only through the normal
+deployment approval path; do not infer shared-target readiness from the local
+release result.
