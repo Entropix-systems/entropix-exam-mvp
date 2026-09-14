@@ -110,6 +110,18 @@ function expect(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
 }
 
+function fallbackNameForEmail(email: string): string {
+  const [localPart = 'demo-user', host = ''] = email.split('@');
+  const words = localPart
+    .split(/[._-]+/)
+    .filter(Boolean)
+    .map((word) => `${word[0].toUpperCase()}${word.slice(1)}`);
+  if (localPart === 'admin' && host.startsWith('northstar.')) {
+    return 'Northstar Administrator';
+  }
+  return words.join(' ') || 'Demo User';
+}
+
 async function authService(clock = () => new Date()) {
   const passwords = new Argon2PasswordHasher();
   const dummyPasswordHash = await passwords.hash('UnknownOnly!2026');
@@ -195,6 +207,19 @@ async function provisionFixtureProfileNames() {
   ))).flat();
   for (const profile of profiles) {
     await prisma.user.update({ where: { id: profile.userId }, data: { name: profile.name } });
+  }
+  const unnamedUsers = await prisma.user.findMany({
+    where: {
+      email: { endsWith: '.example.test' },
+      OR: [{ name: null }, { name: '' }],
+    },
+    select: { id: true, email: true },
+  });
+  for (const user of unnamedUsers) {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { name: fallbackNameForEmail(user.email) },
+    });
   }
 }
 
