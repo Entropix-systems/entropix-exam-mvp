@@ -22,6 +22,7 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
     "smoke:evaluation-flow": "tsx scripts/evaluation-flow-smoke.ts",
     "smoke:results-flow": "tsx scripts/results-flow-smoke.ts",
+    "smoke:student-portal": "tsx scripts/student-portal-smoke.ts",
     "typecheck": "tsc -p tsconfig.build.json --noEmit"
   },
   "dependencies": {

@@ -297,3 +297,61 @@
   .result-stats div:nth-child(2) { border-right: 0; }
   .grant-row .icon-button { justify-self: end; }
 }
+
+.portal-heading { max-width: 1240px; margin-inline: auto; }
+.portal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; max-width: 1240px; margin: 0 auto 20px; }
+.portal-card { overflow: hidden; border: 1px solid #dce5e8; border-radius: 9px; background: #fff; box-shadow: 0 5px 20px rgba(31, 61, 73, .05); }
+.portal-card > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 20px 22px; border-bottom: 1px solid #e4eaec; }
+.portal-card h2 { margin: 3px 0 0; color: #14303f; font-size: 20px; }
+.portal-card-body { padding: 20px 22px; }
+.portal-card-body > p:first-child { margin-top: 0; }
+.portal-row { display: flex; justify-content: space-between; gap: 20px; border-bottom: 1px solid #edf1f2; padding: 11px 0; }
+.portal-row span { color: #6b7d87; }
+.portal-row b { color: #193b49; text-align: right; }
+.portal-action { margin-top: 18px; }
+.portal-result-stats { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 14px; border: 1px solid #e4eaec; border-radius: 8px; }
+.portal-result-stats div { padding: 18px; text-align: center; }
+.portal-result-stats div + div { border-left: 1px solid #e4eaec; }
+.portal-result-stats b, .portal-result-stats span { display: block; }
+.portal-result-stats b { color: #183b49; font-size: 25px; }
+.portal-result-stats span { margin-top: 4px; color: #74868e; font-size: 11px; text-transform: uppercase; }
+.portal-withheld { border-radius: 8px; padding: 16px; color: #913a3a; background: #fbecec; }
+.portal-withheld p { margin: 6px 0 0; }
+.portal-timetable { max-width: 1240px; margin: auto; }
+.portal-document-overlay { position: fixed; z-index: 40; inset: 0; overflow: auto; padding: 28px; background: rgba(9, 34, 44, .62); }
+.portal-document-dialog { width: min(900px, 100%); margin: auto; border-radius: 10px; background: #fff; box-shadow: 0 24px 80px rgba(8, 31, 40, .38); }
+.portal-paper { padding: 46px; color: #152f3c; background: #fff; }
+.portal-paper-institution, .portal-paper h2, .portal-paper-subtitle { text-align: center; }
+.portal-paper-institution { margin: 0; color: #0b6c54; font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.portal-paper h2 { margin: 8px 0 4px; font-family: Georgia, serif; font-size: 30px; }
+.portal-paper-subtitle { margin: 0 0 28px; color: #667b86; }
+.portal-paper-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; margin: 0 0 28px; border-block: 1px solid #dce5e8; padding: 16px 0; }
+.portal-paper-meta div { display: grid; grid-template-columns: 130px 1fr; gap: 12px; padding: 7px 0; }
+.portal-paper-meta dt { color: #6b7d87; font-size: 12px; text-transform: uppercase; }
+.portal-paper-meta dd { margin: 0; font-weight: 700; }
+.portal-document-table { width: 100%; border-collapse: collapse; }
+.portal-document-table th { border-bottom: 2px solid #2e525f; padding: 9px 10px; font-size: 11px; text-align: left; text-transform: uppercase; }
+.portal-document-table td { border-bottom: 1px solid #dce5e8; padding: 12px 10px; vertical-align: top; }
+.portal-document-table td span { display: block; margin-top: 3px; color: #6b7d87; font-size: 12px; }
+.portal-paper-instruction { margin: 24px 0 0; border-left: 3px solid #0b6c54; padding: 10px 14px; background: #eff7f4; }
+.portal-paper-summary { display: flex; justify-content: flex-end; gap: 26px; margin-top: 22px; }
+.portal-paper-summary span { color: #60747e; }
+.portal-paper-summary b { display: block; margin-top: 3px; color: #173b49; font-size: 18px; }
+.portal-paper-version { margin: 24px 0 0; color: #6b7d87; font-size: 11px; text-align: center; }
+.portal-document-actions { display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #dce5e8; padding: 16px 20px; }
+
+@media (max-width: 820px) {
+  .portal-grid { grid-template-columns: 1fr; }
+  .portal-paper { padding: 24px 18px; }
+  .portal-paper-meta { grid-template-columns: 1fr; }
+  .portal-paper-summary { justify-content: flex-start; flex-wrap: wrap; }
+}
+
+@media print {
+  .workspace-sidebar, .workspace-topbar, .demo-notice, .workspace-content > :not(.portal-document-overlay), .portal-document-actions { display: none !important; }
+  .workspace-shell, .workspace-main, .workspace-content { display: block !important; min-height: 0; margin: 0; padding: 0; background: #fff; }
+  .portal-document-overlay { position: static; overflow: visible; padding: 0; background: transparent; }
+  .portal-document-dialog { width: auto; box-shadow: none; }
+  .portal-print-document { padding: 12mm; }
+  @page { margin: 10mm; }
+}

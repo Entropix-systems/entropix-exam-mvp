@@ -419,7 +419,11 @@ export class ResultsRepository {
       if (!current || !current.resultRun.students[0]) return null;
       const run = mapRun(current.resultRun, current.exam as ExamRow);
       const result = run.students[0]!;
-      return { publication: publication(current), examId: current.examId, examCode: current.exam.code, examName: current.exam.name, ruleVersion: current.exam.ruleVersion.version, result };
+      const base = { publication: publication(current), examId: current.examId, examCode: current.exam.code, examName: current.exam.name, ruleVersion: current.exam.ruleVersion.version };
+      if (result.outcome === RESULT_OUTCOMES.WITHHELD) {
+        return { ...base, outcome: 'WITHHELD', holdMessage: result.reason ?? 'Your result is withheld. Contact the examination office for assistance.' };
+      }
+      return { ...base, outcome: result.outcome, result };
     });
   }
 }

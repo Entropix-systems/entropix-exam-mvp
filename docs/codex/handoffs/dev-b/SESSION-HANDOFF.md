@@ -1,171 +1,155 @@
 # SESSION HANDOFF - DEV B
 
 Last updated: 2026-09-14
-Branch: `feat/B03-result-runs-publication`
-Base: `9720aea`
-Head: current branch tip (B03 implementation and delivery fixes)
+Branch: `feat/B04-student-portal-documents`
+Base: `eea1b18` (`integration`, includes merged B03)
+Head: `eea1b18` plus uncommitted B04 working-tree changes
 
 ## Current Sprint Goal
 
-Deliver the Tuesday demo's marks-to-publication vertical slice. B03 Result Runs
-& Publication is implemented and focused-verified against disposable local
-PostgreSQL. Its migration is also applied and read-verified on the shared demo
-database. Review and integration merge remain.
+Deliver the Tuesday demo's authenticated student closeout journey: own approved
+registration, current published timetable/seat, printable admit card, current
+published result, and eligible printable grade card.
 
 ## Current Task
 
-Task: B03 - Result Runs & Publication
-Status: READY FOR REVIEW/MERGE
+Task: B04 - Student Portal, Admit Card & Grade Card
+Status: IMPLEMENTED AND FOCUSED-VERIFIED; REVIEW/COMMIT/MERGE PENDING
 
-The controller workflow now:
+The student workflow now:
 
-1. Reads readiness from the real approved roster, submitted conduct state, and
-   independently approved marks batches.
-2. Blocks computation when required inputs are incomplete.
-3. Computes one immutable result run for the current rule/input revision and
-   persists subject and student snapshots.
-4. Reviews pass/fail/absent/withheld counts and candidate rows on `/results`.
-5. Publishes only after rechecking rule version, input revision, checksum, and
-   readiness inside a tenant/exam transaction lock.
-6. Returns the same publication on retry and preserves exactly one current
-   publication per exam.
-7. Withdraws with an audit reason, removes student visibility, permits approved
-   correction, then creates a new run and monotonically versioned republication.
+1. Resolves tenant and Student exclusively from the verified active membership.
+2. Returns only the caller's approved registrations through `/api/v1/me/*`.
+3. Returns timetable/hall/seat only while the schedule remains published and
+   complete for that registration.
+4. Binds the current printable admit-card issue ID to registration ID plus
+   `Exam.scheduleRevision`; schedule editing removes access until republished.
+5. Returns result data only from the active current publication and only while
+   the student's registration remains approved.
+6. Returns a dedicated WITHHELD hold-message response with no items, components,
+   percentages, GPA, credits, or grade-card reference.
+7. Allows PASS, FAIL, and ABSENT to render a grade card from the immutable
+   `StudentResult`/`ResultItem` snapshot, with ABSENT never displayed as zero.
+8. Uses one-page printable HTML previews; no public URL or stored artifact is
+   created for the demo.
 
-The student workflow resolves the caller's Student record from the active
-membership and returns only that student's current published snapshot. Draft,
-historical, and withdrawn results are inaccessible through the student route.
+## Portal UI
+
+- Student sessions land on the mockup-aligned student workspace at `/student`
+  (and the authenticated root) with `Student portal` navigation.
+- The page shows verified institution/student/cohort identity, registration,
+  subjects, first paper, hall/seat, full local-time timetable, and current result.
+- Admit and grade previews include stable issue IDs and authoritative schedule or
+  publication versions. Print CSS isolates the document from the application
+  shell and produces one-page output in the focused browser check.
+- Existing student directory and exam/registration navigation remains available
+  so the A03 registration journey is not hidden.
 
 ## Shared Contracts / Schema
 
-Migration:
+Schema / migration:
 
-- `packages/db/prisma/migrations/20260914143000_result_runs_publication/migration.sql`
-- Adds `ResultRun`, `ResultItem`, `StudentResult`, and `Publication` with
-  tenant-safe foreign keys, forced RLS, runtime grants, immutable snapshot
-  triggers, and a partial unique index for one current publication per exam.
+- NONE. Existing approved Registration, schedule state/revision, seat assignment,
+  immutable result snapshots, and current Publication are sufficient.
+- Migration lock is available; B04 does not acquire it.
 
 Typed contracts:
 
-- `packages/contracts/src/results.ts` defines readiness blockers, persisted
-  result items/student aggregates/runs, publication records, controller
-  snapshot, withdrawal input, and current student result response.
-
-Shared project truth:
-
-- `docs/codex/CONTRACTS.md` records B03 routes and authority/version/privacy
-  rules, including conduct-driven input revision invalidation.
-- `docs/codex/DECISIONS.md` records DEC-011 for immutable snapshots and the
-  single-current versioned publication model.
-- `docs/codex/CURRENT-STATE.md` records B03 status and both held locks.
-
-## Locks
-
-- Migration lock: Developer B for B03 until reviewed and merged.
-- Shared contract lock: Developer B for B03 until reviewed and merged.
-- No competing Result/Publication migration or shared contract should start
-  before this branch is integrated or the locks are explicitly transferred.
+- `packages/contracts/src/student-portal.ts` adds own-registration,
+  own-timetable, own-published-result, current-document metadata, and aggregate
+  portal DTOs.
+- `CurrentStudentResultRecord` is now a discriminated union so the legacy B03
+  student result route also returns only a hold message for WITHHELD.
+- `docs/codex/CONTRACTS.md` records the `/api/v1/me/*` authority, visibility,
+  invalidation, and printable-document rules.
+- Shared contract lock: Developer B for B04 until reviewed and merged.
 
 ## Main Files
 
-- `packages/db/prisma/schema.prisma`
-- `packages/db/prisma/migrations/20260914143000_result_runs_publication/migration.sql`
+- `packages/contracts/src/student-portal.ts`
 - `packages/contracts/src/results.ts`
-- `apps/api/src/modules/results/`
-- `apps/api/scripts/results-flow-smoke.ts`
-- `apps/api/src/modules/conduct/conduct.repository.ts`
-- `apps/web/src/results/results-client.ts`
+- `apps/api/src/modules/documents/`
+- `apps/api/src/modules/results/results.repository.ts`
+- `apps/api/scripts/student-portal-smoke.ts`
+- `apps/web/src/student-portal/`
+- `apps/web/src/pages/student-portal-page.tsx`
 - `apps/web/src/pages/results-page.tsx`
 - `apps/web/src/pages/workspace-shell.tsx`
 - `apps/web/src/App.tsx`
 - `apps/web/src/App.css`
-- `README.md`, `.env.example`, `.env.docker.example`, and package scripts
-
-## Important Adjacent Correction
-
-All result-affecting conduct writes now advance `Exam.inputRevision`. The
-focused smoke also exposed an existing Prisma 7 advisory-lock defect in Conduct:
-`pg_advisory_xact_lock` returns PostgreSQL `void`, so the call now uses
-`$executeRaw`, matching Evaluation and Results, instead of trying to deserialize
-the row with `$queryRaw`.
+- `docs/codex/CONTRACTS.md`
+- `docs/codex/CURRENT-STATE.md`
+- `README.md` and package scripts
 
 ## Verification Evidence
 
-- `pnpm verify:b03` -> PASS (contracts/domain builds, DB/API/Web typechecks,
-  API/Web lint, and 2 focused conduct/result files / 14 tests).
+- `pnpm verify:b04` -> PASS: contracts build; 13 focused API portal/result tests;
+  4 focused Web navigation/client tests; API/Web typechecks; API/Web lint.
 - `pnpm --filter @entropix/api build` -> PASS.
-- `pnpm --filter @entropix/web build` -> PASS; route-level lazy loading leaves
-  all production chunks below 500 kB (main chunk 445.42 kB).
-- `pnpm --filter @entropix/db build` -> PASS.
-- `pnpm --filter @entropix/api lint` -> PASS.
-- `pnpm --filter @entropix/web lint` -> PASS.
-- Prisma validate/generate -> PASS.
-- Local `prisma migrate deploy` and status -> PASS; all 15 migrations up to date.
-- Shared demo `pnpm db:migrate:deploy` -> PASS; applied
-  `20260914143000_result_runs_publication`.
-- Shared demo `pnpm db:migrate:status` -> PASS; all 15 migrations up to date.
-- Documented `pnpm setup:local` -> PASS end-to-end: Prisma generate, no pending
-  migrations, and the full fictional academic/people/exam/schedule/conduct/
-  evaluation seed chain.
-- Full fictional local seed chain through evaluation -> PASS.
-- `pnpm smoke:results-flow` against local `exam_app` -> PASS: incomplete-input
-  block; real conduct revision increment; stale-run rejection; immutable compute;
-  retry-safe publish; exactly one current version; own-current-only student read;
-  ABSENT/WITHHELD numeric privacy; withdrawal; corrected recompute/republish.
-- Targeted local browser flow on `/results` -> PASS: authenticated Cedar
-  controller page, current publication, immutable candidate register, readiness,
-  counts, ABSENT/WITHHELD presentation, withdrawal with reason, retry-safe
-  compute, and versioned publish all work through UI/API. The final publish
-  request returned HTTP 201; no Vite overlay or browser error was detected.
-- Read-only shared-demo browser gate on `/results` -> PASS: the route-specific
-  Results module loaded with HTTP 200, rendered the empty shared-demo result
-  state, and reported no console errors or Vite overlay.
-- API startup -> PASS; all six B03 routes mapped.
-- `pnpm why pg -r` -> one resolved `pg` version, 8.18.0, for the application and
-  Prisma adapter. `pnpm smoke:results-flow` with deprecation tracing -> PASS with
-  no concurrent-query warning.
+- `pnpm --filter @entropix/web build` -> PASS; student portal remains a lazy
+  route chunk and all production chunks remain under 500 kB.
+- API startup -> PASS; all five `/api/v1/me/*` routes mapped.
+- Local live HTTP gate -> health 200; unauthenticated student portal read 401.
+- `pnpm smoke:student-portal` -> PASS against the configured database using the
+  restricted tenant transaction: one Northstar student was resolved from their
+  membership and only their approved registration was returned.
+- `PORTAL_SMOKE_TENANT_SLUG=cedar-school pnpm smoke:student-portal` -> PASS for
+  two scoped Cedar students; Student 03 has one approved registration, one
+  published timetable with three papers, and no current result.
+- Browser render/print check -> PASS using local response fixtures because no
+  demo login credential is stored in the repository: portal survives reload,
+  shows revision 3 / publication v2 data, has no Vite overlay/page errors, and
+  produces one-page admit and grade PDF output with issue/version metadata.
+- Real browser/API check -> PASS for Cedar Student 03 after provisioning the
+  fictional account through the one-time password-reset workflow. Login,
+  refresh-cookie restoration, own approved registration, all three timetable
+  rows, Hall A seat 03, admit-card preview, and logout work with no page error or
+  Vite overlay. The real admit-card PDF is one page and includes schedule
+  revision 1 plus its stable issue ID. No credential was written to Git.
 
-## README / Setup Scripts
+## Actual Shared-Demo Data State
 
-The root README now documents pinned runtime installation, local environment
-files, Docker infrastructure, migrations, seed chain, app startup, focused and
-broad verification, shutdown, repository layout, and restricted-role database
-safety. Root scripts now expose `db:generate`, migrate deploy/status,
-`seed:demo`, `setup:local`, `verify:b03`, and the explicitly local-only mutating
-`smoke:results-flow`. `.env.docker.example` is tracked and contains placeholders
-matching the local URLs in `.env.example`.
-
-The workspace pins `pg` 8.18.0 in `packages/db/package.json` and
-`pnpm-workspace.yaml` to avoid the Prisma adapter's current warning with newer
-`pg` transaction-query behavior. Web routes are lazy-loaded so the production
-build no longer emits the existing single-bundle size warning.
+The configured shared database gives the scoped Cedar Student 03 one approved
+registration, a published three-paper timetable for 15-17 September 2026, and a
+current admit card. It has no current publication. Read-only result readiness
+reports 63 incomplete conduct items and three unapproved marks batches. The
+student credential was created through the normal reset-token workflow; no exam,
+conduct, marks, result, or publication record was bypassed or directly patched.
 
 ## Known Limitations / Deferred
 
-- Result computation is synchronous for MVP; no worker queue is introduced.
-- Grade-card PDF generation, spreadsheet result import, moderation committees,
-  notifications, analytics, and advanced result history UI remain out of scope.
-- The mutating end-to-end browser flow used the ignored fictional credentials
-  and disposable local PostgreSQL. The shared-demo check was read-only.
+- Printable HTML is used instead of stored/generated PDFs, as allowed for the
+  Tuesday demo. There is no document download endpoint or historical document
+  archive.
+- The portal currently presents the newest approved registration as the primary
+  examination card while retaining all approved registrations in the API DTO.
+- The real authenticated schedule/admit-card path passes. A real grade-card path
+  remains pending completed conduct, marks submission, independent approval,
+  computation, and publication.
 
 ## Blockers
 
-No implementation or deployment blocker. Integration review and merge are the
-remaining gates.
+Implementation is not blocked. Full shared-demo grade-card evidence is sequence-
+blocked: the Cedar exam sittings are scheduled for 15-17 September 2026, and the
+core conduct-window and independent-approval rules must not be bypassed.
 
 ## Next Exact Action
 
-1. Review the migration, handwritten Result code, and generated Prisma diff.
-2. Merge through `integration`.
-3. Release both locks in `CURRENT-STATE.md` and have dependent lanes resync.
+1. Review the `/api/v1/me/*` authorization filters and WITHHELD union change.
+2. Commit/merge B04 and release the shared contract lock in `CURRENT-STATE.md`.
+3. After the Cedar sitting windows, complete accepted duties, attendance,
+   examiner submission, independent approval, compute, and publish through the
+   normal workflow; then rerun the real student grade-card print check.
+4. If a grade card must be shown before those sittings finish, obtain an explicit
+   product decision for a separate historical fictional exam fixture instead of
+   pre-publishing ANNUAL-2026.
 
 ## Minimal Context for the Next Session
 
 1. `AGENTS.md`
 2. this handoff
 3. `docs/codex/CURRENT-STATE.md`
-4. `docs/codex/CONTRACTS.md` - Result Run and Publication section
-5. `docs/codex/DECISIONS.md` - DEC-010 and DEC-011
-6. `packages/contracts/src/results.ts`
-7. `apps/api/src/modules/results/results.repository.ts`
-8. `apps/web/src/pages/results-page.tsx`
+4. `docs/codex/CONTRACTS.md` - Student Portal and Current Document section
+5. `packages/contracts/src/student-portal.ts`
+6. `apps/api/src/modules/documents/student-portal.repository.ts`
+7. `apps/web/src/pages/student-portal-page.tsx`

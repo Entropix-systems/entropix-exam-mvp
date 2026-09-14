@@ -169,11 +169,20 @@ export interface ResultWithdrawalInput {
   reason: string;
 }
 
-export interface CurrentStudentResultRecord {
+interface CurrentStudentResultBase {
   publication: PublicationRecord;
   examId: UUID;
   examCode: string;
   examName: string;
   ruleVersion: number;
-  result: StudentResultRecord;
 }
+
+export type CurrentStudentResultRecord =
+  | (CurrentStudentResultBase & {
+      outcome: 'WITHHELD';
+      holdMessage: string;
+    })
+  | (CurrentStudentResultBase & {
+      outcome: Exclude<ResultOutcome, 'WITHHELD'>;
+      result: StudentResultRecord;
+    });

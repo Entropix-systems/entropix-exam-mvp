@@ -10,5 +10,6 @@ export * from './exam.js';
 export * from './registration.js';
 export * from './results.js';
 export * from './scheduling.js';
+export * from './student-portal.js';
 export * from './roles.js';
 export * from './identity.js';

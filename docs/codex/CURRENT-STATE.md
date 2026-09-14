@@ -5,20 +5,18 @@
 ```text
 Known-good foundation: d0-ready
 Shared development branch: integration
-Current integration SHA: 9720aea
+Current integration SHA: eea1b18
 Current sprint: D1-D3 MVP implementation
-Current day: B02 INTEGRATED; B03 FEATURE BRANCH READY FOR REVIEW/MERGE
+Current day: B03 INTEGRATED; B04 IMPLEMENTED ON FEATURE BRANCH
 ```
 
 ## Current Gate
 
-`integration` at `9720aea` includes B02 Marks Entry & Independent Review plus
-the previously integrated academics, people, exams, scheduling, conduct, and IAM
-vertical slices. B03 Result Runs & Publication is implemented on
-`feat/B03-result-runs-publication` from that exact baseline. Focused local
-database, API, contract, and Web verification passes, and migration
-`20260914143000_result_runs_publication` is applied to the shared demo database.
-Review and merge remain pending.
+`integration` at `eea1b18` includes B03 Result Runs & Publication plus the
+previously integrated academics, people, exams, scheduling, conduct, evaluation,
+and IAM vertical slices. B04 Student Portal, Admit Card & Grade Card is
+implemented on `feat/B04-student-portal-documents` from that exact baseline and
+is in focused verification/handoff.
 
 ## Completed
 
@@ -32,38 +30,41 @@ A04 Timetable, Halls & Seats
 A05 Duties, Attendance & Incidents
 B01 Pure Result Rules
 B02 Marks Entry & Independent Review (merged by PR #8 at 9720aea)
+B03 Result Runs & Publication (merged by PR #9 at eea1b18)
 ```
 
 ## In Progress
 
 ```text
-B03 Result Runs & Publication
-Branch: feat/B03-result-runs-publication
-Base: 9720aea
-Status: SHARED-DEMO DEPLOYED AND FOCUSED-VERIFIED; REVIEW/MERGE PENDING
+B04 Student Portal, Admit Card & Grade Card
+Branch: feat/B04-student-portal-documents
+Base: eea1b18
+Status: IMPLEMENTED; FOCUSED TESTS/BUILDS AND PRINT UI CHECK PASS
 ```
 
 ## Blockers
 
-No B03 implementation or shared-demo deployment blocker. Review and integration
-merge remain.
+The configured shared demo has a complete published Cedar timetable and the
+real authenticated B04 registration/timetable/admit-card journey now passes.
+ANNUAL-2026 has no current result because its three sittings are scheduled for
+15-17 September 2026; conduct correctly reports 63 incomplete items and three
+marks batches remain unapproved. Do not fabricate a publication before those
+business inputs are complete.
 
 ## Migration Lock
 
 ```text
-Owner: Developer B - B03 Result Runs & Publication
-Purpose: ResultRun, ResultItem, StudentResult, Publication, forced RLS, immutable
-snapshot triggers, and one-current-publication enforcement
-New migration: 20260914143000_result_runs_publication
-Last integrated B02 migration: 20260914040000_evaluation_marks_review
+Owner: NONE
+Purpose: available; B04 introduces no schema change
+Last integrated migration: 20260914143000_result_runs_publication
 ```
 
 ## Shared Contract Lock
 
 ```text
-Owner: Developer B - B03 Result Runs & Publication
-Purpose: result readiness, immutable run/item/student snapshots, publication,
-withdrawal, and current-only student result contracts
+Owner: Developer B - B04 Student Portal, Admit Card & Grade Card
+Purpose: authenticated own-registration/timetable/result reads, current document
+metadata, and strict WITHHELD response privacy
 ```
 
 ## Developer A
@@ -76,12 +77,12 @@ Status: MERGED; LOCKS RELEASED
 ## Developer B
 
 ```text
-Task: B03 Result Runs & Publication
-Branch: feat/B03-result-runs-publication
-Status: SHARED-DEMO DEPLOYED AND FOCUSED-VERIFIED; REVIEW/MERGE PENDING
+Task: B04 Student Portal, Admit Card & Grade Card
+Branch: feat/B04-student-portal-documents
+Status: IMPLEMENTED; FOCUSED VERIFIED; HANDOFF/REVIEW PENDING
 ```
 
-## Current B03 Acceptance Evidence (Unmerged)
+## Current B03 Acceptance Evidence (Integrated)
 
 - Migration applied to disposable local PostgreSQL; all 15 migrations report up
   to date and Prisma schema validation passes.
@@ -112,7 +113,39 @@ Status: SHARED-DEMO DEPLOYED AND FOCUSED-VERIFIED; REVIEW/MERGE PENDING
   verification, and teardown path; the documented `pnpm setup:local` sequence
   passes against disposable local PostgreSQL.
 
+## Current B04 Acceptance Evidence (Feature Branch)
+
+- `pnpm verify:b04` passes: 13 focused API result/portal tests, 4 focused Web
+  navigation/client tests, contracts build, API/Web typechecks, and API/Web lint.
+- API and Web production builds pass; all B04 `/api/v1/me/*` routes map at
+  startup, health returns 200, and an unauthenticated portal read returns 401.
+- The read-only restricted-role `pnpm smoke:student-portal` query resolves the
+  configured Northstar student from membership context and returns only the
+  approved registration. Current shared data has no published timetable or
+  current publication for that student, so it correctly returns neither current
+  document nor result.
+- `PORTAL_SMOKE_TENANT_SLUG=cedar-school pnpm smoke:student-portal` passes for
+  two scoped Cedar students; Student 03 has one approved registration, one
+  published timetable with three papers, and no current result.
+- Cedar Student 03 was provisioned through the real one-time password-reset
+  workflow. A real browser login and refresh-cookie reload resolve only that
+  student's Class 10 registration, timetable, Hall A seat 03, and current admit
+  card. Sign-out returns to the login page and revokes the verification session.
+- The real Cedar admit card prints as one page with the student/roll identity,
+  all three local-time sittings, seat 03, stable issue ID, and schedule revision
+  1. The browser reported no page errors or Vite overlay.
+- A browser rendering check with local fixture responses covers reload, the
+  mockup-aligned student portal, local-time hall/seat display, and both printable
+  documents without a Vite overlay or page error. Admit and grade print outputs
+  are each one page and include their current revision/version and issue ID.
+- No schema, migration, stored file, public URL, or signed URL was added; current
+  printable HTML references derive from the approved registration plus schedule
+  revision or the active publication plus publication version.
+
 ## Next Required Action
 
-Review the B03 handwritten/generated/migration diff, merge through
-`integration`, then release both locks and refresh dependent lanes.
+Review B04's scoped `/api/v1/me/*` queries, typed contracts, portal/print UI,
+and focused evidence, then commit/merge B04 and release its contract lock. The
+real Cedar grade-card proof can run only after the 15-17 September conduct
+windows, marks submission, independent approval, computation, and publication,
+or after the team explicitly approves a separate historical demo fixture.

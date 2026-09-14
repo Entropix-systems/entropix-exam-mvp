@@ -45,6 +45,9 @@ describe('role-aware workspace navigation', () => {
     expect(student).not.toContain('Setup &amp; access')
     expect(student).not.toContain('Timetable &amp; halls')
     expect(student).not.toContain('Duties &amp; attendance')
+    expect(student).toContain('Student portal')
+    expect(student).not.toContain('Result publication')
+    expect(student).toContain('Exams &amp; registration')
     const invigilator = renderToStaticMarkup(
       <WorkspaceShell currentUser={context('INVIGILATOR')} active="attendance" onLogout={vi.fn()} onSwitchInstitution={vi.fn()} onSwitchRole={vi.fn()}>
         Assigned roster
