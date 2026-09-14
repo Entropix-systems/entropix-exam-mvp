@@ -16,6 +16,8 @@ export interface StudentDirectoryRecord {
 export interface StudentDirectoryResponse {
   students: readonly StudentDirectoryRecord[];
   total: number;
+  nextCursor: UUID | null;
+  pageSize: number;
 }
 
 export interface FacultyDirectoryRecord {

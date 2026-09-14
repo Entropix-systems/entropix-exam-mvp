@@ -15,9 +15,18 @@ export class PeopleApiClient {
     this.requester = requester
   }
 
-  listStudents(search = ''): Promise<StudentDirectoryResponse> {
-    const query = search.trim() ? `?search=${encodeURIComponent(search.trim())}` : ''
-    return this.requester.request(`/people/students${query}`)
+  listStudents(options: {
+    search?: string
+    cursor?: string | null
+    pageSize?: number
+  } = {}): Promise<StudentDirectoryResponse> {
+    const query = new URLSearchParams()
+    if (options.search?.trim()) query.set('search', options.search.trim())
+    if (options.cursor) query.set('cursor', options.cursor)
+    if (options.pageSize) query.set('pageSize', String(options.pageSize))
+    return this.requester.request(
+      `/people/students${query.size ? `?${query.toString()}` : ''}`,
+    )
   }
 
   getStudent(id: string): Promise<StudentDirectoryRecord> {

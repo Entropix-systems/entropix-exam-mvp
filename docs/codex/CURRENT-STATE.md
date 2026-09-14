@@ -36,6 +36,7 @@ B03 Result Runs & Publication (merged by PR #9 at eea1b18)
 B04 Student Portal, Admit Card & Grade Card (merged locally at 536fac9)
 Full Application Demo Seed, Role Credentials & End-to-End Flow Test (merged at b5fe792)
 B05 Dashboard, Reports, Audit & Demo Polish (merged at 5d021ed)
+Student directory API/UI cursor pagination (locally verified and integrated)
 ```
 
 ## Full-Application Demo Gate

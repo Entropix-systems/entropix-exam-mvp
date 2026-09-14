@@ -12,8 +12,10 @@ export class PeopleController {
   listStudents(
     @CurrentAuthContext() context: AuthenticatedContext,
     @Query('search') search?: string,
+    @Query('cursor') cursor?: string,
+    @Query('pageSize') pageSize?: string,
   ) {
-    return this.people.listStudents(context, search);
+    return this.people.listStudents(context, search, cursor, pageSize);
   }
 
   @Get('students/:id')
