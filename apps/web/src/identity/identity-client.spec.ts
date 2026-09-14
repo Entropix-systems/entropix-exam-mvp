@@ -26,7 +26,7 @@ describe('IdentityApiClient', () => {
       { role: 'FACULTY' as const, departmentId: 'department-1' },
     ]
 
-    await client.createInvitation({ email: 'faculty@example.test', grants })
+    await client.createInvitation({ email: 'faculty@example.test', name: 'Faculty Member', grants })
     await client.replaceRoleGrants('membership/1', {
       expectedVersion: 3,
       grants,
