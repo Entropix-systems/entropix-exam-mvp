@@ -3,12 +3,13 @@
 Last updated: 2026-09-14
 Branch: `feat/B05-dashboard-reports-demo-polish`
 Base / starting HEAD: `b5fe792` (`integration` after PR #10)
-Current HEAD: `b5fe792` plus the uncommitted B05 working tree
+Implementation commit: `6cd45a4`
+Integration merge: `5d021ed`
 
 ## Current Task
 
 Task: B05 Dashboard, Reports, Audit & Demo Polish
-Status: IMPLEMENTED AND VERIFIED ON DISPOSABLE LOCAL POSTGRESQL; REVIEW/COMMIT/MERGE PENDING
+Status: MERGED INTO `integration`; VERIFIED ON DISPOSABLE LOCAL POSTGRESQL
 
 B05 replaces the starter home screen with an authoritative examination overview,
 adds role-scoped reports and safe CSV exports, persists real post-migration
@@ -46,7 +47,7 @@ for the Tuesday demo.
   PostgreSQL. It was not applied to any shared or remote target.
 - Shared contracts: NONE. B05 request/response types remain feature-local.
 - Decision: `DEC-012 — Request-Level Immutable Audit Events`.
-- Migration lock: HELD BY DEV B / B05 until the branch migration merges.
+- Migration lock: RELEASED after integration merge `5d021ed`.
 
 ## Verification
 
@@ -123,13 +124,11 @@ providing a direct tenant-scope check in addition to database RLS.
 
 ## Next Exact Action
 
-1. Review `git diff --check` and the complete B05 diff.
-2. Commit the internally consistent B05 working tree.
-3. Merge through `integration`; affected developers pull/rebase and reread
+1. Affected developers pull/rebase updated `integration` and reread
    `CURRENT-STATE.md` plus `DEC-012`.
-4. Apply `20260914150000_audit_events` to an explicitly authorized shared demo
+2. Apply `20260914150000_audit_events` to an explicitly authorized shared demo
    before expecting audit capture there.
-5. Rerun the focused B05 checks and both authenticated institution journeys on
+3. Rerun the focused B05 checks and both authenticated institution journeys on
    that exact target.
 
 ## Minimal Context for the Next Session

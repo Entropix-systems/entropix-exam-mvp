@@ -5,17 +5,16 @@
 ```text
 Known-good foundation: d0-ready
 Shared development branch: integration
-Current integration merge: b5fe792
+Current B05 integration merge: 5d021ed
 Current sprint: D1-D3 MVP implementation
-Current day: FULL-APPLICATION GATE INTEGRATED; B05 VERIFIED LOCALLY
+Current day: B05 INTEGRATED; SHARED-DEMO APPLICATION PENDING
 ```
 
 ## Current Gate
 
-B05 dashboard, reports, audit, and demo polish is implemented on
-`feat/B05-dashboard-reports-demo-polish` from integrated baseline `b5fe792` and
-verified against disposable local PostgreSQL. Shared-demo migration/application
-was not attempted; review and merge remain pending.
+B05 dashboard, reports, audit, and demo polish is integrated at `5d021ed` from
+implementation commit `6cd45a4` and verified against disposable local
+PostgreSQL. Shared-demo migration/application was not attempted.
 
 ## Completed
 
@@ -32,6 +31,7 @@ B02 Marks Entry & Independent Review (merged by PR #8 at 9720aea)
 B03 Result Runs & Publication (merged by PR #9 at eea1b18)
 B04 Student Portal, Admit Card & Grade Card (merged locally at 536fac9)
 Full Application Demo Seed, Role Credentials & End-to-End Flow Test (merged at b5fe792)
+B05 Dashboard, Reports, Audit & Demo Polish (merged at 5d021ed)
 ```
 
 ## Full-Application Demo Gate
@@ -65,17 +65,16 @@ audit history, dashboard state, or exports match the disposable local target.
 ## Migration Lock
 
 ```text
-Owner: DEV B / B05
-Purpose: tenant-scoped AuditEvent migration is verified locally; merge pending
-Last integrated migration: 20260914143000_result_runs_publication
-Pending branch migration: 20260914150000_audit_events
+Owner: NONE
+Purpose: B05 audit migration integrated; lock released
+Last integrated migration: 20260914150000_audit_events
 ```
 
 ## Shared Contract Lock
 
 ```text
 Owner: NONE
-Purpose: B04 contracts are integrated locally; available for B04A/B05
+Purpose: B05 introduced no shared contract change
 ```
 
 ## Developer A
@@ -88,9 +87,10 @@ Status: MERGED; LOCKS RELEASED
 ## Developer B
 
 ```text
-Active task: B05 Dashboard, Reports, Audit & Demo Polish
-Branch: feat/B05-dashboard-reports-demo-polish
-Status: IMPLEMENTED AND VERIFIED LOCALLY; REVIEW/MERGE PENDING
+Last delivered task: B05 Dashboard, Reports, Audit & Demo Polish
+Implementation: 6cd45a4
+Integration merge: 5d021ed
+Status: MERGED; LOCKS RELEASED
 ```
 
 ## Current B03 Acceptance Evidence (Integrated)
@@ -202,9 +202,8 @@ Status: IMPLEMENTED AND VERIFIED LOCALLY; REVIEW/MERGE PENDING
 
 ## Next Required Action
 
-Review and commit `feat/B05-dashboard-reports-demo-polish`, then merge it through
-`integration` and release the migration lock. Apply
-`20260914150000_audit_events` to an explicitly authorized
-shared-demo target before demonstrating audit capture there, and rerun the
-focused B05 checks plus the two authenticated institution journeys. Remote push
-and shared-target mutation remain separate authorized actions.
+Affected developers should pull/rebase from updated `integration` and reread
+`DEC-012`. Apply `20260914150000_audit_events` to an explicitly authorized
+shared-demo target before demonstrating audit capture there, then rerun the
+focused B05 checks plus the two authenticated institution journeys. Shared-target
+mutation remains a separate authorized action.
