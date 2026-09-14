@@ -41,10 +41,11 @@ for the Tuesday demo.
 
 - Migration: `20260914150000_audit_events`.
 - Model: tenant-owned `AuditEvent` with composite tenant relationships, forced
-  RLS, runtime SELECT/INSERT only, immutable update/delete trigger, and unique
+  RLS, immutable update/delete trigger, and unique
   `(tenant_id, request_id)` idempotency.
 - The migration applied successfully through Prisma to disposable local
-  PostgreSQL. It was not applied to any shared or remote target.
+  PostgreSQL and the configured Supabase target. Prisma reports all 16
+  migrations current on the configured target.
 - Shared contracts: NONE. B05 request/response types remain feature-local.
 - Decision: `DEC-012 — Request-Level Immutable Audit Events`.
 - Migration lock: RELEASED after integration merge `5d021ed`.
@@ -110,7 +111,13 @@ providing a direct tenant-scope check in addition to database RLS.
 
 ## Important Limitations
 
-- Shared/remote demo schema and data were not mutated or verified.
+- The configured Supabase schema was migrated, but its application data and
+  browser journeys were not reverified.
+- The configured `exam_app` connection is non-owner, non-superuser, and does not
+  bypass RLS. It currently inherits UPDATE and DELETE table privileges despite
+  the migration's explicit SELECT/INSERT grant; the immutable trigger still
+  rejects both operations. Tightening that inherited ACL requires a separate
+  reviewed migration.
 - The audit interceptor is intentionally request-level for the demo, not a
   transactional outbox. A committed command can survive an audit persistence
   failure; the failure is logged.
@@ -126,9 +133,7 @@ providing a direct tenant-scope check in addition to database RLS.
 
 1. Affected developers pull/rebase updated `integration` and reread
    `CURRENT-STATE.md` plus `DEC-012`.
-2. Apply `20260914150000_audit_events` to an explicitly authorized shared demo
-   before expecting audit capture there.
-3. Rerun the focused B05 checks and both authenticated institution journeys on
+2. Rerun the focused B05 checks and both authenticated institution journeys on
    that exact target.
 
 ## Minimal Context for the Next Session

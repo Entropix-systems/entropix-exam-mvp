@@ -7,14 +7,16 @@ Known-good foundation: d0-ready
 Shared development branch: integration
 Current B05 integration merge: 5d021ed
 Current sprint: D1-D3 MVP implementation
-Current day: B05 INTEGRATED; SHARED-DEMO APPLICATION PENDING
+Current day: B05 INTEGRATED; CONFIGURED SUPABASE MIGRATION APPLIED
 ```
 
 ## Current Gate
 
 B05 dashboard, reports, audit, and demo polish is integrated at `5d021ed` from
 implementation commit `6cd45a4` and verified against disposable local
-PostgreSQL. Shared-demo migration/application was not attempted.
+PostgreSQL. The configured Supabase target now reports all 16 migrations current,
+including `20260914150000_audit_events`; shared-target data and browser journeys
+were not rerun.
 
 ## Completed
 
@@ -41,7 +43,7 @@ Full Application Demo Seed, Role Credentials & End-to-End Flow Test
 Prompt: docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md
 Status: INTEGRATED AT b5fe792; VERIFIED ON DISPOSABLE LOCAL POSTGRESQL
 Local target: APPLIED
-Shared demo target: NOT APPLIED / NOT VERIFIED
+Shared demo seeded journey data: NOT APPLIED / NOT VERIFIED
 ```
 
 Local authoritative historical outcomes:
@@ -58,9 +60,9 @@ Bulk import pack: 12 Northstar rows, 12 Cedar rows, 7 negative/reconciliation ro
 
 ## Blockers
 
-No implementation blocker remains for local B05 verification. The configured
-shared demo was not migrated or mutated by B05. Do not infer that its schema,
-audit history, dashboard state, or exports match the disposable local target.
+No implementation blocker remains for B05. The configured Supabase schema is
+current, but its audit history, dashboard data, exports, and browser journeys
+were not reverified after migration deployment.
 
 ## Migration Lock
 
@@ -68,6 +70,7 @@ audit history, dashboard state, or exports match the disposable local target.
 Owner: NONE
 Purpose: B05 audit migration integrated; lock released
 Last integrated migration: 20260914150000_audit_events
+Configured Supabase target: APPLIED AND STATUS VERIFIED (16/16)
 ```
 
 ## Shared Contract Lock
@@ -187,7 +190,8 @@ Status: MERGED; LOCKS RELEASED
   spreadsheet formula prefixes are neutralized; WITHHELD rows omit percentage
   and GPA.
 - `20260914150000_audit_events` applied through Prisma to disposable local
-  PostgreSQL. Forced RLS and tenant/membership foreign keys preserve tenant
+  PostgreSQL and the configured Supabase target. Prisma reports 16/16 migrations
+  current. Forced RLS and tenant/membership foreign keys preserve tenant
   boundaries; update/delete triggers make recorded events immutable.
 - Successful mapped business commands now record actor, active role, action,
   target, reason when supplied, request ID, and timestamp. Audit persistence is
@@ -203,7 +207,6 @@ Status: MERGED; LOCKS RELEASED
 ## Next Required Action
 
 Affected developers should pull/rebase from updated `integration` and reread
-`DEC-012`. Apply `20260914150000_audit_events` to an explicitly authorized
-shared-demo target before demonstrating audit capture there, then rerun the
-focused B05 checks plus the two authenticated institution journeys. Shared-target
-mutation remains a separate authorized action.
+`DEC-012`. Rerun the focused B05 checks plus the two authenticated institution
+journeys against the configured Supabase target before treating its application
+data as demo-verified.
