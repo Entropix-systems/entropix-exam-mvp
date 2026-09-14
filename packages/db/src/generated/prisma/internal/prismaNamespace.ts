@@ -433,6 +433,7 @@ export const ModelName = {
   StudentResult: 'StudentResult',
   Publication: 'Publication',
   AuditEvent: 'AuditEvent',
+  PlatformAuditEvent: 'PlatformAuditEvent',
   WorkerJob: 'WorkerJob',
   WorkerOutput: 'WorkerOutput',
   RoleGrant: 'RoleGrant',
@@ -453,7 +454,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "campus" | "department" | "program" | "academicYear" | "term" | "cohort" | "subject" | "user" | "membership" | "student" | "faculty" | "enrolment" | "studentImport" | "ruleVersion" | "exam" | "examSubject" | "registration" | "registrationSubject" | "examPaper" | "hall" | "hallSitting" | "seatAssignment" | "duty" | "attendanceBatch" | "attendance" | "incident" | "incidentStudent" | "evaluationAssignment" | "marksBatch" | "mark" | "resultRun" | "resultItem" | "studentResult" | "publication" | "auditEvent" | "workerJob" | "workerOutput" | "roleGrant" | "session" | "authToken"
+    modelProps: "tenant" | "campus" | "department" | "program" | "academicYear" | "term" | "cohort" | "subject" | "user" | "membership" | "student" | "faculty" | "enrolment" | "studentImport" | "ruleVersion" | "exam" | "examSubject" | "registration" | "registrationSubject" | "examPaper" | "hall" | "hallSitting" | "seatAssignment" | "duty" | "attendanceBatch" | "attendance" | "incident" | "incidentStudent" | "evaluationAssignment" | "marksBatch" | "mark" | "resultRun" | "resultItem" | "studentResult" | "publication" | "auditEvent" | "platformAuditEvent" | "workerJob" | "workerOutput" | "roleGrant" | "session" | "authToken"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3121,6 +3122,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PlatformAuditEvent: {
+      payload: Prisma.$PlatformAuditEventPayload<ExtArgs>
+      fields: Prisma.PlatformAuditEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlatformAuditEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformAuditEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlatformAuditEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformAuditEventPayload>
+        }
+        findFirst: {
+          args: Prisma.PlatformAuditEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformAuditEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlatformAuditEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformAuditEventPayload>
+        }
+        findMany: {
+          args: Prisma.PlatformAuditEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformAuditEventPayload>[]
+        }
+        create: {
+          args: Prisma.PlatformAuditEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformAuditEventPayload>
+        }
+        createMany: {
+          args: Prisma.PlatformAuditEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlatformAuditEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformAuditEventPayload>[]
+        }
+        delete: {
+          args: Prisma.PlatformAuditEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformAuditEventPayload>
+        }
+        update: {
+          args: Prisma.PlatformAuditEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformAuditEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlatformAuditEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlatformAuditEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlatformAuditEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformAuditEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlatformAuditEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformAuditEventPayload>
+        }
+        aggregate: {
+          args: Prisma.PlatformAuditEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlatformAuditEvent>
+        }
+        groupBy: {
+          args: Prisma.PlatformAuditEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlatformAuditEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlatformAuditEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlatformAuditEventCountAggregateOutputType> | number
+        }
+      }
+    }
     WorkerJob: {
       payload: Prisma.$WorkerJobPayload<ExtArgs>
       fields: Prisma.WorkerJobFieldRefs
@@ -3534,7 +3609,12 @@ export const TenantScalarFieldEnum = {
   id: 'id',
   name: 'name',
   slug: 'slug',
+  code: 'code',
+  type: 'type',
+  primaryAdministratorName: 'primaryAdministratorName',
+  primaryAdministratorEmail: 'primaryAdministratorEmail',
   status: 'status',
+  onboardingState: 'onboardingState',
   timezone: 'timezone',
   plan: 'plan',
   createdAt: 'createdAt',
@@ -4094,6 +4174,20 @@ export const AuditEventScalarFieldEnum = {
 export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
 
 
+export const PlatformAuditEventScalarFieldEnum = {
+  id: 'id',
+  actorUserId: 'actorUserId',
+  tenantId: 'tenantId',
+  action: 'action',
+  previous: 'previous',
+  next: 'next',
+  requestId: 'requestId',
+  createdAt: 'createdAt'
+} as const
+
+export type PlatformAuditEventScalarFieldEnum = (typeof PlatformAuditEventScalarFieldEnum)[keyof typeof PlatformAuditEventScalarFieldEnum]
+
+
 export const WorkerJobScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -4508,6 +4602,7 @@ export type GlobalOmitConfig = {
   studentResult?: Prisma.StudentResultOmit
   publication?: Prisma.PublicationOmit
   auditEvent?: Prisma.AuditEventOmit
+  platformAuditEvent?: Prisma.PlatformAuditEventOmit
   workerJob?: Prisma.WorkerJobOmit
   workerOutput?: Prisma.WorkerOutputOmit
   roleGrant?: Prisma.RoleGrantOmit

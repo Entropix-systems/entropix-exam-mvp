@@ -51,16 +51,33 @@ but permission and feature checks evaluate only the active role bundle. JWTs rem
 identity hints and never carry authoritative role state.
 
 ```text
-POST /api/v1/auth/context  { institutionId, role? }
+POST /api/v1/auth/context  { institutionId?, role?, returnToPlatform? }
 GET  /api/v1/auth/me       → { email, context, sessionId, institutions }
 ```
 
 Context switching accepts only an active institution membership belonging to the
 authenticated user and, when supplied, a role currently granted on that
-membership. A successful switch updates the session and live refresh-token
-binding atomically, then returns a replacement access token. The browser reloads
-`/auth/me` and remounts tenant screens so no tenant-local page state survives the
-switch.
+membership. A Platform Admin may instead select an ACTIVE institution through the
+same command: the session stays `PLATFORM`, retains the real user/role, and
+persists only a server-validated selected tenant ID (never a membership or tenant
+role). A successful switch updates the session and live refresh-token binding
+atomically, then returns a replacement access token. The browser reloads
+`/auth/me` and remounts all selected-institution screens so no tenant-local page
+state survives the switch.
+
+Platform institution management is available only to a current `PLATFORM_ADMIN`:
+
+```text
+GET  /api/v1/platform/institutions
+POST /api/v1/platform/institutions
+POST /api/v1/platform/institutions/:id/status
+```
+
+Onboarding requires name, unique code, type, initial academic year, initial
+administrator details, status, and a request ID. Platform actions are retained in
+the immutable platform audit with the real actor user ID, selected tenant, prior/
+next material values, request ID, and timestamp. Non-platform users cannot list,
+onboard, select, or mutate arbitrary institutions.
 
 The staff access directory is cursor-paginated on the server:
 

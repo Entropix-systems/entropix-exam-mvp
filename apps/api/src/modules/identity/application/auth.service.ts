@@ -172,7 +172,7 @@ export class AuthApplicationService {
 
   async switchContext(
     principal: AuthenticatedPrincipal,
-    input: SwitchAuthContextRequest,
+    input: SwitchAuthContextRequest & { requestId?: string },
   ): Promise<AccessTokenResponse> {
     const institutionId =
       typeof input.institutionId === 'string' && isUuid(input.institutionId)
@@ -184,7 +184,8 @@ export class AuthApplicationService {
         : typeof input.role === 'string' && tenantRoles.has(input.role)
           ? input.role
           : undefined;
-    if (!institutionId || role === undefined)
+    const returnToPlatform = input.returnToPlatform === true;
+    if ((!institutionId && !returnToPlatform) || (returnToPlatform && (institutionId || input.role !== undefined)) || role === undefined)
       throw new AuthApplicationError(
         'VALIDATION',
         'Institution or role selection is invalid',
@@ -194,6 +195,8 @@ export class AuthApplicationService {
       sessionId: principal.identity.sessionId,
       institutionId,
       role,
+      returnToPlatform,
+      requestId: input.requestId ?? randomUUID(),
       now: this.clock(),
     });
     if (result.kind === 'SESSION_INVALID') throw invalidSession();

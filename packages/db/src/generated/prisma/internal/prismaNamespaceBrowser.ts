@@ -87,6 +87,7 @@ export const ModelName = {
   StudentResult: 'StudentResult',
   Publication: 'Publication',
   AuditEvent: 'AuditEvent',
+  PlatformAuditEvent: 'PlatformAuditEvent',
   WorkerJob: 'WorkerJob',
   WorkerOutput: 'WorkerOutput',
   RoleGrant: 'RoleGrant',
@@ -114,7 +115,12 @@ export const TenantScalarFieldEnum = {
   id: 'id',
   name: 'name',
   slug: 'slug',
+  code: 'code',
+  type: 'type',
+  primaryAdministratorName: 'primaryAdministratorName',
+  primaryAdministratorEmail: 'primaryAdministratorEmail',
   status: 'status',
+  onboardingState: 'onboardingState',
   timezone: 'timezone',
   plan: 'plan',
   createdAt: 'createdAt',
@@ -672,6 +678,20 @@ export const AuditEventScalarFieldEnum = {
 } as const
 
 export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
+
+
+export const PlatformAuditEventScalarFieldEnum = {
+  id: 'id',
+  actorUserId: 'actorUserId',
+  tenantId: 'tenantId',
+  action: 'action',
+  previous: 'previous',
+  next: 'next',
+  requestId: 'requestId',
+  createdAt: 'createdAt'
+} as const
+
+export type PlatformAuditEventScalarFieldEnum = (typeof PlatformAuditEventScalarFieldEnum)[keyof typeof PlatformAuditEventScalarFieldEnum]
 
 
 export const WorkerJobScalarFieldEnum = {

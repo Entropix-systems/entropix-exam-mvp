@@ -106,6 +106,10 @@ export class AuthApiClient {
     }
   }
 
+  async returnToPlatform(): Promise<CurrentUserResponse> {
+    return this.switchContext({ returnToPlatform: true })
+  }
+
   async logout(): Promise<void> {
     try {
       if (this.accessToken) {

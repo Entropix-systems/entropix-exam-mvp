@@ -222,6 +222,11 @@ export type Publication = Prisma.PublicationModel
  */
 export type AuditEvent = Prisma.AuditEventModel
 /**
+ * Model PlatformAuditEvent
+ * * Immutable platform-admin audit; actor identity is global, never a tenant membership.
+ */
+export type PlatformAuditEvent = Prisma.PlatformAuditEventModel
+/**
  * Model WorkerJob
  *
  */

@@ -81,6 +81,13 @@ export function AuthProvider({
     [client],
   )
 
+  const returnToPlatform = useCallback(async () => {
+    const user = await client.returnToPlatform()
+    setCurrentUser(user)
+    setStatus('AUTHENTICATED')
+    return user
+  }, [client])
+
   const switchRole = useCallback(
     async (role: TenantRole) => {
       if (!currentUser || currentUser.context.kind !== 'TENANT') {
@@ -112,6 +119,7 @@ export function AuthProvider({
       currentUser,
       login,
       switchInstitution,
+      returnToPlatform,
       switchRole,
       logout,
       restore,
@@ -121,6 +129,7 @@ export function AuthProvider({
       currentUser,
       login,
       switchInstitution,
+      returnToPlatform,
       switchRole,
       logout,
       restore,

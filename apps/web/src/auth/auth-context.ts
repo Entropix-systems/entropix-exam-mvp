@@ -16,6 +16,7 @@ export interface AuthContextValue {
   currentUser: CurrentUserResponse | null
   login(input: LoginRequest): Promise<CurrentUserResponse>
   switchInstitution(institutionId: string): Promise<CurrentUserResponse>
+  returnToPlatform(): Promise<CurrentUserResponse>
   switchRole(role: TenantRole): Promise<CurrentUserResponse>
   logout(): Promise<void>
   restore(): Promise<void>

@@ -428,13 +428,15 @@ describe('current context', () => {
       accessToken: `access:${sessionId}`,
       expiresInSeconds: 900,
     });
-    expect(repository.switchCommands).toEqual([{
+    expect(repository.switchCommands).toHaveLength(1);
+    expect(repository.switchCommands[0]).toMatchObject({
       userId,
       sessionId,
       institutionId: tenantId,
       role: 'STUDENT',
+      returnToPlatform: false,
       now,
-    }]);
+    });
     expect(accessTokens.signed.at(-1)).toEqual(identity);
 
     repository.switchResult = { kind: 'FORBIDDEN' };
@@ -442,5 +444,14 @@ describe('current context', () => {
       institutionId: '33333333-3333-4333-8333-333333333333',
       role: 'INSTITUTION_ADMIN',
     })).rejects.toMatchObject({ kind: 'FORBIDDEN' });
+  });
+
+  it('passes a platform-owned selected institution without claiming a tenant role', async () => {
+    const { service, repository } = setup();
+    const platformIdentity: AccessTokenIdentity = { kind: 'PLATFORM', userId, sessionId };
+    const platformContext: AuthenticatedContext = { kind: 'PLATFORM', userId, role: 'PLATFORM_ADMIN' };
+    repository.switchResult = { kind: 'SWITCHED', identity: { ...platformIdentity, tenantId } };
+    await service.switchContext({ identity: platformIdentity, context: platformContext }, { institutionId: tenantId });
+    expect(repository.switchCommands[0]).toMatchObject({ institutionId: tenantId, role: null, returnToPlatform: false });
   });
 });

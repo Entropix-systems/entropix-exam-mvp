@@ -23,6 +23,8 @@ export interface PlatformAuthContext {
   readonly kind: 'PLATFORM';
   readonly userId: UUID;
   readonly role: 'PLATFORM_ADMIN';
+  /** A platform-authorized institution selection, never a tenant membership. */
+  readonly tenantId?: UUID;
 }
 
 /** Server-resolved authority, never copied directly from request/JWT claims. */

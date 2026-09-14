@@ -50,6 +50,17 @@ describe('role-aware landing policy', () => {
     expect(canAccessWorkspacePath(platformUser, '/')).toBe(false)
   })
 
+  it('takes a selected Platform Admin directly to the institution overview and keeps platform return available', () => {
+    const selected: CurrentUserResponse = {
+      ...platformUser,
+      institutions: [{ id: '11111111-1111-4111-8111-111111111111', name: 'Northstar College', slug: 'northstar-college' }],
+      context: { ...platformUser.context, tenantId: '11111111-1111-4111-8111-111111111111' },
+    }
+    expect(canAccessWorkspacePath(selected, '/')).toBe(true)
+    expect(destinationAfterContextChange('/platform', selected)).toBe('/')
+    expect(canAccessWorkspacePath(selected, '/masters')).toBe(false)
+  })
+
   it('routes Faculty to Invigilator from marks into attendance', () => {
     const invigilator = tenantUser('INVIGILATOR', ['FACULTY', 'INVIGILATOR'])
     expect(destinationAfterContextChange('/marks', invigilator)).toBe('/attendance')

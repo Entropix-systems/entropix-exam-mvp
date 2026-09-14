@@ -12,6 +12,7 @@ describe('LoginPage', () => {
         currentUser: null,
         login: vi.fn(),
         switchInstitution: vi.fn(),
+        returnToPlatform: vi.fn(),
         switchRole: vi.fn(),
         logout: vi.fn(),
         restore: vi.fn(),

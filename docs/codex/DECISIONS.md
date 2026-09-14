@@ -316,6 +316,29 @@ Related task: A13/A15 release-evidence closure.
 
 ---
 
+## DEC-014 — Platform Selection Is Not Tenant Impersonation
+
+Status: ACCEPTED
+
+Decision:
+
+A Platform Admin may select an ACTIVE institution in a `PLATFORM` session. The
+session/JWT retain the Platform Admin user and role and carry only the
+server-validated selected tenant ID; they never acquire a tenant membership,
+tenant role, or tenant authorization claim. Platform institution actions use a
+separate immutable audit record keyed to the real user identity.
+
+Consequences:
+
+Ordinary users remain membership-scoped. Platform-selected overview reads are
+explicitly allowed only for the selected tenant; ordinary tenant API commands
+continue to reject Platform context unless a dedicated platform policy is added.
+
+Affected modules: Identity, Platform administration, Audit, Web workspace,
+Database.
+
+---
+
 ## New Decision Template
 
 ### DEC-XXX — Title

@@ -45,7 +45,7 @@ export function ExamOverview({ exam, timezone, currentUser }: { exam: DashboardE
 }
 
 export function HomePage({ client }: { client: AuditApiClient }) {
-  const { currentUser, logout, switchInstitution, switchRole } = useAuth()
+  const { currentUser, logout, switchInstitution, returnToPlatform, switchRole } = useAuth()
   const [snapshot, setSnapshot] = useState<DashboardSnapshot | null>(null)
   const [selectedId, setSelectedId] = useState('')
   const [loading, setLoading] = useState(true)
@@ -75,10 +75,11 @@ export function HomePage({ client }: { client: AuditApiClient }) {
   }, [client])
   if (!currentUser) return null
   const tenant = currentUser.context.kind === 'TENANT' ? currentUser.context : null
+  const selectedTenantId = tenant?.tenantId ?? (currentUser.context.kind === 'PLATFORM' ? currentUser.context.tenantId : undefined)
   const exam = snapshot?.exams.find((entry) => entry.examId === selectedId) ?? snapshot?.exams[0]
 
-  return <WorkspaceShell currentUser={currentUser} active="overview" onLogout={logout} onSwitchInstitution={switchInstitution} onSwitchRole={switchRole}>
-    <div className="page-heading"><div><p className="eyebrow">Examination control</p><h1>{snapshot?.institutionName ?? currentUser.institutions.find((institution) => institution.id === tenant?.tenantId)?.name ?? 'Institution overview'}</h1><p>{exam ? `${exam.academicYear} · ${exam.termName} · ${exam.examName}` : 'Authoritative readiness across the examination journey.'}</p></div>{exam && snapshot && snapshot.exams.length > 1 ? <label className="overview-exam-select">Exam<select value={exam.examId} onChange={(event) => setSelectedId(event.target.value)}>{snapshot.exams.map((entry) => <option value={entry.examId} key={entry.examId}>{entry.examCode} · {entry.examName}</option>)}</select></label> : null}</div>
+  return <WorkspaceShell currentUser={currentUser} active="overview" onLogout={logout} onSwitchInstitution={switchInstitution} onReturnToPlatform={returnToPlatform} onSwitchRole={switchRole}>
+    <div className="page-heading"><div><p className="eyebrow">{currentUser.context.kind === 'PLATFORM' ? 'Platform Admin · Institution overview' : 'Examination control'}</p><h1>{snapshot?.institutionName ?? currentUser.institutions.find((institution) => institution.id === selectedTenantId)?.name ?? 'Institution overview'}</h1><p>{exam ? `${exam.academicYear} · ${exam.termName} · ${exam.examName}` : 'Authoritative readiness across the examination journey.'}</p></div>{exam && snapshot && snapshot.exams.length > 1 ? <label className="overview-exam-select">Exam<select value={exam.examId} onChange={(event) => setSelectedId(event.target.value)}>{snapshot.exams.map((entry) => <option value={entry.examId} key={entry.examId}>{entry.examCode} · {entry.examName}</option>)}</select></label> : null}</div>
     {loading ? <div className="reports-empty"><b>Loading overview…</b><p>Reading current registration, schedule, conduct, marks, and publication state.</p></div> : error ? <div className="reports-error" role="alert"><b>Overview unavailable</b><p>{error}</p><button type="button" className="secondary-button" onClick={load}>Try again</button></div> : !exam || !snapshot ? <div className="reports-empty"><b>No examinations yet</b><p>Create an exam to begin the readiness journey.</p></div> : <ExamOverview exam={exam} timezone={snapshot.timezone} currentUser={currentUser} />}
   </WorkspaceShell>
 }
