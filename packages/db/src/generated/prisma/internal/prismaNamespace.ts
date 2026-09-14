@@ -432,6 +432,7 @@ export const ModelName = {
   ResultItem: 'ResultItem',
   StudentResult: 'StudentResult',
   Publication: 'Publication',
+  AuditEvent: 'AuditEvent',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -450,7 +451,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "campus" | "department" | "program" | "academicYear" | "term" | "cohort" | "subject" | "user" | "membership" | "student" | "faculty" | "enrolment" | "studentImport" | "ruleVersion" | "exam" | "examSubject" | "registration" | "registrationSubject" | "examPaper" | "hall" | "hallSitting" | "seatAssignment" | "duty" | "attendanceBatch" | "attendance" | "incident" | "incidentStudent" | "evaluationAssignment" | "marksBatch" | "mark" | "resultRun" | "resultItem" | "studentResult" | "publication" | "roleGrant" | "session" | "authToken"
+    modelProps: "tenant" | "campus" | "department" | "program" | "academicYear" | "term" | "cohort" | "subject" | "user" | "membership" | "student" | "faculty" | "enrolment" | "studentImport" | "ruleVersion" | "exam" | "examSubject" | "registration" | "registrationSubject" | "examPaper" | "hall" | "hallSitting" | "seatAssignment" | "duty" | "attendanceBatch" | "attendance" | "incident" | "incidentStudent" | "evaluationAssignment" | "marksBatch" | "mark" | "resultRun" | "resultItem" | "studentResult" | "publication" | "auditEvent" | "roleGrant" | "session" | "authToken"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3044,6 +3045,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AuditEvent: {
+      payload: Prisma.$AuditEventPayload<ExtArgs>
+      fields: Prisma.AuditEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AuditEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AuditEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>
+        }
+        findFirst: {
+          args: Prisma.AuditEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AuditEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>
+        }
+        findMany: {
+          args: Prisma.AuditEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>[]
+        }
+        create: {
+          args: Prisma.AuditEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>
+        }
+        createMany: {
+          args: Prisma.AuditEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AuditEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>[]
+        }
+        delete: {
+          args: Prisma.AuditEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>
+        }
+        update: {
+          args: Prisma.AuditEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.AuditEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AuditEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AuditEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.AuditEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>
+        }
+        aggregate: {
+          args: Prisma.AuditEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAuditEvent>
+        }
+        groupBy: {
+          args: Prisma.AuditEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuditEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AuditEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuditEventCountAggregateOutputType> | number
+        }
+      }
+    }
     RoleGrant: {
       payload: Prisma.$RoleGrantPayload<ExtArgs>
       fields: Prisma.RoleGrantFieldRefs
@@ -3853,6 +3928,22 @@ export const PublicationScalarFieldEnum = {
 export type PublicationScalarFieldEnum = (typeof PublicationScalarFieldEnum)[keyof typeof PublicationScalarFieldEnum]
 
 
+export const AuditEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  actorMembershipId: 'actorMembershipId',
+  actorRole: 'actorRole',
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  reason: 'reason',
+  requestId: 'requestId',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
+
+
 export const RoleGrantScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -4232,6 +4323,7 @@ export type GlobalOmitConfig = {
   resultItem?: Prisma.ResultItemOmit
   studentResult?: Prisma.StudentResultOmit
   publication?: Prisma.PublicationOmit
+  auditEvent?: Prisma.AuditEventOmit
   roleGrant?: Prisma.RoleGrantOmit
   session?: Prisma.SessionOmit
   authToken?: Prisma.AuthTokenOmit

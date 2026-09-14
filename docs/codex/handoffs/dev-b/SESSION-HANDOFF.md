@@ -1,153 +1,145 @@
 # SESSION HANDOFF - DEV B
 
 Last updated: 2026-09-14
-Branch: `feat/FULL-APPLICATION-demo-seed-and-flow-test`
-Base: `origin/integration` at `1d7ed58`
-Starting HEAD: `ecbf2ec`
+Branch: `feat/B05-dashboard-reports-demo-polish`
+Base / starting HEAD: `b5fe792` (`integration` after PR #10)
+Current HEAD: `b5fe792` plus the uncommitted B05 working tree
 
 ## Current Task
 
-Task: Full Application Demo Seed, Role Credentials & End-to-End Flow Test
-Status: IMPLEMENTED AND VERIFIED ON DISPOSABLE LOCAL POSTGRESQL; REVIEW/MERGE PENDING
+Task: B05 Dashboard, Reports, Audit & Demo Polish
+Status: IMPLEMENTED AND VERIFIED ON DISPOSABLE LOCAL POSTGRESQL; REVIEW/COMMIT/MERGE PENDING
 
-This gate makes IAM plus A01-A05 and B01-B04 reproducible before B05. It adds
-historical completed exams without changing Cedar's future `ANNUAL-2026`
-schedule, provisions fictional role credentials through the real reset path,
-and verifies server-resolved role access plus student documents.
+B05 replaces the starter home screen with an authoritative examination overview,
+adds role-scoped reports and safe CSV exports, persists real post-migration
+command audit events, and aligns workspace navigation/loading/empty/error states
+for the Tuesday demo.
 
-## Commands
+## Implemented
 
-```bash
-pnpm seed:demo:full-application
-pnpm smoke:demo:full-application
-pnpm test:demo:roles
-pnpm test:demo:journey
-pnpm test:demo:bulk-imports
-```
+- `/` now loads tenant- and active-role-scoped exam counts, readiness steps,
+  schedule context, blockers, result-run currency, and publication state.
+- `/reports` exposes registration roster, timetable/seating, attendance/incidents,
+  evaluation progress, current-result register, and audit exports according to
+  the server-resolved active role.
+- All CSV fields are quoted, embedded quotes are escaped, and cells beginning
+  with `=`, `+`, `-`, or `@` after leading whitespace receive an apostrophe.
+- Current-result exports contain only the active publication; WITHHELD rows omit
+  percentage and GPA. No access token, question content, or client-asserted
+  tenant is included.
+- Successful mapped tenant command requests append immutable audit events with
+  actor membership, active role, action, target, optional reason, request ID,
+  and timestamp. Failed/read/auth requests and allocation previews are excluded.
+- Historical seed activity is intentionally absent because it predates audit
+  persistence. The UI states that history is empty instead of inferring it.
+- Navigation follows the demo journey: Overview, setup, masters, students,
+  exams/registration, timetable/halls, duties/attendance, marks/review,
+  publication, reports/audit.
 
-The seed defaults to local PostgreSQL and refuses production. A non-local
-fictional shared demo additionally requires both:
+## Schema / Contracts / Decisions
 
-```bash
-DEMO_SEED_TARGET=shared DEMO_SEED_ACK=<host:port>/<exact-database-name> \
-  pnpm seed:demo:full-application
-```
-
-The shared target was not applied or verified in this task.
-
-## Seeded Journeys
-
-```text
-CEDAR-HIST-2026
-  20 students
-  PASS 18 / ABSENT 1 / WITHHELD 1
-  three published historical sittings and 60 exact seats
-  accepted duties and submitted attendance
-  three independently approved marks batches
-  exactly one current publication
-
-NORTHSTAR-HIST-2026
-  two approved students plus one rejected application fixture
-  PASS 1 / FAIL 1
-  three published historical sittings and six exact seats
-  accepted duties and submitted attendance
-  three independently approved marks batches
-  exactly one current publication
-```
-
-Cedar `ANNUAL-2026` remains schedule revision 1 with its three 15-17 September
-2026 sittings and existing hall/seat/admit-card behavior.
-
-## Credentials and Bulk Imports
-
-- Shared fictional role reference:
-  `docs/codex/SEEDED-ROLE-TEST-CREDENTIALS.md`
-- 13 usable role/student credentials and one expected suspended denial are
-  provisioned through the real reset/password-hashing workflow.
-- Bulk CSV pack: `fixtures/imports/bulk/`
-  - clean 12-row Northstar upload
-  - clean 12-row Cedar upload
-  - seven-row negative/reconciliation preview file
-- The original 100-row Northstar and 20-row Cedar CSVs remain the baseline seed
-  fixtures; the upload pack is not auto-committed into the authoritative roster.
-
-## Browser Evidence
-
-Eight screenshots and their index live under
-`docs/codex/evidence/full-application-demo/`. They cover:
-
-1. Cedar Student 03 PASS portal.
-2. Historical admit card.
-3. One-page grade card.
-4. Controller future timetable/hall allocation.
-5. Controller historical result publication.
-6. Assigned faculty marks.
-7. Invigilator duty/submitted attendance.
-8. Cedar Student 02 WITHHELD privacy.
-
-The browser used real API authentication. The final console had no page or Vite
-errors. No screenshots contain credentials, tokens, cookies, database details,
-or developer tooling.
+- Migration: `20260914150000_audit_events`.
+- Model: tenant-owned `AuditEvent` with composite tenant relationships, forced
+  RLS, runtime SELECT/INSERT only, immutable update/delete trigger, and unique
+  `(tenant_id, request_id)` idempotency.
+- The migration applied successfully through Prisma to disposable local
+  PostgreSQL. It was not applied to any shared or remote target.
+- Shared contracts: NONE. B05 request/response types remain feature-local.
+- Decision: `DEC-012 — Request-Level Immutable Audit Events`.
+- Migration lock: HELD BY DEV B / B05 until the branch migration merges.
 
 ## Verification
 
-- Full seed on disposable local PostgreSQL -> PASS.
-- Identical repeated seed -> PASS; historical publication IDs and counts stable.
-- `pnpm smoke:demo:full-application` -> PASS.
-- `pnpm test:demo:roles` -> PASS for live credential/authority/logout checks and
-  focused identity, guard, conduct, evaluation, and portal authorization tests.
-- `pnpm test:demo:journey` -> PASS for Cedar PASS/ABSENT/WITHHELD privacy and
-  Northstar PASS through the persisted portal repository.
-- `pnpm verify:b04` -> PASS: 13 API tests, 4 Web tests, build/typecheck/lint gate.
-- API and DB typechecks -> PASS.
-- API and Web production builds -> PASS; Web chunks remain under 500 kB.
-- Real Student 03 grade-card print -> PASS; one Letter-size PDF page.
-- API and Worker health endpoints -> PASS in the seeded local environment.
-- Local S3 mock/ClamAV storage lifecycle, infected promotion denial, generated
-  private object, and signed download -> PASS.
-- Notification ACCEPT/FAIL visibility and business-state isolation -> PASS.
-- Bulk CSV artifact parsing, five-column shape inspection, and rendering -> PASS.
+Focused automated checks:
 
-## Schema / Contracts / Environment
+```text
+pnpm --filter @entropix/api exec vitest run \
+  src/modules/audit/csv.spec.ts \
+  src/modules/audit/audit.service.spec.ts \
+  src/modules/audit/audit.interceptor.spec.ts
+  -> PASS (3 files, 8 tests)
 
-- Schema/migration: NONE.
-- Shared contracts: NONE.
-- Architectural decisions: NONE.
-- New required environment variables: NONE. Optional `DEMO_LOCAL_DATABASE_NAME`
-  and `DEMO_LOCAL_DATABASE_PORT` identify a differently configured disposable
-  local database. `DEMO_SEED_TARGET` and `DEMO_SEED_ACK` acknowledge all other
-  mutation targets.
-- Runtime fix: scheduling advisory locks use `$executeRaw` because the lock query
-  has no result row; historical replay passes explicit repository clocks for
-  registration transitions.
+pnpm --filter @entropix/web exec vitest run \
+  src/audit/audit-client.spec.ts \
+  src/pages/home-page.spec.tsx \
+  src/pages/workspace-shell.spec.tsx
+  -> PASS (3 files, 5 tests)
 
-## Limitations / B05 Dependency
+pnpm --filter @entropix/db typecheck -> PASS
+pnpm --filter @entropix/api typecheck -> PASS
+pnpm --filter @entropix/web typecheck -> PASS
+pnpm --filter @entropix/api lint -> PASS
+pnpm --filter @entropix/web lint -> PASS
+pnpm --filter @entropix/api build -> PASS
+pnpm --filter @entropix/web build -> PASS
+pnpm smoke:demo:full-application -> PASS
+```
 
-- Shared demo application and live shared role checks were not attempted.
-- Printable HTML remains the private, version-bound B04 document mechanism; no
-  public or stored document URL was added.
-- Existing application commands do not create a persistent audit history for
-  these seeded actions. B05 must treat persistent audit data as an explicit
-  dependency and must not infer it from terminal-state records.
-- The invalid scheduling/capacity/overlap and student-import fixtures remain
-  reusable validation inputs; the seed does not persist invalid final states.
+Local repository smoke through the real Audit repository:
+
+```text
+Northstar historical
+  2 registrations; 3/3 papers; 6/6 seats; 3/3 approved; 0 holds
+  CSV rows: registration 4, timetable 6, attendance 7,
+            evaluation 6, current result 2
+
+Cedar historical
+  20 registrations; 3/3 papers; 60/60 seats; 3/3 approved; 1 hold
+  CSV rows: registration 40, timetable 120, attendance 121,
+            evaluation 6, current result 40
+```
+
+The smoke asserted that WITHHELD current-result rows end with blank percentage
+and GPA columns. A Northstar audit event was not visible through the Cedar actor,
+providing a direct tenant-scope check in addition to database RLS.
+
+## Browser Evidence
+
+- Northstar institution administrator selected `NORTHSTAR-HIST-2026` and saw
+  the complete 2 / 3 / 6 / 3 readiness path and current publication.
+- The administrator created fictional local hall `B05-VERIFY`; Reports & Audit
+  immediately showed the real `HALL CREATED` event with actor, target, request
+  ID, and timestamp.
+- Cedar exam controller selected `CEDAR-HIST-2026` and saw 20 registrations,
+  3/3 scheduled papers, 60/60 seats, 3/3 independently approved subjects, the
+  one WITHHELD hold, and current publication.
+- Cedar downloaded each of the five required export kinds from the real API;
+  row counts matched the repository smoke. The desktop reports layout rendered
+  without a Vite overlay or browser error.
+
+## Important Limitations
+
+- Shared/remote demo schema and data were not mutated or verified.
+- The audit interceptor is intentionally request-level for the demo, not a
+  transactional outbox. A committed command can survive an audit persistence
+  failure; the failure is logged.
+- Audit history starts when the migration and B05 API are deployed. It does not
+  backfill historical seeded actions.
+- Disposable local Cedar `ANNUAL-2026` had pre-existing interactive mutations
+  from another running dev session (publication v13 and active holds). The
+  isolated historical journey remained authoritative and passed.
+- `B05-VERIFY` is fictional verification data in disposable local PostgreSQL
+  only; it is not part of the idempotent seed or shared fixtures.
 
 ## Next Exact Action
 
-1. Review the branch diff and merge it through `integration`.
-2. Pull/rebase affected work onto the updated integration baseline.
-3. If authorized, run the guarded seed and all four gates against the exact
-   shared-demo target and update current state with the actual outcome.
-4. Start `docs/codex/generated/B05-dashboard-reports-demo-polish.md` using the
-   authoritative non-empty historical data.
+1. Review `git diff --check` and the complete B05 diff.
+2. Commit the internally consistent B05 working tree.
+3. Merge through `integration`; affected developers pull/rebase and reread
+   `CURRENT-STATE.md` plus `DEC-012`.
+4. Apply `20260914150000_audit_events` to an explicitly authorized shared demo
+   before expecting audit capture there.
+5. Rerun the focused B05 checks and both authenticated institution journeys on
+   that exact target.
 
 ## Minimal Context for the Next Session
 
 1. `AGENTS.md`
 2. this handoff
 3. `docs/codex/CURRENT-STATE.md`
-4. `docs/codex/SEEDED-ROLE-TEST-CREDENTIALS.md`
-5. `docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md`
-6. `apps/api/scripts/full-application-demo.ts`
-7. `fixtures/imports/bulk/README.md`
-8. `docs/codex/evidence/full-application-demo/README.md`
+4. `docs/codex/DECISIONS.md` (`DEC-012`)
+5. `docs/codex/generated/B05-dashboard-reports-demo-polish.md`
+6. `apps/api/src/modules/audit/`
+7. `apps/web/src/pages/home-page.tsx`
+8. `apps/web/src/pages/reports-page.tsx`
+9. `packages/db/prisma/migrations/20260914150000_audit_events/migration.sql`

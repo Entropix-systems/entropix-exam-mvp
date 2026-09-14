@@ -86,6 +86,7 @@ export const ModelName = {
   ResultItem: 'ResultItem',
   StudentResult: 'StudentResult',
   Publication: 'Publication',
+  AuditEvent: 'AuditEvent',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -653,6 +654,22 @@ export const PublicationScalarFieldEnum = {
 } as const
 
 export type PublicationScalarFieldEnum = (typeof PublicationScalarFieldEnum)[keyof typeof PublicationScalarFieldEnum]
+
+
+export const AuditEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  actorMembershipId: 'actorMembershipId',
+  actorRole: 'actorRole',
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  reason: 'reason',
+  requestId: 'requestId',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
 
 
 export const RoleGrantScalarFieldEnum = {

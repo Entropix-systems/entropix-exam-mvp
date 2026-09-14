@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import type { CurrentUserResponse } from '@entropix/contracts'
 import { AuthContext } from '../auth/auth-context'
 import { HomePage } from './home-page'
+import type { AuditApiClient } from '../audit/audit-client'
 
 const currentUser: CurrentUserResponse = {
   sessionId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
@@ -34,7 +35,7 @@ describe('HomePage access context', () => {
         logout: vi.fn(),
         restore: vi.fn(),
       }}>
-        <HomePage />
+        <HomePage client={{ dashboard: vi.fn() } as unknown as AuditApiClient} />
       </AuthContext.Provider>,
     )
 

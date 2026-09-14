@@ -239,6 +239,7 @@ export type TenantWhereInput = {
   resultItems?: Prisma.ResultItemListRelationFilter
   studentResults?: Prisma.StudentResultListRelationFilter
   publications?: Prisma.PublicationListRelationFilter
+  auditEvents?: Prisma.AuditEventListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -283,6 +284,7 @@ export type TenantOrderByWithRelationInput = {
   resultItems?: Prisma.ResultItemOrderByRelationAggregateInput
   studentResults?: Prisma.StudentResultOrderByRelationAggregateInput
   publications?: Prisma.PublicationOrderByRelationAggregateInput
+  auditEvents?: Prisma.AuditEventOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -330,6 +332,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   resultItems?: Prisma.ResultItemListRelationFilter
   studentResults?: Prisma.StudentResultListRelationFilter
   publications?: Prisma.PublicationListRelationFilter
+  auditEvents?: Prisma.AuditEventListRelationFilter
 }, "id" | "slug">
 
 export type TenantOrderByWithAggregationInput = {
@@ -402,6 +405,7 @@ export type TenantCreateInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -446,6 +450,7 @@ export type TenantUncheckedCreateInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -490,6 +495,7 @@ export type TenantUpdateInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -534,6 +540,7 @@ export type TenantUncheckedUpdateInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -1077,6 +1084,20 @@ export type TenantUpdateOneRequiredWithoutPublicationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutPublicationsInput, Prisma.TenantUpdateWithoutPublicationsInput>, Prisma.TenantUncheckedUpdateWithoutPublicationsInput>
 }
 
+export type TenantCreateNestedOneWithoutAuditEventsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutAuditEventsInput, Prisma.TenantUncheckedCreateWithoutAuditEventsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutAuditEventsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutAuditEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutAuditEventsInput, Prisma.TenantUncheckedCreateWithoutAuditEventsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutAuditEventsInput
+  upsert?: Prisma.TenantUpsertWithoutAuditEventsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutAuditEventsInput, Prisma.TenantUpdateWithoutAuditEventsInput>, Prisma.TenantUncheckedUpdateWithoutAuditEventsInput>
+}
+
 export type TenantCreateWithoutCampusesInput = {
   id?: string
   name: string
@@ -1118,6 +1139,7 @@ export type TenantCreateWithoutCampusesInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCampusesInput = {
@@ -1161,6 +1183,7 @@ export type TenantUncheckedCreateWithoutCampusesInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCampusesInput = {
@@ -1220,6 +1243,7 @@ export type TenantUpdateWithoutCampusesInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCampusesInput = {
@@ -1263,6 +1287,7 @@ export type TenantUncheckedUpdateWithoutCampusesInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDepartmentsInput = {
@@ -1306,6 +1331,7 @@ export type TenantCreateWithoutDepartmentsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDepartmentsInput = {
@@ -1349,6 +1375,7 @@ export type TenantUncheckedCreateWithoutDepartmentsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDepartmentsInput = {
@@ -1408,6 +1435,7 @@ export type TenantUpdateWithoutDepartmentsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDepartmentsInput = {
@@ -1451,6 +1479,7 @@ export type TenantUncheckedUpdateWithoutDepartmentsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutProgramsInput = {
@@ -1494,6 +1523,7 @@ export type TenantCreateWithoutProgramsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutProgramsInput = {
@@ -1537,6 +1567,7 @@ export type TenantUncheckedCreateWithoutProgramsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutProgramsInput = {
@@ -1596,6 +1627,7 @@ export type TenantUpdateWithoutProgramsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutProgramsInput = {
@@ -1639,6 +1671,7 @@ export type TenantUncheckedUpdateWithoutProgramsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAcademicYearsInput = {
@@ -1682,6 +1715,7 @@ export type TenantCreateWithoutAcademicYearsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAcademicYearsInput = {
@@ -1725,6 +1759,7 @@ export type TenantUncheckedCreateWithoutAcademicYearsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAcademicYearsInput = {
@@ -1784,6 +1819,7 @@ export type TenantUpdateWithoutAcademicYearsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAcademicYearsInput = {
@@ -1827,6 +1863,7 @@ export type TenantUncheckedUpdateWithoutAcademicYearsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutTermsInput = {
@@ -1870,6 +1907,7 @@ export type TenantCreateWithoutTermsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutTermsInput = {
@@ -1913,6 +1951,7 @@ export type TenantUncheckedCreateWithoutTermsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutTermsInput = {
@@ -1972,6 +2011,7 @@ export type TenantUpdateWithoutTermsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutTermsInput = {
@@ -2015,6 +2055,7 @@ export type TenantUncheckedUpdateWithoutTermsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCohortsInput = {
@@ -2058,6 +2099,7 @@ export type TenantCreateWithoutCohortsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCohortsInput = {
@@ -2101,6 +2143,7 @@ export type TenantUncheckedCreateWithoutCohortsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCohortsInput = {
@@ -2160,6 +2203,7 @@ export type TenantUpdateWithoutCohortsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCohortsInput = {
@@ -2203,6 +2247,7 @@ export type TenantUncheckedUpdateWithoutCohortsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSubjectsInput = {
@@ -2246,6 +2291,7 @@ export type TenantCreateWithoutSubjectsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSubjectsInput = {
@@ -2289,6 +2335,7 @@ export type TenantUncheckedCreateWithoutSubjectsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSubjectsInput = {
@@ -2348,6 +2395,7 @@ export type TenantUpdateWithoutSubjectsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSubjectsInput = {
@@ -2391,6 +2439,7 @@ export type TenantUncheckedUpdateWithoutSubjectsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutMembershipsInput = {
@@ -2434,6 +2483,7 @@ export type TenantCreateWithoutMembershipsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutMembershipsInput = {
@@ -2477,6 +2527,7 @@ export type TenantUncheckedCreateWithoutMembershipsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutMembershipsInput = {
@@ -2536,6 +2587,7 @@ export type TenantUpdateWithoutMembershipsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutMembershipsInput = {
@@ -2579,6 +2631,7 @@ export type TenantUncheckedUpdateWithoutMembershipsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutStudentsInput = {
@@ -2622,6 +2675,7 @@ export type TenantCreateWithoutStudentsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutStudentsInput = {
@@ -2665,6 +2719,7 @@ export type TenantUncheckedCreateWithoutStudentsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutStudentsInput = {
@@ -2724,6 +2779,7 @@ export type TenantUpdateWithoutStudentsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutStudentsInput = {
@@ -2767,6 +2823,7 @@ export type TenantUncheckedUpdateWithoutStudentsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutFacultyInput = {
@@ -2810,6 +2867,7 @@ export type TenantCreateWithoutFacultyInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutFacultyInput = {
@@ -2853,6 +2911,7 @@ export type TenantUncheckedCreateWithoutFacultyInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutFacultyInput = {
@@ -2912,6 +2971,7 @@ export type TenantUpdateWithoutFacultyInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutFacultyInput = {
@@ -2955,6 +3015,7 @@ export type TenantUncheckedUpdateWithoutFacultyInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEnrolmentsInput = {
@@ -2998,6 +3059,7 @@ export type TenantCreateWithoutEnrolmentsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEnrolmentsInput = {
@@ -3041,6 +3103,7 @@ export type TenantUncheckedCreateWithoutEnrolmentsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEnrolmentsInput = {
@@ -3100,6 +3163,7 @@ export type TenantUpdateWithoutEnrolmentsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEnrolmentsInput = {
@@ -3143,6 +3207,7 @@ export type TenantUncheckedUpdateWithoutEnrolmentsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutStudentImportsInput = {
@@ -3186,6 +3251,7 @@ export type TenantCreateWithoutStudentImportsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutStudentImportsInput = {
@@ -3229,6 +3295,7 @@ export type TenantUncheckedCreateWithoutStudentImportsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutStudentImportsInput = {
@@ -3288,6 +3355,7 @@ export type TenantUpdateWithoutStudentImportsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutStudentImportsInput = {
@@ -3331,6 +3399,7 @@ export type TenantUncheckedUpdateWithoutStudentImportsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutRuleVersionsInput = {
@@ -3374,6 +3443,7 @@ export type TenantCreateWithoutRuleVersionsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutRuleVersionsInput = {
@@ -3417,6 +3487,7 @@ export type TenantUncheckedCreateWithoutRuleVersionsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutRuleVersionsInput = {
@@ -3476,6 +3547,7 @@ export type TenantUpdateWithoutRuleVersionsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutRuleVersionsInput = {
@@ -3519,6 +3591,7 @@ export type TenantUncheckedUpdateWithoutRuleVersionsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutExamsInput = {
@@ -3562,6 +3635,7 @@ export type TenantCreateWithoutExamsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutExamsInput = {
@@ -3605,6 +3679,7 @@ export type TenantUncheckedCreateWithoutExamsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutExamsInput = {
@@ -3664,6 +3739,7 @@ export type TenantUpdateWithoutExamsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutExamsInput = {
@@ -3707,6 +3783,7 @@ export type TenantUncheckedUpdateWithoutExamsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutExamSubjectsInput = {
@@ -3750,6 +3827,7 @@ export type TenantCreateWithoutExamSubjectsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutExamSubjectsInput = {
@@ -3793,6 +3871,7 @@ export type TenantUncheckedCreateWithoutExamSubjectsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutExamSubjectsInput = {
@@ -3852,6 +3931,7 @@ export type TenantUpdateWithoutExamSubjectsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutExamSubjectsInput = {
@@ -3895,6 +3975,7 @@ export type TenantUncheckedUpdateWithoutExamSubjectsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutRegistrationsInput = {
@@ -3938,6 +4019,7 @@ export type TenantCreateWithoutRegistrationsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutRegistrationsInput = {
@@ -3981,6 +4063,7 @@ export type TenantUncheckedCreateWithoutRegistrationsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutRegistrationsInput = {
@@ -4040,6 +4123,7 @@ export type TenantUpdateWithoutRegistrationsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutRegistrationsInput = {
@@ -4083,6 +4167,7 @@ export type TenantUncheckedUpdateWithoutRegistrationsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutRegistrationSubjectsInput = {
@@ -4126,6 +4211,7 @@ export type TenantCreateWithoutRegistrationSubjectsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutRegistrationSubjectsInput = {
@@ -4169,6 +4255,7 @@ export type TenantUncheckedCreateWithoutRegistrationSubjectsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutRegistrationSubjectsInput = {
@@ -4228,6 +4315,7 @@ export type TenantUpdateWithoutRegistrationSubjectsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutRegistrationSubjectsInput = {
@@ -4271,6 +4359,7 @@ export type TenantUncheckedUpdateWithoutRegistrationSubjectsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutExamPapersInput = {
@@ -4314,6 +4403,7 @@ export type TenantCreateWithoutExamPapersInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutExamPapersInput = {
@@ -4357,6 +4447,7 @@ export type TenantUncheckedCreateWithoutExamPapersInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutExamPapersInput = {
@@ -4416,6 +4507,7 @@ export type TenantUpdateWithoutExamPapersInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutExamPapersInput = {
@@ -4459,6 +4551,7 @@ export type TenantUncheckedUpdateWithoutExamPapersInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHallsInput = {
@@ -4502,6 +4595,7 @@ export type TenantCreateWithoutHallsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHallsInput = {
@@ -4545,6 +4639,7 @@ export type TenantUncheckedCreateWithoutHallsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHallsInput = {
@@ -4604,6 +4699,7 @@ export type TenantUpdateWithoutHallsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHallsInput = {
@@ -4647,6 +4743,7 @@ export type TenantUncheckedUpdateWithoutHallsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHallSittingsInput = {
@@ -4690,6 +4787,7 @@ export type TenantCreateWithoutHallSittingsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHallSittingsInput = {
@@ -4733,6 +4831,7 @@ export type TenantUncheckedCreateWithoutHallSittingsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHallSittingsInput = {
@@ -4792,6 +4891,7 @@ export type TenantUpdateWithoutHallSittingsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHallSittingsInput = {
@@ -4835,6 +4935,7 @@ export type TenantUncheckedUpdateWithoutHallSittingsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSeatAssignmentsInput = {
@@ -4878,6 +4979,7 @@ export type TenantCreateWithoutSeatAssignmentsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSeatAssignmentsInput = {
@@ -4921,6 +5023,7 @@ export type TenantUncheckedCreateWithoutSeatAssignmentsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSeatAssignmentsInput = {
@@ -4980,6 +5083,7 @@ export type TenantUpdateWithoutSeatAssignmentsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSeatAssignmentsInput = {
@@ -5023,6 +5127,7 @@ export type TenantUncheckedUpdateWithoutSeatAssignmentsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDutiesInput = {
@@ -5066,6 +5171,7 @@ export type TenantCreateWithoutDutiesInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDutiesInput = {
@@ -5109,6 +5215,7 @@ export type TenantUncheckedCreateWithoutDutiesInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDutiesInput = {
@@ -5168,6 +5275,7 @@ export type TenantUpdateWithoutDutiesInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDutiesInput = {
@@ -5211,6 +5319,7 @@ export type TenantUncheckedUpdateWithoutDutiesInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAttendanceBatchesInput = {
@@ -5254,6 +5363,7 @@ export type TenantCreateWithoutAttendanceBatchesInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAttendanceBatchesInput = {
@@ -5297,6 +5407,7 @@ export type TenantUncheckedCreateWithoutAttendanceBatchesInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAttendanceBatchesInput = {
@@ -5356,6 +5467,7 @@ export type TenantUpdateWithoutAttendanceBatchesInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAttendanceBatchesInput = {
@@ -5399,6 +5511,7 @@ export type TenantUncheckedUpdateWithoutAttendanceBatchesInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAttendanceRowsInput = {
@@ -5442,6 +5555,7 @@ export type TenantCreateWithoutAttendanceRowsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAttendanceRowsInput = {
@@ -5485,6 +5599,7 @@ export type TenantUncheckedCreateWithoutAttendanceRowsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAttendanceRowsInput = {
@@ -5544,6 +5659,7 @@ export type TenantUpdateWithoutAttendanceRowsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAttendanceRowsInput = {
@@ -5587,6 +5703,7 @@ export type TenantUncheckedUpdateWithoutAttendanceRowsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutIncidentsInput = {
@@ -5630,6 +5747,7 @@ export type TenantCreateWithoutIncidentsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutIncidentsInput = {
@@ -5673,6 +5791,7 @@ export type TenantUncheckedCreateWithoutIncidentsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutIncidentsInput = {
@@ -5732,6 +5851,7 @@ export type TenantUpdateWithoutIncidentsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutIncidentsInput = {
@@ -5775,6 +5895,7 @@ export type TenantUncheckedUpdateWithoutIncidentsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutIncidentStudentsInput = {
@@ -5818,6 +5939,7 @@ export type TenantCreateWithoutIncidentStudentsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutIncidentStudentsInput = {
@@ -5861,6 +5983,7 @@ export type TenantUncheckedCreateWithoutIncidentStudentsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutIncidentStudentsInput = {
@@ -5920,6 +6043,7 @@ export type TenantUpdateWithoutIncidentStudentsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutIncidentStudentsInput = {
@@ -5963,6 +6087,7 @@ export type TenantUncheckedUpdateWithoutIncidentStudentsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEvaluationAssignmentsInput = {
@@ -6006,6 +6131,7 @@ export type TenantCreateWithoutEvaluationAssignmentsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEvaluationAssignmentsInput = {
@@ -6049,6 +6175,7 @@ export type TenantUncheckedCreateWithoutEvaluationAssignmentsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEvaluationAssignmentsInput = {
@@ -6108,6 +6235,7 @@ export type TenantUpdateWithoutEvaluationAssignmentsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEvaluationAssignmentsInput = {
@@ -6151,6 +6279,7 @@ export type TenantUncheckedUpdateWithoutEvaluationAssignmentsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutMarksBatchesInput = {
@@ -6194,6 +6323,7 @@ export type TenantCreateWithoutMarksBatchesInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutMarksBatchesInput = {
@@ -6237,6 +6367,7 @@ export type TenantUncheckedCreateWithoutMarksBatchesInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutMarksBatchesInput = {
@@ -6296,6 +6427,7 @@ export type TenantUpdateWithoutMarksBatchesInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutMarksBatchesInput = {
@@ -6339,6 +6471,7 @@ export type TenantUncheckedUpdateWithoutMarksBatchesInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutMarksInput = {
@@ -6382,6 +6515,7 @@ export type TenantCreateWithoutMarksInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutMarksInput = {
@@ -6425,6 +6559,7 @@ export type TenantUncheckedCreateWithoutMarksInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutMarksInput = {
@@ -6484,6 +6619,7 @@ export type TenantUpdateWithoutMarksInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutMarksInput = {
@@ -6527,6 +6663,7 @@ export type TenantUncheckedUpdateWithoutMarksInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutResultRunsInput = {
@@ -6570,6 +6707,7 @@ export type TenantCreateWithoutResultRunsInput = {
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutResultRunsInput = {
@@ -6613,6 +6751,7 @@ export type TenantUncheckedCreateWithoutResultRunsInput = {
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutResultRunsInput = {
@@ -6672,6 +6811,7 @@ export type TenantUpdateWithoutResultRunsInput = {
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutResultRunsInput = {
@@ -6715,6 +6855,7 @@ export type TenantUncheckedUpdateWithoutResultRunsInput = {
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutResultItemsInput = {
@@ -6758,6 +6899,7 @@ export type TenantCreateWithoutResultItemsInput = {
   resultRuns?: Prisma.ResultRunCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutResultItemsInput = {
@@ -6801,6 +6943,7 @@ export type TenantUncheckedCreateWithoutResultItemsInput = {
   resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutResultItemsInput = {
@@ -6860,6 +7003,7 @@ export type TenantUpdateWithoutResultItemsInput = {
   resultRuns?: Prisma.ResultRunUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutResultItemsInput = {
@@ -6903,6 +7047,7 @@ export type TenantUncheckedUpdateWithoutResultItemsInput = {
   resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutStudentResultsInput = {
@@ -6946,6 +7091,7 @@ export type TenantCreateWithoutStudentResultsInput = {
   resultRuns?: Prisma.ResultRunCreateNestedManyWithoutTenantInput
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutStudentResultsInput = {
@@ -6989,6 +7135,7 @@ export type TenantUncheckedCreateWithoutStudentResultsInput = {
   resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutTenantInput
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutStudentResultsInput = {
@@ -7048,6 +7195,7 @@ export type TenantUpdateWithoutStudentResultsInput = {
   resultRuns?: Prisma.ResultRunUpdateManyWithoutTenantNestedInput
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutStudentResultsInput = {
@@ -7091,6 +7239,7 @@ export type TenantUncheckedUpdateWithoutStudentResultsInput = {
   resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutTenantNestedInput
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPublicationsInput = {
@@ -7134,6 +7283,7 @@ export type TenantCreateWithoutPublicationsInput = {
   resultRuns?: Prisma.ResultRunCreateNestedManyWithoutTenantInput
   resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPublicationsInput = {
@@ -7177,6 +7327,7 @@ export type TenantUncheckedCreateWithoutPublicationsInput = {
   resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutTenantInput
   resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
   studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPublicationsInput = {
@@ -7236,6 +7387,7 @@ export type TenantUpdateWithoutPublicationsInput = {
   resultRuns?: Prisma.ResultRunUpdateManyWithoutTenantNestedInput
   resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPublicationsInput = {
@@ -7279,6 +7431,199 @@ export type TenantUncheckedUpdateWithoutPublicationsInput = {
   resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutTenantNestedInput
   resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
   studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutAuditEventsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutTenantInput
+  students?: Prisma.StudentCreateNestedManyWithoutTenantInput
+  faculty?: Prisma.FacultyCreateNestedManyWithoutTenantInput
+  enrolments?: Prisma.EnrolmentCreateNestedManyWithoutTenantInput
+  studentImports?: Prisma.StudentImportCreateNestedManyWithoutTenantInput
+  ruleVersions?: Prisma.RuleVersionCreateNestedManyWithoutTenantInput
+  exams?: Prisma.ExamCreateNestedManyWithoutTenantInput
+  examSubjects?: Prisma.ExamSubjectCreateNestedManyWithoutTenantInput
+  registrations?: Prisma.RegistrationCreateNestedManyWithoutTenantInput
+  registrationSubjects?: Prisma.RegistrationSubjectCreateNestedManyWithoutTenantInput
+  examPapers?: Prisma.ExamPaperCreateNestedManyWithoutTenantInput
+  halls?: Prisma.HallCreateNestedManyWithoutTenantInput
+  hallSittings?: Prisma.HallSittingCreateNestedManyWithoutTenantInput
+  seatAssignments?: Prisma.SeatAssignmentCreateNestedManyWithoutTenantInput
+  duties?: Prisma.DutyCreateNestedManyWithoutTenantInput
+  attendanceBatches?: Prisma.AttendanceBatchCreateNestedManyWithoutTenantInput
+  attendanceRows?: Prisma.AttendanceCreateNestedManyWithoutTenantInput
+  incidents?: Prisma.IncidentCreateNestedManyWithoutTenantInput
+  incidentStudents?: Prisma.IncidentStudentCreateNestedManyWithoutTenantInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentCreateNestedManyWithoutTenantInput
+  marksBatches?: Prisma.MarksBatchCreateNestedManyWithoutTenantInput
+  marks?: Prisma.MarkCreateNestedManyWithoutTenantInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutTenantInput
+  resultItems?: Prisma.ResultItemCreateNestedManyWithoutTenantInput
+  studentResults?: Prisma.StudentResultCreateNestedManyWithoutTenantInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutAuditEventsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: string
+  timezone: string
+  plan?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutTenantInput
+  campuses?: Prisma.CampusUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTenantInput
+  academicYears?: Prisma.AcademicYearUncheckedCreateNestedManyWithoutTenantInput
+  terms?: Prisma.TermUncheckedCreateNestedManyWithoutTenantInput
+  cohorts?: Prisma.CohortUncheckedCreateNestedManyWithoutTenantInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutTenantInput
+  students?: Prisma.StudentUncheckedCreateNestedManyWithoutTenantInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedManyWithoutTenantInput
+  enrolments?: Prisma.EnrolmentUncheckedCreateNestedManyWithoutTenantInput
+  studentImports?: Prisma.StudentImportUncheckedCreateNestedManyWithoutTenantInput
+  ruleVersions?: Prisma.RuleVersionUncheckedCreateNestedManyWithoutTenantInput
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutTenantInput
+  examSubjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutTenantInput
+  registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutTenantInput
+  registrationSubjects?: Prisma.RegistrationSubjectUncheckedCreateNestedManyWithoutTenantInput
+  examPapers?: Prisma.ExamPaperUncheckedCreateNestedManyWithoutTenantInput
+  halls?: Prisma.HallUncheckedCreateNestedManyWithoutTenantInput
+  hallSittings?: Prisma.HallSittingUncheckedCreateNestedManyWithoutTenantInput
+  seatAssignments?: Prisma.SeatAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  duties?: Prisma.DutyUncheckedCreateNestedManyWithoutTenantInput
+  attendanceBatches?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutTenantInput
+  attendanceRows?: Prisma.AttendanceUncheckedCreateNestedManyWithoutTenantInput
+  incidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutTenantInput
+  incidentStudents?: Prisma.IncidentStudentUncheckedCreateNestedManyWithoutTenantInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  marksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutTenantInput
+  marks?: Prisma.MarkUncheckedCreateNestedManyWithoutTenantInput
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutTenantInput
+  resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutTenantInput
+  studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutTenantInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutAuditEventsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutAuditEventsInput, Prisma.TenantUncheckedCreateWithoutAuditEventsInput>
+}
+
+export type TenantUpsertWithoutAuditEventsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutAuditEventsInput, Prisma.TenantUncheckedUpdateWithoutAuditEventsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutAuditEventsInput, Prisma.TenantUncheckedCreateWithoutAuditEventsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutAuditEventsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutAuditEventsInput, Prisma.TenantUncheckedUpdateWithoutAuditEventsInput>
+}
+
+export type TenantUpdateWithoutAuditEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutTenantNestedInput
+  students?: Prisma.StudentUpdateManyWithoutTenantNestedInput
+  faculty?: Prisma.FacultyUpdateManyWithoutTenantNestedInput
+  enrolments?: Prisma.EnrolmentUpdateManyWithoutTenantNestedInput
+  studentImports?: Prisma.StudentImportUpdateManyWithoutTenantNestedInput
+  ruleVersions?: Prisma.RuleVersionUpdateManyWithoutTenantNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutTenantNestedInput
+  examSubjects?: Prisma.ExamSubjectUpdateManyWithoutTenantNestedInput
+  registrations?: Prisma.RegistrationUpdateManyWithoutTenantNestedInput
+  registrationSubjects?: Prisma.RegistrationSubjectUpdateManyWithoutTenantNestedInput
+  examPapers?: Prisma.ExamPaperUpdateManyWithoutTenantNestedInput
+  halls?: Prisma.HallUpdateManyWithoutTenantNestedInput
+  hallSittings?: Prisma.HallSittingUpdateManyWithoutTenantNestedInput
+  seatAssignments?: Prisma.SeatAssignmentUpdateManyWithoutTenantNestedInput
+  duties?: Prisma.DutyUpdateManyWithoutTenantNestedInput
+  attendanceBatches?: Prisma.AttendanceBatchUpdateManyWithoutTenantNestedInput
+  attendanceRows?: Prisma.AttendanceUpdateManyWithoutTenantNestedInput
+  incidents?: Prisma.IncidentUpdateManyWithoutTenantNestedInput
+  incidentStudents?: Prisma.IncidentStudentUpdateManyWithoutTenantNestedInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUpdateManyWithoutTenantNestedInput
+  marksBatches?: Prisma.MarksBatchUpdateManyWithoutTenantNestedInput
+  marks?: Prisma.MarkUpdateManyWithoutTenantNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutTenantNestedInput
+  resultItems?: Prisma.ResultItemUpdateManyWithoutTenantNestedInput
+  studentResults?: Prisma.StudentResultUpdateManyWithoutTenantNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutAuditEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutTenantNestedInput
+  campuses?: Prisma.CampusUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTenantNestedInput
+  academicYears?: Prisma.AcademicYearUncheckedUpdateManyWithoutTenantNestedInput
+  terms?: Prisma.TermUncheckedUpdateManyWithoutTenantNestedInput
+  cohorts?: Prisma.CohortUncheckedUpdateManyWithoutTenantNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutTenantNestedInput
+  students?: Prisma.StudentUncheckedUpdateManyWithoutTenantNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateManyWithoutTenantNestedInput
+  enrolments?: Prisma.EnrolmentUncheckedUpdateManyWithoutTenantNestedInput
+  studentImports?: Prisma.StudentImportUncheckedUpdateManyWithoutTenantNestedInput
+  ruleVersions?: Prisma.RuleVersionUncheckedUpdateManyWithoutTenantNestedInput
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutTenantNestedInput
+  examSubjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutTenantNestedInput
+  registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutTenantNestedInput
+  registrationSubjects?: Prisma.RegistrationSubjectUncheckedUpdateManyWithoutTenantNestedInput
+  examPapers?: Prisma.ExamPaperUncheckedUpdateManyWithoutTenantNestedInput
+  halls?: Prisma.HallUncheckedUpdateManyWithoutTenantNestedInput
+  hallSittings?: Prisma.HallSittingUncheckedUpdateManyWithoutTenantNestedInput
+  seatAssignments?: Prisma.SeatAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  duties?: Prisma.DutyUncheckedUpdateManyWithoutTenantNestedInput
+  attendanceBatches?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutTenantNestedInput
+  attendanceRows?: Prisma.AttendanceUncheckedUpdateManyWithoutTenantNestedInput
+  incidents?: Prisma.IncidentUncheckedUpdateManyWithoutTenantNestedInput
+  incidentStudents?: Prisma.IncidentStudentUncheckedUpdateManyWithoutTenantNestedInput
+  evaluationAssignments?: Prisma.EvaluationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  marksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutTenantNestedInput
+  marks?: Prisma.MarkUncheckedUpdateManyWithoutTenantNestedInput
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutTenantNestedInput
+  resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutTenantNestedInput
+  studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutTenantNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -7320,6 +7665,7 @@ export type TenantCountOutputType = {
   resultItems: number
   studentResults: number
   publications: number
+  auditEvents: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -7356,6 +7702,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   resultItems?: boolean | TenantCountOutputTypeCountResultItemsArgs
   studentResults?: boolean | TenantCountOutputTypeCountStudentResultsArgs
   publications?: boolean | TenantCountOutputTypeCountPublicationsArgs
+  auditEvents?: boolean | TenantCountOutputTypeCountAuditEventsArgs
 }
 
 /**
@@ -7599,6 +7946,13 @@ export type TenantCountOutputTypeCountPublicationsArgs<ExtArgs extends runtime.T
   where?: Prisma.PublicationWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountAuditEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditEventWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -7642,6 +7996,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   resultItems?: boolean | Prisma.Tenant$resultItemsArgs<ExtArgs>
   studentResults?: boolean | Prisma.Tenant$studentResultsArgs<ExtArgs>
   publications?: boolean | Prisma.Tenant$publicationsArgs<ExtArgs>
+  auditEvents?: boolean | Prisma.Tenant$auditEventsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -7713,6 +8068,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   resultItems?: boolean | Prisma.Tenant$resultItemsArgs<ExtArgs>
   studentResults?: boolean | Prisma.Tenant$studentResultsArgs<ExtArgs>
   publications?: boolean | Prisma.Tenant$publicationsArgs<ExtArgs>
+  auditEvents?: boolean | Prisma.Tenant$auditEventsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -7754,6 +8110,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     resultItems: Prisma.$ResultItemPayload<ExtArgs>[]
     studentResults: Prisma.$StudentResultPayload<ExtArgs>[]
     publications: Prisma.$PublicationPayload<ExtArgs>[]
+    auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -8191,6 +8548,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   resultItems<T extends Prisma.Tenant$resultItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$resultItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResultItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studentResults<T extends Prisma.Tenant$studentResultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$studentResultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   publications<T extends Prisma.Tenant$publicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  auditEvents<T extends Prisma.Tenant$auditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9410,6 +9768,30 @@ export type Tenant$publicationsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.PublicationScalarFieldEnum | Prisma.PublicationScalarFieldEnum[]
+}
+
+/**
+ * Tenant.auditEvents
+ */
+export type Tenant$auditEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditEvent
+   */
+  select?: Prisma.AuditEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditEvent
+   */
+  omit?: Prisma.AuditEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditEventInclude<ExtArgs> | null
+  where?: Prisma.AuditEventWhereInput
+  orderBy?: Prisma.AuditEventOrderByWithRelationInput | Prisma.AuditEventOrderByWithRelationInput[]
+  cursor?: Prisma.AuditEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditEventScalarFieldEnum | Prisma.AuditEventScalarFieldEnum[]
 }
 
 /**

@@ -14,7 +14,7 @@ export function WorkspaceShell({
   children,
 }: PropsWithChildren<{
   currentUser: CurrentUserResponse
-  active: 'overview' | 'setup-access' | 'masters' | 'students' | 'exams' | 'schedule' | 'attendance' | 'marks' | 'results' | 'student'
+  active: 'overview' | 'setup-access' | 'masters' | 'students' | 'exams' | 'schedule' | 'attendance' | 'marks' | 'results' | 'student' | 'reports'
   onLogout(): Promise<void>
   onSwitchInstitution(institutionId: string): Promise<void>
   onSwitchRole(role: TenantRole): Promise<void>
@@ -91,39 +91,19 @@ export function WorkspaceShell({
           {canManageIdentity(currentUser) ? (
             <button
               type="button"
-              className={active === 'masters' ? 'active' : ''}
-              onClick={() => navigate('/masters')}
-            >
-              <span aria-hidden="true">▦</span> Academic masters
-            </button>
-          ) : null}
-          {canManageIdentity(currentUser) ? (
-            <button
-              type="button"
               className={active === 'setup-access' ? 'active' : ''}
               onClick={() => navigate('/setup-access')}
             >
               <span aria-hidden="true">⚙</span> Setup &amp; access
             </button>
           ) : null}
-          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(tenant.activeRole) ? (
-            <button type="button" className={active === 'schedule' ? 'active' : ''} onClick={() => navigate('/schedule')}>
-              <span aria-hidden="true">▦</span> Timetable &amp; halls
-            </button>
-          ) : null}
-          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'INVIGILATOR'].includes(tenant.activeRole) ? (
-            <button type="button" className={active === 'attendance' ? 'active' : ''} onClick={() => navigate('/attendance')}>
-              <span aria-hidden="true">✓</span> Duties &amp; attendance
-            </button>
-          ) : null}
-          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'FACULTY'].includes(tenant.activeRole) ? (
-            <button type="button" className={active === 'marks' ? 'active' : ''} onClick={() => navigate('/marks')}>
-              <span aria-hidden="true">≡</span> Marks &amp; review
-            </button>
-          ) : null}
-          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(tenant.activeRole) ? (
-            <button type="button" className={active === 'results' ? 'active' : ''} onClick={() => navigate('/results')}>
-              <span aria-hidden="true">◎</span> Result publication
+          {canManageIdentity(currentUser) ? (
+            <button
+              type="button"
+              className={active === 'masters' ? 'active' : ''}
+              onClick={() => navigate('/masters')}
+            >
+              <span aria-hidden="true">▦</span> Academic masters
             </button>
           ) : null}
           {tenant && [
@@ -154,12 +134,37 @@ export function WorkspaceShell({
               <span aria-hidden="true">▣</span> Exams &amp; registration
             </button>
           ) : null}
+          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(tenant.activeRole) ? (
+            <button type="button" className={active === 'schedule' ? 'active' : ''} onClick={() => navigate('/schedule')}>
+              <span aria-hidden="true">▦</span> Timetable &amp; halls
+            </button>
+          ) : null}
+          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'INVIGILATOR'].includes(tenant.activeRole) ? (
+            <button type="button" className={active === 'attendance' ? 'active' : ''} onClick={() => navigate('/attendance')}>
+              <span aria-hidden="true">✓</span> Duties &amp; attendance
+            </button>
+          ) : null}
+          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'FACULTY'].includes(tenant.activeRole) ? (
+            <button type="button" className={active === 'marks' ? 'active' : ''} onClick={() => navigate('/marks')}>
+              <span aria-hidden="true">≡</span> Marks &amp; review
+            </button>
+          ) : null}
+          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(tenant.activeRole) ? (
+            <button type="button" className={active === 'results' ? 'active' : ''} onClick={() => navigate('/results')}>
+              <span aria-hidden="true">◎</span> Result publication
+            </button>
+          ) : null}
+          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'INVIGILATOR', 'AUDITOR'].includes(tenant.activeRole) ? (
+            <button type="button" className={active === 'reports' ? 'active' : ''} onClick={() => navigate('/reports')}>
+              <span aria-hidden="true">↗</span> Reports &amp; audit
+            </button>
+          ) : null}
         </nav>
         <p className="sidebar-foot">Academic year 2026–27<br />MVP · Written examinations</p>
       </aside>
       <div className="workspace-main">
         <header className="workspace-topbar">
-          <span>Workspace / {active === 'overview' ? 'Overview' : active === 'student' ? 'Student portal' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : active === 'marks' ? 'Marks & review' : active === 'results' ? 'Result publication' : 'Setup & access'}</span>
+          <span>Workspace / {active === 'overview' ? 'Overview' : active === 'student' ? 'Student portal' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : active === 'marks' ? 'Marks & review' : active === 'results' ? 'Result publication' : active === 'reports' ? 'Reports & audit' : 'Setup & access'}</span>
           <div className="topbar-actions">
             <span className="user-email">{currentUser.email}</span>
             {tenant && availableRoles.length > 1 ? (

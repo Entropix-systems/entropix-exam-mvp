@@ -5,19 +5,17 @@
 ```text
 Known-good foundation: d0-ready
 Shared development branch: integration
-Current B04 integration merge: 536fac9
+Current integration merge: b5fe792
 Current sprint: D1-D3 MVP implementation
-Current day: B04 INTEGRATED LOCALLY; FULL-APPLICATION DEMO GATE VERIFIED LOCALLY
+Current day: FULL-APPLICATION GATE INTEGRATED; B05 VERIFIED LOCALLY
 ```
 
 ## Current Gate
 
-The full-application gate is implemented and verified on branch
-`feat/FULL-APPLICATION-demo-seed-and-flow-test` against disposable local
-PostgreSQL. It adds the guarded idempotent seed, tracked role credentials,
-school/college journey gates, bulk-import CSVs, and browser evidence. Shared demo
-application was not attempted; B05 must consume this change only after it is
-reviewed and merged through `integration`.
+B05 dashboard, reports, audit, and demo polish is implemented on
+`feat/B05-dashboard-reports-demo-polish` from integrated baseline `b5fe792` and
+verified against disposable local PostgreSQL. Shared-demo migration/application
+was not attempted; review and merge remain pending.
 
 ## Completed
 
@@ -33,6 +31,7 @@ B01 Pure Result Rules
 B02 Marks Entry & Independent Review (merged by PR #8 at 9720aea)
 B03 Result Runs & Publication (merged by PR #9 at eea1b18)
 B04 Student Portal, Admit Card & Grade Card (merged locally at 536fac9)
+Full Application Demo Seed, Role Credentials & End-to-End Flow Test (merged at b5fe792)
 ```
 
 ## Full-Application Demo Gate
@@ -40,7 +39,7 @@ B04 Student Portal, Admit Card & Grade Card (merged locally at 536fac9)
 ```text
 Full Application Demo Seed, Role Credentials & End-to-End Flow Test
 Prompt: docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md
-Status: IMPLEMENTED AND VERIFIED LOCALLY; NOT YET MERGED
+Status: INTEGRATED AT b5fe792; VERIFIED ON DISPOSABLE LOCAL POSTGRESQL
 Local target: APPLIED
 Shared demo target: NOT APPLIED / NOT VERIFIED
 ```
@@ -59,17 +58,17 @@ Bulk import pack: 12 Northstar rows, 12 Cedar rows, 7 negative/reconciliation ro
 
 ## Blockers
 
-No implementation blocker remains for the local full-application gate. The
-configured shared demo remains at its earlier B04 state and was not mutated or
-re-verified by this branch. Do not infer that the local historical exams,
-credentials, or outcomes exist there.
+No implementation blocker remains for local B05 verification. The configured
+shared demo was not migrated or mutated by B05. Do not infer that its schema,
+audit history, dashboard state, or exports match the disposable local target.
 
 ## Migration Lock
 
 ```text
-Owner: NONE
-Purpose: available; B04 introduces no schema change
+Owner: DEV B / B05
+Purpose: tenant-scoped AuditEvent migration is verified locally; merge pending
 Last integrated migration: 20260914143000_result_runs_publication
+Pending branch migration: 20260914150000_audit_events
 ```
 
 ## Shared Contract Lock
@@ -89,9 +88,9 @@ Status: MERGED; LOCKS RELEASED
 ## Developer B
 
 ```text
-Last delivered task: B04 Student Portal, Admit Card & Grade Card
-Merge: 536fac9 on local integration
-Next queued task: Full Application Demo Seed, Role Credentials & Flow Test
+Active task: B05 Dashboard, Reports, Audit & Demo Polish
+Branch: feat/B05-dashboard-reports-demo-polish
+Status: IMPLEMENTED AND VERIFIED LOCALLY; REVIEW/MERGE PENDING
 ```
 
 ## Current B03 Acceptance Evidence (Integrated)
@@ -174,13 +173,38 @@ Next queued task: Full Application Demo Seed, Role Credentials & Flow Test
   introduced. Optional `DEMO_LOCAL_DATABASE_NAME` and
   `DEMO_LOCAL_DATABASE_PORT` narrow which local database the guarded demo
   commands may mutate without a shared-target acknowledgement.
-- Existing commands do not emit the persistent audit history B05 may need.
-  B05 must treat audit persistence as an explicit dependency rather than infer
-  audit events from seeded terminal states.
+- Historical seed commands predate B05 audit persistence and therefore do not
+  produce fabricated audit history. New successful mapped business commands are
+  recorded after migration deployment.
+
+## Current B05 Acceptance Evidence
+
+- The role-scoped Overview reads authoritative registration, scheduling,
+  conduct, evaluation, result-run, and publication state with explicit readiness
+  blockers; the Reports page exposes only exports allowed for the active role.
+- Registration, timetable/seating, attendance/incidents, evaluation progress,
+  and current-result CSVs are generated server-side. Fields are quoted and
+  spreadsheet formula prefixes are neutralized; WITHHELD rows omit percentage
+  and GPA.
+- `20260914150000_audit_events` applied through Prisma to disposable local
+  PostgreSQL. Forced RLS and tenant/membership foreign keys preserve tenant
+  boundaries; update/delete triggers make recorded events immutable.
+- Successful mapped business commands now record actor, active role, action,
+  target, reason when supplied, request ID, and timestamp. Audit persistence is
+  idempotent by tenant/request ID and does not invent pre-migration events.
+- Focused API/Web tests, DB/API/Web typechecks, API/Web lint, API/Web production
+  builds, and the full-application smoke pass locally.
+- Authenticated browser journeys passed for Northstar College and Cedar School.
+  Northstar historical showed 2 registrations, 3/3 scheduled papers, 6/6 seats,
+  3/3 approved subjects, and a current publication; Cedar historical showed 20,
+  3/3, 60/60, 3/3, one WITHHELD hold, and a current publication. A Northstar
+  hall command produced a real tenant-scoped audit row.
 
 ## Next Required Action
 
-Review and merge `feat/FULL-APPLICATION-demo-seed-and-flow-test` through
-`integration`. Then apply the guarded seed to the explicitly authorized target,
-rerun the four demo gates there, and start B05 from the updated integration
-baseline. A shared-demo application and remote push remain separate actions.
+Review and commit `feat/B05-dashboard-reports-demo-polish`, then merge it through
+`integration` and release the migration lock. Apply
+`20260914150000_audit_events` to an explicitly authorized
+shared-demo target before demonstrating audit capture there, and rerun the
+focused B05 checks plus the two authenticated institution journeys. Remote push
+and shared-target mutation remain separate authorized actions.

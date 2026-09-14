@@ -217,6 +217,11 @@ export type StudentResult = Prisma.StudentResultModel
  */
 export type Publication = Prisma.PublicationModel
 /**
+ * Model AuditEvent
+ *
+ */
+export type AuditEvent = Prisma.AuditEventModel
+/**
  * Model RoleGrant
  *
  */
