@@ -328,6 +328,6 @@ export class SchedulingRepository {
       if (exam.state !== 'PREPARATION') throw new Error('INVALID_EXAM_STATE');
       await tx.exam.update({ where: { id: examId }, data: { state: 'SCHEDULE_PUBLISHED', scheduleRevision: { increment: 1 }, version: { increment: 1 } } });
       return examRecord(tx, tenantId, examId);
-    });
+    }, { maxWait: 10_000, timeout: 120_000 });
   }
 }

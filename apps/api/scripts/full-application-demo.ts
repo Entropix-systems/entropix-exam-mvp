@@ -309,6 +309,7 @@ async function ensureHistoricalExam(slug: 'cedar-school' | 'northstar-college', 
   const hall = await scheduling.createHall(tenant.id, { campusId: campus.id, code: code.startsWith('CEDAR') ? 'HIST-HALL' : 'NORTH-HIST-HALL', name: code.startsWith('CEDAR') ? 'Historical Hall' : 'Northstar Historical Hall', capacity: code.startsWith('CEDAR') ? 30 : 120 });
   let schedule = await scheduling.initializeExam(tenant.id, exam.id);
   for (const [index, paper] of schedule.papers.entries()) {
+    if (paper.startsAt && paper.endsAt && paper.sittings.length > 0) continue;
     const date = String(day + index).padStart(2, '0');
     let updated = await scheduling.updatePaperSchedule(tenant.id, paper.id, new Date(`2026-08-${date}T04:30:00.000Z`), new Date(`2026-08-${date}T07:30:00.000Z`), paper.version);
     updated = await scheduling.commitAllocation(tenant.id, updated.id, [hall.id], updated.version);
