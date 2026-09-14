@@ -72,6 +72,10 @@ pnpm db:generate          # regenerate the Prisma client
 pnpm db:migrate:deploy    # apply committed migrations
 pnpm db:migrate:status    # inspect migration status
 pnpm seed:demo            # idempotent fictional seed chain
+pnpm seed:demo:full-application  # guarded full role + historical journey seed
+pnpm smoke:demo:full-application # read-only seeded structure/business gate
+pnpm test:demo:roles      # live credential matrix + focused authorization tests
+pnpm test:demo:journey    # Cedar and Northstar persisted student journeys
 pnpm typecheck            # workspace type checks
 pnpm build                # workspace production builds
 pnpm test                 # workspace tests
@@ -88,6 +92,38 @@ pnpm infra:down           # stop local containers
 `pnpm smoke:results-flow` creates and publishes fictional result snapshots,
 withdraws them, and republishes a corrected version. Do not point that command at
 the shared demo or production database.
+
+## Full-application demo data
+
+For a disposable local database, run the normal migrations and then:
+
+```bash
+pnpm seed:demo:full-application
+pnpm smoke:demo:full-application
+pnpm test:demo:roles
+pnpm test:demo:journey
+```
+
+The full seed refuses `NODE_ENV=production`, provisions only fictional
+`example.test` identities, and prints a target preflight without credentials,
+tokens, hashes, or connection strings. A non-local fictional shared demo requires
+both an explicit target category and the exact database-name acknowledgement:
+
+```bash
+DEMO_SEED_TARGET=shared DEMO_SEED_ACK=<exact-database-name> \
+  pnpm seed:demo:full-application
+```
+
+Do not run that shared-target command until the named database and authorization
+have been independently confirmed. The verified role accounts and intentional
+public test password are tracked in
+`docs/codex/SEEDED-ROLE-TEST-CREDENTIALS.md`.
+
+Bulk student-import files are under `fixtures/imports/bulk/`: clean 12-row files
+for Northstar and Cedar plus an intentionally invalid reconciliation file. The
+existing 100-row Northstar and 20-row Cedar CSVs remain the authoritative baseline
+seed inputs. Preview bulk uploads before commit, and use a disposable local
+database when later checks depend on the original roster counts.
 
 ## Repository layout
 

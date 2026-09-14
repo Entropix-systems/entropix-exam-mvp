@@ -241,15 +241,16 @@ login, reload, portal, published result, one-page grade-card print, logout, and 
 browser/Vite errors. Perform a focused Northstar college browser/API journey and
 role-switch/tenant-isolation checks.
 
-After the automated role and journey gates pass, use browser automation against
-the seeded application and commit a curated 6-8 screenshot evidence set under
-`docs/codex/evidence/full-application-demo/`. Cover representative controller,
-faculty, invigilator, and student screens, including timetable/hall allocation,
-attendance, marks/independent approval, result publication, PASS grade card, and
-WITHHELD privacy. Use the API role matrix for exhaustive authorization coverage;
-do not duplicate every role/scope permutation in the browser. Capture only stable
-post-action states, use descriptive filenames, add a short evidence index, and
-ensure screenshots contain no passwords, tokens, cookies, or developer tooling.
+After the automated role and journey gates pass, use the Codex Browser/computer-
+use plugin against the seeded application and commit a curated 6-8 screenshot
+evidence set under `docs/codex/evidence/full-application-demo/`. Cover
+representative controller, faculty, invigilator, and student screens, including
+timetable/hall allocation, attendance, marks/independent approval, result
+publication, PASS grade card, and WITHHELD privacy. Use the API role matrix for
+exhaustive authorization coverage; do not duplicate every role/scope permutation
+in the browser. Capture only stable post-action states, use descriptive
+filenames, add a short evidence index, and ensure screenshots contain no
+passwords, tokens, cookies, or developer tooling.
 
 ## Read-Only Full-Application Assertions
 

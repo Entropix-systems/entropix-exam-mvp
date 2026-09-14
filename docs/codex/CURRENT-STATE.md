@@ -7,16 +7,17 @@ Known-good foundation: d0-ready
 Shared development branch: integration
 Current B04 integration merge: 536fac9
 Current sprint: D1-D3 MVP implementation
-Current day: B04 INTEGRATED LOCALLY; FULL-APPLICATION DEMO GATE QUEUED BEFORE B05
+Current day: B04 INTEGRATED LOCALLY; FULL-APPLICATION DEMO GATE VERIFIED LOCALLY
 ```
 
 ## Current Gate
 
-Local `integration` includes B04 Student Portal, Admit Card & Grade Card at merge
-commit `536fac9`, on top of the previously integrated IAM and A01-B03 vertical
-slices. B04 is focused-verified. The next prerequisite before B05 is the guarded,
-idempotent full-application seed, role credential matrix, and journey gate in
-`docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md`.
+The full-application gate is implemented and verified on branch
+`feat/FULL-APPLICATION-demo-seed-and-flow-test` against disposable local
+PostgreSQL. It adds the guarded idempotent seed, tracked role credentials,
+school/college journey gates, bulk-import CSVs, and browser evidence. Shared demo
+application was not attempted; B05 must consume this change only after it is
+reviewed and merged through `integration`.
 
 ## Completed
 
@@ -34,22 +35,34 @@ B03 Result Runs & Publication (merged by PR #9 at eea1b18)
 B04 Student Portal, Admit Card & Grade Card (merged locally at 536fac9)
 ```
 
-## In Progress
+## Full-Application Demo Gate
 
 ```text
 Full Application Demo Seed, Role Credentials & End-to-End Flow Test
 Prompt: docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md
-Status: QUEUED; REQUIRED BEFORE B05
+Status: IMPLEMENTED AND VERIFIED LOCALLY; NOT YET MERGED
+Local target: APPLIED
+Shared demo target: NOT APPLIED / NOT VERIFIED
+```
+
+Local authoritative historical outcomes:
+
+```text
+CEDAR-HIST-2026: 20 students; PASS 18, FAIL 0, ABSENT 1, WITHHELD 1
+NORTHSTAR-HIST-2026: 2 students; PASS 1, FAIL 1, ABSENT 0, WITHHELD 0
+Completed subjects: Cedar 3/3, Northstar 3/3
+Current historical publications: exactly 1 per exam; stable across seed reruns
+Future fixture: Cedar ANNUAL-2026 remains schedule revision 1 on 15-17 Sep 2026
+Credentials: 13 usable role/student identities plus 1 expected suspended denial
+Bulk import pack: 12 Northstar rows, 12 Cedar rows, 7 negative/reconciliation rows
 ```
 
 ## Blockers
 
-The configured shared demo has a complete published Cedar timetable and the
-real authenticated B04 registration/timetable/admit-card journey now passes.
-ANNUAL-2026 has no current result because its three sittings are scheduled for
-15-17 September 2026; conduct correctly reports 63 incomplete items and three
-marks batches remain unapproved. Do not fabricate a publication before those
-business inputs are complete.
+No implementation blocker remains for the local full-application gate. The
+configured shared demo remains at its earlier B04 state and was not mutated or
+re-verified by this branch. Do not infer that the local historical exams,
+credentials, or outcomes exist there.
 
 ## Migration Lock
 
@@ -141,11 +154,29 @@ Next queued task: Full Application Demo Seed, Role Credentials & Flow Test
   printable HTML references derive from the approved registration plus schedule
   revision or the active publication plus publication version.
 
+## Full-Application Verification Evidence
+
+- `pnpm seed:demo:full-application` passed repeatedly with stable publication
+  identities and outcome summaries.
+- `pnpm smoke:demo:full-application`, `pnpm test:demo:roles`, and
+  `pnpm test:demo:journey` pass against restricted local runtime access.
+- `pnpm verify:b04`, API/DB typechecks, and API/Web builds pass; both health
+  endpoints return 200 in the seeded environment.
+- Local S3 mock/ClamAV private-storage lifecycle and signed download smoke pass;
+  notification ACCEPT/FAIL and business-state isolation smoke also pass.
+- A real Cedar Student 03 browser journey produces a one-page grade card. Eight
+  curated screenshots cover controller, faculty, invigilator, PASS document, and
+  WITHHELD privacy states without browser errors.
+- Bulk CSVs were parsed through the spreadsheet artifact runtime, inspected, and
+  rendered with the exact five-column importer contract.
+- No schema, migration, shared contract, or environment variable was introduced.
+- Existing commands do not emit the persistent audit history B05 may need.
+  B05 must treat audit persistence as an explicit dependency rather than infer
+  audit events from seeded terminal states.
+
 ## Next Required Action
 
-Implement and verify
-`docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md` on a
-short-lived branch, including the tracked
-`docs/codex/SEEDED-ROLE-TEST-CREDENTIALS.md` artifact. Merge it through `integration`,
-then start B05 against the resulting authoritative whole-application data. Push
-of local integration remains a separate explicit action.
+Review and merge `feat/FULL-APPLICATION-demo-seed-and-flow-test` through
+`integration`. Then apply the guarded seed to the explicitly authorized target,
+rerun the four demo gates there, and start B05 from the updated integration
+baseline. A shared-demo application and remote push remain separate actions.

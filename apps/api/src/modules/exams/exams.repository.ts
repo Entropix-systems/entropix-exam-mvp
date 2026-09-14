@@ -123,12 +123,11 @@ export class ExamsRepository {
     return withTenant(this.prisma, tenantId, async (tx) => (await tx.student.findFirst({ where: { tenantId, membershipId }, select: { id: true } }))?.id ?? null);
   }
 
-  async saveDraft(tenantId: UUID, examId: UUID, studentId: UUID, examSubjectIds: readonly UUID[]): Promise<RegistrationRecord> {
+  async saveDraft(tenantId: UUID, examId: UUID, studentId: UUID, examSubjectIds: readonly UUID[], now = new Date()): Promise<RegistrationRecord> {
     return withTenant(this.prisma, tenantId, async (tx) => {
       const exam = await tx.exam.findFirst({ where: { tenantId, id: examId }, include: { subjects: true } });
       if (!exam) throw new Error('EXAM_NOT_FOUND');
       if (exam.registrationMode !== 'APPLICATION') throw new Error('APPLICATION_MODE_REQUIRED');
-      const now = new Date();
       if (exam.state !== 'REGISTRATION_OPEN' || now < exam.registrationOpensAt || now > exam.registrationClosesAt) throw new Error('REGISTRATION_CLOSED');
       const selectedIds = [...new Set(examSubjectIds)];
       if (!selectedIds.length || selectedIds.some((id) => !exam.subjects.some((subject) => subject.id === id))) throw new Error('INVALID_SUBJECT');
@@ -169,14 +168,14 @@ export class ExamsRepository {
     });
   }
 
-  async transition(tenantId: UUID, registrationId: UUID, from: readonly string[], state: string, snapshot: EligibilitySnapshot | null, reviewerMembershipId: UUID | null, reason: string | null): Promise<RegistrationRecord | null> {
+  async transition(tenantId: UUID, registrationId: UUID, from: readonly string[], state: string, snapshot: EligibilitySnapshot | null, reviewerMembershipId: UUID | null, reason: string | null, now = new Date()): Promise<RegistrationRecord | null> {
     return withTenant(this.prisma, tenantId, async (tx) => {
       const changed = await tx.registration.updateMany({
         where: { tenantId, id: registrationId, state: { in: [...from] } },
         data: {
           state, version: { increment: 1 }, eligibilitySnapshot: snapshot ? snapshot as unknown as Prisma.InputJsonValue : undefined,
-          submittedAt: state === 'SUBMITTED' ? new Date() : undefined, reviewedByMembershipId: reviewerMembershipId,
-          reviewedAt: reviewerMembershipId ? new Date() : null, decisionReason: reason,
+          submittedAt: state === 'SUBMITTED' ? now : undefined, reviewedByMembershipId: reviewerMembershipId,
+          reviewedAt: reviewerMembershipId ? now : null, decisionReason: reason,
         },
       });
       if (changed.count) return mapRegistration(await tx.registration.findUniqueOrThrow({ where: { id: registrationId }, include: registrationInclude }));
