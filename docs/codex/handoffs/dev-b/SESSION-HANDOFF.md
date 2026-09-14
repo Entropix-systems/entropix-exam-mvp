@@ -22,13 +22,14 @@ pnpm seed:demo:full-application
 pnpm smoke:demo:full-application
 pnpm test:demo:roles
 pnpm test:demo:journey
+pnpm test:demo:bulk-imports
 ```
 
 The seed defaults to local PostgreSQL and refuses production. A non-local
 fictional shared demo additionally requires both:
 
 ```bash
-DEMO_SEED_TARGET=shared DEMO_SEED_ACK=<exact-database-name> \
+DEMO_SEED_TARGET=shared DEMO_SEED_ACK=<host:port>/<exact-database-name> \
   pnpm seed:demo:full-application
 ```
 
@@ -112,8 +113,10 @@ or developer tooling.
 - Schema/migration: NONE.
 - Shared contracts: NONE.
 - Architectural decisions: NONE.
-- New required environment variables: NONE. Optional `DEMO_SEED_TARGET` and
-  `DEMO_SEED_ACK` exist only as mutation acknowledgements for non-local demos.
+- New required environment variables: NONE. Optional `DEMO_LOCAL_DATABASE_NAME`
+  and `DEMO_LOCAL_DATABASE_PORT` identify a differently configured disposable
+  local database. `DEMO_SEED_TARGET` and `DEMO_SEED_ACK` acknowledge all other
+  mutation targets.
 - Runtime fix: scheduling advisory locks use `$executeRaw` because the lock query
   has no result row; historical replay passes explicit repository clocks for
   registration transitions.

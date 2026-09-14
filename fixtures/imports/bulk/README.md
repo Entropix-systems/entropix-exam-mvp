@@ -15,4 +15,6 @@ The larger baseline seed fixtures remain at
 `fixtures/imports/northstar-students-valid.csv` (100 students) and
 `fixtures/imports/cedar-students-valid.csv` (20 students). Uploading the clean
 files changes the live roster, so use a disposable local database when a later
-test depends on the original seeded counts.
+test depends on the original seeded counts. `pnpm test:demo:bulk-imports`
+commits both clean batches through the real importer, verifies replay, and
+removes only those exact fictional batches so the canonical roster is restored.

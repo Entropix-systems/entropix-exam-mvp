@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
+import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import type { AttendanceState, TenantRole, UUID, ValidatedResultRule } from '@entropix/contracts';
+import type { AttendanceState, AuthenticatedContext, TenantRole, UUID, ValidatedResultRule } from '@entropix/contracts';
 import { createPrismaClient, withTenant } from '@entropix/db';
 import dotenv from 'dotenv';
 import { ExamsRepository } from '../src/modules/exams/exams.repository.js';
@@ -15,6 +16,8 @@ import { IdentityNotificationSender } from '../src/modules/identity/application/
 import { Argon2PasswordHasher } from '../src/modules/identity/security/password-hasher.js';
 import { JoseAccessTokenCodec } from '../src/modules/identity/security/access-token.js';
 import { generateOpaqueToken, hashOpaqueToken } from '../src/modules/identity/security/opaque-token.js';
+import { PeopleRepository } from '../src/modules/people/people.repository.js';
+import { PeopleService } from '../src/modules/people/people.service.js';
 
 dotenv.config({ path: fileURLToPath(new URL('../../../.env', import.meta.url)) });
 
@@ -24,21 +27,27 @@ const HISTORICAL_NOW = new Date('2026-08-31T12:00:00.000Z');
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) throw new Error('DATABASE_URL is required');
 
-type Mode = 'guard' | 'seed' | 'smoke' | 'roles' | 'journey';
+type Mode = 'guard' | 'seed' | 'smoke' | 'roles' | 'journey' | 'imports';
 const mode = (process.argv[2] ?? 'smoke') as Mode;
-if (!['guard', 'seed', 'smoke', 'roles', 'journey'].includes(mode)) throw new Error('Expected guard, seed, smoke, roles, or journey mode');
+if (!['guard', 'seed', 'smoke', 'roles', 'journey', 'imports'].includes(mode)) throw new Error('Expected guard, seed, smoke, roles, journey, or imports mode');
 
 const target = new URL(connectionString);
 const databaseName = decodeURIComponent(target.pathname.replace(/^\//, ''));
-const local = ['localhost', '127.0.0.1', '::1'].includes(target.hostname);
+const localHostname = ['localhost', '127.0.0.1', '::1'].includes(target.hostname);
+const disposableDatabaseName = process.env.DEMO_LOCAL_DATABASE_NAME?.trim() || 'exam_mvp';
+const disposableDatabasePort = process.env.DEMO_LOCAL_DATABASE_PORT?.trim() || '55432';
+const targetPort = target.port || '5432';
+const disposableLocal = localHostname && targetPort === disposableDatabasePort && databaseName === disposableDatabaseName;
+const mutationMode = ['guard', 'seed', 'imports'].includes(mode);
+const sharedAcknowledgement = `${target.host}/${databaseName}`;
 if (process.env.NODE_ENV === 'production') throw new Error('Demo commands refuse NODE_ENV=production');
-if (['guard', 'seed'].includes(mode) && !local) {
-  if (process.env.DEMO_SEED_TARGET !== 'shared' || process.env.DEMO_SEED_ACK !== databaseName) {
-    throw new Error(`Shared demo mutation refused. Set DEMO_SEED_TARGET=shared and DEMO_SEED_ACK=${databaseName}`);
+if (mutationMode && !disposableLocal) {
+  if (process.env.DEMO_SEED_TARGET !== 'shared' || process.env.DEMO_SEED_ACK !== sharedAcknowledgement) {
+    throw new Error(`Non-disposable demo mutation refused. Expected local ${disposableDatabaseName} on port ${disposableDatabasePort}, or set DEMO_SEED_TARGET=shared and DEMO_SEED_ACK=${sharedAcknowledgement}`);
   }
 }
 
-const targetCategory = local ? 'disposable-local' : ['guard', 'seed'].includes(mode) ? 'acknowledged-shared' : 'non-local-read-only';
+const targetCategory = disposableLocal ? 'disposable-local' : mutationMode ? 'acknowledged-shared' : 'non-disposable-read-only';
 console.log(`Full demo preflight: ${targetCategory} database=${databaseName}; tenants=northstar-college,cedar-school; seed=${SEED_VERSION}; exams=CEDAR-HIST-2026,NORTHSTAR-HIST-2026 (ANNUAL-2026 preserved)`);
 
 const prisma = createPrismaClient(connectionString, { sslCaPath: process.env.DATABASE_SSL_CA_PATH || undefined });
@@ -125,7 +134,7 @@ async function provisionCredentials() {
     expect(credential.email.endsWith('.example.test'), `Non-fictional credential refused: ${credential.email}`);
     let user = await prisma.user.findUnique({ where: { email: credential.email } });
     if (!user) user = await prisma.user.create({ data: { email: credential.email, status: 'ACTIVE', platformRole: credential.expectedRole === 'PLATFORM_ADMIN' ? 'PLATFORM_ADMIN' : null } });
-    else await prisma.user.update({ where: { id: user.id }, data: { status: 'ACTIVE', platformRole: credential.expectedRole === 'PLATFORM_ADMIN' ? 'PLATFORM_ADMIN' : user.platformRole } });
+    else await prisma.user.update({ where: { id: user.id }, data: { status: 'ACTIVE', platformRole: credential.expectedRole === 'PLATFORM_ADMIN' ? 'PLATFORM_ADMIN' : null } });
 
     if (credential.tenantSlug) {
       const tenant = await prisma.tenant.findUniqueOrThrow({ where: { slug: credential.tenantSlug } });
@@ -135,11 +144,16 @@ async function provisionCredentials() {
           create: { tenantId: tenant.id, userId: user!.id, status: 'ACTIVE' },
           update: { status: 'ACTIVE' },
         });
+        const expectedGrantKeys = new Set<string>();
         for (const grant of credential.roles) {
           const department = grant.departmentCode ? await tx.department.findFirstOrThrow({ where: { tenantId: tenant.id, code: grant.departmentCode } }) : null;
+          expectedGrantKeys.add(`${grant.role}:${department?.id ?? ''}`);
           const existing = await tx.roleGrant.findFirst({ where: { tenantId: tenant.id, membershipId: membership.id, role: grant.role, departmentId: department?.id ?? null } });
           if (!existing) await tx.roleGrant.create({ data: { tenantId: tenant.id, membershipId: membership.id, role: grant.role, departmentId: department?.id ?? null } });
         }
+        const currentGrants = await tx.roleGrant.findMany({ where: { tenantId: tenant.id, membershipId: membership.id }, select: { id: true, role: true, departmentId: true } });
+        const staleGrantIds = currentGrants.filter((grant) => !expectedGrantKeys.has(`${grant.role}:${grant.departmentId ?? ''}`)).map((grant) => grant.id);
+        if (staleGrantIds.length) await tx.roleGrant.deleteMany({ where: { tenantId: tenant.id, id: { in: staleGrantIds } } });
         if (credential.profile?.kind === 'faculty') {
           const departmentCode = credential.roles.find((grant) => grant.departmentCode)?.departmentCode ?? (credential.tenantSlug === 'cedar-school' ? 'SCHOOL' : 'CSE');
           const department = await tx.department.findFirstOrThrow({ where: { tenantId: tenant.id, code: departmentCode } });
@@ -318,7 +332,7 @@ async function structuralSmoke() {
         tx.enrolment.count({ where: { tenantId: tenant.id, status: 'ACTIVE' } }),
       ]);
       expect(graphCounts.every((count) => count > 0), `${tenant.slug} academic/people graph is incomplete`);
-      const exam = await tx.exam.findFirstOrThrow({ where: { tenantId: tenant.id, code: tenant.slug === 'cedar-school' ? 'CEDAR-HIST-2026' : 'NORTHSTAR-HIST-2026' }, include: { subjects: { include: { paper: { include: { hallSittings: { include: { duties: true, attendanceBatch: { include: { rows: true } }, incidents: true } } } }, marksBatch: true, registrationSubjects: { where: { registration: { state: 'APPROVED' } }, include: { seatAssignments: true } } } }, publications: { where: { isCurrent: true }, include: { resultRun: { include: { students: true } } } } } });
+      const exam = await tx.exam.findFirstOrThrow({ where: { tenantId: tenant.id, code: tenant.slug === 'cedar-school' ? 'CEDAR-HIST-2026' : 'NORTHSTAR-HIST-2026' }, include: { subjects: { include: { paper: { include: { hallSittings: { include: { duties: true, attendanceBatch: { include: { rows: true } }, incidents: true } } } }, marksBatch: { include: { marks: true } }, registrationSubjects: { where: { registration: { state: 'APPROVED' } }, include: { seatAssignments: true, registration: { include: { student: true } } } } } }, publications: { where: { isCurrent: true }, include: { resultRun: { include: { students: true } } } } } });
       expect(exam.publications.length === 1, `${exam.code} needs exactly one current publication`);
       expect(exam.subjects.every((subject) => subject.paper && subject.paper.hallSittings.length > 0 && subject.marksBatch?.state === 'APPROVED'), `${exam.code} subject readiness incomplete`);
       expect(exam.subjects.every((subject) => subject.marksBatch?.submittedByMembershipId && subject.marksBatch.reviewedByMembershipId && subject.marksBatch.submittedByMembershipId !== subject.marksBatch.reviewedByMembershipId), `${exam.code} marks were not independently approved`);
@@ -326,16 +340,27 @@ async function structuralSmoke() {
       expect(exam.subjects.every((subject) => subject.paper!.hallSittings.every((sitting) => sitting.duties.some((duty) => duty.state === 'ACCEPTED') && sitting.attendanceBatch?.state === 'SUBMITTED' && sitting.attendanceBatch.rows.every((row) => row.state !== 'NOT_MARKED'))), `${exam.code} conduct incomplete`);
       const run = exam.publications[0]!.resultRun;
       expect(run.inputRevision === exam.inputRevision && run.ruleVersionId === exam.ruleVersionId, `${exam.code} current publication is stale`);
+      const outcomes = Object.fromEntries(['PASS', 'FAIL', 'ABSENT', 'WITHHELD'].map((outcome) => [outcome, run.students.filter((row) => row.outcome === outcome).length]));
       const registrations = await tx.registration.groupBy({ by: ['state'], where: { tenantId: tenant.id, examId: exam.id }, _count: true });
       if (tenant.slug === 'cedar-school') {
         expect(registrations.some((row) => row.state === 'APPROVED' && row._count === 20), 'Cedar auto-enrol roster is incomplete');
+        expect(run.students.length === 20 && outcomes.PASS === 18 && outcomes.FAIL === 0 && outcomes.ABSENT === 1 && outcomes.WITHHELD === 1, 'Cedar result distribution changed');
         expect(exam.subjects.some((subject) => subject.paper!.hallSittings.some((sitting) => sitting.incidents.some((incident) => incident.kind === 'STUDENT' && incident.disposition === 'RETAIN_WITHHELD'))), 'Cedar retained student incident is missing');
+        expect(exam.subjects.some((subject) => subject.paper!.hallSittings.some((sitting) => sitting.incidents.some((incident) => incident.kind === 'HALL' && incident.disposition === 'NO_RESULT_IMPACT'))), 'Cedar resolved hall incident is missing');
+        const attendanceStates = new Set(exam.subjects.flatMap((subject) => subject.paper!.hallSittings.flatMap((sitting) => sitting.attendanceBatch?.rows.map((row) => row.state) ?? [])));
+        expect(['PRESENT', 'LATE', 'ABSENT'].every((state) => attendanceStates.has(state)), 'Cedar attendance mix is incomplete');
+        const absentRegistrations = exam.subjects.flatMap((subject) => subject.registrationSubjects.filter((row) => row.registration.student.rollNo === 'CED10A01').map((row) => row.id));
+        expect(absentRegistrations.length === exam.subjects.length, 'Cedar absent student subject coverage is incomplete');
+        const absentExternalMarks = exam.subjects.flatMap((subject) => subject.marksBatch?.marks ?? []).filter((mark) => absentRegistrations.includes(mark.registrationSubjectId) && ['FINAL', 'EXTERNAL'].includes(mark.component));
+        expect(absentExternalMarks.length === 0, 'Cedar absent student has a final/external mark');
       } else {
         expect(registrations.some((row) => row.state === 'APPROVED' && row._count === 2) && registrations.some((row) => row.state === 'REJECTED' && row._count >= 1), 'Northstar approval/rejection fixtures are incomplete');
+        expect(run.students.length === 2 && outcomes.PASS === 1 && outcomes.FAIL === 1 && outcomes.ABSENT === 0 && outcomes.WITHHELD === 0, 'Northstar result distribution changed');
+        expect(exam.subjects.some((subject) => subject.paper!.hallSittings.some((sitting) => sitting.incidents.some((incident) => incident.kind === 'HALL' && incident.disposition === 'NO_RESULT_IMPACT'))), 'Northstar resolved hall incident is missing');
         const inactive = await tx.student.findFirstOrThrow({ where: { tenantId: tenant.id, rollNo: 'NS26099', status: 'INACTIVE' }, include: { registrations: { where: { examId: exam.id } } } });
         expect(inactive.registrations.length === 0, 'Inactive Northstar student entered the historical exam');
       }
-      return { exam: exam.code, students: exam.publications[0]!.resultRun.students.length, outcomes: Object.fromEntries(['PASS', 'FAIL', 'ABSENT', 'WITHHELD'].map((outcome) => [outcome, exam.publications[0]!.resultRun.students.filter((row) => row.outcome === outcome).length])), publicationId: exam.publications[0]!.id };
+      return { exam: exam.code, students: run.students.length, outcomes, publicationId: exam.publications[0]!.id };
     });
     console.log(`Smoke ${tenant.slug}: ${JSON.stringify(summary)}`);
   }
@@ -346,8 +371,77 @@ async function structuralSmoke() {
   expect(declared === demoCredentials.length, 'Declared credential graph is incomplete');
   const tenantRoles = new Set((await Promise.all(tenants.map((tenant) => withTenant(prisma, tenant.id, (tx) => tx.roleGrant.findMany({ where: { tenantId: tenant.id }, select: { role: true } }))))).flat().map((grant) => grant.role));
   for (const role of ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'FACULTY', 'INVIGILATOR', 'STUDENT', 'AUDITOR']) expect(tenantRoles.has(role), `Canonical role ${role} is missing`);
-  expect(await prisma.user.count({ where: { platformRole: 'PLATFORM_ADMIN', status: 'ACTIVE' } }) > 0, 'Canonical PLATFORM_ADMIN is missing');
+  const demoUsers = await prisma.user.findMany({ where: { email: { in: demoCredentials.map((entry) => entry.email) } }, select: { email: true, platformRole: true } });
+  expect(demoUsers.every((user) => user.platformRole === (user.email === 'platform.admin@demo.example.test' ? 'PLATFORM_ADMIN' : null)), 'A reserved demo credential has unexpected platform authority');
   console.log('Full application structural/business smoke READY');
+}
+
+async function cleanupBulkImport(tenantId: UUID, contentHash: string, rollNos: readonly string[]) {
+  const userIds = await withTenant(prisma, tenantId, async (tx) => {
+    const students = await tx.student.findMany({ where: { tenantId, rollNo: { in: [...rollNos] } }, select: { id: true, membershipId: true, membership: { select: { userId: true } } } });
+    const studentIds = students.map((student) => student.id);
+    const membershipIds = students.flatMap((student) => student.membershipId ? [student.membershipId] : []);
+    const registrationSubjects = await tx.registrationSubject.findMany({ where: { tenantId, registration: { studentId: { in: studentIds } } }, select: { id: true } });
+    const registrationSubjectIds = registrationSubjects.map((row) => row.id);
+    const seatAssignments = await tx.seatAssignment.findMany({ where: { tenantId, registrationSubjectId: { in: registrationSubjectIds } }, select: { id: true } });
+    const seatAssignmentIds = seatAssignments.map((row) => row.id);
+    await tx.attendance.deleteMany({ where: { tenantId, seatAssignmentId: { in: seatAssignmentIds } } });
+    await tx.incidentStudent.deleteMany({ where: { tenantId, registrationSubjectId: { in: registrationSubjectIds } } });
+    await tx.mark.deleteMany({ where: { tenantId, registrationSubjectId: { in: registrationSubjectIds } } });
+    await tx.resultItem.deleteMany({ where: { tenantId, registrationSubjectId: { in: registrationSubjectIds } } });
+    await tx.seatAssignment.deleteMany({ where: { tenantId, id: { in: seatAssignmentIds } } });
+    await tx.registrationSubject.deleteMany({ where: { tenantId, id: { in: registrationSubjectIds } } });
+    await tx.registration.deleteMany({ where: { tenantId, studentId: { in: studentIds } } });
+    await tx.studentResult.deleteMany({ where: { tenantId, studentId: { in: studentIds } } });
+    await tx.enrolment.deleteMany({ where: { tenantId, studentId: { in: studentIds } } });
+    await tx.student.deleteMany({ where: { tenantId, id: { in: studentIds } } });
+    await tx.roleGrant.deleteMany({ where: { tenantId, membershipId: { in: membershipIds } } });
+    await tx.membership.deleteMany({ where: { tenantId, id: { in: membershipIds } } });
+    await tx.studentImport.deleteMany({ where: { tenantId, contentHash } });
+    return students.map((student) => student.membership?.userId).filter((userId): userId is string => Boolean(userId));
+  });
+  if (userIds.length) await prisma.user.deleteMany({ where: { id: { in: userIds }, email: { endsWith: '.example.test' }, memberships: { none: {} } } });
+}
+
+async function bulkImports() {
+  const people = new PeopleService(new PeopleRepository(prisma));
+  for (const fixture of [
+    { tenantSlug: 'northstar-college', fileName: 'northstar-students-upload.csv' },
+    { tenantSlug: 'cedar-school', fileName: 'cedar-students-upload.csv' },
+  ]) {
+    const tenant = await prisma.tenant.findUniqueOrThrow({ where: { slug: fixture.tenantSlug } });
+    const membership = await withTenant(prisma, tenant.id, (tx) => tx.membership.findFirstOrThrow({ where: { tenantId: tenant.id, user: { email: `institution.admin@${fixture.tenantSlug === 'cedar-school' ? 'cedar' : 'northstar'}.example.test` } } }));
+    const context: AuthenticatedContext = { kind: 'TENANT', userId: membership.userId, tenantId: tenant.id, membershipId: membership.id, activeRole: 'INSTITUTION_ADMIN', grants: [{ role: 'INSTITUTION_ADMIN', departmentId: null }] };
+    const sourceText = await readFile(fileURLToPath(new URL(`../../../fixtures/imports/bulk/${fixture.fileName}`, import.meta.url)), 'utf8');
+    const request = { fileName: fixture.fileName, sourceText };
+    const preview = await people.previewImport(context, request);
+    expect(preview.rowCount === 12 && preview.acceptedCount === 12 && preview.rejectedCount === 0, `${fixture.fileName} preview failed`);
+    const importedRolls = preview.rows.map((row) => row.rollNo);
+    try {
+      const committed = await people.commitImport(context, request);
+      const replay = await people.commitImport(context, request);
+      expect(committed.rowCount === 12 && committed.createdCount === 12 && committed.enrolmentCount === 36, `${fixture.fileName} commit counts changed`);
+      expect(replay.replayed && replay.importId === committed.importId, `${fixture.fileName} commit replay was not idempotent`);
+      const imported = await withTenant(prisma, tenant.id, (tx) => tx.student.findMany({ where: { tenantId: tenant.id, rollNo: { in: importedRolls } }, include: { enrolments: { where: { status: 'ACTIVE' } }, membership: { include: { roleGrants: true } } } }));
+      expect(imported.length === 12 && imported.every((student) => student.enrolments.length === 3 && student.membership?.roleGrants.some((grant) => grant.role === 'STUDENT')), `${fixture.fileName} persisted graph is incomplete`);
+    } finally {
+      await cleanupBulkImport(tenant.id, preview.contentHash, importedRolls);
+    }
+  }
+
+  const northstar = await prisma.tenant.findUniqueOrThrow({ where: { slug: 'northstar-college' } });
+  const membership = await withTenant(prisma, northstar.id, (tx) => tx.membership.findFirstOrThrow({ where: { tenantId: northstar.id, user: { email: 'institution.admin@northstar.example.test' } } }));
+  const context: AuthenticatedContext = { kind: 'TENANT', userId: membership.userId, tenantId: northstar.id, membershipId: membership.id, activeRole: 'INSTITUTION_ADMIN', grants: [{ role: 'INSTITUTION_ADMIN', departmentId: null }] };
+  const fileName = 'student-import-reconciliation.csv';
+  const sourceText = await readFile(fileURLToPath(new URL(`../../../fixtures/imports/bulk/${fileName}`, import.meta.url)), 'utf8');
+  const preview = await people.previewImport(context, { fileName, sourceText });
+  const errorCodes = new Set(preview.errors.map((error) => error.code));
+  expect(preview.rowCount === 7 && preview.rejectedCount === 6, 'Reconciliation preview row counts changed');
+  expect(['EXISTING_ROLL', 'UNKNOWN_SUBJECT', 'MALFORMED_VALUE', 'MISSING_VALUE', 'UNKNOWN_COHORT', 'DUPLICATE_FILE_ROLL'].every((code) => errorCodes.has(code as never)), 'Reconciliation preview error coverage changed');
+  let rejected = false;
+  try { await people.commitImport(context, { fileName, sourceText }); } catch { rejected = true; }
+  expect(rejected, 'Invalid reconciliation file unexpectedly committed');
+  console.log('Bulk student import preview/commit/replay, cleanup, and reconciliation rejection READY');
 }
 
 async function roleMatrix() {
@@ -416,7 +510,8 @@ try {
   else if (mode === 'seed') await seed();
   else if (mode === 'smoke') await structuralSmoke();
   else if (mode === 'roles') await roleMatrix();
-  else await journeys();
+  else if (mode === 'journey') await journeys();
+  else await bulkImports();
 } finally {
   await prisma.$disconnect();
 }

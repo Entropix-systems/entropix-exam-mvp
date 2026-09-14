@@ -102,15 +102,18 @@ pnpm seed:demo:full-application
 pnpm smoke:demo:full-application
 pnpm test:demo:roles
 pnpm test:demo:journey
+pnpm test:demo:bulk-imports
 ```
 
 The full seed refuses `NODE_ENV=production`, provisions only fictional
 `example.test` identities, and prints a target preflight without credentials,
-tokens, hashes, or connection strings. A non-local fictional shared demo requires
-both an explicit target category and the exact database-name acknowledgement:
+tokens, hashes, or connection strings. Local mutation is allowed only when the
+database is named `exam_mvp` on port `55432` (or the explicit local name/port
+overrides). Every other fictional demo target requires both an explicit target
+category and the exact host:port/database acknowledgement:
 
 ```bash
-DEMO_SEED_TARGET=shared DEMO_SEED_ACK=<exact-database-name> \
+DEMO_SEED_TARGET=shared DEMO_SEED_ACK=<host:port>/<exact-database-name> \
   pnpm seed:demo:full-application
 ```
 

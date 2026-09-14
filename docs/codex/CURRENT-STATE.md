@@ -167,9 +167,13 @@ Next queued task: Full Application Demo Seed, Role Credentials & Flow Test
 - A real Cedar Student 03 browser journey produces a one-page grade card. Eight
   curated screenshots cover controller, faculty, invigilator, PASS document, and
   WITHHELD privacy states without browser errors.
-- Bulk CSVs were parsed through the spreadsheet artifact runtime, inspected, and
-  rendered with the exact five-column importer contract.
-- No schema, migration, shared contract, or environment variable was introduced.
+- Bulk CSVs were parsed through the spreadsheet artifact runtime and now pass a
+  real tenant-scoped preview, commit, persisted-graph, idempotent-replay, and
+  invalid-reconciliation rejection check via `pnpm test:demo:bulk-imports`.
+- No schema, migration, shared contract, or required environment variable was
+  introduced. Optional `DEMO_LOCAL_DATABASE_NAME` and
+  `DEMO_LOCAL_DATABASE_PORT` narrow which local database the guarded demo
+  commands may mutate without a shared-target acknowledgement.
 - Existing commands do not emit the persistent audit history B05 may need.
   B05 must treat audit persistence as an explicit dependency rather than infer
   audit events from seeded terminal states.

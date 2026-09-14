@@ -17,7 +17,7 @@ and Argon2 hashing workflow; it never inserts plaintext or a fabricated hash.
 | Shared demo target | **NOT APPLIED / NOT VERIFIED** |
 | Seed version | `full-application-v1` |
 | Seed command | `pnpm seed:demo:full-application` |
-| Verification | Seed twice, structural smoke, role matrix, journeys, and browser evidence passed |
+| Verification | Seed twice, structural smoke, role matrix, journeys, bulk-import preview/commit/replay, and browser evidence passed |
 
 ## Role Accounts
 
