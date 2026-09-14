@@ -108,7 +108,7 @@
 .membership-table tbody tr:first-child td { border-top: 0; }
 .membership-table td:first-child strong, .membership-table td:first-child small { display: block; }
 .membership-table td:first-child small { margin-top: 4px; color: #6e8089; }
-.status-badge { display: inline-block; border-radius: 999px; padding: 5px 9px; color: #805d13; background: #fff3d6; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.status-badge { display: inline-block; align-self: flex-start; width: fit-content; max-width: 100%; border-radius: 999px; padding: 5px 9px; color: #805d13; background: #fff3d6; font-size: 10px; font-weight: 800; letter-spacing: .05em; line-height: 1.2; text-transform: uppercase; }
 .status-badge.active { color: #0c7159; background: #e5f5ef; }
 .status-badge.deactivated, .status-badge.inactive, .status-badge.suspended { color: #a13d3d; background: #fdecec; }
 .role-grants { display: flex; flex-wrap: wrap; gap: 7px; }
@@ -210,7 +210,7 @@
 .conduct-stack { display: grid; gap: 20px; max-width: 1240px; margin: auto; }
 .conduct-card, .conduct-empty { overflow: hidden; border: 1px solid #dce5e8; border-radius: 9px; background: #fff; box-shadow: 0 5px 20px rgba(31, 61, 73, .05); }
 .conduct-empty { max-width: 1240px; margin: auto; padding: 32px; }
-.conduct-card > header { display: flex; justify-content: space-between; gap: 18px; padding: 20px 22px; border-bottom: 1px solid #e4eaec; }
+.conduct-card > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 20px 22px; border-bottom: 1px solid #e4eaec; }
 .conduct-card h2, .conduct-card h3 { margin: 3px 0 6px; }.conduct-card header p:last-child { margin: 0; color: #6b7d87; font-size: 13px; }
 .duty-panel { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 20px 22px; }.duty-panel p { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; }.duty-panel small, .incident-list small { display: block; width: 100%; color: #6b7d87; }
 .duty-assignment { display: flex; align-items: end; gap: 10px; }.duty-actions, .incident-actions, .conduct-actions { display: flex; align-items: center; gap: 10px; }
@@ -224,7 +224,7 @@
 .evaluation-stack { display: grid; gap: 20px; max-width: 1240px; margin: auto; }
 .evaluation-card, .evaluation-empty { overflow: hidden; border: 1px solid #dce5e8; border-radius: 9px; background: #fff; box-shadow: 0 5px 20px rgba(31, 61, 73, .05); }
 .evaluation-empty { max-width: 1240px; margin: auto; padding: 32px; }
-.evaluation-card > header { display: flex; justify-content: space-between; gap: 18px; padding: 20px 22px; border-bottom: 1px solid #e4eaec; }
+.evaluation-card > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 20px 22px; border-bottom: 1px solid #e4eaec; }
 .evaluation-card h2, .evaluation-card h3 { margin: 3px 0 6px; }
 .evaluation-card header p:last-child, .evaluation-assignment p { margin: 0; color: #6b7d87; font-size: 13px; }
 .evaluation-assignment { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 20px 22px; }

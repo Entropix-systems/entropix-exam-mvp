@@ -1,30 +1,30 @@
-import { useState } from 'react'
+import { useReducer } from 'react'
 import type { FormEvent } from 'react'
 import { AuthApiError } from '../auth/auth-client'
 import { useAuth } from '../auth/auth-context'
 import { navigate } from '../auth/navigation'
+import { landingDestination } from '../auth/route-policy'
 import { AuthLayout, FormError } from './auth-layout'
+import { INITIAL_LOGIN_STATE, loginStateReducer } from './login-state'
 
 export function LoginPage() {
   const { login } = useAuth()
-  const [error, setError] = useState<string | null>(null)
-  const [busy, setBusy] = useState(false)
+  const [state, dispatch] = useReducer(loginStateReducer, INITIAL_LOGIN_STATE)
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    setBusy(true)
-    setError(null)
+    dispatch({ type: 'SUBMIT' })
     const form = new FormData(event.currentTarget)
     try {
-      await login({
+      const currentUser = await login({
         email: String(form.get('email') ?? ''),
         password: String(form.get('password') ?? ''),
       })
-      navigate('/', true)
+      navigate(landingDestination(currentUser), true)
     } catch (reason) {
-      setError(reason instanceof AuthApiError ? reason.message : 'Sign in failed')
+      dispatch({ type: 'FAIL', message: reason instanceof AuthApiError ? reason.message : 'Sign in failed' })
     } finally {
-      setBusy(false)
+      dispatch({ type: 'FINISH' })
     }
   }
 
@@ -35,10 +35,10 @@ export function LoginPage() {
       footer={<button type="button" className="link-button" onClick={() => navigate('/forgot-password')}>Forgot password?</button>}
     >
       <form onSubmit={submit} className="auth-form">
-        <label>Email <input name="email" type="email" autoComplete="username" required /></label>
-        <label>Password <input name="password" type="password" autoComplete="current-password" required /></label>
-        <FormError message={error} />
-        <button className="primary-button" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
+        <label>Email <input name="email" type="email" autoComplete="username" required onChange={() => dispatch({ type: 'EDIT' })} /></label>
+        <label>Password <input name="password" type="password" autoComplete="current-password" required onChange={() => dispatch({ type: 'EDIT' })} /></label>
+        <FormError message={state.error} />
+        <button className="primary-button" disabled={state.busy}>{state.busy ? 'Signing in…' : 'Sign in'}</button>
       </form>
     </AuthLayout>
   )

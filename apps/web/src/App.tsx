@@ -14,6 +14,8 @@ import { EvaluationApiClient } from './evaluation/evaluation-client'
 import { ResultsApiClient } from './results/results-client'
 import { StudentPortalApiClient } from './student-portal/student-portal-client'
 import { AuditApiClient } from './audit/audit-client'
+import { navigate } from './auth/navigation'
+import { landingDestination } from './auth/route-policy'
 import './App.css'
 
 const AccessDeniedPage = lazy(() => import('./pages/access-denied-page').then((module) => ({ default: module.AccessDeniedPage })))
@@ -21,6 +23,7 @@ const ForgotPasswordPage = lazy(() => import('./pages/forgot-password-page').the
 const HomePage = lazy(() => import('./pages/home-page').then((module) => ({ default: module.HomePage })))
 const InvitationPage = lazy(() => import('./pages/invitation-page').then((module) => ({ default: module.InvitationPage })))
 const LoginPage = lazy(() => import('./pages/login-page').then((module) => ({ default: module.LoginPage })))
+const PlatformPage = lazy(() => import('./pages/platform-page').then((module) => ({ default: module.PlatformPage })))
 const MastersPage = lazy(() => import('./pages/masters-page').then((module) => ({ default: module.MastersPage })))
 const ResetPasswordPage = lazy(() => import('./pages/reset-password-page').then((module) => ({ default: module.ResetPasswordPage })))
 const SetupAccessPage = lazy(() => import('./pages/setup-access-page').then((module) => ({ default: module.SetupAccessPage })))
@@ -56,6 +59,12 @@ function usePathname() {
   }, [])
   return pathname
 }
+
+function Redirect({ to }: { to: string }) {
+  useEffect(() => navigate(to, true), [to])
+  return null
+}
+
 function Routes() {
   const pathname = usePathname()
   const { currentUser } = useAuth()
@@ -69,6 +78,10 @@ function Routes() {
   if (pathname === '/accept-invitation')
     return <InvitationPage client={authClient} />
   if (pathname === '/access-denied') return <AccessDeniedPage />
+  if (pathname === '/platform') {
+    if (currentUser?.context.kind === 'TENANT') return <Redirect to={landingDestination(currentUser)} />
+    return <ProtectedRoute><PlatformPage /></ProtectedRoute>
+  }
   if (pathname === '/setup-access')
     return (
       <ProtectedRoute>
@@ -135,6 +148,8 @@ function Routes() {
         <StudentPortalPage key={scopeKey} client={studentPortalClient} />
       </ProtectedRoute>
     )
+  if (pathname === '/' && currentUser?.context.kind === 'PLATFORM')
+    return <ProtectedRoute><Redirect to="/platform" /></ProtectedRoute>
   return (
     <ProtectedRoute>
       <HomePage key={scopeKey} client={auditClient} />

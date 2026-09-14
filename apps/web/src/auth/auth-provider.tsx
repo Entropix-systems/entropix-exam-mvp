@@ -63,30 +63,36 @@ export function AuthProvider({
 
   const login = useCallback(
     async (input: LoginRequest) => {
-      setCurrentUser(await client.login(input))
+      const user = await client.login(input)
+      setCurrentUser(user)
       setStatus('AUTHENTICATED')
+      return user
     },
     [client],
   )
 
   const switchInstitution = useCallback(
     async (institutionId: string) => {
-      setCurrentUser(await client.switchContext({ institutionId }))
+      const user = await client.switchContext({ institutionId })
+      setCurrentUser(user)
       setStatus('AUTHENTICATED')
+      return user
     },
     [client],
   )
 
   const switchRole = useCallback(
     async (role: TenantRole) => {
-      if (!currentUser || currentUser.context.kind !== 'TENANT') return
-      setCurrentUser(
-        await client.switchContext({
-          institutionId: currentUser.context.tenantId,
-          role,
-        }),
-      )
+      if (!currentUser || currentUser.context.kind !== 'TENANT') {
+        throw new AuthApiError(403, 'CONTEXT_UNAVAILABLE', 'Access context could not be changed.')
+      }
+      const user = await client.switchContext({
+        institutionId: currentUser.context.tenantId,
+        role,
+      })
+      setCurrentUser(user)
       setStatus('AUTHENTICATED')
+      return user
     },
     [client, currentUser],
   )

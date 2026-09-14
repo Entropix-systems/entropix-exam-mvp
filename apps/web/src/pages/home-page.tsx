@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
+import type { CurrentUserResponse } from '@entropix/contracts'
 import { AuditApiClient, type DashboardExam, type DashboardSnapshot } from '../audit/audit-client'
 import { AuthApiError } from '../auth/auth-client'
 import { useAuth } from '../auth/auth-context'
 import { navigate } from '../auth/navigation'
+import { attentionViewFor } from './home-attention'
 import { WorkspaceShell } from './workspace-shell'
 
 function message(reason: unknown): string {
@@ -14,8 +16,9 @@ function formatDate(value: string | null, timezone: string): string {
   return new Intl.DateTimeFormat('en-IN', { timeZone: timezone, dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value))
 }
 
-function ExamOverview({ exam, timezone, canManageResults }: { exam: DashboardExam; timezone: string; canManageResults: boolean }) {
-  const ready = exam.steps.every((step) => step.status !== 'PENDING')
+export function ExamOverview({ exam, timezone, currentUser }: { exam: DashboardExam; timezone: string; currentUser: CurrentUserResponse }) {
+  const ready = exam.steps.every((step) => step.status === 'COMPLETE')
+  const attention = attentionViewFor(exam.steps, currentUser)
   return <>
     <div className="overview-stats">
       <div><span>Registered students</span><b>{exam.registeredStudents}</b><small>Approved registrations</small></div>
@@ -29,9 +32,9 @@ function ExamOverview({ exam, timezone, canManageResults }: { exam: DashboardExa
         <div className="readiness-list">{exam.steps.map((step, index) => <div className={'readiness-row ' + step.status.toLowerCase()} key={step.code}><span className="readiness-number">{step.status === 'COMPLETE' ? '✓' : index + 1}</span><div><b>{step.label}</b><small>{step.detail}</small></div><span className={'status-badge ' + (step.status === 'COMPLETE' ? 'active' : step.status === 'PENDING' ? 'inactive' : '')}>{step.status}</span></div>)}</div>
       </section>
       <section className="overview-card">
-        <header><div><p className="eyebrow">Needs your attention</p><h2>{exam.examCode}</h2></div></header>
-        {exam.attention.length > 0 ? <ul className="attention-list">{exam.attention.map((item) => <li key={item}>{item}</li>)}</ul> : <div className="reports-empty"><b>No blockers</b><p>This exam has a current run and publication.</p></div>}
-        {canManageResults ? <button type="button" className="primary-button" onClick={() => navigate('/results')}>Open result checklist</button> : null}
+        <header><div><p className="eyebrow">Needs your attention · {exam.examCode}</p><h2>{attention.title}</h2></div><span className={'status-badge ' + (attention.status === 'READY' ? 'active' : attention.status === 'PENDING' ? 'inactive' : '')}>{attention.status}</span></header>
+        <div className="reports-empty"><b>{attention.status === 'READY' ? 'No blockers' : 'Next readiness item'}</b><p>{attention.detail}</p></div>
+        <button type="button" className="primary-button" onClick={() => navigate(attention.route)}>{attention.actionLabel}</button>
       </section>
     </div>
     <section className="overview-card">
@@ -73,10 +76,9 @@ export function HomePage({ client }: { client: AuditApiClient }) {
   if (!currentUser) return null
   const tenant = currentUser.context.kind === 'TENANT' ? currentUser.context : null
   const exam = snapshot?.exams.find((entry) => entry.examId === selectedId) ?? snapshot?.exams[0]
-  const canManageResults = Boolean(tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(tenant.activeRole))
 
   return <WorkspaceShell currentUser={currentUser} active="overview" onLogout={logout} onSwitchInstitution={switchInstitution} onSwitchRole={switchRole}>
     <div className="page-heading"><div><p className="eyebrow">Examination control</p><h1>{snapshot?.institutionName ?? currentUser.institutions.find((institution) => institution.id === tenant?.tenantId)?.name ?? 'Institution overview'}</h1><p>{exam ? `${exam.academicYear} · ${exam.termName} · ${exam.examName}` : 'Authoritative readiness across the examination journey.'}</p></div>{exam && snapshot && snapshot.exams.length > 1 ? <label className="overview-exam-select">Exam<select value={exam.examId} onChange={(event) => setSelectedId(event.target.value)}>{snapshot.exams.map((entry) => <option value={entry.examId} key={entry.examId}>{entry.examCode} · {entry.examName}</option>)}</select></label> : null}</div>
-    {loading ? <div className="reports-empty"><b>Loading overview…</b><p>Reading current registration, schedule, conduct, marks, and publication state.</p></div> : error ? <div className="reports-error" role="alert"><b>Overview unavailable</b><p>{error}</p><button type="button" className="secondary-button" onClick={load}>Try again</button></div> : !exam || !snapshot ? <div className="reports-empty"><b>No examinations yet</b><p>Create an exam to begin the readiness journey.</p></div> : <ExamOverview exam={exam} timezone={snapshot.timezone} canManageResults={canManageResults} />}
+    {loading ? <div className="reports-empty"><b>Loading overview…</b><p>Reading current registration, schedule, conduct, marks, and publication state.</p></div> : error ? <div className="reports-error" role="alert"><b>Overview unavailable</b><p>{error}</p><button type="button" className="secondary-button" onClick={load}>Try again</button></div> : !exam || !snapshot ? <div className="reports-empty"><b>No examinations yet</b><p>Create an exam to begin the readiness journey.</p></div> : <ExamOverview exam={exam} timezone={snapshot.timezone} currentUser={currentUser} />}
   </WorkspaceShell>
 }

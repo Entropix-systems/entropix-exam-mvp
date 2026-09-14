@@ -204,6 +204,22 @@ Status: MERGED; LOCKS RELEASED
   3/3, 60/60, 3/3, one WITHHELD hold, and a current publication. A Northstar
   hall command produced a real tenant-scoped audit row.
 
+## Post-Browser-Audit Remediation
+
+- The audit now classifies BUG-002 as a product-rule clarification and no defect.
+  ABSENT subject percentage/grade remain nonnumeric, credited absence remains in
+  the GPA denominator with zero points, released ABSENT remains grade-card
+  eligible, and WITHHELD continues to suppress numeric results and grade cards.
+- The Web app has one role-aware landing/route policy, an explicit platform-only
+  workspace, safe login and context-switch destinations, compact operational
+  badges, edit-cleared login errors, and an attention card derived from the same
+  ordered readiness steps shown on the overview.
+- The full Web suite passes with 17 files and 53 tests. API, domain, worker,
+  contract, migration, seeded role/journey/import, and representative browser
+  checks also pass as recorded in `POST-REMEDIATION-VERIFICATION.md`.
+- No schema, migration, contract, permission, readiness-rule, or result-semantic
+  change was introduced by this remediation.
+
 ## Next Required Action
 
 Affected developers should pull/rebase from updated `integration` and reread

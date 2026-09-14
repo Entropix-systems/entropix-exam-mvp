@@ -14,9 +14,9 @@ export type AuthStatus =
 export interface AuthContextValue {
   status: AuthStatus
   currentUser: CurrentUserResponse | null
-  login(input: LoginRequest): Promise<void>
-  switchInstitution(institutionId: string): Promise<void>
-  switchRole(role: TenantRole): Promise<void>
+  login(input: LoginRequest): Promise<CurrentUserResponse>
+  switchInstitution(institutionId: string): Promise<CurrentUserResponse>
+  switchRole(role: TenantRole): Promise<CurrentUserResponse>
   logout(): Promise<void>
   restore(): Promise<void>
 }

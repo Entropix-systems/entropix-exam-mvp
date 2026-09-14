@@ -3,7 +3,8 @@ import type { PropsWithChildren } from 'react'
 import type { CurrentUserResponse, TenantRole } from '@entropix/contracts'
 import { AuthApiError } from '../auth/auth-client'
 import { navigate } from '../auth/navigation'
-import { canManageIdentity, roleLabel } from '../identity/identity-access'
+import { canAccessWorkspacePath, destinationAfterContextChange } from '../auth/route-policy'
+import { roleLabel } from '../identity/identity-access'
 
 export function WorkspaceShell({
   currentUser,
@@ -14,10 +15,10 @@ export function WorkspaceShell({
   children,
 }: PropsWithChildren<{
   currentUser: CurrentUserResponse
-  active: 'overview' | 'setup-access' | 'masters' | 'students' | 'exams' | 'schedule' | 'attendance' | 'marks' | 'results' | 'student' | 'reports'
+  active: 'platform' | 'overview' | 'setup-access' | 'masters' | 'students' | 'exams' | 'schedule' | 'attendance' | 'marks' | 'results' | 'student' | 'reports'
   onLogout(): Promise<void>
-  onSwitchInstitution(institutionId: string): Promise<void>
-  onSwitchRole(role: TenantRole): Promise<void>
+  onSwitchInstitution(institutionId: string): Promise<CurrentUserResponse>
+  onSwitchRole(role: TenantRole): Promise<CurrentUserResponse>
 }>) {
   const tenant = currentUser.context.kind === 'TENANT' ? currentUser.context : null
   const [switching, setSwitching] = useState(false)
@@ -46,6 +47,15 @@ export function WorkspaceShell({
       setSwitching(false)
     }
   }
+
+  async function changeContext(operation: () => Promise<CurrentUserResponse>) {
+    await change(async () => {
+      const nextUser = await operation()
+      const currentPath = window.location.pathname
+      const destination = destinationAfterContextChange(currentPath, nextUser)
+      if (destination !== currentPath) navigate(destination, true)
+    })
+  }
   return (
     <div className="workspace-shell">
       <aside className="workspace-sidebar">
@@ -54,14 +64,14 @@ export function WorkspaceShell({
           <small>ENTROPIX SYSTEMS</small>
         </div>
         <div className="tenant-box">
-          <small>INSTITUTION WORKSPACE</small>
+          <small>{tenant ? 'INSTITUTION WORKSPACE' : 'PLATFORM WORKSPACE'}</small>
           {currentUser.institutions.length > 1 ? (
             <select
               aria-label="Active institution"
               value={activeInstitution?.id ?? ''}
               disabled={switching}
               onChange={(event) =>
-                void change(() => onSwitchInstitution(event.target.value))
+                void changeContext(() => onSwitchInstitution(event.target.value))
               }
             >
               {!activeInstitution ? <option value="">Select institution</option> : null}
@@ -77,9 +87,13 @@ export function WorkspaceShell({
             </strong>
           )}
         </div>
-        <p className="nav-label">EXAMINATION WORKSPACE</p>
+        <p className="nav-label">{tenant ? 'EXAMINATION WORKSPACE' : 'PLATFORM ADMINISTRATION'}</p>
         <nav aria-label="Primary navigation">
-          {tenant?.activeRole === 'STUDENT' ? (
+          {!tenant ? (
+            <button type="button" className={active === 'platform' ? 'active' : ''} onClick={() => navigate('/platform')}>
+              <span aria-hidden="true">◫</span> Platform workspace
+            </button>
+          ) : tenant.activeRole === 'STUDENT' ? (
             <button type="button" className={active === 'student' ? 'active' : ''} onClick={() => navigate('/student')}>
               <span aria-hidden="true">◫</span> Student portal
             </button>
@@ -88,7 +102,7 @@ export function WorkspaceShell({
               <span aria-hidden="true">◫</span> Overview
             </button>
           )}
-          {canManageIdentity(currentUser) ? (
+          {canAccessWorkspacePath(currentUser, '/setup-access') ? (
             <button
               type="button"
               className={active === 'setup-access' ? 'active' : ''}
@@ -97,7 +111,7 @@ export function WorkspaceShell({
               <span aria-hidden="true">⚙</span> Setup &amp; access
             </button>
           ) : null}
-          {canManageIdentity(currentUser) ? (
+          {canAccessWorkspacePath(currentUser, '/masters') ? (
             <button
               type="button"
               className={active === 'masters' ? 'active' : ''}
@@ -106,14 +120,7 @@ export function WorkspaceShell({
               <span aria-hidden="true">▦</span> Academic masters
             </button>
           ) : null}
-          {tenant && [
-            'INSTITUTION_ADMIN',
-            'EXAM_CONTROLLER',
-            'DEPARTMENT_ADMIN',
-            'FACULTY',
-            'STUDENT',
-            'AUDITOR',
-          ].includes(tenant.activeRole) ? (
+          {canAccessWorkspacePath(currentUser, '/students') ? (
             <button
               type="button"
               className={active === 'students' ? 'active' : ''}
@@ -122,39 +129,32 @@ export function WorkspaceShell({
               <span aria-hidden="true">▤</span> Students
             </button>
           ) : null}
-          {tenant && [
-            'INSTITUTION_ADMIN',
-            'EXAM_CONTROLLER',
-            'DEPARTMENT_ADMIN',
-            'FACULTY',
-            'STUDENT',
-            'AUDITOR',
-          ].includes(tenant.activeRole) ? (
+          {canAccessWorkspacePath(currentUser, '/exams') ? (
             <button type="button" className={active === 'exams' ? 'active' : ''} onClick={() => navigate('/exams')}>
               <span aria-hidden="true">▣</span> Exams &amp; registration
             </button>
           ) : null}
-          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(tenant.activeRole) ? (
+          {canAccessWorkspacePath(currentUser, '/schedule') ? (
             <button type="button" className={active === 'schedule' ? 'active' : ''} onClick={() => navigate('/schedule')}>
               <span aria-hidden="true">▦</span> Timetable &amp; halls
             </button>
           ) : null}
-          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'INVIGILATOR'].includes(tenant.activeRole) ? (
+          {canAccessWorkspacePath(currentUser, '/attendance') ? (
             <button type="button" className={active === 'attendance' ? 'active' : ''} onClick={() => navigate('/attendance')}>
               <span aria-hidden="true">✓</span> Duties &amp; attendance
             </button>
           ) : null}
-          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'FACULTY'].includes(tenant.activeRole) ? (
+          {canAccessWorkspacePath(currentUser, '/marks') ? (
             <button type="button" className={active === 'marks' ? 'active' : ''} onClick={() => navigate('/marks')}>
               <span aria-hidden="true">≡</span> Marks &amp; review
             </button>
           ) : null}
-          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(tenant.activeRole) ? (
+          {canAccessWorkspacePath(currentUser, '/results') ? (
             <button type="button" className={active === 'results' ? 'active' : ''} onClick={() => navigate('/results')}>
               <span aria-hidden="true">◎</span> Result publication
             </button>
           ) : null}
-          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'INVIGILATOR', 'AUDITOR'].includes(tenant.activeRole) ? (
+          {canAccessWorkspacePath(currentUser, '/reports') ? (
             <button type="button" className={active === 'reports' ? 'active' : ''} onClick={() => navigate('/reports')}>
               <span aria-hidden="true">↗</span> Reports &amp; audit
             </button>
@@ -164,7 +164,7 @@ export function WorkspaceShell({
       </aside>
       <div className="workspace-main">
         <header className="workspace-topbar">
-          <span>Workspace / {active === 'overview' ? 'Overview' : active === 'student' ? 'Student portal' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : active === 'marks' ? 'Marks & review' : active === 'results' ? 'Result publication' : active === 'reports' ? 'Reports & audit' : 'Setup & access'}</span>
+          <span>Workspace / {active === 'platform' ? 'Platform administration' : active === 'overview' ? 'Overview' : active === 'student' ? 'Student portal' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : active === 'marks' ? 'Marks & review' : active === 'results' ? 'Result publication' : active === 'reports' ? 'Reports & audit' : 'Setup & access'}</span>
           <div className="topbar-actions">
             <span className="user-email">{currentUser.email}</span>
             {tenant && availableRoles.length > 1 ? (
@@ -173,7 +173,7 @@ export function WorkspaceShell({
                 value={tenant.activeRole}
                 disabled={switching}
                 onChange={(event) =>
-                  void change(() => onSwitchRole(event.target.value as TenantRole))
+                  void changeContext(() => onSwitchRole(event.target.value as TenantRole))
                 }
               >
                 {availableRoles.map((role) => (

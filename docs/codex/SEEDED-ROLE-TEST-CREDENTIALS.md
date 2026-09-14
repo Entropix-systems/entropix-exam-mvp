@@ -26,12 +26,12 @@ All usable accounts use password `DemoOnly!2026`.
 | Fixture scenario | Email | Password | Institution | Active role | Scope | Expected landing | Expected result | Verified |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Platform administration | `platform.admin@demo.example.test` | `DemoOnly!2026` | Platform | `PLATFORM_ADMIN` | Global only; no tenant context | `/platform` | Platform context without tenant authority | PASS |
-| Northstar administration | `institution.admin@northstar.example.test` | `DemoOnly!2026` | Northstar College | `INSTITUTION_ADMIN` | Tenant | `/academics` | Authorized Northstar administration | PASS |
-| Cedar administration | `institution.admin@cedar.example.test` | `DemoOnly!2026` | Cedar School | `INSTITUTION_ADMIN` | Tenant | `/academics` | Authorized Cedar administration | PASS |
+| Northstar administration | `institution.admin@northstar.example.test` | `DemoOnly!2026` | Northstar College | `INSTITUTION_ADMIN` | Tenant | `/masters` | Authorized Northstar administration | PASS |
+| Cedar administration | `institution.admin@cedar.example.test` | `DemoOnly!2026` | Cedar School | `INSTITUTION_ADMIN` | Tenant | `/masters` | Authorized Cedar administration | PASS |
 | Exam configuration/publication | `exam.controller@cedar.example.test` | `DemoOnly!2026` | Cedar School | `EXAM_CONTROLLER` | Tenant; `CEDAR-HIST-2026` | `/results` | Published v1 historical result | PASS |
-| Department review | `department.admin@northstar.example.test` | `DemoOnly!2026` | Northstar College | `DEPARTMENT_ADMIN` | `CSE` department | `/evaluation` | Department-scoped independent review | PASS |
-| Assigned marks entry | `ananya.iyer@northstar.example.test` | `DemoOnly!2026` | Northstar College | `FACULTY` | `CSE`; assigned `NORTHSTAR-HIST-2026` subjects | `/evaluation` | Assigned marks visible; unassigned writes denied | PASS |
-| Assigned conduct | `nisha.rao@cedar.example.test` | `DemoOnly!2026` | Cedar School | `INVIGILATOR` | Accepted historical sitting; legitimate `FACULTY`/`INVIGILATOR` contexts | `/conduct` | Assigned roster visible; unassigned writes denied | PASS |
+| Department review | `department.admin@northstar.example.test` | `DemoOnly!2026` | Northstar College | `DEPARTMENT_ADMIN` | `CSE` department | `/marks` | Department-scoped independent review | PASS |
+| Assigned marks entry | `ananya.iyer@northstar.example.test` | `DemoOnly!2026` | Northstar College | `FACULTY` | `CSE`; assigned `NORTHSTAR-HIST-2026` subjects | `/marks` | Assigned marks visible; unassigned writes denied | PASS |
+| Assigned conduct and marks | `nisha.rao@cedar.example.test` | `DemoOnly!2026` | Cedar School | `FACULTY` (deterministic default) | Legitimate `FACULTY`/`INVIGILATOR` contexts; switch to Invigilator for the accepted historical sitting | `/marks` | Assigned marks visible; switching to Invigilator routes to `/attendance`; unassigned writes denied | PASS |
 | Read-only institution access | `auditor@northstar.example.test` | `DemoOnly!2026` | Northstar College | `AUDITOR` | Tenant read-only | `/` | Read access without mutation authority | PASS |
 | Context switch | `context.switch@northstar.example.test` | `DemoOnly!2026` | Northstar College | `EXAM_CONTROLLER` | Legitimate `EXAM_CONTROLLER` and `AUDITOR` grants | `/results` | Both server-authorized contexts selectable | PASS |
 
