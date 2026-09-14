@@ -173,6 +173,26 @@ export type MarksBatch = Prisma.MarksBatchModel
  */
 export type Mark = Prisma.MarkModel
 /**
+ * Model ResultRun
+ *
+ */
+export type ResultRun = Prisma.ResultRunModel
+/**
+ * Model ResultItem
+ *
+ */
+export type ResultItem = Prisma.ResultItemModel
+/**
+ * Model StudentResult
+ *
+ */
+export type StudentResult = Prisma.StudentResultModel
+/**
+ * Model Publication
+ *
+ */
+export type Publication = Prisma.PublicationModel
+/**
  * Model RoleGrant
  *
  */

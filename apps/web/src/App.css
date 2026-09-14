@@ -239,6 +239,17 @@
 .evaluation-note { padding: 13px 22px; color: #526f79; background: #eef6f7; font-size: 12px; }
 .evaluation-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 10px; padding: 16px 22px; border-top: 1px solid #e8edef; }
 .evaluation-actions span { margin-right: auto; color: #60747e; font-size: 13px; }
+.result-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 1px solid #e4eaec; }
+.result-stats div { padding: 18px 22px; border-right: 1px solid #e4eaec; }
+.result-stats div:last-child { border-right: 0; }
+.result-stats b, .result-stats span { display: block; }
+.result-stats b { color: #183b49; font-size: 22px; }
+.result-stats span { margin-top: 4px; color: #74868e; font-size: 11px; text-transform: uppercase; }
+.result-blockers, .result-ready { margin: 0; padding: 16px 22px; }
+.result-blockers { color: #913a3a; background: #fbecec; }
+.result-blockers p { margin: 6px 0 0; }
+.result-ready { color: #0b6c54; background: #e8f4f0; }
+.result-subject { display: block; margin: 3px 0; color: #526b76; font-size: 12px; }
 
 @media (max-width: 820px) {
   .auth-layout { display: block; }
@@ -282,5 +293,7 @@
   .evaluation-toolbar, .evaluation-assignment, .evaluation-assignment > div:last-child, .evaluation-actions { align-items: stretch; flex-direction: column; }
   .evaluation-toolbar select { min-width: 0; width: 100%; }
   .evaluation-actions span { margin-right: 0; }
+  .result-stats { grid-template-columns: 1fr 1fr; }
+  .result-stats div:nth-child(2) { border-right: 0; }
   .grant-row .icon-button { justify-self: end; }
 }

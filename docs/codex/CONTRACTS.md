@@ -466,6 +466,9 @@ GET  /conduct/exams/:examId/result-state
   lacks an accepted duty/submitted attendance or such a hall incident remains.
 - Published results freeze attendance and incident disposition; the controller
   must withdraw publication before changing conduct state.
+- Saving/submitting/reopening attendance and creating/disposing incidents advance
+  `Exam.inputRevision`; an already computed result run is stale after any of
+  these result-affecting conduct changes.
 - B02/B03 must consume `GET /conduct/exams/:examId/result-state` (or the same
   `ConductResultState` type) and must not create duplicate attendance/hold tables.
 
@@ -510,6 +513,46 @@ POST /evaluation/subjects/:examSubjectId/reopen
   batch, and a 5–500 character reason is required. Marks/review mutations update
   `Exam.inputRevision`, which B03 must capture and recheck before committing a
   result run.
+
+---
+
+# Result Run and Publication Contract
+
+Typed B03 contracts live in `packages/contracts/src/results.ts`. Computation
+consumes the frozen result rule, approved B02 marks, and submitted A05 conduct
+state synchronously.
+
+```text
+GET  /results
+GET  /results/student/current
+POST /results/exams/:examId/compute
+POST /results/exams/:examId/withdraw
+GET  /results/runs/:resultRunId
+POST /results/runs/:resultRunId/publish
+```
+
+- Only the session-selected `INSTITUTION_ADMIN` or `EXAM_CONTROLLER` role may
+  compute, review, publish, or withdraw results. The student route resolves the
+  current membership server-side and never accepts a student identifier.
+- A `ResultRun` captures the exam, rule version, `Exam.inputRevision`, canonical
+  input checksum, aggregate counts, and immutable per-subject/per-student
+  snapshots. Repeating computation for the same unchanged revision returns the
+  existing run.
+- Computation is blocked until every scheduled sitting has accepted duty and
+  submitted attendance, no hall-wide incident is unresolved, and every exam
+  subject has an independently approved complete marks batch.
+- `ABSENT` is never converted to zero. `ABSENT` and `WITHHELD` snapshots retain
+  explicit outcomes while hiding the numeric values prohibited by the B01 rule
+  contract. A student-level hold hides every subject's numeric result.
+- Publish rechecks the current rule, input revision, and canonical input checksum
+  inside the result transaction. A stale candidate is rejected and must be
+  recomputed. Retrying publication of the active run is idempotent.
+- At most one `Publication` per exam is current. Withdrawal requires a reason,
+  removes student visibility, and returns the exam to `EVALUATION`; a corrected
+  publication receives the next monotonically increasing version.
+- Student reads return only the caller's own result from the current publication.
+  Draft candidate runs, historical versions, and withdrawn publications are not
+  student-visible.
 
 ---
 

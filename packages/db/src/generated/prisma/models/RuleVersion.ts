@@ -222,6 +222,7 @@ export type RuleVersionWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"RuleVersion"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   exams?: Prisma.ExamListRelationFilter
+  resultRuns?: Prisma.ResultRunListRelationFilter
 }
 
 export type RuleVersionOrderByWithRelationInput = {
@@ -233,6 +234,7 @@ export type RuleVersionOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   exams?: Prisma.ExamOrderByRelationAggregateInput
+  resultRuns?: Prisma.ResultRunOrderByRelationAggregateInput
 }
 
 export type RuleVersionWhereUniqueInput = Prisma.AtLeast<{
@@ -249,6 +251,7 @@ export type RuleVersionWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"RuleVersion"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   exams?: Prisma.ExamListRelationFilter
+  resultRuns?: Prisma.ResultRunListRelationFilter
 }, "id" | "tenantId_id" | "tenantId_version">
 
 export type RuleVersionOrderByWithAggregationInput = {
@@ -285,6 +288,7 @@ export type RuleVersionCreateInput = {
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutRuleVersionsInput
   exams?: Prisma.ExamCreateNestedManyWithoutRuleVersionInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutRuleVersionInput
 }
 
 export type RuleVersionUncheckedCreateInput = {
@@ -295,6 +299,7 @@ export type RuleVersionUncheckedCreateInput = {
   frozenAt?: Date | string | null
   createdAt?: Date | string
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutRuleVersionInput
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutRuleVersionInput
 }
 
 export type RuleVersionUpdateInput = {
@@ -305,6 +310,7 @@ export type RuleVersionUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutRuleVersionsNestedInput
   exams?: Prisma.ExamUpdateManyWithoutRuleVersionNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutRuleVersionNestedInput
 }
 
 export type RuleVersionUncheckedUpdateInput = {
@@ -315,6 +321,7 @@ export type RuleVersionUncheckedUpdateInput = {
   frozenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exams?: Prisma.ExamUncheckedUpdateManyWithoutRuleVersionNestedInput
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutRuleVersionNestedInput
 }
 
 export type RuleVersionCreateManyInput = {
@@ -461,6 +468,20 @@ export type RuleVersionUpdateOneRequiredWithoutExamsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RuleVersionUpdateToOneWithWhereWithoutExamsInput, Prisma.RuleVersionUpdateWithoutExamsInput>, Prisma.RuleVersionUncheckedUpdateWithoutExamsInput>
 }
 
+export type RuleVersionCreateNestedOneWithoutResultRunsInput = {
+  create?: Prisma.XOR<Prisma.RuleVersionCreateWithoutResultRunsInput, Prisma.RuleVersionUncheckedCreateWithoutResultRunsInput>
+  connectOrCreate?: Prisma.RuleVersionCreateOrConnectWithoutResultRunsInput
+  connect?: Prisma.RuleVersionWhereUniqueInput
+}
+
+export type RuleVersionUpdateOneRequiredWithoutResultRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.RuleVersionCreateWithoutResultRunsInput, Prisma.RuleVersionUncheckedCreateWithoutResultRunsInput>
+  connectOrCreate?: Prisma.RuleVersionCreateOrConnectWithoutResultRunsInput
+  upsert?: Prisma.RuleVersionUpsertWithoutResultRunsInput
+  connect?: Prisma.RuleVersionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RuleVersionUpdateToOneWithWhereWithoutResultRunsInput, Prisma.RuleVersionUpdateWithoutResultRunsInput>, Prisma.RuleVersionUncheckedUpdateWithoutResultRunsInput>
+}
+
 export type RuleVersionCreateWithoutTenantInput = {
   id?: string
   version: number
@@ -468,6 +489,7 @@ export type RuleVersionCreateWithoutTenantInput = {
   frozenAt?: Date | string | null
   createdAt?: Date | string
   exams?: Prisma.ExamCreateNestedManyWithoutRuleVersionInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutRuleVersionInput
 }
 
 export type RuleVersionUncheckedCreateWithoutTenantInput = {
@@ -477,6 +499,7 @@ export type RuleVersionUncheckedCreateWithoutTenantInput = {
   frozenAt?: Date | string | null
   createdAt?: Date | string
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutRuleVersionInput
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutRuleVersionInput
 }
 
 export type RuleVersionCreateOrConnectWithoutTenantInput = {
@@ -524,6 +547,7 @@ export type RuleVersionCreateWithoutExamsInput = {
   frozenAt?: Date | string | null
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutRuleVersionsInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutRuleVersionInput
 }
 
 export type RuleVersionUncheckedCreateWithoutExamsInput = {
@@ -533,6 +557,7 @@ export type RuleVersionUncheckedCreateWithoutExamsInput = {
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   frozenAt?: Date | string | null
   createdAt?: Date | string
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutRuleVersionInput
 }
 
 export type RuleVersionCreateOrConnectWithoutExamsInput = {
@@ -558,6 +583,7 @@ export type RuleVersionUpdateWithoutExamsInput = {
   frozenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutRuleVersionsNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutRuleVersionNestedInput
 }
 
 export type RuleVersionUncheckedUpdateWithoutExamsInput = {
@@ -567,6 +593,63 @@ export type RuleVersionUncheckedUpdateWithoutExamsInput = {
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   frozenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutRuleVersionNestedInput
+}
+
+export type RuleVersionCreateWithoutResultRunsInput = {
+  id?: string
+  version: number
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  frozenAt?: Date | string | null
+  createdAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutRuleVersionsInput
+  exams?: Prisma.ExamCreateNestedManyWithoutRuleVersionInput
+}
+
+export type RuleVersionUncheckedCreateWithoutResultRunsInput = {
+  id?: string
+  tenantId: string
+  version: number
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  frozenAt?: Date | string | null
+  createdAt?: Date | string
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutRuleVersionInput
+}
+
+export type RuleVersionCreateOrConnectWithoutResultRunsInput = {
+  where: Prisma.RuleVersionWhereUniqueInput
+  create: Prisma.XOR<Prisma.RuleVersionCreateWithoutResultRunsInput, Prisma.RuleVersionUncheckedCreateWithoutResultRunsInput>
+}
+
+export type RuleVersionUpsertWithoutResultRunsInput = {
+  update: Prisma.XOR<Prisma.RuleVersionUpdateWithoutResultRunsInput, Prisma.RuleVersionUncheckedUpdateWithoutResultRunsInput>
+  create: Prisma.XOR<Prisma.RuleVersionCreateWithoutResultRunsInput, Prisma.RuleVersionUncheckedCreateWithoutResultRunsInput>
+  where?: Prisma.RuleVersionWhereInput
+}
+
+export type RuleVersionUpdateToOneWithWhereWithoutResultRunsInput = {
+  where?: Prisma.RuleVersionWhereInput
+  data: Prisma.XOR<Prisma.RuleVersionUpdateWithoutResultRunsInput, Prisma.RuleVersionUncheckedUpdateWithoutResultRunsInput>
+}
+
+export type RuleVersionUpdateWithoutResultRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  frozenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutRuleVersionsNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutRuleVersionNestedInput
+}
+
+export type RuleVersionUncheckedUpdateWithoutResultRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  frozenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutRuleVersionNestedInput
 }
 
 export type RuleVersionCreateManyTenantInput = {
@@ -584,6 +667,7 @@ export type RuleVersionUpdateWithoutTenantInput = {
   frozenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exams?: Prisma.ExamUpdateManyWithoutRuleVersionNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutRuleVersionNestedInput
 }
 
 export type RuleVersionUncheckedUpdateWithoutTenantInput = {
@@ -593,6 +677,7 @@ export type RuleVersionUncheckedUpdateWithoutTenantInput = {
   frozenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   exams?: Prisma.ExamUncheckedUpdateManyWithoutRuleVersionNestedInput
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutRuleVersionNestedInput
 }
 
 export type RuleVersionUncheckedUpdateManyWithoutTenantInput = {
@@ -610,10 +695,12 @@ export type RuleVersionUncheckedUpdateManyWithoutTenantInput = {
 
 export type RuleVersionCountOutputType = {
   exams: number
+  resultRuns: number
 }
 
 export type RuleVersionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   exams?: boolean | RuleVersionCountOutputTypeCountExamsArgs
+  resultRuns?: boolean | RuleVersionCountOutputTypeCountResultRunsArgs
 }
 
 /**
@@ -633,6 +720,13 @@ export type RuleVersionCountOutputTypeCountExamsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.ExamWhereInput
 }
 
+/**
+ * RuleVersionCountOutputType without action
+ */
+export type RuleVersionCountOutputTypeCountResultRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ResultRunWhereInput
+}
+
 
 export type RuleVersionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -643,6 +737,7 @@ export type RuleVersionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   createdAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   exams?: boolean | Prisma.RuleVersion$examsArgs<ExtArgs>
+  resultRuns?: boolean | Prisma.RuleVersion$resultRunsArgs<ExtArgs>
   _count?: boolean | Prisma.RuleVersionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ruleVersion"]>
 
@@ -679,6 +774,7 @@ export type RuleVersionOmit<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type RuleVersionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   exams?: boolean | Prisma.RuleVersion$examsArgs<ExtArgs>
+  resultRuns?: boolean | Prisma.RuleVersion$resultRunsArgs<ExtArgs>
   _count?: boolean | Prisma.RuleVersionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RuleVersionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -693,6 +789,7 @@ export type $RuleVersionPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     tenant: Prisma.$TenantPayload<ExtArgs>
     exams: Prisma.$ExamPayload<ExtArgs>[]
+    resultRuns: Prisma.$ResultRunPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1097,6 +1194,7 @@ export interface Prisma__RuleVersionClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   exams<T extends Prisma.RuleVersion$examsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RuleVersion$examsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  resultRuns<T extends Prisma.RuleVersion$resultRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RuleVersion$resultRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResultRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1554,6 +1652,30 @@ export type RuleVersion$examsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.ExamScalarFieldEnum | Prisma.ExamScalarFieldEnum[]
+}
+
+/**
+ * RuleVersion.resultRuns
+ */
+export type RuleVersion$resultRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ResultRun
+   */
+  select?: Prisma.ResultRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ResultRun
+   */
+  omit?: Prisma.ResultRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ResultRunInclude<ExtArgs> | null
+  where?: Prisma.ResultRunWhereInput
+  orderBy?: Prisma.ResultRunOrderByWithRelationInput | Prisma.ResultRunOrderByWithRelationInput[]
+  cursor?: Prisma.ResultRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ResultRunScalarFieldEnum | Prisma.ResultRunScalarFieldEnum[]
 }
 
 /**

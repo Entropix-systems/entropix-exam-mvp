@@ -205,6 +205,7 @@ export type RegistrationSubjectWhereInput = {
   seatAssignments?: Prisma.SeatAssignmentListRelationFilter
   incidentStudents?: Prisma.IncidentStudentListRelationFilter
   marks?: Prisma.MarkListRelationFilter
+  resultItems?: Prisma.ResultItemListRelationFilter
 }
 
 export type RegistrationSubjectOrderByWithRelationInput = {
@@ -222,6 +223,7 @@ export type RegistrationSubjectOrderByWithRelationInput = {
   seatAssignments?: Prisma.SeatAssignmentOrderByRelationAggregateInput
   incidentStudents?: Prisma.IncidentStudentOrderByRelationAggregateInput
   marks?: Prisma.MarkOrderByRelationAggregateInput
+  resultItems?: Prisma.ResultItemOrderByRelationAggregateInput
 }
 
 export type RegistrationSubjectWhereUniqueInput = Prisma.AtLeast<{
@@ -245,6 +247,7 @@ export type RegistrationSubjectWhereUniqueInput = Prisma.AtLeast<{
   seatAssignments?: Prisma.SeatAssignmentListRelationFilter
   incidentStudents?: Prisma.IncidentStudentListRelationFilter
   marks?: Prisma.MarkListRelationFilter
+  resultItems?: Prisma.ResultItemListRelationFilter
 }, "id" | "tenantId_id" | "tenantId_id_examSubjectId" | "tenantId_registrationId_examSubjectId">
 
 export type RegistrationSubjectOrderByWithAggregationInput = {
@@ -283,6 +286,7 @@ export type RegistrationSubjectCreateInput = {
   seatAssignments?: Prisma.SeatAssignmentCreateNestedManyWithoutRegistrationSubjectInput
   incidentStudents?: Prisma.IncidentStudentCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectUncheckedCreateInput = {
@@ -296,6 +300,7 @@ export type RegistrationSubjectUncheckedCreateInput = {
   seatAssignments?: Prisma.SeatAssignmentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   incidentStudents?: Prisma.IncidentStudentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkUncheckedCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectUpdateInput = {
@@ -308,6 +313,7 @@ export type RegistrationSubjectUpdateInput = {
   seatAssignments?: Prisma.SeatAssignmentUpdateManyWithoutRegistrationSubjectNestedInput
   incidentStudents?: Prisma.IncidentStudentUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectUncheckedUpdateInput = {
@@ -321,6 +327,7 @@ export type RegistrationSubjectUncheckedUpdateInput = {
   seatAssignments?: Prisma.SeatAssignmentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   incidentStudents?: Prisma.IncidentStudentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectCreateManyInput = {
@@ -620,6 +627,20 @@ export type RegistrationSubjectUpdateOneRequiredWithoutMarksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RegistrationSubjectUpdateToOneWithWhereWithoutMarksInput, Prisma.RegistrationSubjectUpdateWithoutMarksInput>, Prisma.RegistrationSubjectUncheckedUpdateWithoutMarksInput>
 }
 
+export type RegistrationSubjectCreateNestedOneWithoutResultItemsInput = {
+  create?: Prisma.XOR<Prisma.RegistrationSubjectCreateWithoutResultItemsInput, Prisma.RegistrationSubjectUncheckedCreateWithoutResultItemsInput>
+  connectOrCreate?: Prisma.RegistrationSubjectCreateOrConnectWithoutResultItemsInput
+  connect?: Prisma.RegistrationSubjectWhereUniqueInput
+}
+
+export type RegistrationSubjectUpdateOneRequiredWithoutResultItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.RegistrationSubjectCreateWithoutResultItemsInput, Prisma.RegistrationSubjectUncheckedCreateWithoutResultItemsInput>
+  connectOrCreate?: Prisma.RegistrationSubjectCreateOrConnectWithoutResultItemsInput
+  upsert?: Prisma.RegistrationSubjectUpsertWithoutResultItemsInput
+  connect?: Prisma.RegistrationSubjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RegistrationSubjectUpdateToOneWithWhereWithoutResultItemsInput, Prisma.RegistrationSubjectUpdateWithoutResultItemsInput>, Prisma.RegistrationSubjectUncheckedUpdateWithoutResultItemsInput>
+}
+
 export type RegistrationSubjectCreateWithoutTenantInput = {
   id?: string
   createdAt?: Date | string
@@ -629,6 +650,7 @@ export type RegistrationSubjectCreateWithoutTenantInput = {
   seatAssignments?: Prisma.SeatAssignmentCreateNestedManyWithoutRegistrationSubjectInput
   incidentStudents?: Prisma.IncidentStudentCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectUncheckedCreateWithoutTenantInput = {
@@ -641,6 +663,7 @@ export type RegistrationSubjectUncheckedCreateWithoutTenantInput = {
   seatAssignments?: Prisma.SeatAssignmentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   incidentStudents?: Prisma.IncidentStudentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkUncheckedCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectCreateOrConnectWithoutTenantInput = {
@@ -691,6 +714,7 @@ export type RegistrationSubjectCreateWithoutEnrolmentInput = {
   seatAssignments?: Prisma.SeatAssignmentCreateNestedManyWithoutRegistrationSubjectInput
   incidentStudents?: Prisma.IncidentStudentCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectUncheckedCreateWithoutEnrolmentInput = {
@@ -702,6 +726,7 @@ export type RegistrationSubjectUncheckedCreateWithoutEnrolmentInput = {
   seatAssignments?: Prisma.SeatAssignmentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   incidentStudents?: Prisma.IncidentStudentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkUncheckedCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectCreateOrConnectWithoutEnrolmentInput = {
@@ -739,6 +764,7 @@ export type RegistrationSubjectCreateWithoutExamSubjectInput = {
   seatAssignments?: Prisma.SeatAssignmentCreateNestedManyWithoutRegistrationSubjectInput
   incidentStudents?: Prisma.IncidentStudentCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectUncheckedCreateWithoutExamSubjectInput = {
@@ -749,6 +775,7 @@ export type RegistrationSubjectUncheckedCreateWithoutExamSubjectInput = {
   seatAssignments?: Prisma.SeatAssignmentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   incidentStudents?: Prisma.IncidentStudentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkUncheckedCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectCreateOrConnectWithoutExamSubjectInput = {
@@ -786,6 +813,7 @@ export type RegistrationSubjectCreateWithoutRegistrationInput = {
   seatAssignments?: Prisma.SeatAssignmentCreateNestedManyWithoutRegistrationSubjectInput
   incidentStudents?: Prisma.IncidentStudentCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectUncheckedCreateWithoutRegistrationInput = {
@@ -796,6 +824,7 @@ export type RegistrationSubjectUncheckedCreateWithoutRegistrationInput = {
   seatAssignments?: Prisma.SeatAssignmentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   incidentStudents?: Prisma.IncidentStudentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkUncheckedCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectCreateOrConnectWithoutRegistrationInput = {
@@ -833,6 +862,7 @@ export type RegistrationSubjectCreateWithoutSeatAssignmentsInput = {
   enrolment: Prisma.EnrolmentCreateNestedOneWithoutRegistrationSubjectsInput
   incidentStudents?: Prisma.IncidentStudentCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectUncheckedCreateWithoutSeatAssignmentsInput = {
@@ -845,6 +875,7 @@ export type RegistrationSubjectUncheckedCreateWithoutSeatAssignmentsInput = {
   createdAt?: Date | string
   incidentStudents?: Prisma.IncidentStudentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkUncheckedCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectCreateOrConnectWithoutSeatAssignmentsInput = {
@@ -872,6 +903,7 @@ export type RegistrationSubjectUpdateWithoutSeatAssignmentsInput = {
   enrolment?: Prisma.EnrolmentUpdateOneRequiredWithoutRegistrationSubjectsNestedInput
   incidentStudents?: Prisma.IncidentStudentUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectUncheckedUpdateWithoutSeatAssignmentsInput = {
@@ -884,6 +916,7 @@ export type RegistrationSubjectUncheckedUpdateWithoutSeatAssignmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   incidentStudents?: Prisma.IncidentStudentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectCreateWithoutIncidentStudentsInput = {
@@ -895,6 +928,7 @@ export type RegistrationSubjectCreateWithoutIncidentStudentsInput = {
   enrolment: Prisma.EnrolmentCreateNestedOneWithoutRegistrationSubjectsInput
   seatAssignments?: Prisma.SeatAssignmentCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectUncheckedCreateWithoutIncidentStudentsInput = {
@@ -907,6 +941,7 @@ export type RegistrationSubjectUncheckedCreateWithoutIncidentStudentsInput = {
   createdAt?: Date | string
   seatAssignments?: Prisma.SeatAssignmentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   marks?: Prisma.MarkUncheckedCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectCreateOrConnectWithoutIncidentStudentsInput = {
@@ -934,6 +969,7 @@ export type RegistrationSubjectUpdateWithoutIncidentStudentsInput = {
   enrolment?: Prisma.EnrolmentUpdateOneRequiredWithoutRegistrationSubjectsNestedInput
   seatAssignments?: Prisma.SeatAssignmentUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectUncheckedUpdateWithoutIncidentStudentsInput = {
@@ -946,6 +982,7 @@ export type RegistrationSubjectUncheckedUpdateWithoutIncidentStudentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   seatAssignments?: Prisma.SeatAssignmentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectCreateWithoutMarksInput = {
@@ -957,6 +994,7 @@ export type RegistrationSubjectCreateWithoutMarksInput = {
   enrolment: Prisma.EnrolmentCreateNestedOneWithoutRegistrationSubjectsInput
   seatAssignments?: Prisma.SeatAssignmentCreateNestedManyWithoutRegistrationSubjectInput
   incidentStudents?: Prisma.IncidentStudentCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectUncheckedCreateWithoutMarksInput = {
@@ -969,6 +1007,7 @@ export type RegistrationSubjectUncheckedCreateWithoutMarksInput = {
   createdAt?: Date | string
   seatAssignments?: Prisma.SeatAssignmentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
   incidentStudents?: Prisma.IncidentStudentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
+  resultItems?: Prisma.ResultItemUncheckedCreateNestedManyWithoutRegistrationSubjectInput
 }
 
 export type RegistrationSubjectCreateOrConnectWithoutMarksInput = {
@@ -996,6 +1035,7 @@ export type RegistrationSubjectUpdateWithoutMarksInput = {
   enrolment?: Prisma.EnrolmentUpdateOneRequiredWithoutRegistrationSubjectsNestedInput
   seatAssignments?: Prisma.SeatAssignmentUpdateManyWithoutRegistrationSubjectNestedInput
   incidentStudents?: Prisma.IncidentStudentUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectUncheckedUpdateWithoutMarksInput = {
@@ -1008,6 +1048,73 @@ export type RegistrationSubjectUncheckedUpdateWithoutMarksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   seatAssignments?: Prisma.SeatAssignmentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   incidentStudents?: Prisma.IncidentStudentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
+}
+
+export type RegistrationSubjectCreateWithoutResultItemsInput = {
+  id?: string
+  createdAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutRegistrationSubjectsInput
+  registration: Prisma.RegistrationCreateNestedOneWithoutSubjectsInput
+  examSubject: Prisma.ExamSubjectCreateNestedOneWithoutRegistrationSubjectsInput
+  enrolment: Prisma.EnrolmentCreateNestedOneWithoutRegistrationSubjectsInput
+  seatAssignments?: Prisma.SeatAssignmentCreateNestedManyWithoutRegistrationSubjectInput
+  incidentStudents?: Prisma.IncidentStudentCreateNestedManyWithoutRegistrationSubjectInput
+  marks?: Prisma.MarkCreateNestedManyWithoutRegistrationSubjectInput
+}
+
+export type RegistrationSubjectUncheckedCreateWithoutResultItemsInput = {
+  id?: string
+  tenantId: string
+  registrationId: string
+  examId: string
+  examSubjectId: string
+  enrolmentId: string
+  createdAt?: Date | string
+  seatAssignments?: Prisma.SeatAssignmentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
+  incidentStudents?: Prisma.IncidentStudentUncheckedCreateNestedManyWithoutRegistrationSubjectInput
+  marks?: Prisma.MarkUncheckedCreateNestedManyWithoutRegistrationSubjectInput
+}
+
+export type RegistrationSubjectCreateOrConnectWithoutResultItemsInput = {
+  where: Prisma.RegistrationSubjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.RegistrationSubjectCreateWithoutResultItemsInput, Prisma.RegistrationSubjectUncheckedCreateWithoutResultItemsInput>
+}
+
+export type RegistrationSubjectUpsertWithoutResultItemsInput = {
+  update: Prisma.XOR<Prisma.RegistrationSubjectUpdateWithoutResultItemsInput, Prisma.RegistrationSubjectUncheckedUpdateWithoutResultItemsInput>
+  create: Prisma.XOR<Prisma.RegistrationSubjectCreateWithoutResultItemsInput, Prisma.RegistrationSubjectUncheckedCreateWithoutResultItemsInput>
+  where?: Prisma.RegistrationSubjectWhereInput
+}
+
+export type RegistrationSubjectUpdateToOneWithWhereWithoutResultItemsInput = {
+  where?: Prisma.RegistrationSubjectWhereInput
+  data: Prisma.XOR<Prisma.RegistrationSubjectUpdateWithoutResultItemsInput, Prisma.RegistrationSubjectUncheckedUpdateWithoutResultItemsInput>
+}
+
+export type RegistrationSubjectUpdateWithoutResultItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutRegistrationSubjectsNestedInput
+  registration?: Prisma.RegistrationUpdateOneRequiredWithoutSubjectsNestedInput
+  examSubject?: Prisma.ExamSubjectUpdateOneRequiredWithoutRegistrationSubjectsNestedInput
+  enrolment?: Prisma.EnrolmentUpdateOneRequiredWithoutRegistrationSubjectsNestedInput
+  seatAssignments?: Prisma.SeatAssignmentUpdateManyWithoutRegistrationSubjectNestedInput
+  incidentStudents?: Prisma.IncidentStudentUpdateManyWithoutRegistrationSubjectNestedInput
+  marks?: Prisma.MarkUpdateManyWithoutRegistrationSubjectNestedInput
+}
+
+export type RegistrationSubjectUncheckedUpdateWithoutResultItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationId?: Prisma.StringFieldUpdateOperationsInput | string
+  examId?: Prisma.StringFieldUpdateOperationsInput | string
+  examSubjectId?: Prisma.StringFieldUpdateOperationsInput | string
+  enrolmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  seatAssignments?: Prisma.SeatAssignmentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
+  incidentStudents?: Prisma.IncidentStudentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
+  marks?: Prisma.MarkUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectCreateManyTenantInput = {
@@ -1028,6 +1135,7 @@ export type RegistrationSubjectUpdateWithoutTenantInput = {
   seatAssignments?: Prisma.SeatAssignmentUpdateManyWithoutRegistrationSubjectNestedInput
   incidentStudents?: Prisma.IncidentStudentUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectUncheckedUpdateWithoutTenantInput = {
@@ -1040,6 +1148,7 @@ export type RegistrationSubjectUncheckedUpdateWithoutTenantInput = {
   seatAssignments?: Prisma.SeatAssignmentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   incidentStudents?: Prisma.IncidentStudentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectUncheckedUpdateManyWithoutTenantInput = {
@@ -1068,6 +1177,7 @@ export type RegistrationSubjectUpdateWithoutEnrolmentInput = {
   seatAssignments?: Prisma.SeatAssignmentUpdateManyWithoutRegistrationSubjectNestedInput
   incidentStudents?: Prisma.IncidentStudentUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectUncheckedUpdateWithoutEnrolmentInput = {
@@ -1079,6 +1189,7 @@ export type RegistrationSubjectUncheckedUpdateWithoutEnrolmentInput = {
   seatAssignments?: Prisma.SeatAssignmentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   incidentStudents?: Prisma.IncidentStudentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectUncheckedUpdateManyWithoutEnrolmentInput = {
@@ -1105,6 +1216,7 @@ export type RegistrationSubjectUpdateWithoutExamSubjectInput = {
   seatAssignments?: Prisma.SeatAssignmentUpdateManyWithoutRegistrationSubjectNestedInput
   incidentStudents?: Prisma.IncidentStudentUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectUncheckedUpdateWithoutExamSubjectInput = {
@@ -1115,6 +1227,7 @@ export type RegistrationSubjectUncheckedUpdateWithoutExamSubjectInput = {
   seatAssignments?: Prisma.SeatAssignmentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   incidentStudents?: Prisma.IncidentStudentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectUncheckedUpdateManyWithoutExamSubjectInput = {
@@ -1140,6 +1253,7 @@ export type RegistrationSubjectUpdateWithoutRegistrationInput = {
   seatAssignments?: Prisma.SeatAssignmentUpdateManyWithoutRegistrationSubjectNestedInput
   incidentStudents?: Prisma.IncidentStudentUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectUncheckedUpdateWithoutRegistrationInput = {
@@ -1150,6 +1264,7 @@ export type RegistrationSubjectUncheckedUpdateWithoutRegistrationInput = {
   seatAssignments?: Prisma.SeatAssignmentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   incidentStudents?: Prisma.IncidentStudentUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
   marks?: Prisma.MarkUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
+  resultItems?: Prisma.ResultItemUncheckedUpdateManyWithoutRegistrationSubjectNestedInput
 }
 
 export type RegistrationSubjectUncheckedUpdateManyWithoutRegistrationInput = {
@@ -1168,12 +1283,14 @@ export type RegistrationSubjectCountOutputType = {
   seatAssignments: number
   incidentStudents: number
   marks: number
+  resultItems: number
 }
 
 export type RegistrationSubjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   seatAssignments?: boolean | RegistrationSubjectCountOutputTypeCountSeatAssignmentsArgs
   incidentStudents?: boolean | RegistrationSubjectCountOutputTypeCountIncidentStudentsArgs
   marks?: boolean | RegistrationSubjectCountOutputTypeCountMarksArgs
+  resultItems?: boolean | RegistrationSubjectCountOutputTypeCountResultItemsArgs
 }
 
 /**
@@ -1207,6 +1324,13 @@ export type RegistrationSubjectCountOutputTypeCountMarksArgs<ExtArgs extends run
   where?: Prisma.MarkWhereInput
 }
 
+/**
+ * RegistrationSubjectCountOutputType without action
+ */
+export type RegistrationSubjectCountOutputTypeCountResultItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ResultItemWhereInput
+}
+
 
 export type RegistrationSubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1223,6 +1347,7 @@ export type RegistrationSubjectSelect<ExtArgs extends runtime.Types.Extensions.I
   seatAssignments?: boolean | Prisma.RegistrationSubject$seatAssignmentsArgs<ExtArgs>
   incidentStudents?: boolean | Prisma.RegistrationSubject$incidentStudentsArgs<ExtArgs>
   marks?: boolean | Prisma.RegistrationSubject$marksArgs<ExtArgs>
+  resultItems?: boolean | Prisma.RegistrationSubject$resultItemsArgs<ExtArgs>
   _count?: boolean | Prisma.RegistrationSubjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["registrationSubject"]>
 
@@ -1273,6 +1398,7 @@ export type RegistrationSubjectInclude<ExtArgs extends runtime.Types.Extensions.
   seatAssignments?: boolean | Prisma.RegistrationSubject$seatAssignmentsArgs<ExtArgs>
   incidentStudents?: boolean | Prisma.RegistrationSubject$incidentStudentsArgs<ExtArgs>
   marks?: boolean | Prisma.RegistrationSubject$marksArgs<ExtArgs>
+  resultItems?: boolean | Prisma.RegistrationSubject$resultItemsArgs<ExtArgs>
   _count?: boolean | Prisma.RegistrationSubjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RegistrationSubjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1298,6 +1424,7 @@ export type $RegistrationSubjectPayload<ExtArgs extends runtime.Types.Extensions
     seatAssignments: Prisma.$SeatAssignmentPayload<ExtArgs>[]
     incidentStudents: Prisma.$IncidentStudentPayload<ExtArgs>[]
     marks: Prisma.$MarkPayload<ExtArgs>[]
+    resultItems: Prisma.$ResultItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1708,6 +1835,7 @@ export interface Prisma__RegistrationSubjectClient<T, Null = never, ExtArgs exte
   seatAssignments<T extends Prisma.RegistrationSubject$seatAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RegistrationSubject$seatAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SeatAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   incidentStudents<T extends Prisma.RegistrationSubject$incidentStudentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RegistrationSubject$incidentStudentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidentStudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   marks<T extends Prisma.RegistrationSubject$marksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RegistrationSubject$marksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  resultItems<T extends Prisma.RegistrationSubject$resultItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RegistrationSubject$resultItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResultItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2214,6 +2342,30 @@ export type RegistrationSubject$marksArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.MarkScalarFieldEnum | Prisma.MarkScalarFieldEnum[]
+}
+
+/**
+ * RegistrationSubject.resultItems
+ */
+export type RegistrationSubject$resultItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ResultItem
+   */
+  select?: Prisma.ResultItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ResultItem
+   */
+  omit?: Prisma.ResultItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ResultItemInclude<ExtArgs> | null
+  where?: Prisma.ResultItemWhereInput
+  orderBy?: Prisma.ResultItemOrderByWithRelationInput | Prisma.ResultItemOrderByWithRelationInput[]
+  cursor?: Prisma.ResultItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ResultItemScalarFieldEnum | Prisma.ResultItemScalarFieldEnum[]
 }
 
 /**
