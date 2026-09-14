@@ -137,7 +137,7 @@ try {
   const currentCount = await withTenant(prisma, tenant.id, (tx) => tx.publication.count({ where: { tenantId: tenant.id, examId: fixture.examId, isCurrent: true } }));
   if (currentCount !== 1) throw new Error('Exactly one current publication was not preserved');
   const heldRead = await results.currentStudent(tenant.id, fixture.heldStudent.membershipId);
-  if (heldRead?.result.outcome !== 'WITHHELD' || heldRead.result.gpa !== null) throw new Error('Current student read did not preserve WITHHELD privacy');
+  if (!heldRead || heldRead.outcome !== 'WITHHELD' || 'result' in heldRead || !heldRead.holdMessage) throw new Error('Current student read did not preserve WITHHELD privacy');
 
   await results.withdraw(tenant.id, fixture.controllerMembershipId, fixture.examId, 'Correction workflow verification.', new Date());
   if (await results.currentStudent(tenant.id, fixture.heldStudent.membershipId)) throw new Error('Withdrawn result remained student-visible');

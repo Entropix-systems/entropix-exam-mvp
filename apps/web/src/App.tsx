@@ -12,6 +12,7 @@ import { SchedulingApiClient } from './scheduling/scheduling-client'
 import { ConductApiClient } from './conduct/conduct-client'
 import { EvaluationApiClient } from './evaluation/evaluation-client'
 import { ResultsApiClient } from './results/results-client'
+import { StudentPortalApiClient } from './student-portal/student-portal-client'
 import './App.css'
 
 const AccessDeniedPage = lazy(() => import('./pages/access-denied-page').then((module) => ({ default: module.AccessDeniedPage })))
@@ -28,6 +29,7 @@ const SchedulingPage = lazy(() => import('./pages/scheduling-page').then((module
 const ConductPage = lazy(() => import('./pages/conduct-page').then((module) => ({ default: module.ConductPage })))
 const EvaluationPage = lazy(() => import('./pages/evaluation-page').then((module) => ({ default: module.EvaluationPage })))
 const ResultsPage = lazy(() => import('./pages/results-page').then((module) => ({ default: module.ResultsPage })))
+const StudentPortalPage = lazy(() => import('./pages/student-portal-page').then((module) => ({ default: module.StudentPortalPage })))
 
 const authClient = new AuthApiClient(
   import.meta.env.VITE_API_BASE_URL ?? '/api/v1',
@@ -40,6 +42,7 @@ const schedulingClient = new SchedulingApiClient(authClient)
 const conductClient = new ConductApiClient(authClient)
 const evaluationClient = new EvaluationApiClient(authClient)
 const resultsClient = new ResultsApiClient(authClient)
+const studentPortalClient = new StudentPortalApiClient(authClient)
 
 function usePathname() {
   const [pathname, setPathname] = useState(window.location.pathname)
@@ -54,6 +57,7 @@ function Routes() {
   const pathname = usePathname()
   const { currentUser } = useAuth()
   const scopeKey = authContextKey(currentUser)
+  const studentRole = currentUser?.context.kind === 'TENANT' && currentUser.context.activeRole === 'STUDENT'
   if (pathname === '/login') return <LoginPage />
   if (pathname === '/forgot-password')
     return <ForgotPasswordPage client={authClient} />
@@ -108,6 +112,18 @@ function Routes() {
     return (
       <ProtectedRoute>
         <ResultsPage key={scopeKey} client={resultsClient} />
+      </ProtectedRoute>
+    )
+  if (pathname === '/student')
+    return (
+      <ProtectedRoute>
+        <StudentPortalPage key={scopeKey} client={studentPortalClient} />
+      </ProtectedRoute>
+    )
+  if (studentRole)
+    return (
+      <ProtectedRoute>
+        <StudentPortalPage key={scopeKey} client={studentPortalClient} />
       </ProtectedRoute>
     )
   return (

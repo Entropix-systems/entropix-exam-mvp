@@ -19,6 +19,7 @@ function ResultTable({ run, studentOnly = false }: { run: ResultRunRecord; stude
 
 function StudentResults({ current }: { current: CurrentStudentResultRecord | null }) {
   if (!current) return <section className="evaluation-empty"><h2>Results are not available yet</h2><p>Your institution will publish the approved result snapshot here. Draft and withdrawn results remain private.</p><span className="status-badge">NOT PUBLISHED</span></section>
+  if (current.outcome === 'WITHHELD') return <section className="evaluation-card withheld-result"><header><div><p className="eyebrow">{current.examCode}</p><h2>{current.examName}</h2><p>Published version {current.publication.version} · Rule v{current.ruleVersion}</p></div><span className="status-badge inactive">WITHHELD</span></header><div className="result-blockers"><b>Result withheld</b><p>{current.holdMessage}</p></div><p className="evaluation-note">No marks, subject components, percentage, GPA, or grade card are available while this hold is active.</p></section>
   const run: ResultRunRecord = {
     id: current.publication.resultRunId,
     examId: current.examId,
@@ -38,7 +39,7 @@ function StudentResults({ current }: { current: CurrentStudentResultRecord | nul
   }
   return <div className="evaluation-stack">
     <section className="evaluation-card"><header><div><p className="eyebrow">{current.examCode}</p><h2>{current.examName}</h2><p>Published version {current.publication.version} · Rule v{current.ruleVersion}</p></div><span className="status-badge active">PUBLISHED</span></header>
-      <div className="result-stats"><div><b>{current.result.outcome}</b><span>Outcome</span></div><div><b>{value(current.result.percentage, '%')}</b><span>Overall</span></div><div><b>{value(current.result.gpa)}</b><span>GPA</span></div><div><b>{current.result.items.length}</b><span>Subjects</span></div></div>
+      <div className="result-stats"><div><b>{current.outcome}</b><span>Outcome</span></div><div><b>{value(current.result.percentage, '%')}</b><span>Overall</span></div><div><b>{value(current.result.gpa)}</b><span>GPA</span></div><div><b>{current.result.items.length}</b><span>Subjects</span></div></div>
       <ResultTable run={run} studentOnly />
       <p className="evaluation-note">This is the current published snapshot. WITHHELD outcomes expose no marks, percentage, grade, or GPA.</p>
     </section>

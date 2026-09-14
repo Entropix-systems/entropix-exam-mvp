@@ -14,7 +14,7 @@ export function WorkspaceShell({
   children,
 }: PropsWithChildren<{
   currentUser: CurrentUserResponse
-  active: 'overview' | 'setup-access' | 'masters' | 'students' | 'exams' | 'schedule' | 'attendance' | 'marks' | 'results'
+  active: 'overview' | 'setup-access' | 'masters' | 'students' | 'exams' | 'schedule' | 'attendance' | 'marks' | 'results' | 'student'
   onLogout(): Promise<void>
   onSwitchInstitution(institutionId: string): Promise<void>
   onSwitchRole(role: TenantRole): Promise<void>
@@ -79,13 +79,15 @@ export function WorkspaceShell({
         </div>
         <p className="nav-label">EXAMINATION WORKSPACE</p>
         <nav aria-label="Primary navigation">
-          <button
-            type="button"
-            className={active === 'overview' ? 'active' : ''}
-            onClick={() => navigate('/')}
-          >
-            <span aria-hidden="true">◫</span> Overview
-          </button>
+          {tenant?.activeRole === 'STUDENT' ? (
+            <button type="button" className={active === 'student' ? 'active' : ''} onClick={() => navigate('/student')}>
+              <span aria-hidden="true">◫</span> Student portal
+            </button>
+          ) : (
+            <button type="button" className={active === 'overview' ? 'active' : ''} onClick={() => navigate('/')}>
+              <span aria-hidden="true">◫</span> Overview
+            </button>
+          )}
           {canManageIdentity(currentUser) ? (
             <button
               type="button"
@@ -119,9 +121,9 @@ export function WorkspaceShell({
               <span aria-hidden="true">≡</span> Marks &amp; review
             </button>
           ) : null}
-          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'STUDENT'].includes(tenant.activeRole) ? (
+          {tenant && ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(tenant.activeRole) ? (
             <button type="button" className={active === 'results' ? 'active' : ''} onClick={() => navigate('/results')}>
-              <span aria-hidden="true">◎</span> {tenant.activeRole === 'STUDENT' ? 'My result' : 'Result publication'}
+              <span aria-hidden="true">◎</span> Result publication
             </button>
           ) : null}
           {tenant && [
@@ -157,7 +159,7 @@ export function WorkspaceShell({
       </aside>
       <div className="workspace-main">
         <header className="workspace-topbar">
-          <span>Workspace / {active === 'overview' ? 'Overview' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : active === 'marks' ? 'Marks & review' : active === 'results' ? 'Result publication' : 'Setup & access'}</span>
+          <span>Workspace / {active === 'overview' ? 'Overview' : active === 'student' ? 'Student portal' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : active === 'marks' ? 'Marks & review' : active === 'results' ? 'Result publication' : 'Setup & access'}</span>
           <div className="topbar-actions">
             <span className="user-email">{currentUser.email}</span>
             {tenant && availableRoles.length > 1 ? (

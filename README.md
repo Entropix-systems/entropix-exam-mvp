@@ -77,7 +77,9 @@ pnpm build                # workspace production builds
 pnpm test                 # workspace tests
 pnpm lint                 # workspace lint
 pnpm verify:b03           # focused Result Runs & Publication checks
+pnpm verify:b04           # focused student portal and document checks
 pnpm smoke:results-flow   # mutating B03 flow; use a disposable local DB only
+pnpm smoke:student-portal # read-only scoped portal check against current data
 pnpm d0:verify            # broad foundation/integration gate
 pnpm dev:stop             # stop repository dev processes
 pnpm infra:down           # stop local containers

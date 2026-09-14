@@ -552,7 +552,42 @@ POST /results/runs/:resultRunId/publish
   publication receives the next monotonically increasing version.
 - Student reads return only the caller's own result from the current publication.
   Draft candidate runs, historical versions, and withdrawn publications are not
-  student-visible.
+  student-visible. A `WITHHELD` response is a dedicated hold-message variant and
+  contains no result item, component, percentage, GPA, or credit fields.
+
+---
+
+# Student Portal and Current Document Contract
+
+Typed B04 contracts live in `packages/contracts/src/student-portal.ts`. Every
+route below requires the session-selected `STUDENT` role and resolves both tenant
+and student identity from the authenticated membership. No route accepts a
+student identifier.
+
+```text
+GET /api/v1/me/student-portal
+GET /api/v1/me/registrations
+GET /api/v1/me/timetable
+GET /api/v1/me/result
+GET /api/v1/me/documents
+```
+
+- Registration reads contain only the caller's currently `APPROVED`
+  registrations.
+- Timetable, hall, and seat data is visible only while the exam has a published
+  schedule state and every registered subject has a current paper and seat.
+- Admit-card metadata binds its stable issue ID to the approved registration and
+  current `Exam.scheduleRevision`. Editing a published schedule removes the
+  current timetable/admit reference until the later revision is published.
+- Result reads contain only an active current publication backed by an approved
+  registration. Withdrawal removes result and grade-card visibility.
+- `WITHHELD` returns only the publication/exam identity, explicit outcome, and a
+  hold message. `PASS`, `FAIL`, and `ABSENT` may expose the immutable published
+  snapshot and a current grade-card reference; `ABSENT` is never rendered as
+  zero.
+- Admit cards and grade cards are printable HTML for the demo. Their metadata
+  has no public or signed file URL. Grade-card issue IDs bind to publication
+  version; no persisted document table or storage object is introduced.
 
 ---
 
