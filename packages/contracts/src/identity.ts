@@ -58,8 +58,26 @@ export interface InstitutionAccessSummary {
   slug: string;
 }
 export interface SwitchAuthContextRequest {
-  institutionId: UUID;
+  institutionId?: UUID;
   role?: TenantRole;
+  returnToPlatform?: true;
+}
+export interface PlatformInstitutionSummary extends InstitutionAccessSummary {
+  code: string;
+  type: string;
+  status: string;
+  academicYear: string | null;
+  onboardingState: string;
+}
+export interface OnboardInstitutionRequest {
+  name: string;
+  code: string;
+  type: string;
+  primaryAdministratorName: string;
+  primaryAdministratorEmail: string;
+  academicYear: string;
+  status: 'ACTIVE' | 'SUSPENDED';
+  requestId: string;
 }
 export interface MembershipDirectoryItem {
   id: UUID;
@@ -89,7 +107,8 @@ export type AccessTokenIdentity = {
   userId: UUID;
   sessionId: UUID;
 } & (
-  { kind: 'TENANT'; tenantId: UUID; membershipId: UUID } | { kind: 'PLATFORM' }
+  { kind: 'TENANT'; tenantId: UUID; membershipId: UUID }
+  | { kind: 'PLATFORM'; tenantId?: UUID }
 );
 
 export const IAM_PERMISSIONS = {

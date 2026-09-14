@@ -27,6 +27,7 @@ import { refreshCookiePolicy } from '../security/cookie-policy.js';
 import type { RefreshCookieConfiguration } from '../security/cookie-policy.js';
 import { AuthApplicationError } from '../application/auth.errors.js';
 import { CookieMutationGuard } from './cookie-mutation.guard.js';
+import { requestIdFor } from './request-context.js';
 
 export abstract class RefreshCookieConfigurationProvider {
   abstract readonly value: RefreshCookieConfiguration;
@@ -147,11 +148,14 @@ export class AuthController {
   switchContext(
     @CurrentAuthPrincipal() principal: AuthenticatedPrincipal,
     @Body() rawBody: unknown,
+    @Req() request: Request,
   ) {
     const body = objectBody(rawBody);
     return this.auth.switchContext(principal, {
       institutionId: body.institutionId,
       role: body.role,
+      returnToPlatform: body.returnToPlatform,
+      requestId: requestIdFor(request),
     } as SwitchAuthContextRequest);
   }
 

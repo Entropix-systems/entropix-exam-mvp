@@ -11,8 +11,10 @@ export function createPrismaClient(
   connectionString: string,
   options: PrismaConnectionOptions = {},
 ) {
+  const host = new URL(connectionString).hostname;
+  const localTarget = host === 'localhost' || host === '127.0.0.1' || host === '::1';
   const ssl =
-    options.sslCaPath
+    options.sslCaPath && !localTarget
       ? {
           ca: fs.readFileSync(
             options.sslCaPath,

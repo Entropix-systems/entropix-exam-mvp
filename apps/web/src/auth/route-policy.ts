@@ -37,7 +37,8 @@ export function canAccessWorkspacePath(
   currentUser: CurrentUserResponse,
   pathname: string,
 ): boolean {
-  if (currentUser.context.kind === 'PLATFORM') return pathname === '/platform'
+  if (currentUser.context.kind === 'PLATFORM')
+    return pathname === '/platform' || (pathname === '/' && Boolean(currentUser.context.tenantId))
   return ROLE_ROUTES[currentUser.context.activeRole].includes(pathname)
 }
 
@@ -45,6 +46,8 @@ export function destinationAfterContextChange(
   pathname: string,
   currentUser: CurrentUserResponse,
 ): string {
+  if (currentUser.context.kind === 'PLATFORM' && currentUser.context.tenantId)
+    return pathname === '/platform' ? '/' : canAccessWorkspacePath(currentUser, pathname) ? pathname : '/'
   return canAccessWorkspacePath(currentUser, pathname)
     ? pathname
     : landingDestination(currentUser)

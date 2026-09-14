@@ -13,6 +13,7 @@ import { DocumentsModule } from './modules/documents/documents.module.js';
 import { NotificationsModule } from './modules/notifications/notifications.module.js';
 import { AuditModule } from './modules/audit/audit.module.js';
 import { PeopleModule } from './modules/people/people.module.js';
+import { PlatformModule } from './modules/platform/platform.module.js';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PeopleModule } from './modules/people/people.module.js';
     IdentityHttpModule,
     AcademicsModule,
     PeopleModule,
+    PlatformModule,
     ExamsModule,
     SchedulingModule,
     ConductModule,

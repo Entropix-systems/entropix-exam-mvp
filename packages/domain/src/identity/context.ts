@@ -42,7 +42,7 @@ export function isAuthenticatedContext(
   if (value.kind === 'PLATFORM') {
     return (
       value.role === ROLES.PLATFORM_ADMIN &&
-      !('tenantId' in value) &&
+      (!('tenantId' in value) || isUuid(value.tenantId)) &&
       !('membershipId' in value) &&
       !('grants' in value)
     );
@@ -65,7 +65,7 @@ export function isAccessTokenIdentity(
   if (!record(value) || !isUuid(value.userId) || !isUuid(value.sessionId))
     return false;
   if (value.kind === 'PLATFORM')
-    return !('tenantId' in value) && !('membershipId' in value);
+    return (!('tenantId' in value) || isUuid(value.tenantId)) && !('membershipId' in value);
   return (
     value.kind === 'TENANT' &&
     isUuid(value.tenantId) &&

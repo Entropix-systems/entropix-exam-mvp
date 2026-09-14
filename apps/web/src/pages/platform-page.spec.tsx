@@ -24,18 +24,18 @@ describe('PlatformPage', () => {
         currentUser,
         login: vi.fn(),
         switchInstitution: vi.fn(),
+        returnToPlatform: vi.fn(),
         switchRole: vi.fn(),
         logout: vi.fn(),
         restore: vi.fn(),
       }}>
-        <PlatformPage />
+        <PlatformPage client={{ institutions: vi.fn(), onboard: vi.fn(), setStatus: vi.fn() } as never} />
       </AuthContext.Provider>,
     )
 
-    expect(html).toContain('Platform workspace')
+    expect(html).toContain('Institution management')
     expect(html).toContain('platform.admin@demo.example.test')
-    expect(html).toContain('No institution selected')
-    expect(html).toContain('does not request institution overview data')
+    expect(html).toContain('Create a new institution')
     expect(html).not.toContain('Overview unavailable')
     expect(html).not.toContain(currentUser.sessionId)
     expect(html).not.toContain(currentUser.context.userId)

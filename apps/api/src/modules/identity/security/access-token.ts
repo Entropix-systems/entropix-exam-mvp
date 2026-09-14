@@ -51,10 +51,9 @@ export class JoseAccessTokenCodec extends AccessTokenCodec {
     if (!isAccessTokenIdentity(identity))
       throw new Error('Invalid access identity');
     const now = Math.floor(this.clock().getTime() / 1000);
-    const binding =
-      identity.kind === 'TENANT'
-        ? { tenantId: identity.tenantId, membershipId: identity.membershipId }
-        : {};
+    const binding = identity.kind === 'TENANT'
+      ? { tenantId: identity.tenantId, membershipId: identity.membershipId }
+      : identity.tenantId ? { tenantId: identity.tenantId } : {};
     return new SignJWT({
       kind: identity.kind,
       sid: identity.sessionId,

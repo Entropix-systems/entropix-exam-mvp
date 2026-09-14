@@ -9,7 +9,7 @@ import type {
 } from '@entropix/contracts';
 
 export type SessionBinding =
-  | { kind: 'PLATFORM'; tenantId: null; membershipId: null }
+  | { kind: 'PLATFORM'; tenantId: UUID | null; membershipId: null }
   | { kind: 'TENANT'; tenantId: UUID; membershipId: UUID };
 
 /** Global authentication record; id is the refresh family identifier. */
@@ -78,8 +78,10 @@ export type LoginSessionResult =
 export interface SwitchSessionContextCommand {
   userId: UUID;
   sessionId: UUID;
-  institutionId: UUID;
+  institutionId: UUID | null;
   role: TenantRole | null;
+  returnToPlatform: boolean;
+  requestId: string;
   now: Date;
 }
 

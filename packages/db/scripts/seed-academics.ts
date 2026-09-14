@@ -78,6 +78,10 @@ try {
       create: {
         name: fixture.tenant.name,
         slug: fixture.tenant.slug,
+        code: fixture.tenant.slug.toUpperCase().replace(/-/g, '_'),
+        type: fixture.tenant.name.includes('School') ? 'School' : 'College',
+        primaryAdministratorName: 'Demo Administrator',
+        primaryAdministratorEmail: `admin@${fixture.tenant.slug}.example.test`,
         timezone: fixture.tenant.timezone,
       },
     });

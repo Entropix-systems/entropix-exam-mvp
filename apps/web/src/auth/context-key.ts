@@ -5,5 +5,5 @@ export function authContextKey(currentUser: CurrentUserResponse | null): string 
   if (!currentUser) return 'signed-out'
   return currentUser.context.kind === 'TENANT'
     ? `${currentUser.context.tenantId}:${currentUser.context.membershipId}:${currentUser.context.activeRole}`
-    : `platform:${currentUser.context.userId}`
+    : `platform:${currentUser.context.userId}:${currentUser.context.tenantId ?? 'none'}`
 }

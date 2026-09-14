@@ -14,11 +14,15 @@ import type {
 const controllerRoles: readonly TenantRole[] = ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'];
 const iso = (value: Date | null | undefined) => value?.toISOString() ?? '';
 
-function isController(actor: ReportingActor): boolean {
+type DashboardActor = ReportingActor | 'PLATFORM';
+
+function isController(actor: DashboardActor): boolean {
+  if (actor === 'PLATFORM') return true;
   return controllerRoles.includes(actor.role);
 }
 
-export function availableReports(actor: ReportingActor): readonly ReportKind[] {
+export function availableReports(actor: DashboardActor): readonly ReportKind[] {
+  if (actor === 'PLATFORM') return [];
   if (isController(actor)) return [
     'registration-roster',
     'timetable-hall-roster',
@@ -33,7 +37,8 @@ export function availableReports(actor: ReportingActor): readonly ReportKind[] {
   return [];
 }
 
-function examScope(actor: ReportingActor): Prisma.ExamWhereInput {
+function examScope(actor: DashboardActor): Prisma.ExamWhereInput {
+  if (actor === 'PLATFORM') return {};
   if (isController(actor) || actor.role === 'AUDITOR') return {};
   if (actor.role === 'DEPARTMENT_ADMIN') return {
     term: { program: { departmentId: { in: [...actor.departmentIds] } } },
@@ -55,7 +60,7 @@ function reportFileName(slug: string, kind: ReportKind): string {
 export class AuditRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
-  dashboard(tenantId: UUID, actor: ReportingActor, now = new Date()): Promise<DashboardSnapshot> {
+  dashboard(tenantId: UUID, actor: DashboardActor, now = new Date()): Promise<DashboardSnapshot> {
     return withTenant(this.prisma, tenantId, async (tx) => {
       const [tenant, exams] = await Promise.all([
         tx.tenant.findFirstOrThrow({ where: { id: tenantId }, select: { name: true, timezone: true } }),

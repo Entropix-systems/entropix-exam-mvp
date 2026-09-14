@@ -11,6 +11,7 @@ export function WorkspaceShell({
   active,
   onLogout,
   onSwitchInstitution,
+  onReturnToPlatform,
   onSwitchRole,
   children,
 }: PropsWithChildren<{
@@ -18,14 +19,17 @@ export function WorkspaceShell({
   active: 'platform' | 'overview' | 'setup-access' | 'masters' | 'students' | 'exams' | 'schedule' | 'attendance' | 'marks' | 'results' | 'student' | 'reports'
   onLogout(): Promise<void>
   onSwitchInstitution(institutionId: string): Promise<CurrentUserResponse>
+  onReturnToPlatform?(): Promise<CurrentUserResponse>
   onSwitchRole(role: TenantRole): Promise<CurrentUserResponse>
 }>) {
   const tenant = currentUser.context.kind === 'TENANT' ? currentUser.context : null
+  const platformTenantId = currentUser.context.kind === 'PLATFORM' ? currentUser.context.tenantId : undefined
+  const returnPlatform = onReturnToPlatform
   const [switching, setSwitching] = useState(false)
   const [switchError, setSwitchError] = useState<string | null>(null)
-  const activeInstitution = tenant
+  const activeInstitution = tenant || platformTenantId
     ? currentUser.institutions.find(
-        (institution) => institution.id === tenant.tenantId,
+        (institution) => institution.id === (tenant?.tenantId ?? platformTenantId),
       )
     : null
   const availableRoles = tenant
@@ -64,8 +68,13 @@ export function WorkspaceShell({
           <small>ENTROPIX SYSTEMS</small>
         </div>
         <div className="tenant-box">
-          <small>{tenant ? 'INSTITUTION WORKSPACE' : 'PLATFORM WORKSPACE'}</small>
-          {currentUser.institutions.length > 1 ? (
+          <small>{tenant || platformTenantId ? 'INSTITUTION WORKSPACE' : 'PLATFORM WORKSPACE'}</small>
+          {currentUser.context.kind === 'PLATFORM' ? (
+            <select aria-label="Active institution" value={platformTenantId ?? ''} disabled={switching} onChange={(event) => void changeContext(() => event.target.value ? onSwitchInstitution(event.target.value) : returnPlatform!())}>
+              <option value="">Platform administration</option>
+              {currentUser.institutions.map((institution) => <option key={institution.id} value={institution.id}>{institution.name}</option>)}
+            </select>
+          ) : currentUser.institutions.length > 1 ? (
             <select
               aria-label="Active institution"
               value={activeInstitution?.id ?? ''}
@@ -87,13 +96,13 @@ export function WorkspaceShell({
             </strong>
           )}
         </div>
-        <p className="nav-label">{tenant ? 'EXAMINATION WORKSPACE' : 'PLATFORM ADMINISTRATION'}</p>
+        <p className="nav-label">{tenant || platformTenantId ? 'EXAMINATION WORKSPACE' : 'PLATFORM ADMINISTRATION'}</p>
         <nav aria-label="Primary navigation">
-          {!tenant ? (
+          {!tenant && !platformTenantId ? (
             <button type="button" className={active === 'platform' ? 'active' : ''} onClick={() => navigate('/platform')}>
               <span aria-hidden="true">◫</span> Platform workspace
             </button>
-          ) : tenant.activeRole === 'STUDENT' ? (
+          ) : tenant?.activeRole === 'STUDENT' ? (
             <button type="button" className={active === 'student' ? 'active' : ''} onClick={() => navigate('/student')}>
               <span aria-hidden="true">◫</span> Student portal
             </button>
@@ -160,11 +169,12 @@ export function WorkspaceShell({
             </button>
           ) : null}
         </nav>
+        {platformTenantId && returnPlatform ? <button type="button" className="secondary-button" onClick={() => void changeContext(returnPlatform)}>Return to platform</button> : null}
         <p className="sidebar-foot">Academic year 2026–27<br />MVP · Written examinations</p>
       </aside>
       <div className="workspace-main">
         <header className="workspace-topbar">
-          <span>Workspace / {active === 'platform' ? 'Platform administration' : active === 'overview' ? 'Overview' : active === 'student' ? 'Student portal' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : active === 'marks' ? 'Marks & review' : active === 'results' ? 'Result publication' : active === 'reports' ? 'Reports & audit' : 'Setup & access'}</span>
+          <span>{platformTenantId ? `Platform Admin · Managing ${activeInstitution?.name ?? 'selected institution'} / ` : 'Workspace / '}{active === 'platform' ? 'Platform administration' : active === 'overview' ? 'Overview' : active === 'student' ? 'Student portal' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : active === 'marks' ? 'Marks & review' : active === 'results' ? 'Result publication' : active === 'reports' ? 'Reports & audit' : 'Setup & access'}</span>
           <div className="topbar-actions">
             <span className="user-identity">
               {currentUser.name ? <strong>{currentUser.name}</strong> : null}
