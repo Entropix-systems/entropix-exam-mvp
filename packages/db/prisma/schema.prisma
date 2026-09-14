@@ -11,7 +11,12 @@ model Tenant {
   id        String   @id @default(uuid()) @db.Uuid
   name      String
   slug      String   @unique
+  code      String   @unique
+  type      String   @default("COLLEGE")
+  primaryAdministratorName String @map("primary_administrator_name")
+  primaryAdministratorEmail String @map("primary_administrator_email")
   status    String   @default("ACTIVE")
+  onboardingState String @default("COMPLETE") @map("onboarding_state")
   timezone  String
   plan      String   @default("MVP")
   createdAt DateTime @default(now()) @map("created_at")
@@ -51,6 +56,7 @@ model Tenant {
   studentResults        StudentResult[]
   publications          Publication[]
   auditEvents           AuditEvent[]
+  platformAuditEvents   PlatformAuditEvent[]
   workerJobs            WorkerJob[]
   workerOutputs         WorkerOutput[]
 
@@ -220,6 +226,7 @@ model User {
   memberships Membership[]
   sessions    Session[]
   authTokens  AuthToken[]
+  platformAuditEvents PlatformAuditEvent[]
 
   @@map("users")
 }
@@ -915,6 +922,25 @@ model AuditEvent {
   @@index([tenantId, createdAt])
   @@index([tenantId, actorMembershipId, createdAt])
   @@map("audit_events")
+}
+
+/** Immutable platform-admin audit; actor identity is global, never a tenant membership. */
+model PlatformAuditEvent {
+  id          String   @id @default(uuid()) @db.Uuid
+  actorUserId String   @map("actor_user_id") @db.Uuid
+  tenantId    String?  @map("tenant_id") @db.Uuid
+  action      String
+  previous    Json?
+  next        Json?
+  requestId   String   @unique @map("request_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  actor User    @relation(fields: [actorUserId], references: [id], onDelete: Restrict)
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@index([actorUserId, createdAt])
+  @@index([tenantId, createdAt])
+  @@map("platform_audit_events")
 }
 
 model WorkerJob {

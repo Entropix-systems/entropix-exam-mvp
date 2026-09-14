@@ -14,6 +14,7 @@ import { EvaluationApiClient } from './evaluation/evaluation-client'
 import { ResultsApiClient } from './results/results-client'
 import { StudentPortalApiClient } from './student-portal/student-portal-client'
 import { AuditApiClient } from './audit/audit-client'
+import { PlatformApiClient } from './platform/platform-client'
 import { navigate } from './auth/navigation'
 import { landingDestination } from './auth/route-policy'
 import './App.css'
@@ -49,6 +50,7 @@ const evaluationClient = new EvaluationApiClient(authClient)
 const resultsClient = new ResultsApiClient(authClient)
 const studentPortalClient = new StudentPortalApiClient(authClient)
 const auditClient = new AuditApiClient(authClient)
+const platformClient = new PlatformApiClient(authClient)
 
 function usePathname() {
   const [pathname, setPathname] = useState(window.location.pathname)
@@ -80,7 +82,7 @@ function Routes() {
   if (pathname === '/access-denied') return <AccessDeniedPage />
   if (pathname === '/platform') {
     if (currentUser?.context.kind === 'TENANT') return <Redirect to={landingDestination(currentUser)} />
-    return <ProtectedRoute><PlatformPage /></ProtectedRoute>
+    return <ProtectedRoute><PlatformPage client={platformClient} /></ProtectedRoute>
   }
   if (pathname === '/setup-access')
     return (
@@ -148,7 +150,7 @@ function Routes() {
         <StudentPortalPage key={scopeKey} client={studentPortalClient} />
       </ProtectedRoute>
     )
-  if (pathname === '/' && currentUser?.context.kind === 'PLATFORM')
+  if (pathname === '/' && currentUser?.context.kind === 'PLATFORM' && !currentUser.context.tenantId)
     return <ProtectedRoute><Redirect to="/platform" /></ProtectedRoute>
   return (
     <ProtectedRoute>

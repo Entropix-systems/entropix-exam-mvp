@@ -164,11 +164,12 @@ async function lockSession(tx: Tx, sessionId: string) {
 }
 
 function identityFrom(session: LockedSessionRow): AccessTokenIdentity | null {
-  if (session.kind === 'PLATFORM' && !session.tenantId && !session.membershipId)
+  if (session.kind === 'PLATFORM' && !session.membershipId)
     return {
       kind: 'PLATFORM',
       userId: session.userId,
       sessionId: session.id,
+      ...(session.tenantId ? { tenantId: session.tenantId } : {}),
     };
   if (session.kind === 'TENANT' && session.tenantId && session.membershipId)
     return {
@@ -303,6 +304,40 @@ export class PrismaIdentityRepository
       const user = await lockUser(tx, command.userId);
       if (!user || user.status !== ACTIVE) return { kind: 'SESSION_INVALID' };
 
+      if (user.platformRole === ROLES.PLATFORM_ADMIN) {
+        const tenant = command.returnToPlatform
+          ? null
+          : await tx.tenant.findFirst({
+              where: { id: command.institutionId ?? undefined, status: ACTIVE },
+              select: { id: true },
+            });
+        if (!command.returnToPlatform && !tenant) return { kind: 'FORBIDDEN' };
+        const tenantId = tenant?.id ?? null;
+        await tx.session.update({
+          where: { id: session.id },
+          data: { kind: 'PLATFORM', tenantId, membershipId: null, activeRole: null, lastUsedAt: command.now },
+        });
+        await tx.authToken.updateMany({
+          where: { sessionId: session.id, purpose: 'REFRESH', consumedAt: null, revokedAt: null },
+          data: { tenantId, membershipId: null },
+        });
+        await tx.platformAuditEvent.create({
+          data: {
+            actorUserId: command.userId,
+            tenantId,
+            action: command.returnToPlatform ? 'PLATFORM_CONTEXT_RETURNED' : 'PLATFORM_INSTITUTION_CONTEXT_SELECTED',
+            requestId: command.requestId,
+            previous: session.tenantId ? { tenantId: session.tenantId } : undefined,
+            next: tenantId ? { tenantId } : undefined,
+          },
+        });
+        return {
+          kind: 'SWITCHED',
+          identity: { kind: 'PLATFORM', userId: command.userId, sessionId: session.id, ...(tenantId ? { tenantId } : {}) },
+        };
+      }
+      if (!command.institutionId || command.returnToPlatform) return { kind: 'FORBIDDEN' };
+
       await setIdentityUser(tx, command.userId);
       const membership = await tx.membership.findFirst({
         where: {
@@ -363,9 +398,17 @@ export class PrismaIdentityRepository
     return this.prisma.$transaction(async (tx) => {
       const user = await tx.user.findFirst({
         where: { id: userId, status: ACTIVE },
-        select: { name: true, email: true },
+        select: { name: true, email: true, platformRole: true },
       });
       if (!user) return null;
+      if (user.platformRole === ROLES.PLATFORM_ADMIN) {
+        const institutions = await tx.tenant.findMany({
+          where: { status: ACTIVE },
+          select: { id: true, name: true, slug: true },
+          orderBy: [{ name: 'asc' }, { id: 'asc' }],
+        });
+        return { name: user.name, email: user.email, institutions };
+      }
       await setIdentityUser(tx, userId);
       const memberships = await tx.membership.findMany({
         where: {
@@ -426,6 +469,10 @@ export class PrismaIdentityRepository
       if (session.kind === 'PLATFORM') {
         if (session.activeRole !== null || user.platformRole !== ROLES.PLATFORM_ADMIN)
           return { kind: 'SESSION_REVOKED' };
+        if (session.tenantId) {
+          const tenant = await tx.tenant.findFirst({ where: { id: session.tenantId, status: ACTIVE }, select: { id: true } });
+          if (!tenant) return { kind: 'SESSION_REVOKED' };
+        }
       } else {
         if (!session.tenantId || !session.membershipId || !session.activeRole)
           return { kind: 'SESSION_REVOKED' };
@@ -983,13 +1030,15 @@ export class PrismaCurrentAuthorityRepository extends CurrentAuthorityRepository
       session.kind !== identity.kind
     )
       return null;
-    if (identity.kind === 'PLATFORM')
-      return session.tenantId === null &&
+    if (identity.kind === 'PLATFORM') {
+      if (session.tenantId && !await this.prisma.tenant.findFirst({ where: { id: session.tenantId, status: ACTIVE }, select: { id: true } })) return null;
+      return session.tenantId === (identity.tenantId ?? null) &&
         session.membershipId === null &&
         session.activeRole === null &&
         session.user.platformRole === 'PLATFORM_ADMIN'
-        ? { kind: 'PLATFORM', userId: identity.userId, role: 'PLATFORM_ADMIN' }
+        ? { kind: 'PLATFORM', userId: identity.userId, role: 'PLATFORM_ADMIN', ...(session.tenantId ? { tenantId: session.tenantId } : {}) }
         : null;
+    }
     if (
       session.tenantId !== identity.tenantId ||
       session.membershipId !== identity.membershipId ||

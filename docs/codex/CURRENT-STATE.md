@@ -20,6 +20,18 @@ the repository-pinned Node 24.20.0 and pnpm 12.3.4, all 17 local migrations,
 the complete configured automated suite, `smoke:release`, seeded workflows, and
 the release browser matrix. See `FINAL-RELEASE-VERIFICATION.md`.
 
+## Active Unmerged Work
+
+```text
+Platform Admin institution management: feat/platform-admi-flow
+Migration / shared-contract owner: feat/platform-admi-flow
+Status: implementation and focused type/unit checks pass; not merged
+Migration: 20260914170000_platform_admin_context
+Local verification: migration applied to disposable PostgreSQL; platform
+onboarding, institution selection, return-to-platform, role matrix, and both
+seeded journeys pass. No shared Supabase target was changed.
+```
+
 ## Completed
 
 ```text

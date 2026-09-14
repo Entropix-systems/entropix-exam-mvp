@@ -24,6 +24,10 @@ export class AuditService {
   constructor(private readonly repository: AuditRepository) {}
 
   dashboard(context: AuthenticatedContext) {
+    if (context.kind === 'PLATFORM') {
+      if (!context.tenantId) throw new ForbiddenException('Select an institution first');
+      return this.repository.dashboard(context.tenantId, 'PLATFORM');
+    }
     const { tenantId, actor } = tenantActor(context);
     return this.repository.dashboard(tenantId, actor);
   }

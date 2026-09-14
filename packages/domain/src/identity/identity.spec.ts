@@ -41,7 +41,7 @@ describe('canonical identity contexts', () => {
   });
   it('distinguishes platform authority without fabricating tenant records', () => {
     expect(isAuthenticatedContext(platform)).toBe(true);
-    expect(isAuthenticatedContext({ ...platform, tenantId })).toBe(false);
+    expect(isAuthenticatedContext({ ...platform, tenantId })).toBe(true);
     expect(isAuthenticatedContext(tenant([]))).toBe(false);
     expect(
       isAuthenticatedContext({ ...tenant([]), membershipId: undefined }),
@@ -82,7 +82,7 @@ describe('canonical identity contexts', () => {
   it('validates access identity hints independently from authority', () => {
     const identity = { kind: 'PLATFORM', userId, sessionId: membershipId };
     expect(isAccessTokenIdentity(identity)).toBe(true);
-    expect(isAccessTokenIdentity({ ...identity, tenantId })).toBe(false);
+    expect(isAccessTokenIdentity({ ...identity, tenantId })).toBe(true);
     expect(
       isAccessTokenIdentity({
         ...identity,
