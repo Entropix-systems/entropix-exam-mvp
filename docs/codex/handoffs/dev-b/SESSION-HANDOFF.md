@@ -136,20 +136,24 @@ core conduct-window and independent-approval rules must not be bypassed.
 ## Next Exact Action
 
 1. Implement
-   `docs/codex/generated/B04A-full-flow-demo-seed-test.md` on a short-lived branch.
-2. Preserve Cedar `ANNUAL-2026`; create a separate historical fictional exam for
-   the published-result/grade-card journey.
-3. Merge the verified full-flow fixture through `integration`.
-4. Start `docs/codex/generated/B05-dashboard-reports-demo-polish.md` using the
-   authoritative seeded readiness and publication data.
+   `docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md` on a
+   short-lived branch.
+2. Populate and commit `docs/codex/SEEDED-ROLE-TEST-CREDENTIALS.md` with verified
+   working `example.test` identities for every canonical role and
+   PASS/ABSENT/WITHHELD student scenarios.
+3. Preserve Cedar `ANNUAL-2026`, and verify the full school and college journeys
+   across all implemented application modules.
+4. Merge the verified full-application fixture through `integration`, then start
+   `docs/codex/generated/B05-dashboard-reports-demo-polish.md`.
 
 ## Minimal Context for the Next Session
 
 1. `AGENTS.md`
 2. this handoff
 3. `docs/codex/CURRENT-STATE.md`
-4. `docs/codex/generated/B04A-full-flow-demo-seed-test.md`
-5. `docs/codex/CONTRACTS.md` - Student Portal and Current Document section
-6. `packages/contracts/src/student-portal.ts`
-7. `apps/api/src/modules/documents/student-portal.repository.ts`
-8. `apps/web/src/pages/student-portal-page.tsx`
+4. `docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md`
+5. `docs/codex/SEEDED-ROLE-TEST-CREDENTIALS.md`
+6. `docs/codex/CONTRACTS.md`
+7. `packages/contracts/src/student-portal.ts`
+8. `apps/api/src/modules/documents/student-portal.repository.ts`
+9. `apps/web/src/pages/student-portal-page.tsx`

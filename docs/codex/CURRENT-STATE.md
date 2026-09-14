@@ -7,7 +7,7 @@ Known-good foundation: d0-ready
 Shared development branch: integration
 Current B04 integration merge: 536fac9
 Current sprint: D1-D3 MVP implementation
-Current day: B04 INTEGRATED LOCALLY; FULL-FLOW DEMO SEED QUEUED BEFORE B05
+Current day: B04 INTEGRATED LOCALLY; FULL-APPLICATION DEMO GATE QUEUED BEFORE B05
 ```
 
 ## Current Gate
@@ -15,8 +15,8 @@ Current day: B04 INTEGRATED LOCALLY; FULL-FLOW DEMO SEED QUEUED BEFORE B05
 Local `integration` includes B04 Student Portal, Admit Card & Grade Card at merge
 commit `536fac9`, on top of the previously integrated IAM and A01-B03 vertical
 slices. B04 is focused-verified. The next prerequisite before B05 is the guarded,
-idempotent historical full-flow demo seed described in
-`docs/codex/generated/B04A-full-flow-demo-seed-test.md`.
+idempotent full-application seed, role credential matrix, and journey gate in
+`docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md`.
 
 ## Completed
 
@@ -37,8 +37,8 @@ B04 Student Portal, Admit Card & Grade Card (merged locally at 536fac9)
 ## In Progress
 
 ```text
-B04A Full-Flow Demo Seed & End-to-End Test
-Prompt: docs/codex/generated/B04A-full-flow-demo-seed-test.md
+Full Application Demo Seed, Role Credentials & End-to-End Flow Test
+Prompt: docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md
 Status: QUEUED; REQUIRED BEFORE B05
 ```
 
@@ -78,7 +78,7 @@ Status: MERGED; LOCKS RELEASED
 ```text
 Last delivered task: B04 Student Portal, Admit Card & Grade Card
 Merge: 536fac9 on local integration
-Next queued task: B04A Full-Flow Demo Seed & End-to-End Test
+Next queued task: Full Application Demo Seed, Role Credentials & Flow Test
 ```
 
 ## Current B03 Acceptance Evidence (Integrated)
@@ -144,7 +144,8 @@ Next queued task: B04A Full-Flow Demo Seed & End-to-End Test
 ## Next Required Action
 
 Implement and verify
-`docs/codex/generated/B04A-full-flow-demo-seed-test.md` on a short-lived branch,
-merge it through `integration`, then start B05 against the resulting authoritative
-historical publication/readiness data. Push of local integration remains a
-separate explicit action.
+`docs/codex/generated/FULL-APPLICATION-demo-seed-and-flow-test.md` on a
+short-lived branch, including the tracked
+`docs/codex/SEEDED-ROLE-TEST-CREDENTIALS.md` artifact. Merge it through `integration`,
+then start B05 against the resulting authoritative whole-application data. Push
+of local integration remains a separate explicit action.
