@@ -108,16 +108,19 @@ describeDatabase('PostgreSQL IAM persistence', () => {
       data: [
         {
           id: adminUser,
+          name: 'Platform Admin',
           email: 'admin@iam-phase3.example.test',
           passwordHash: '$test$admin password',
         },
         {
           id: memberUser,
+          name: 'IAM Member',
           email: 'member@iam-phase3.example.test',
           passwordHash: '$test$member password',
         },
         {
           id: foreignUser,
+          name: 'IAM Foreign',
           email: 'foreign@iam-phase3.example.test',
           passwordHash: '$test$foreign password',
         },
@@ -302,6 +305,7 @@ describeDatabase('PostgreSQL IAM persistence', () => {
     const invited = await repository.createInvitation({
       tenantId: tenantA,
       actorMembershipId: adminMembership,
+      name: 'Invited User',
       email: 'invited@iam-phase3.example.test',
       grants: [{ role: 'STUDENT', departmentId: null }],
       invitationTokenId: randomUUID(),
@@ -333,6 +337,7 @@ describeDatabase('PostgreSQL IAM persistence', () => {
     const invitedUser = await prisma.user.findUniqueOrThrow({
       where: { email: 'invited@iam-phase3.example.test' },
     });
+    expect(invitedUser.name).toBe('Invited User');
     const login = await repository.createLoginSession({
       userId: invitedUser.id,
       sessionId: randomUUID(),
@@ -433,6 +438,7 @@ describeDatabase('PostgreSQL IAM persistence', () => {
       identity: { tenantId: tenantA, membershipId: memberMembership },
     });
     await expect(repository.currentUserAccess(memberUser)).resolves.toMatchObject({
+      name: 'IAM Member',
       email: 'member@iam-phase3.example.test',
       institutions: [
         { id: tenantA, name: 'IAM Phase 3 College' },

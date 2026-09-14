@@ -9,6 +9,7 @@ function user(
 ): CurrentUserResponse {
   return {
     sessionId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+    name: 'Northstar Administrator',
     email: 'admin@example.test',
     institutions: [],
     context: {

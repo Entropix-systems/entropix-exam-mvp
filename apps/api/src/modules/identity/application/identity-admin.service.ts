@@ -46,6 +46,12 @@ function normalizedEmail(value: unknown): string | null {
     : null;
 }
 
+function normalizedName(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const normalized = value.normalize('NFKC').trim().replace(/\s+/g, ' ');
+  return normalized.length >= 1 && normalized.length <= 160 ? normalized : null;
+}
+
 function checkedGrants(value: unknown): readonly ScopedRoleGrant[] {
   if (
     !Array.isArray(value) ||
@@ -143,6 +149,8 @@ export class IdentityAdminService {
 
   async invite(context: AuthenticatedContext, input: CreateInvitationRequest) {
     const tenant = tenantContext(context);
+    const name = normalizedName(input.name);
+    if (!name) throw new UnprocessableEntityException('Name is invalid');
     const email = normalizedEmail(input.email);
     if (!email) throw new UnprocessableEntityException('Email is invalid');
     const grants = checkedGrants(input.grants);
@@ -151,6 +159,7 @@ export class IdentityAdminService {
     const result = await this.repository.createInvitation({
       tenantId: tenant.tenantId,
       actorMembershipId: tenant.membershipId,
+      name,
       email,
       grants,
       invitationTokenId: randomUUID(),

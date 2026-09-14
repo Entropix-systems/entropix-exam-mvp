@@ -91,15 +91,14 @@ function memberFrom(row: {
   userId: string;
   status: string;
   version: number;
-  user: { email: string };
-  faculty?: { name: string } | null;
+  user: { name: string | null; email: string };
   roleGrants: readonly { role: string; departmentId: string | null }[];
 }): MembershipListItem {
   return {
     id: row.id,
     userId: row.userId,
     email: row.user.email,
-    name: row.faculty?.name ?? null,
+    name: row.user.name,
     status: row.status,
     version: row.version,
     grants: grantsFrom(row.roleGrants),
@@ -364,7 +363,7 @@ export class PrismaIdentityRepository
     return this.prisma.$transaction(async (tx) => {
       const user = await tx.user.findFirst({
         where: { id: userId, status: ACTIVE },
-        select: { email: true },
+        select: { name: true, email: true },
       });
       if (!user) return null;
       await setIdentityUser(tx, userId);
@@ -381,6 +380,7 @@ export class PrismaIdentityRepository
         orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
       });
       return {
+        name: user.name,
         email: user.email,
         institutions: memberships.map(({ tenant }) => tenant),
       };
@@ -689,8 +689,7 @@ export class PrismaIdentityRepository
         tx.membership.findMany({
           where: staffWhere,
           include: {
-            user: { select: { email: true } },
-            faculty: { select: { name: true } },
+            user: { select: { name: true, email: true } },
             roleGrants: {
               select: { role: true, departmentId: true },
               orderBy: [{ role: 'asc' }, { departmentId: 'asc' }],
@@ -733,12 +732,22 @@ export class PrismaIdentityRepository
         select: { id: true },
       });
       if (!actor) return { kind: 'INELIGIBLE' };
-      const user = await tx.user.upsert({
+      const existingUser = await tx.user.findUnique({
         where: { email: command.email },
-        update: {},
-        create: { email: command.email, status: ACTIVE },
-        select: { id: true, status: true },
+        select: { id: true, name: true, status: true },
       });
+      const user = existingUser
+        ? existingUser.name
+          ? existingUser
+          : await tx.user.update({
+              where: { id: existingUser.id },
+              data: { name: command.name },
+              select: { id: true, name: true, status: true },
+            })
+        : await tx.user.create({
+            data: { name: command.name, email: command.email, status: ACTIVE },
+            select: { id: true, name: true, status: true },
+          });
       if (user.status !== ACTIVE) return { kind: 'INELIGIBLE' };
 
       let membership = await tx.membership.findUnique({
@@ -795,7 +804,7 @@ export class PrismaIdentityRepository
       const created = await tx.membership.findUniqueOrThrow({
         where: { id: membership.id },
         include: {
-          user: { select: { email: true } },
+          user: { select: { name: true, email: true } },
           roleGrants: { select: { role: true, departmentId: true } },
         },
       });
@@ -825,7 +834,7 @@ export class PrismaIdentityRepository
       const current = await tx.membership.findUniqueOrThrow({
         where: { id: command.membershipId },
         include: {
-          user: { select: { email: true } },
+          user: { select: { name: true, email: true } },
           roleGrants: { select: { role: true, departmentId: true } },
         },
       });
@@ -876,7 +885,7 @@ export class PrismaIdentityRepository
         where: { id: current.id },
         data: { version: { increment: 1 } },
         include: {
-          user: { select: { email: true } },
+          user: { select: { name: true, email: true } },
           roleGrants: { select: { role: true, departmentId: true } },
         },
       });
@@ -927,7 +936,7 @@ export class PrismaIdentityRepository
           version: { increment: 1 },
         },
         include: {
-          user: { select: { email: true } },
+          user: { select: { name: true, email: true } },
           roleGrants: { select: { role: true, departmentId: true } },
         },
       });

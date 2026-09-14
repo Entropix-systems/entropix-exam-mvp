@@ -166,7 +166,10 @@ export function WorkspaceShell({
         <header className="workspace-topbar">
           <span>Workspace / {active === 'platform' ? 'Platform administration' : active === 'overview' ? 'Overview' : active === 'student' ? 'Student portal' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : active === 'marks' ? 'Marks & review' : active === 'results' ? 'Result publication' : active === 'reports' ? 'Reports & audit' : 'Setup & access'}</span>
           <div className="topbar-actions">
-            <span className="user-email">{currentUser.email}</span>
+            <span className="user-identity">
+              {currentUser.name ? <strong>{currentUser.name}</strong> : null}
+              <span className="user-email">{currentUser.email}</span>
+            </span>
             {tenant && availableRoles.length > 1 ? (
               <select
                 aria-label="Active role"

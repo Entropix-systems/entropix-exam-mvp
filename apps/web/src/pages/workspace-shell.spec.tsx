@@ -6,6 +6,7 @@ import { WorkspaceShell } from './workspace-shell'
 function context(role: 'INSTITUTION_ADMIN' | 'INVIGILATOR' | 'STUDENT'): CurrentUserResponse {
   return {
     sessionId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+    name: 'Workspace User',
     email: 'user@example.test',
     institutions: [{
       id: '11111111-1111-4111-8111-111111111111',
@@ -37,6 +38,7 @@ describe('role-aware workspace navigation', () => {
     )
 
     expect(admin).toContain('Authenticated shell')
+    expect(admin).toContain('Workspace User')
     expect(admin).toContain('Academic masters')
     expect(admin).toContain('Setup &amp; access')
     expect(admin).toContain('Timetable &amp; halls')

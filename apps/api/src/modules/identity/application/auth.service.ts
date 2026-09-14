@@ -351,6 +351,7 @@ export class AuthApplicationService {
     return {
       context: principal.context,
       sessionId: principal.identity.sessionId,
+      name: access.name,
       email: access.email,
       institutions: access.institutions,
     };

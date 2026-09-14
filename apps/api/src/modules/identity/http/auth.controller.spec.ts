@@ -233,6 +233,7 @@ describe('auth HTTP surface', () => {
     auth.me.mockReturnValueOnce({
       context: principal.context,
       sessionId: principal.identity.sessionId,
+      name: 'Northstar Student',
       email: 'student@example.test',
       institutions: [{
         id: principal.context.kind === 'TENANT' ? principal.context.tenantId : '',
@@ -247,6 +248,7 @@ describe('auth HTTP surface', () => {
     expect(response.body.data).toEqual({
       context: principal.context,
       sessionId: principal.identity.sessionId,
+      name: 'Northstar Student',
       email: 'student@example.test',
       institutions: [{
         id: principal.context.kind === 'TENANT' ? principal.context.tenantId : '',

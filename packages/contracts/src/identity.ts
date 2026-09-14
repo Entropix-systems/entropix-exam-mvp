@@ -48,6 +48,7 @@ export interface AccessTokenResponse {
 export interface CurrentUserResponse {
   context: AuthenticatedContext;
   sessionId: UUID;
+  name: string | null;
   email: string;
   institutions: readonly InstitutionAccessSummary[];
 }
@@ -75,6 +76,7 @@ export interface MembershipDirectoryResponse {
   pageSize: number;
 }
 export interface CreateInvitationRequest {
+  name: string;
   email: string;
   grants: readonly ScopedRoleGrant[];
 }

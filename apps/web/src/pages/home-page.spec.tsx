@@ -8,6 +8,7 @@ import type { AuditApiClient, DashboardExam, DashboardStep } from '../audit/audi
 
 const currentUser: CurrentUserResponse = {
   sessionId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+  name: 'Northstar Administrator',
   email: 'admin@northstar.example.test',
   institutions: [{
     id: '11111111-1111-4111-8111-111111111111',

@@ -94,6 +94,7 @@ export interface InstitutionAccessRecord {
 }
 
 export interface CurrentUserAccessRecord {
+  name: string | null;
   email: string;
   institutions: readonly InstitutionAccessRecord[];
 }
@@ -272,6 +273,7 @@ export interface MembershipDirectoryRecord {
 export interface CreateInvitationCommand {
   tenantId: UUID;
   actorMembershipId: UUID;
+  name: string;
   email: string;
   grants: readonly ScopedRoleGrant[];
   invitationTokenId: UUID;

@@ -4,6 +4,7 @@ import { AuthApiClient } from './auth-client'
 
 const me: CurrentUserResponse = {
   sessionId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+  name: 'Northstar Student',
   email: 'student@example.test',
   institutions: [
     {

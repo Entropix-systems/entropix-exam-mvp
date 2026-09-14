@@ -92,6 +92,7 @@ class TestRepository extends IdentityWorkflowRepository {
   }
   async currentUserAccess() {
     return {
+      name: 'Northstar Student',
       email: 'student@example.test',
       institutions: [{ id: tenantId, name: 'Northstar College', slug: 'northstar-college' }],
     };
@@ -414,6 +415,7 @@ describe('current context', () => {
     await expect(setup().service.me(principal)).resolves.toEqual({
       context,
       sessionId,
+      name: 'Northstar Student',
       email: 'student@example.test',
       institutions: [{ id: tenantId, name: 'Northstar College', slug: 'northstar-college' }],
     });

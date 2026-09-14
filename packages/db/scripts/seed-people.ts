@@ -67,9 +67,14 @@ try {
       const existingFacultyUsers = await tx.user.findMany({ where: { email: { in: facultyEmails } } });
       const existingFacultyEmails = new Set(existingFacultyUsers.map((user) => user.email));
       await tx.user.createMany({
-        data: facultyEmails.filter((email) => !existingFacultyEmails.has(email)).map((email) => ({ email, status: 'ACTIVE' })),
+        data: fixture.faculty
+          .filter((entry) => !existingFacultyEmails.has(entry.email))
+          .map((entry) => ({ name: entry.name, email: entry.email, status: 'ACTIVE' })),
         skipDuplicates: true,
       });
+      for (const entry of fixture.faculty) {
+        await tx.user.updateMany({ where: { email: entry.email }, data: { name: entry.name } });
+      }
       const facultyUsers = await tx.user.findMany({ where: { email: { in: facultyEmails } } });
       const facultyUserByEmail = new Map(facultyUsers.map((user) => [user.email, user]));
       const existingFacultyMemberships = await tx.membership.findMany({
@@ -141,9 +146,14 @@ try {
       const existingUsers = await tx.user.findMany({ where: { email: { in: emails } } });
       const existingEmails = new Set(existingUsers.map((user) => user.email));
       await tx.user.createMany({
-        data: emails.filter((email) => !existingEmails.has(email)).map((email) => ({ email, status: 'ACTIVE' })),
+        data: students
+          .filter((entry) => !existingEmails.has(entry.email))
+          .map((entry) => ({ name: entry.name, email: entry.email, status: 'ACTIVE' })),
         skipDuplicates: true,
       });
+      for (const entry of students) {
+        await tx.user.updateMany({ where: { email: entry.email }, data: { name: entry.name } });
+      }
       const users = await tx.user.findMany({ where: { email: { in: emails } } });
       const userByEmail = new Map(users.map((user) => [user.email, user]));
       const existingMemberships = await tx.membership.findMany({

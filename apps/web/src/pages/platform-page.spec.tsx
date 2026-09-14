@@ -6,6 +6,7 @@ import { PlatformPage } from './platform-page'
 
 const currentUser: CurrentUserResponse = {
   sessionId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+  name: 'Demo Platform Admin',
   email: 'platform.admin@demo.example.test',
   institutions: [],
   context: {

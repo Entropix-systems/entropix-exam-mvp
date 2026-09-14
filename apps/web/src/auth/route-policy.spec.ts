@@ -5,6 +5,7 @@ import { canAccessWorkspacePath, destinationAfterContextChange, landingDestinati
 function tenantUser(activeRole: TenantRole, grants: readonly TenantRole[] = [activeRole]): CurrentUserResponse {
   return {
     sessionId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+    name: 'Workspace User',
     email: 'user@example.test',
     institutions: [{ id: '11111111-1111-4111-8111-111111111111', name: 'Northstar College', slug: 'northstar-college' }],
     context: {
@@ -20,6 +21,7 @@ function tenantUser(activeRole: TenantRole, grants: readonly TenantRole[] = [act
 
 const platformUser: CurrentUserResponse = {
   sessionId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+  name: 'Platform Administrator',
   email: 'platform.admin@demo.example.test',
   institutions: [],
   context: {

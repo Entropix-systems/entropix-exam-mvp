@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import type { AttendanceState, AuthenticatedContext, TenantRole, UUID, ValidatedResultRule } from '@entropix/contracts';
@@ -15,7 +14,6 @@ import { AuthApplicationService } from '../src/modules/identity/application/auth
 import { IdentityNotificationSender } from '../src/modules/identity/application/identity-notifications.js';
 import { Argon2PasswordHasher } from '../src/modules/identity/security/password-hasher.js';
 import { JoseAccessTokenCodec } from '../src/modules/identity/security/access-token.js';
-import { generateOpaqueToken, hashOpaqueToken } from '../src/modules/identity/security/opaque-token.js';
 import { PeopleRepository } from '../src/modules/people/people.repository.js';
 import { PeopleService } from '../src/modules/people/people.service.js';
 
@@ -66,6 +64,7 @@ class SilentNotifications extends IdentityNotificationSender {
 
 interface Credential {
   scenario: string;
+  name: string;
   email: string;
   tenantSlug: string | null;
   roles: readonly { role: TenantRole; departmentCode?: string }[];
@@ -76,20 +75,20 @@ interface Credential {
 }
 
 export const demoCredentials: readonly Credential[] = [
-  { scenario: 'Platform administration', email: 'platform.admin@demo.example.test', tenantSlug: null, roles: [], expectedRole: 'PLATFORM_ADMIN', expectedRoute: '/platform' },
-  { scenario: 'Northstar tenant administration', email: 'institution.admin@northstar.example.test', tenantSlug: 'northstar-college', roles: [{ role: 'INSTITUTION_ADMIN' }], expectedRole: 'INSTITUTION_ADMIN', expectedRoute: '/masters' },
-  { scenario: 'Cedar tenant administration', email: 'institution.admin@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'INSTITUTION_ADMIN' }], expectedRole: 'INSTITUTION_ADMIN', expectedRoute: '/masters' },
-  { scenario: 'Exam configuration and publication', email: 'exam.controller@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'EXAM_CONTROLLER' }], expectedRole: 'EXAM_CONTROLLER', expectedRoute: '/results' },
-  { scenario: 'Department-scoped review', email: 'department.admin@northstar.example.test', tenantSlug: 'northstar-college', roles: [{ role: 'DEPARTMENT_ADMIN', departmentCode: 'CSE' }], expectedRole: 'DEPARTMENT_ADMIN', expectedRoute: '/marks' },
-  { scenario: 'Assigned marks entry', email: 'ananya.iyer@northstar.example.test', tenantSlug: 'northstar-college', roles: [{ role: 'FACULTY', departmentCode: 'CSE' }], expectedRole: 'FACULTY', expectedRoute: '/marks', profile: { kind: 'faculty', code: 'NSF001' } },
-  { scenario: 'Assigned conduct and marks', email: 'nisha.rao@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'INVIGILATOR' }, { role: 'FACULTY', departmentCode: 'SCHOOL' }], expectedRole: 'FACULTY', expectedRoute: '/marks', profile: { kind: 'faculty', code: 'CSF001' } },
-  { scenario: 'Read-only institution access', email: 'auditor@northstar.example.test', tenantSlug: 'northstar-college', roles: [{ role: 'AUDITOR' }], expectedRole: 'AUDITOR', expectedRoute: '/' },
-  { scenario: 'Normal student result', email: 'student.03@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'STUDENT' }], expectedRole: 'STUDENT', expectedRoute: '/student', profile: { kind: 'student', rollNo: 'CED10A03' } },
-  { scenario: 'Absent student result', email: 'student.01@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'STUDENT' }], expectedRole: 'STUDENT', expectedRoute: '/student', profile: { kind: 'student', rollNo: 'CED10A01' } },
-  { scenario: 'Held student result', email: 'student.02@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'STUDENT' }], expectedRole: 'STUDENT', expectedRoute: '/student', profile: { kind: 'student', rollNo: 'CED10A02' } },
-  { scenario: 'Northstar passing student', email: 'student.001@northstar.example.test', tenantSlug: 'northstar-college', roles: [{ role: 'STUDENT' }], expectedRole: 'STUDENT', expectedRoute: '/student', profile: { kind: 'student', rollNo: 'NS26001' } },
-  { scenario: 'Context switch', email: 'context.switch@northstar.example.test', tenantSlug: 'northstar-college', roles: [{ role: 'EXAM_CONTROLLER' }, { role: 'AUDITOR' }], expectedRole: 'EXAM_CONTROLLER', expectedRoute: '/results' },
-  { scenario: 'Negative login and authority', email: 'suspended@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'AUDITOR' }], expectedRole: 'DENIED', expectedRoute: '/login', suspended: true },
+  { scenario: 'Platform administration', name: 'Demo Platform Admin', email: 'platform.admin@demo.example.test', tenantSlug: null, roles: [], expectedRole: 'PLATFORM_ADMIN', expectedRoute: '/platform' },
+  { scenario: 'Northstar tenant administration', name: 'Northstar Administrator', email: 'institution.admin@northstar.example.test', tenantSlug: 'northstar-college', roles: [{ role: 'INSTITUTION_ADMIN' }], expectedRole: 'INSTITUTION_ADMIN', expectedRoute: '/masters' },
+  { scenario: 'Cedar tenant administration', name: 'Cedar Administrator', email: 'institution.admin@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'INSTITUTION_ADMIN' }], expectedRole: 'INSTITUTION_ADMIN', expectedRoute: '/masters' },
+  { scenario: 'Exam configuration and publication', name: 'Cedar Exam Controller', email: 'exam.controller@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'EXAM_CONTROLLER' }], expectedRole: 'EXAM_CONTROLLER', expectedRoute: '/results' },
+  { scenario: 'Department-scoped review', name: 'Northstar Department Admin', email: 'department.admin@northstar.example.test', tenantSlug: 'northstar-college', roles: [{ role: 'DEPARTMENT_ADMIN', departmentCode: 'CSE' }], expectedRole: 'DEPARTMENT_ADMIN', expectedRoute: '/marks' },
+  { scenario: 'Assigned marks entry', name: 'Ananya Iyer', email: 'ananya.iyer@northstar.example.test', tenantSlug: 'northstar-college', roles: [{ role: 'FACULTY', departmentCode: 'CSE' }], expectedRole: 'FACULTY', expectedRoute: '/marks', profile: { kind: 'faculty', code: 'NSF001' } },
+  { scenario: 'Assigned conduct and marks', name: 'Nisha Rao', email: 'nisha.rao@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'INVIGILATOR' }, { role: 'FACULTY', departmentCode: 'SCHOOL' }], expectedRole: 'FACULTY', expectedRoute: '/marks', profile: { kind: 'faculty', code: 'CSF001' } },
+  { scenario: 'Read-only institution access', name: 'Northstar Auditor', email: 'auditor@northstar.example.test', tenantSlug: 'northstar-college', roles: [{ role: 'AUDITOR' }], expectedRole: 'AUDITOR', expectedRoute: '/' },
+  { scenario: 'Normal student result', name: 'Cedar Student 03', email: 'student.03@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'STUDENT' }], expectedRole: 'STUDENT', expectedRoute: '/student', profile: { kind: 'student', rollNo: 'CED10A03' } },
+  { scenario: 'Absent student result', name: 'Cedar Student 01', email: 'student.01@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'STUDENT' }], expectedRole: 'STUDENT', expectedRoute: '/student', profile: { kind: 'student', rollNo: 'CED10A01' } },
+  { scenario: 'Held student result', name: 'Cedar Student 02', email: 'student.02@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'STUDENT' }], expectedRole: 'STUDENT', expectedRoute: '/student', profile: { kind: 'student', rollNo: 'CED10A02' } },
+  { scenario: 'Northstar passing student', name: 'Northstar Student 001', email: 'student.001@northstar.example.test', tenantSlug: 'northstar-college', roles: [{ role: 'STUDENT' }], expectedRole: 'STUDENT', expectedRoute: '/student', profile: { kind: 'student', rollNo: 'NS26001' } },
+  { scenario: 'Context switch', name: 'Northstar Context Switcher', email: 'context.switch@northstar.example.test', tenantSlug: 'northstar-college', roles: [{ role: 'EXAM_CONTROLLER' }, { role: 'AUDITOR' }], expectedRole: 'EXAM_CONTROLLER', expectedRoute: '/results' },
+  { scenario: 'Negative login and authority', name: 'Suspended Cedar Auditor', email: 'suspended@cedar.example.test', tenantSlug: 'cedar-school', roles: [{ role: 'AUDITOR' }], expectedRole: 'DENIED', expectedRoute: '/login', suspended: true },
 ] as const;
 
 const rule: ValidatedResultRule = {
@@ -129,12 +128,11 @@ function accessTokenCodec(clock = () => new Date()) {
 }
 
 async function provisionCredentials() {
-  const auth = await authService();
   for (const credential of demoCredentials) {
     expect(credential.email.endsWith('.example.test'), `Non-fictional credential refused: ${credential.email}`);
     let user = await prisma.user.findUnique({ where: { email: credential.email } });
-    if (!user) user = await prisma.user.create({ data: { email: credential.email, status: 'ACTIVE', platformRole: credential.expectedRole === 'PLATFORM_ADMIN' ? 'PLATFORM_ADMIN' : null } });
-    else await prisma.user.update({ where: { id: user.id }, data: { status: 'ACTIVE', platformRole: credential.expectedRole === 'PLATFORM_ADMIN' ? 'PLATFORM_ADMIN' : null } });
+    if (!user) user = await prisma.user.create({ data: { name: credential.name, email: credential.email, status: 'ACTIVE', platformRole: credential.expectedRole === 'PLATFORM_ADMIN' ? 'PLATFORM_ADMIN' : null } });
+    else await prisma.user.update({ where: { id: user.id }, data: { name: credential.name, status: 'ACTIVE', platformRole: credential.expectedRole === 'PLATFORM_ADMIN' ? 'PLATFORM_ADMIN' : null } });
 
     if (credential.tenantSlug) {
       const tenant = await prisma.tenant.findUniqueOrThrow({ where: { slug: credential.tenantSlug } });
@@ -166,12 +164,70 @@ async function provisionCredentials() {
       });
     }
 
-    const token = generateOpaqueToken();
-    const resetNow = new Date();
-    await identities.createPasswordReset({ userId: user.id, tokenId: randomUUID(), tokenHash: hashOpaqueToken(token), now: resetNow, expiresAt: new Date(resetNow.getTime() + 60_000) });
-    await auth.resetPassword({ token, password: PASSWORD });
     if (credential.suspended) await prisma.user.update({ where: { id: user.id }, data: { status: 'SUSPENDED' } });
   }
+  await provisionFixtureProfileNames();
+  await provisionFixturePasswords();
+}
+
+async function provisionFixtureProfileNames() {
+  const tenants = await prisma.tenant.findMany({
+    where: { slug: { in: ['northstar-college', 'cedar-school'] } },
+    select: { id: true },
+  });
+  const profiles = (await Promise.all(tenants.map((tenant) =>
+    withTenant(prisma, tenant.id, async (tx) => {
+      const [faculty, students] = await Promise.all([
+        tx.faculty.findMany({
+          where: { tenantId: tenant.id },
+          select: { name: true, membership: { select: { userId: true } } },
+        }),
+        tx.student.findMany({
+          where: { tenantId: tenant.id },
+          select: { name: true, membership: { select: { userId: true } } },
+        }),
+      ]);
+      return [
+        ...faculty.map((faculty) => ({ userId: faculty.membership.userId, name: faculty.name })),
+        ...students.map((student) => ({ userId: student.membership.userId, name: student.name })),
+      ];
+    }),
+  ))).flat();
+  for (const profile of profiles) {
+    await prisma.user.update({ where: { id: profile.userId }, data: { name: profile.name } });
+  }
+}
+
+async function provisionFixturePasswords() {
+  const users = await prisma.user.findMany({
+    where: { email: { endsWith: '.example.test' } },
+    select: { id: true, name: true },
+  });
+  expect(users.length > 0, 'No fictional demo users are available for password provisioning');
+  expect(users.every((user) => user.name), 'Every fictional demo user must have a name before password provisioning');
+
+  const passwords = new Argon2PasswordHasher();
+  const now = new Date();
+  for (const user of users) {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { passwordHash: await passwords.hash(PASSWORD) },
+    });
+  }
+  const userIds = users.map((user) => user.id);
+  await prisma.session.updateMany({
+    where: { userId: { in: userIds }, revokedAt: null },
+    data: { revokedAt: now, revocationReason: 'PASSWORD_RESET' },
+  });
+  await prisma.authToken.updateMany({
+    where: {
+      userId: { in: userIds },
+      purpose: { in: ['PASSWORD_RESET', 'REFRESH'] },
+      revokedAt: null,
+    },
+    data: { revokedAt: now },
+  });
+  console.log(`Shared demo password provisioned for ${users.length} fictional users`);
 }
 
 async function tenantContext(slug: string) {

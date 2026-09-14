@@ -215,23 +215,27 @@ export function MembershipTable({
 
 function AccessDialog({
   title,
+  name,
   email,
   grants,
   departments,
   busy,
   error,
   onEmailChange,
+  onNameChange,
   onGrantsChange,
   onClose,
   onSubmit,
 }: {
   title: string
+  name?: string
   email?: string
   grants: readonly ScopedRoleGrant[]
   departments: readonly DepartmentSummary[]
   busy: boolean
   error: string | null
   onEmailChange?(email: string): void
+  onNameChange?(name: string): void
   onGrantsChange(grants: ScopedRoleGrant[]): void
   onClose(): void
   onSubmit(event: FormEvent<HTMLFormElement>): void
@@ -245,6 +249,17 @@ function AccessDialog({
         </header>
         <form onSubmit={onSubmit}>
           <div className="dialog-body">
+            {onNameChange ? (
+              <label className="field-label">
+                Name
+                <input
+                  value={name}
+                  autoComplete="name"
+                  required
+                  onChange={(event) => onNameChange(event.target.value)}
+                />
+              </label>
+            ) : null}
             {onEmailChange ? (
               <label className="field-label">
                 Email
@@ -288,6 +303,7 @@ export function SetupAccessPage({
   const [pageError, setPageError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [inviteOpen, setInviteOpen] = useState(false)
+  const [inviteName, setInviteName] = useState('')
   const [inviteEmail, setInviteEmail] = useState('')
   const [draftGrants, setDraftGrants] = useState<ScopedRoleGrant[]>([
     { role: 'INVIGILATOR', departmentId: null },
@@ -351,6 +367,7 @@ export function SetupAccessPage({
   }
 
   function openInvite() {
+    setInviteName('')
     setInviteEmail('')
     setDraftGrants([{ role: 'INVIGILATOR', departmentId: null }])
     setDialogError(null)
@@ -370,7 +387,7 @@ export function SetupAccessPage({
     setSaving(true)
     setDialogError(null)
     try {
-      await client.createInvitation({ email: inviteEmail.trim(), grants: draftGrants })
+      await client.createInvitation({ name: inviteName.trim(), email: inviteEmail.trim(), grants: draftGrants })
       closeDialog()
       setSuccess(`Invitation sent to ${inviteEmail.trim()}.`)
       await load()
@@ -513,12 +530,14 @@ export function SetupAccessPage({
       {inviteOpen ? (
         <AccessDialog
           title="Invite user"
+          name={inviteName}
           email={inviteEmail}
           grants={draftGrants}
           departments={directory?.departments ?? []}
           busy={saving}
           error={dialogError}
           onEmailChange={setInviteEmail}
+          onNameChange={setInviteName}
           onGrantsChange={setDraftGrants}
           onClose={closeDialog}
           onSubmit={(event) => void submitInvite(event)}
@@ -527,6 +546,7 @@ export function SetupAccessPage({
       {editing ? (
         <AccessDialog
           title="Edit roles"
+          name={editing.user.name ?? undefined}
           email={editing.user.email}
           grants={draftGrants}
           departments={directory?.departments ?? []}
