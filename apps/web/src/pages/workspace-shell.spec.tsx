@@ -41,10 +41,12 @@ describe('role-aware workspace navigation', () => {
     expect(admin).toContain('Setup &amp; access')
     expect(admin).toContain('Timetable &amp; halls')
     expect(admin).toContain('Duties &amp; attendance')
+    expect(admin).toContain('Reports &amp; audit')
     expect(student).not.toContain('Academic masters')
     expect(student).not.toContain('Setup &amp; access')
     expect(student).not.toContain('Timetable &amp; halls')
     expect(student).not.toContain('Duties &amp; attendance')
+    expect(student).not.toContain('Reports &amp; audit')
     expect(student).toContain('Student portal')
     expect(student).not.toContain('Result publication')
     expect(student).toContain('Exams &amp; registration')
@@ -54,6 +56,7 @@ describe('role-aware workspace navigation', () => {
       </WorkspaceShell>,
     )
     expect(invigilator).toContain('Duties &amp; attendance')
+    expect(invigilator).toContain('Reports &amp; audit')
     expect(invigilator).not.toContain('Timetable &amp; halls')
   })
 

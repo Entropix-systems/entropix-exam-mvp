@@ -255,6 +255,7 @@ export type MembershipWhereInput = {
   computedResultRuns?: Prisma.ResultRunListRelationFilter
   publishedResults?: Prisma.PublicationListRelationFilter
   withdrawnResults?: Prisma.PublicationListRelationFilter
+  auditEvents?: Prisma.AuditEventListRelationFilter
 }
 
 export type MembershipOrderByWithRelationInput = {
@@ -288,6 +289,7 @@ export type MembershipOrderByWithRelationInput = {
   computedResultRuns?: Prisma.ResultRunOrderByRelationAggregateInput
   publishedResults?: Prisma.PublicationOrderByRelationAggregateInput
   withdrawnResults?: Prisma.PublicationOrderByRelationAggregateInput
+  auditEvents?: Prisma.AuditEventOrderByRelationAggregateInput
 }
 
 export type MembershipWhereUniqueInput = Prisma.AtLeast<{
@@ -327,6 +329,7 @@ export type MembershipWhereUniqueInput = Prisma.AtLeast<{
   computedResultRuns?: Prisma.ResultRunListRelationFilter
   publishedResults?: Prisma.PublicationListRelationFilter
   withdrawnResults?: Prisma.PublicationListRelationFilter
+  auditEvents?: Prisma.AuditEventListRelationFilter
 }, "id" | "tenantId_userId" | "tenantId_id" | "tenantId_id_userId">
 
 export type MembershipOrderByWithAggregationInput = {
@@ -386,6 +389,7 @@ export type MembershipCreateInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateInput = {
@@ -417,6 +421,7 @@ export type MembershipUncheckedCreateInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUpdateInput = {
@@ -448,6 +453,7 @@ export type MembershipUpdateInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateInput = {
@@ -479,6 +485,7 @@ export type MembershipUncheckedUpdateInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateManyInput = {
@@ -937,6 +944,20 @@ export type MembershipUpdateOneWithoutWithdrawnResultsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutWithdrawnResultsInput, Prisma.MembershipUpdateWithoutWithdrawnResultsInput>, Prisma.MembershipUncheckedUpdateWithoutWithdrawnResultsInput>
 }
 
+export type MembershipCreateNestedOneWithoutAuditEventsInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutAuditEventsInput, Prisma.MembershipUncheckedCreateWithoutAuditEventsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutAuditEventsInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipUpdateOneRequiredWithoutAuditEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutAuditEventsInput, Prisma.MembershipUncheckedCreateWithoutAuditEventsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutAuditEventsInput
+  upsert?: Prisma.MembershipUpsertWithoutAuditEventsInput
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutAuditEventsInput, Prisma.MembershipUpdateWithoutAuditEventsInput>, Prisma.MembershipUncheckedUpdateWithoutAuditEventsInput>
+}
+
 export type MembershipCreateNestedOneWithoutRoleGrantsInput = {
   create?: Prisma.XOR<Prisma.MembershipCreateWithoutRoleGrantsInput, Prisma.MembershipUncheckedCreateWithoutRoleGrantsInput>
   connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutRoleGrantsInput
@@ -1011,6 +1032,7 @@ export type MembershipCreateWithoutTenantInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutTenantInput = {
@@ -1041,6 +1063,7 @@ export type MembershipUncheckedCreateWithoutTenantInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutTenantInput = {
@@ -1110,6 +1133,7 @@ export type MembershipCreateWithoutUserInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutUserInput = {
@@ -1140,6 +1164,7 @@ export type MembershipUncheckedCreateWithoutUserInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutUserInput = {
@@ -1196,6 +1221,7 @@ export type MembershipCreateWithoutStudentInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutStudentInput = {
@@ -1226,6 +1252,7 @@ export type MembershipUncheckedCreateWithoutStudentInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutStudentInput = {
@@ -1272,6 +1299,7 @@ export type MembershipUpdateWithoutStudentInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutStudentInput = {
@@ -1302,6 +1330,7 @@ export type MembershipUncheckedUpdateWithoutStudentInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutFacultyInput = {
@@ -1332,6 +1361,7 @@ export type MembershipCreateWithoutFacultyInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutFacultyInput = {
@@ -1362,6 +1392,7 @@ export type MembershipUncheckedCreateWithoutFacultyInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutFacultyInput = {
@@ -1408,6 +1439,7 @@ export type MembershipUpdateWithoutFacultyInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutFacultyInput = {
@@ -1438,6 +1470,7 @@ export type MembershipUncheckedUpdateWithoutFacultyInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutReviewedRegistrationsInput = {
@@ -1468,6 +1501,7 @@ export type MembershipCreateWithoutReviewedRegistrationsInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutReviewedRegistrationsInput = {
@@ -1498,6 +1532,7 @@ export type MembershipUncheckedCreateWithoutReviewedRegistrationsInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutReviewedRegistrationsInput = {
@@ -1544,6 +1579,7 @@ export type MembershipUpdateWithoutReviewedRegistrationsInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutReviewedRegistrationsInput = {
@@ -1574,6 +1610,7 @@ export type MembershipUncheckedUpdateWithoutReviewedRegistrationsInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutAssignedDutiesInput = {
@@ -1604,6 +1641,7 @@ export type MembershipCreateWithoutAssignedDutiesInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutAssignedDutiesInput = {
@@ -1634,6 +1672,7 @@ export type MembershipUncheckedCreateWithoutAssignedDutiesInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutAssignedDutiesInput = {
@@ -1669,6 +1708,7 @@ export type MembershipCreateWithoutRespondedDutiesInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutRespondedDutiesInput = {
@@ -1699,6 +1739,7 @@ export type MembershipUncheckedCreateWithoutRespondedDutiesInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutRespondedDutiesInput = {
@@ -1745,6 +1786,7 @@ export type MembershipUpdateWithoutAssignedDutiesInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutAssignedDutiesInput = {
@@ -1775,6 +1817,7 @@ export type MembershipUncheckedUpdateWithoutAssignedDutiesInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUpsertWithoutRespondedDutiesInput = {
@@ -1816,6 +1859,7 @@ export type MembershipUpdateWithoutRespondedDutiesInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutRespondedDutiesInput = {
@@ -1846,6 +1890,7 @@ export type MembershipUncheckedUpdateWithoutRespondedDutiesInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutSubmittedAttendanceInput = {
@@ -1876,6 +1921,7 @@ export type MembershipCreateWithoutSubmittedAttendanceInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutSubmittedAttendanceInput = {
@@ -1906,6 +1952,7 @@ export type MembershipUncheckedCreateWithoutSubmittedAttendanceInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutSubmittedAttendanceInput = {
@@ -1941,6 +1988,7 @@ export type MembershipCreateWithoutReopenedAttendanceInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutReopenedAttendanceInput = {
@@ -1971,6 +2019,7 @@ export type MembershipUncheckedCreateWithoutReopenedAttendanceInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutReopenedAttendanceInput = {
@@ -2017,6 +2066,7 @@ export type MembershipUpdateWithoutSubmittedAttendanceInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutSubmittedAttendanceInput = {
@@ -2047,6 +2097,7 @@ export type MembershipUncheckedUpdateWithoutSubmittedAttendanceInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUpsertWithoutReopenedAttendanceInput = {
@@ -2088,6 +2139,7 @@ export type MembershipUpdateWithoutReopenedAttendanceInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutReopenedAttendanceInput = {
@@ -2118,6 +2170,7 @@ export type MembershipUncheckedUpdateWithoutReopenedAttendanceInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutUpdatedAttendanceInput = {
@@ -2148,6 +2201,7 @@ export type MembershipCreateWithoutUpdatedAttendanceInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutUpdatedAttendanceInput = {
@@ -2178,6 +2232,7 @@ export type MembershipUncheckedCreateWithoutUpdatedAttendanceInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutUpdatedAttendanceInput = {
@@ -2224,6 +2279,7 @@ export type MembershipUpdateWithoutUpdatedAttendanceInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutUpdatedAttendanceInput = {
@@ -2254,6 +2310,7 @@ export type MembershipUncheckedUpdateWithoutUpdatedAttendanceInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutCreatedIncidentsInput = {
@@ -2284,6 +2341,7 @@ export type MembershipCreateWithoutCreatedIncidentsInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutCreatedIncidentsInput = {
@@ -2314,6 +2372,7 @@ export type MembershipUncheckedCreateWithoutCreatedIncidentsInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutCreatedIncidentsInput = {
@@ -2349,6 +2408,7 @@ export type MembershipCreateWithoutDisposedIncidentsInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutDisposedIncidentsInput = {
@@ -2379,6 +2439,7 @@ export type MembershipUncheckedCreateWithoutDisposedIncidentsInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutDisposedIncidentsInput = {
@@ -2425,6 +2486,7 @@ export type MembershipUpdateWithoutCreatedIncidentsInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutCreatedIncidentsInput = {
@@ -2455,6 +2517,7 @@ export type MembershipUncheckedUpdateWithoutCreatedIncidentsInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUpsertWithoutDisposedIncidentsInput = {
@@ -2496,6 +2559,7 @@ export type MembershipUpdateWithoutDisposedIncidentsInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutDisposedIncidentsInput = {
@@ -2526,6 +2590,7 @@ export type MembershipUncheckedUpdateWithoutDisposedIncidentsInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutAssignedEvaluationsInput = {
@@ -2556,6 +2621,7 @@ export type MembershipCreateWithoutAssignedEvaluationsInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutAssignedEvaluationsInput = {
@@ -2586,6 +2652,7 @@ export type MembershipUncheckedCreateWithoutAssignedEvaluationsInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutAssignedEvaluationsInput = {
@@ -2632,6 +2699,7 @@ export type MembershipUpdateWithoutAssignedEvaluationsInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutAssignedEvaluationsInput = {
@@ -2662,6 +2730,7 @@ export type MembershipUncheckedUpdateWithoutAssignedEvaluationsInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutSubmittedMarksBatchesInput = {
@@ -2692,6 +2761,7 @@ export type MembershipCreateWithoutSubmittedMarksBatchesInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutSubmittedMarksBatchesInput = {
@@ -2722,6 +2792,7 @@ export type MembershipUncheckedCreateWithoutSubmittedMarksBatchesInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutSubmittedMarksBatchesInput = {
@@ -2757,6 +2828,7 @@ export type MembershipCreateWithoutReviewedMarksBatchesInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutReviewedMarksBatchesInput = {
@@ -2787,6 +2859,7 @@ export type MembershipUncheckedCreateWithoutReviewedMarksBatchesInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutReviewedMarksBatchesInput = {
@@ -2822,6 +2895,7 @@ export type MembershipCreateWithoutReopenedMarksBatchesInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutReopenedMarksBatchesInput = {
@@ -2852,6 +2926,7 @@ export type MembershipUncheckedCreateWithoutReopenedMarksBatchesInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutReopenedMarksBatchesInput = {
@@ -2898,6 +2973,7 @@ export type MembershipUpdateWithoutSubmittedMarksBatchesInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutSubmittedMarksBatchesInput = {
@@ -2928,6 +3004,7 @@ export type MembershipUncheckedUpdateWithoutSubmittedMarksBatchesInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUpsertWithoutReviewedMarksBatchesInput = {
@@ -2969,6 +3046,7 @@ export type MembershipUpdateWithoutReviewedMarksBatchesInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutReviewedMarksBatchesInput = {
@@ -2999,6 +3077,7 @@ export type MembershipUncheckedUpdateWithoutReviewedMarksBatchesInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUpsertWithoutReopenedMarksBatchesInput = {
@@ -3040,6 +3119,7 @@ export type MembershipUpdateWithoutReopenedMarksBatchesInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutReopenedMarksBatchesInput = {
@@ -3070,6 +3150,7 @@ export type MembershipUncheckedUpdateWithoutReopenedMarksBatchesInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutUpdatedMarksInput = {
@@ -3100,6 +3181,7 @@ export type MembershipCreateWithoutUpdatedMarksInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutUpdatedMarksInput = {
@@ -3130,6 +3212,7 @@ export type MembershipUncheckedCreateWithoutUpdatedMarksInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutUpdatedMarksInput = {
@@ -3176,6 +3259,7 @@ export type MembershipUpdateWithoutUpdatedMarksInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutUpdatedMarksInput = {
@@ -3206,6 +3290,7 @@ export type MembershipUncheckedUpdateWithoutUpdatedMarksInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutComputedResultRunsInput = {
@@ -3236,6 +3321,7 @@ export type MembershipCreateWithoutComputedResultRunsInput = {
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutComputedResultRunsInput = {
@@ -3266,6 +3352,7 @@ export type MembershipUncheckedCreateWithoutComputedResultRunsInput = {
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutComputedResultRunsInput = {
@@ -3312,6 +3399,7 @@ export type MembershipUpdateWithoutComputedResultRunsInput = {
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutComputedResultRunsInput = {
@@ -3342,6 +3430,7 @@ export type MembershipUncheckedUpdateWithoutComputedResultRunsInput = {
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutPublishedResultsInput = {
@@ -3372,6 +3461,7 @@ export type MembershipCreateWithoutPublishedResultsInput = {
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutPublishedResultsInput = {
@@ -3402,6 +3492,7 @@ export type MembershipUncheckedCreateWithoutPublishedResultsInput = {
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutPublishedResultsInput = {
@@ -3437,6 +3528,7 @@ export type MembershipCreateWithoutWithdrawnResultsInput = {
   updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutWithdrawnResultsInput = {
@@ -3467,6 +3559,7 @@ export type MembershipUncheckedCreateWithoutWithdrawnResultsInput = {
   updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutWithdrawnResultsInput = {
@@ -3513,6 +3606,7 @@ export type MembershipUpdateWithoutPublishedResultsInput = {
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutPublishedResultsInput = {
@@ -3543,6 +3637,7 @@ export type MembershipUncheckedUpdateWithoutPublishedResultsInput = {
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUpsertWithoutWithdrawnResultsInput = {
@@ -3584,6 +3679,7 @@ export type MembershipUpdateWithoutWithdrawnResultsInput = {
   updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutWithdrawnResultsInput = {
@@ -3614,6 +3710,147 @@ export type MembershipUncheckedUpdateWithoutWithdrawnResultsInput = {
   updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type MembershipCreateWithoutAuditEventsInput = {
+  id?: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutMembershipsInput
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  roleGrants?: Prisma.RoleGrantCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentCreateNestedManyWithoutDisposerInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentCreateNestedManyWithoutAssignerInput
+  submittedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutSubmitterInput
+  reviewedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReviewerInput
+  reopenedMarksBatches?: Prisma.MarksBatchCreateNestedManyWithoutReopenerInput
+  updatedMarks?: Prisma.MarkCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+}
+
+export type MembershipUncheckedCreateWithoutAuditEventsInput = {
+  id?: string
+  tenantId: string
+  userId: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedCreateNestedManyWithoutMembershipInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMembershipInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutMembershipInput
+  student?: Prisma.StudentUncheckedCreateNestedOneWithoutMembershipInput
+  faculty?: Prisma.FacultyUncheckedCreateNestedOneWithoutMembershipInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutReviewerInput
+  assignedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutAssignerInput
+  respondedDuties?: Prisma.DutyUncheckedCreateNestedManyWithoutResponderInput
+  updatedAttendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUpdaterInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedCreateNestedManyWithoutReopenerInput
+  createdIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutCreatorInput
+  disposedIncidents?: Prisma.IncidentUncheckedCreateNestedManyWithoutDisposerInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentUncheckedCreateNestedManyWithoutAssignerInput
+  submittedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutSubmitterInput
+  reviewedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReviewerInput
+  reopenedMarksBatches?: Prisma.MarksBatchUncheckedCreateNestedManyWithoutReopenerInput
+  updatedMarks?: Prisma.MarkUncheckedCreateNestedManyWithoutUpdaterInput
+  computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
+  publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
+  withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+}
+
+export type MembershipCreateOrConnectWithoutAuditEventsInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutAuditEventsInput, Prisma.MembershipUncheckedCreateWithoutAuditEventsInput>
+}
+
+export type MembershipUpsertWithoutAuditEventsInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutAuditEventsInput, Prisma.MembershipUncheckedUpdateWithoutAuditEventsInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutAuditEventsInput, Prisma.MembershipUncheckedCreateWithoutAuditEventsInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutAuditEventsInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutAuditEventsInput, Prisma.MembershipUncheckedUpdateWithoutAuditEventsInput>
+}
+
+export type MembershipUpdateWithoutAuditEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMembershipsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  roleGrants?: Prisma.RoleGrantUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUpdateManyWithoutDisposerNestedInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentUpdateManyWithoutAssignerNestedInput
+  submittedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutSubmitterNestedInput
+  reviewedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReviewerNestedInput
+  reopenedMarksBatches?: Prisma.MarksBatchUpdateManyWithoutReopenerNestedInput
+  updatedMarks?: Prisma.MarkUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutAuditEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleGrants?: Prisma.RoleGrantUncheckedUpdateManyWithoutMembershipNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMembershipNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutMembershipNestedInput
+  student?: Prisma.StudentUncheckedUpdateOneWithoutMembershipNestedInput
+  faculty?: Prisma.FacultyUncheckedUpdateOneWithoutMembershipNestedInput
+  reviewedRegistrations?: Prisma.RegistrationUncheckedUpdateManyWithoutReviewerNestedInput
+  assignedDuties?: Prisma.DutyUncheckedUpdateManyWithoutAssignerNestedInput
+  respondedDuties?: Prisma.DutyUncheckedUpdateManyWithoutResponderNestedInput
+  updatedAttendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUpdaterNestedInput
+  submittedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reopenedAttendance?: Prisma.AttendanceBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  createdIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutCreatorNestedInput
+  disposedIncidents?: Prisma.IncidentUncheckedUpdateManyWithoutDisposerNestedInput
+  assignedEvaluations?: Prisma.EvaluationAssignmentUncheckedUpdateManyWithoutAssignerNestedInput
+  submittedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutSubmitterNestedInput
+  reviewedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReviewerNestedInput
+  reopenedMarksBatches?: Prisma.MarksBatchUncheckedUpdateManyWithoutReopenerNestedInput
+  updatedMarks?: Prisma.MarkUncheckedUpdateManyWithoutUpdaterNestedInput
+  computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
+  publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
+  withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
 }
 
 export type MembershipCreateWithoutRoleGrantsInput = {
@@ -3644,6 +3881,7 @@ export type MembershipCreateWithoutRoleGrantsInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutRoleGrantsInput = {
@@ -3674,6 +3912,7 @@ export type MembershipUncheckedCreateWithoutRoleGrantsInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutRoleGrantsInput = {
@@ -3720,6 +3959,7 @@ export type MembershipUpdateWithoutRoleGrantsInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutRoleGrantsInput = {
@@ -3750,6 +3990,7 @@ export type MembershipUncheckedUpdateWithoutRoleGrantsInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutSessionsInput = {
@@ -3780,6 +4021,7 @@ export type MembershipCreateWithoutSessionsInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutSessionsInput = {
@@ -3810,6 +4052,7 @@ export type MembershipUncheckedCreateWithoutSessionsInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutSessionsInput = {
@@ -3856,6 +4099,7 @@ export type MembershipUpdateWithoutSessionsInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutSessionsInput = {
@@ -3886,6 +4130,7 @@ export type MembershipUncheckedUpdateWithoutSessionsInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateWithoutAuthTokensInput = {
@@ -3916,6 +4161,7 @@ export type MembershipCreateWithoutAuthTokensInput = {
   computedResultRuns?: Prisma.ResultRunCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
 }
 
 export type MembershipUncheckedCreateWithoutAuthTokensInput = {
@@ -3946,6 +4192,7 @@ export type MembershipUncheckedCreateWithoutAuthTokensInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutComputerInput
   publishedResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutPublisherInput
   withdrawnResults?: Prisma.PublicationUncheckedCreateNestedManyWithoutWithdrawerInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type MembershipCreateOrConnectWithoutAuthTokensInput = {
@@ -3992,6 +4239,7 @@ export type MembershipUpdateWithoutAuthTokensInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutAuthTokensInput = {
@@ -4022,6 +4270,7 @@ export type MembershipUncheckedUpdateWithoutAuthTokensInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipCreateManyTenantInput = {
@@ -4061,6 +4310,7 @@ export type MembershipUpdateWithoutTenantInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutTenantInput = {
@@ -4091,6 +4341,7 @@ export type MembershipUncheckedUpdateWithoutTenantInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateManyWithoutTenantInput = {
@@ -4139,6 +4390,7 @@ export type MembershipUpdateWithoutUserInput = {
   computedResultRuns?: Prisma.ResultRunUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutUserInput = {
@@ -4169,6 +4421,7 @@ export type MembershipUncheckedUpdateWithoutUserInput = {
   computedResultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutComputerNestedInput
   publishedResults?: Prisma.PublicationUncheckedUpdateManyWithoutPublisherNestedInput
   withdrawnResults?: Prisma.PublicationUncheckedUpdateManyWithoutWithdrawerNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type MembershipUncheckedUpdateManyWithoutUserInput = {
@@ -4205,6 +4458,7 @@ export type MembershipCountOutputType = {
   computedResultRuns: number
   publishedResults: number
   withdrawnResults: number
+  auditEvents: number
 }
 
 export type MembershipCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4227,6 +4481,7 @@ export type MembershipCountOutputTypeSelect<ExtArgs extends runtime.Types.Extens
   computedResultRuns?: boolean | MembershipCountOutputTypeCountComputedResultRunsArgs
   publishedResults?: boolean | MembershipCountOutputTypeCountPublishedResultsArgs
   withdrawnResults?: boolean | MembershipCountOutputTypeCountWithdrawnResultsArgs
+  auditEvents?: boolean | MembershipCountOutputTypeCountAuditEventsArgs
 }
 
 /**
@@ -4372,6 +4627,13 @@ export type MembershipCountOutputTypeCountWithdrawnResultsArgs<ExtArgs extends r
   where?: Prisma.PublicationWhereInput
 }
 
+/**
+ * MembershipCountOutputType without action
+ */
+export type MembershipCountOutputTypeCountAuditEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditEventWhereInput
+}
+
 
 export type MembershipSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -4404,6 +4666,7 @@ export type MembershipSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   computedResultRuns?: boolean | Prisma.Membership$computedResultRunsArgs<ExtArgs>
   publishedResults?: boolean | Prisma.Membership$publishedResultsArgs<ExtArgs>
   withdrawnResults?: boolean | Prisma.Membership$withdrawnResultsArgs<ExtArgs>
+  auditEvents?: boolean | Prisma.Membership$auditEventsArgs<ExtArgs>
   _count?: boolean | Prisma.MembershipCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["membership"]>
 
@@ -4466,6 +4729,7 @@ export type MembershipInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   computedResultRuns?: boolean | Prisma.Membership$computedResultRunsArgs<ExtArgs>
   publishedResults?: boolean | Prisma.Membership$publishedResultsArgs<ExtArgs>
   withdrawnResults?: boolean | Prisma.Membership$withdrawnResultsArgs<ExtArgs>
+  auditEvents?: boolean | Prisma.Membership$auditEventsArgs<ExtArgs>
   _count?: boolean | Prisma.MembershipCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MembershipIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4503,6 +4767,7 @@ export type $MembershipPayload<ExtArgs extends runtime.Types.Extensions.Internal
     computedResultRuns: Prisma.$ResultRunPayload<ExtArgs>[]
     publishedResults: Prisma.$PublicationPayload<ExtArgs>[]
     withdrawnResults: Prisma.$PublicationPayload<ExtArgs>[]
+    auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4929,6 +5194,7 @@ export interface Prisma__MembershipClient<T, Null = never, ExtArgs extends runti
   computedResultRuns<T extends Prisma.Membership$computedResultRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$computedResultRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResultRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   publishedResults<T extends Prisma.Membership$publishedResultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$publishedResultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   withdrawnResults<T extends Prisma.Membership$withdrawnResultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$withdrawnResultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  auditEvents<T extends Prisma.Membership$auditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5857,6 +6123,30 @@ export type Membership$withdrawnResultsArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.PublicationScalarFieldEnum | Prisma.PublicationScalarFieldEnum[]
+}
+
+/**
+ * Membership.auditEvents
+ */
+export type Membership$auditEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditEvent
+   */
+  select?: Prisma.AuditEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditEvent
+   */
+  omit?: Prisma.AuditEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditEventInclude<ExtArgs> | null
+  where?: Prisma.AuditEventWhereInput
+  orderBy?: Prisma.AuditEventOrderByWithRelationInput | Prisma.AuditEventOrderByWithRelationInput[]
+  cursor?: Prisma.AuditEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditEventScalarFieldEnum | Prisma.AuditEventScalarFieldEnum[]
 }
 
 /**

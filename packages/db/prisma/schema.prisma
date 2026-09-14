@@ -50,6 +50,7 @@ model Tenant {
   resultItems           ResultItem[]
   studentResults        StudentResult[]
   publications          Publication[]
+  auditEvents           AuditEvent[]
 
   @@map("tenants")
 }
@@ -252,6 +253,7 @@ model Membership {
   computedResultRuns    ResultRun[]            @relation("ResultRunComputer")
   publishedResults      Publication[]          @relation("PublicationPublisher")
   withdrawnResults      Publication[]          @relation("PublicationWithdrawer")
+  auditEvents           AuditEvent[]            @relation("AuditEventActor")
 
   @@unique([tenantId, userId], map: "memberships_tenant_user_key")
   @@unique([tenantId, id], map: "memberships_tenant_id_id_key")
@@ -889,6 +891,27 @@ model Publication {
   @@unique([tenantId, examId, version], map: "publications_tenant_exam_version_key")
   @@index([tenantId, examId, isCurrent])
   @@map("publications")
+}
+
+model AuditEvent {
+  id                String   @id @default(uuid()) @db.Uuid
+  tenantId          String   @map("tenant_id") @db.Uuid
+  actorMembershipId String   @map("actor_membership_id") @db.Uuid
+  actorRole         String   @map("actor_role")
+  action            String
+  targetType        String   @map("target_type")
+  targetId          String?  @map("target_id") @db.Uuid
+  reason            String?
+  requestId         String   @map("request_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  tenant Tenant     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  actor  Membership @relation("AuditEventActor", fields: [tenantId, actorMembershipId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, requestId], map: "audit_events_tenant_request_id_key")
+  @@index([tenantId, createdAt])
+  @@index([tenantId, actorMembershipId, createdAt])
+  @@map("audit_events")
 }
 
 model RoleGrant {

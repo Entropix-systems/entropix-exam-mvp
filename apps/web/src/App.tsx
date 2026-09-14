@@ -13,6 +13,7 @@ import { ConductApiClient } from './conduct/conduct-client'
 import { EvaluationApiClient } from './evaluation/evaluation-client'
 import { ResultsApiClient } from './results/results-client'
 import { StudentPortalApiClient } from './student-portal/student-portal-client'
+import { AuditApiClient } from './audit/audit-client'
 import './App.css'
 
 const AccessDeniedPage = lazy(() => import('./pages/access-denied-page').then((module) => ({ default: module.AccessDeniedPage })))
@@ -30,6 +31,7 @@ const ConductPage = lazy(() => import('./pages/conduct-page').then((module) => (
 const EvaluationPage = lazy(() => import('./pages/evaluation-page').then((module) => ({ default: module.EvaluationPage })))
 const ResultsPage = lazy(() => import('./pages/results-page').then((module) => ({ default: module.ResultsPage })))
 const StudentPortalPage = lazy(() => import('./pages/student-portal-page').then((module) => ({ default: module.StudentPortalPage })))
+const ReportsPage = lazy(() => import('./pages/reports-page').then((module) => ({ default: module.ReportsPage })))
 
 const authClient = new AuthApiClient(
   import.meta.env.VITE_API_BASE_URL ?? '/api/v1',
@@ -43,6 +45,7 @@ const conductClient = new ConductApiClient(authClient)
 const evaluationClient = new EvaluationApiClient(authClient)
 const resultsClient = new ResultsApiClient(authClient)
 const studentPortalClient = new StudentPortalApiClient(authClient)
+const auditClient = new AuditApiClient(authClient)
 
 function usePathname() {
   const [pathname, setPathname] = useState(window.location.pathname)
@@ -120,6 +123,12 @@ function Routes() {
         <StudentPortalPage key={scopeKey} client={studentPortalClient} />
       </ProtectedRoute>
     )
+  if (pathname === '/reports')
+    return (
+      <ProtectedRoute>
+        <ReportsPage key={scopeKey} client={auditClient} />
+      </ProtectedRoute>
+    )
   if (studentRole)
     return (
       <ProtectedRoute>
@@ -128,7 +137,7 @@ function Routes() {
     )
   return (
     <ProtectedRoute>
-      <HomePage key={scopeKey} />
+      <HomePage key={scopeKey} client={auditClient} />
     </ProtectedRoute>
   )
 }

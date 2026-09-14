@@ -252,6 +252,39 @@ Related task: B03 Result Runs & Publication.
 
 ---
 
+## DEC-012 — Request-Level Immutable Audit Events
+
+Status: ACCEPTED
+
+Context:
+
+The dashboard and reports lane needs real operator activity without reconstructing
+history from mutable business tables or adding audit writes independently to
+every command transaction during the demo sprint.
+
+Decision:
+
+Successful mapped tenant command requests append one `AuditEvent` containing the
+server-resolved membership and active role, action, target, optional supplied
+reason, request ID, and timestamp. Events are tenant-scoped, immutable, and
+idempotent by tenant/request ID. Failed requests, reads, authentication activity,
+and pre-migration history do not produce or imply events. Audit-write failure is
+reported operationally but does not roll back a business command that already
+committed.
+
+Consequences:
+
+Audit screens show only persisted post-migration activity. The request-level
+boundary is sufficient for demo traceability but is not a transactional outbox;
+a later production-hardening task may move critical command auditing into the
+same database transaction or a durable outbox.
+
+Affected modules: API command boundary, Audit, Dashboard/Reports, Database.
+
+Related task: B05 Dashboard, Reports, Audit & Demo Polish.
+
+---
+
 ## New Decision Template
 
 ### DEC-XXX — Title
