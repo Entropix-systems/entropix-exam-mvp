@@ -27,5 +27,16 @@ export type {
 } from './clamd.js';
 
 export {
+  authorizePrivateDocument,
+  PrivateDocumentAccessDenied,
+} from './authorization.js';
+
+export type {
+  PrivateDocumentAccessRecord,
+  PrivateDocumentActor,
+  PrivateDocumentScanState,
+} from './authorization.js';
+
+export {
   PrivateObjectStorage,
 } from './storage.js';

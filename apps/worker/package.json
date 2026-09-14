@@ -20,12 +20,17 @@
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
+    "smoke:recovery": "tsx scripts/worker-recovery-smoke.ts",
+    "smoke:restore": "tsx scripts/recovery-restore-smoke.ts",
     "typecheck": "tsc -p tsconfig.build.json --noEmit"
   },
   "dependencies": {
+    "@entropix/db": "workspace:*",
+    "@entropix/storage": "workspace:*",
     "@nestjs/common": "^12.0.1",
     "@nestjs/core": "^12.0.1",
     "@nestjs/platform-express": "^12.0.1",
+    "dotenv": "^17.4.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
@@ -42,6 +47,7 @@
     "prettier": "^3.4.2",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
+    "tsx": "^4.23.13",
     "typescript": "^6.0.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.1.2"

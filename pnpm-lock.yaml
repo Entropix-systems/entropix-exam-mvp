@@ -202,10 +202,10 @@ importers:
         version: 6.0.3
       vite-tsconfig-paths:
         specifier: ^5.1.4
-        version: 5.1.4(supports-color@7.2.0)(typescript@6.0.3)(vite@8.2.2(@types/node@24.13.4)(tsx@4.23.13))
+        version: 5.1.4(supports-color@7.2.0)(typescript@6.0.3)(vite@8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0))
       vitest:
         specifier: ^4.1.2
-        version: 4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(tsx@4.23.13))
+        version: 4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0))
 
   apps/web:
     dependencies:
@@ -281,10 +281,16 @@ importers:
         version: 8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)
       vitest:
         specifier: ^4.1.2
-        version: 4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(tsx@4.23.13))
+        version: 4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0))
 
   apps/worker:
     dependencies:
+      '@entropix/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@entropix/storage':
+        specifier: workspace:*
+        version: link:../../packages/storage
       '@nestjs/common':
         specifier: ^12.0.1
         version: 12.0.1(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@7.2.0)
@@ -294,6 +300,9 @@ importers:
       '@nestjs/platform-express':
         specifier: ^12.0.1
         version: 12.0.1(@nestjs/common@12.0.1(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@7.2.0))(@nestjs/core@12.0.1)(supports-color@7.2.0)
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -337,15 +346,18 @@ importers:
       supertest:
         specifier: ^7.0.0
         version: 7.2.2(supports-color@7.2.0)
+      tsx:
+        specifier: ^4.23.13
+        version: 4.23.13
       typescript:
         specifier: ^6.0.2
         version: 6.0.3
       vite-tsconfig-paths:
         specifier: ^5.1.4
-        version: 5.1.4(supports-color@7.2.0)(typescript@6.0.3)(vite@8.2.2(@types/node@24.13.4)(tsx@4.23.13))
+        version: 5.1.4(supports-color@7.2.0)(typescript@6.0.3)(vite@8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0))
       vitest:
         specifier: ^4.1.2
-        version: 4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(tsx@4.23.13))
+        version: 4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0))
 
   packages/contracts: {}
 
@@ -388,7 +400,7 @@ importers:
     devDependencies:
       vitest:
         specifier: ^4.1.2
-        version: 4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(tsx@4.23.13))
+        version: 4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0))
 
   packages/notifications:
     dependencies:
@@ -5556,7 +5568,7 @@ snapshots:
       obug: 2.2.1
       std-env: 4.2.0
       tinyrainbow: 3.1.1
-      vitest: 4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(tsx@4.23.13))
+      vitest: 4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0))
 
   '@vitest/expect@4.1.11':
     dependencies:
@@ -5567,7 +5579,7 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.1
 
-  '@vitest/mocker@4.1.11(vite@8.2.2(@types/node@24.13.4)(tsx@4.23.13))':
+  '@vitest/mocker@4.1.11(vite@8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0))':
     dependencies:
       '@vitest/spy': 4.1.11
       estree-walker: 3.0.3
@@ -7373,7 +7385,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite-tsconfig-paths@5.1.4(supports-color@7.2.0)(typescript@6.0.3)(vite@8.2.2(@types/node@24.13.4)(tsx@4.23.13)):
+  vite-tsconfig-paths@5.1.4(supports-color@7.2.0)(typescript@6.0.3)(vite@8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)):
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       globrex: 0.1.2
@@ -7399,10 +7411,10 @@ snapshots:
       tsx: 4.23.13
       yaml: 2.9.0
 
-  vitest@4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(tsx@4.23.13)):
+  vitest@4.1.11(@types/node@24.13.4)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0)):
     dependencies:
       '@vitest/expect': 4.1.11
-      '@vitest/mocker': 4.1.11(vite@8.2.2(@types/node@24.13.4)(tsx@4.23.13))
+      '@vitest/mocker': 4.1.11(vite@8.2.2(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0))
       '@vitest/pretty-format': 4.1.11
       '@vitest/runner': 4.1.11
       '@vitest/snapshot': 4.1.11

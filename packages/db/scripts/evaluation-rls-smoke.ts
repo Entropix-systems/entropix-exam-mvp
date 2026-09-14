@@ -12,9 +12,10 @@ try {
   const northstar = await prisma.tenant.findUniqueOrThrow({ where: { slug: 'northstar-college' } });
   const cedar = await prisma.tenant.findUniqueOrThrow({ where: { slug: 'cedar-school' } });
   const cedarAssignments = await withTenant(prisma, cedar.id, (tx) => tx.evaluationAssignment.findMany({
+    where: { examSubject: { exam: { code: 'ANNUAL-2026' } } },
     include: { faculty: true, examSubject: { include: { exam: true } } },
   }));
-  if (cedarAssignments.length !== 3 || cedarAssignments.some((entry) => entry.examSubject.exam.code !== 'ANNUAL-2026')) {
+  if (cedarAssignments.length !== 3) {
     throw new Error('Cedar evaluation assignment fixture is invalid');
   }
   const unscoped = await Promise.all([

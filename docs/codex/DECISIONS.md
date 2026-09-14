@@ -285,6 +285,37 @@ Related task: B05 Dashboard, Reports, Audit & Demo Polish.
 
 ---
 
+## DEC-013 — Durable Tenant-Scoped Worker Leases and Idempotent Outputs
+
+Status: ACCEPTED
+
+Context:
+
+Release acceptance requires an abruptly terminated worker to resume safely
+without two workers producing duplicate current output or crossing tenant
+boundaries.
+
+Decision:
+
+Persist logical jobs and outputs in PostgreSQL under forced tenant RLS. A job is
+unique by tenant, kind, and business key. Workers claim one ready or expired job
+with `FOR UPDATE SKIP LOCKED`, a named owner, and an expiry. Only the live owner
+may complete. Output identity is independently unique by job and by the same
+tenant/kind/business key, with a deterministic SHA-256 checksum.
+
+Consequences:
+
+An expired lease is recoverable and increments its attempt count; a live lease
+cannot be stolen and a stale worker cannot commit. Duplicate enqueue and retry
+completion converge on one job and one output. The database and any referenced
+private objects must be backed up and restored as one release recovery set.
+
+Affected modules: Worker, Database, Private Object Storage, Recovery.
+
+Related task: A13/A15 release-evidence closure.
+
+---
+
 ## New Decision Template
 
 ### DEC-XXX — Title

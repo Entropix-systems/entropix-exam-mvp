@@ -222,6 +222,16 @@ export type Publication = Prisma.PublicationModel
  */
 export type AuditEvent = Prisma.AuditEventModel
 /**
+ * Model WorkerJob
+ *
+ */
+export type WorkerJob = Prisma.WorkerJobModel
+/**
+ * Model WorkerOutput
+ *
+ */
+export type WorkerOutput = Prisma.WorkerOutputModel
+/**
  * Model RoleGrant
  *
  */

@@ -13,8 +13,8 @@ try {
   const cedar = await prisma.tenant.findUniqueOrThrow({ where: { slug: 'cedar-school' } });
   const cedarState = await withTenant(prisma, cedar.id, async (tx) => {
     const exam = await tx.exam.findFirstOrThrow({ where: { code: 'ANNUAL-2026' }, include: { papers: { include: { hallSittings: { include: { seatAssignments: { include: { registrationSubject: { include: { registration: { include: { student: true } } } } } } } } } } } });
-    const halls = await tx.hall.count();
     const seats = exam.papers.flatMap((paper) => paper.hallSittings.flatMap((sitting) => sitting.seatAssignments));
+    const halls = await tx.hall.count({ where: { code: { in: ['HALL-A', 'HALL-B'] } } });
     for (const paper of exam.papers) {
       const ordered = paper.hallSittings.flatMap((sitting) => sitting.seatAssignments).sort((a, b) => a.seatNumber - b.seatNumber);
       if (ordered.some((seat, index) => seat.seatNumber !== index + 1)) throw new Error('Seat numbers are not contiguous');

@@ -591,6 +591,31 @@ GET /api/v1/me/documents
 
 ---
 
+# Private Object Authorization and Recovery Contract
+
+Private object download authorization is evaluated before a signed URL is
+created. The server-resolved actor and persisted document access record must
+agree on tenant, membership assignment, allowed active role, `CLEAN` scan state,
+and the half-open `[availableFrom, availableUntil)` access window. Quarantine
+keys are never downloadable. Generated and promoted-clean keys may be signed
+only when the object exists, and URL lifetime is capped by both the configured
+TTL and the remaining access window.
+
+Durable asynchronous work uses tenant-owned `WorkerJob` and `WorkerOutput`
+records. Both tables have forced RLS. A `(tenant, kind, businessKey)` identifies
+one logical job and one logical output. Claims use row locking with
+`SKIP LOCKED`; only `READY` jobs or expired leases may be claimed. A live lease
+cannot be stolen, a stale owner cannot complete, and successful completion
+atomically records one checksum-addressed output and clears the lease.
+
+Release recovery evidence must restore the logical PostgreSQL backup and each
+referenced private object. Verification compares tenant identities, tenant-owned
+record counts, current publication identities/versions/result checksums, object
+references and object checksums, and rechecks missing-context RLS in the restored
+database.
+
+---
+
 # D1 Contract Freeze Checklist
 
 - [x] Role enum strategy

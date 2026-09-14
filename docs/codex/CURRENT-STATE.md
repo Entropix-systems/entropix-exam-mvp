@@ -67,8 +67,8 @@ were not reverified after migration deployment.
 ## Migration Lock
 
 ```text
-Owner: NONE
-Purpose: B05 audit migration integrated; lock released
+Owner: Codex release-evidence closure
+Purpose: A13 durable worker lease and unique-output acceptance foundation
 Last integrated migration: 20260914150000_audit_events
 Configured Supabase target: APPLIED AND STATUS VERIFIED (16/16)
 ```

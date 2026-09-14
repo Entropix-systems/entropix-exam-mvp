@@ -87,6 +87,8 @@ export const ModelName = {
   StudentResult: 'StudentResult',
   Publication: 'Publication',
   AuditEvent: 'AuditEvent',
+  WorkerJob: 'WorkerJob',
+  WorkerOutput: 'WorkerOutput',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -670,6 +672,40 @@ export const AuditEventScalarFieldEnum = {
 } as const
 
 export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
+
+
+export const WorkerJobScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  kind: 'kind',
+  businessKey: 'businessKey',
+  payload: 'payload',
+  state: 'state',
+  availableAt: 'availableAt',
+  leaseOwner: 'leaseOwner',
+  leaseExpiresAt: 'leaseExpiresAt',
+  attemptCount: 'attemptCount',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WorkerJobScalarFieldEnum = (typeof WorkerJobScalarFieldEnum)[keyof typeof WorkerJobScalarFieldEnum]
+
+
+export const WorkerOutputScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  jobId: 'jobId',
+  kind: 'kind',
+  businessKey: 'businessKey',
+  checksum: 'checksum',
+  objectKey: 'objectKey',
+  output: 'output',
+  createdAt: 'createdAt'
+} as const
+
+export type WorkerOutputScalarFieldEnum = (typeof WorkerOutputScalarFieldEnum)[keyof typeof WorkerOutputScalarFieldEnum]
 
 
 export const RoleGrantScalarFieldEnum = {

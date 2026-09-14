@@ -433,6 +433,8 @@ export const ModelName = {
   StudentResult: 'StudentResult',
   Publication: 'Publication',
   AuditEvent: 'AuditEvent',
+  WorkerJob: 'WorkerJob',
+  WorkerOutput: 'WorkerOutput',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -451,7 +453,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "campus" | "department" | "program" | "academicYear" | "term" | "cohort" | "subject" | "user" | "membership" | "student" | "faculty" | "enrolment" | "studentImport" | "ruleVersion" | "exam" | "examSubject" | "registration" | "registrationSubject" | "examPaper" | "hall" | "hallSitting" | "seatAssignment" | "duty" | "attendanceBatch" | "attendance" | "incident" | "incidentStudent" | "evaluationAssignment" | "marksBatch" | "mark" | "resultRun" | "resultItem" | "studentResult" | "publication" | "auditEvent" | "roleGrant" | "session" | "authToken"
+    modelProps: "tenant" | "campus" | "department" | "program" | "academicYear" | "term" | "cohort" | "subject" | "user" | "membership" | "student" | "faculty" | "enrolment" | "studentImport" | "ruleVersion" | "exam" | "examSubject" | "registration" | "registrationSubject" | "examPaper" | "hall" | "hallSitting" | "seatAssignment" | "duty" | "attendanceBatch" | "attendance" | "incident" | "incidentStudent" | "evaluationAssignment" | "marksBatch" | "mark" | "resultRun" | "resultItem" | "studentResult" | "publication" | "auditEvent" | "workerJob" | "workerOutput" | "roleGrant" | "session" | "authToken"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3119,6 +3121,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    WorkerJob: {
+      payload: Prisma.$WorkerJobPayload<ExtArgs>
+      fields: Prisma.WorkerJobFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WorkerJobFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerJobPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WorkerJobFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerJobPayload>
+        }
+        findFirst: {
+          args: Prisma.WorkerJobFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerJobPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WorkerJobFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerJobPayload>
+        }
+        findMany: {
+          args: Prisma.WorkerJobFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerJobPayload>[]
+        }
+        create: {
+          args: Prisma.WorkerJobCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerJobPayload>
+        }
+        createMany: {
+          args: Prisma.WorkerJobCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WorkerJobCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerJobPayload>[]
+        }
+        delete: {
+          args: Prisma.WorkerJobDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerJobPayload>
+        }
+        update: {
+          args: Prisma.WorkerJobUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerJobPayload>
+        }
+        deleteMany: {
+          args: Prisma.WorkerJobDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WorkerJobUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WorkerJobUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerJobPayload>[]
+        }
+        upsert: {
+          args: Prisma.WorkerJobUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerJobPayload>
+        }
+        aggregate: {
+          args: Prisma.WorkerJobAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWorkerJob>
+        }
+        groupBy: {
+          args: Prisma.WorkerJobGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WorkerJobGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WorkerJobCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WorkerJobCountAggregateOutputType> | number
+        }
+      }
+    }
+    WorkerOutput: {
+      payload: Prisma.$WorkerOutputPayload<ExtArgs>
+      fields: Prisma.WorkerOutputFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WorkerOutputFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerOutputPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WorkerOutputFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerOutputPayload>
+        }
+        findFirst: {
+          args: Prisma.WorkerOutputFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerOutputPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WorkerOutputFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerOutputPayload>
+        }
+        findMany: {
+          args: Prisma.WorkerOutputFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerOutputPayload>[]
+        }
+        create: {
+          args: Prisma.WorkerOutputCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerOutputPayload>
+        }
+        createMany: {
+          args: Prisma.WorkerOutputCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WorkerOutputCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerOutputPayload>[]
+        }
+        delete: {
+          args: Prisma.WorkerOutputDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerOutputPayload>
+        }
+        update: {
+          args: Prisma.WorkerOutputUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerOutputPayload>
+        }
+        deleteMany: {
+          args: Prisma.WorkerOutputDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WorkerOutputUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WorkerOutputUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerOutputPayload>[]
+        }
+        upsert: {
+          args: Prisma.WorkerOutputUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkerOutputPayload>
+        }
+        aggregate: {
+          args: Prisma.WorkerOutputAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWorkerOutput>
+        }
+        groupBy: {
+          args: Prisma.WorkerOutputGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WorkerOutputGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WorkerOutputCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WorkerOutputCountAggregateOutputType> | number
+        }
+      }
+    }
     RoleGrant: {
       payload: Prisma.$RoleGrantPayload<ExtArgs>
       fields: Prisma.RoleGrantFieldRefs
@@ -3944,6 +4094,40 @@ export const AuditEventScalarFieldEnum = {
 export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
 
 
+export const WorkerJobScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  kind: 'kind',
+  businessKey: 'businessKey',
+  payload: 'payload',
+  state: 'state',
+  availableAt: 'availableAt',
+  leaseOwner: 'leaseOwner',
+  leaseExpiresAt: 'leaseExpiresAt',
+  attemptCount: 'attemptCount',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WorkerJobScalarFieldEnum = (typeof WorkerJobScalarFieldEnum)[keyof typeof WorkerJobScalarFieldEnum]
+
+
+export const WorkerOutputScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  jobId: 'jobId',
+  kind: 'kind',
+  businessKey: 'businessKey',
+  checksum: 'checksum',
+  objectKey: 'objectKey',
+  output: 'output',
+  createdAt: 'createdAt'
+} as const
+
+export type WorkerOutputScalarFieldEnum = (typeof WorkerOutputScalarFieldEnum)[keyof typeof WorkerOutputScalarFieldEnum]
+
+
 export const RoleGrantScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -4324,6 +4508,8 @@ export type GlobalOmitConfig = {
   studentResult?: Prisma.StudentResultOmit
   publication?: Prisma.PublicationOmit
   auditEvent?: Prisma.AuditEventOmit
+  workerJob?: Prisma.WorkerJobOmit
+  workerOutput?: Prisma.WorkerOutputOmit
   roleGrant?: Prisma.RoleGrantOmit
   session?: Prisma.SessionOmit
   authToken?: Prisma.AuthTokenOmit

@@ -24,7 +24,9 @@ async function rejects(operation: () => Promise<unknown>, code: string) {
 
 try {
   const tenant = await prisma.tenant.findUniqueOrThrow({ where: { slug: 'cedar-school' } });
-  const existing = await withTenant(prisma, tenant.id, (tx) => tx.publication.findFirst({ where: { tenantId: tenant.id, isCurrent: true } }));
+  const existing = await withTenant(prisma, tenant.id, (tx) => tx.publication.findFirst({
+    where: { tenantId: tenant.id, isCurrent: true, exam: { code: 'ANNUAL-2026' } },
+  }));
   if (existing) await results.withdraw(tenant.id, existing.publishedByMembershipId, existing.examId, 'Reset before focused result verification.', new Date());
 
   const fixture = await withTenant(prisma, tenant.id, async (tx) => {
@@ -140,7 +142,12 @@ try {
   if (!heldRead || heldRead.outcome !== 'WITHHELD' || 'result' in heldRead || !heldRead.holdMessage) throw new Error('Current student read did not preserve WITHHELD privacy');
 
   await results.withdraw(tenant.id, fixture.controllerMembershipId, fixture.examId, 'Correction workflow verification.', new Date());
-  if (await results.currentStudent(tenant.id, fixture.heldStudent.membershipId)) throw new Error('Withdrawn result remained student-visible');
+  const afterWithdrawal = await results.currentStudent(tenant.id, fixture.heldStudent.membershipId);
+  if (afterWithdrawal?.examId === fixture.examId) throw new Error('Withdrawn result remained student-visible');
+  const withdrawnCurrentCount = await withTenant(prisma, tenant.id, (tx) => tx.publication.count({
+    where: { tenantId: tenant.id, examId: fixture.examId, isCurrent: true },
+  }));
+  if (withdrawnCurrentCount !== 0) throw new Error('Withdrawn publication remained current');
 
   const evaluationSnapshot = await evaluation.snapshot(tenant.id, { membershipId: fixture.controllerMembershipId, controller: true, examiner: false, departmentIds: [] });
   const subject = evaluationSnapshot.subjects.find((entry) => entry.examId === fixture.examId && entry.batch.state === 'APPROVED')!;

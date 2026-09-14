@@ -24,7 +24,7 @@ try {
       where: { tenantId: tenant.id, role: { in: ['EXAM_CONTROLLER', 'INSTITUTION_ADMIN'] }, membership: { status: 'ACTIVE' } },
     });
     const subject = await tx.examSubject.findFirstOrThrow({
-      where: { tenantId: tenant.id, subject: { code: 'MAT10' } },
+      where: { tenantId: tenant.id, exam: { code: 'ANNUAL-2026' }, subject: { code: 'MAT10' } },
       include: {
         exam: { include: { ruleVersion: true } },
         evaluationAssignment: { include: { faculty: true } },
