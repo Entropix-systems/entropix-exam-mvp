@@ -157,9 +157,9 @@ The production demo uses the same GitHub monorepo for two independently filtered
 deployments:
 
 ```text
-examops.entropixsystems.com           Vercel Vite static site
+examos.entropixsystems.com            Vercel Vite static site
   /api/*                              proxied by Vercel
-api.examops.entropixsystems.com       Render NestJS Web Service
+entropix-exam-mvp.onrender.com        Render NestJS Web Service
 entropix-exam-mvp-staging             Supabase PostgreSQL
 ```
 
@@ -192,10 +192,10 @@ migrations separately with the migration role, verify migration status, and
 only then deploy the API. Seed the shared fictional demo target only with the
 guarded `DEMO_SEED_TARGET=shared` acknowledgement documented above.
 
-In Render, add `api.examops.entropixsystems.com` as the API custom domain. In
-Vercel, add `examops.entropixsystems.com` to the Web project. Create the exact
-CNAME records each platform displays in Cloudflare with proxying disabled until
-both platforms verify their domains and provision TLS.
+Keep Render on its generated `entropix-exam-mvp.onrender.com` hostname. In
+Vercel, add `examos.entropixsystems.com` to the Web project and create the exact
+CNAME record Vercel displays in Cloudflare with proxying disabled until Vercel
+verifies the domain and provisions TLS.
 
 The Web app keeps `VITE_API_BASE_URL=/api/v1`. Do not point the browser directly
 at Render: Vercel's `/api/*` rewrite preserves the same-origin secure-cookie

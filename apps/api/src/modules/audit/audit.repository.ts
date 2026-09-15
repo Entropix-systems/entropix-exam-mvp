@@ -194,7 +194,7 @@ export class AuditRepository {
         availableReports: availableReports(actor),
         exams: mapped,
       };
-    });
+    }, { maxWait: 10_000, timeout: 120_000 });
   }
 
   activity(tenantId: UUID, limit = 100): Promise<readonly AuditActivityRow[]> {

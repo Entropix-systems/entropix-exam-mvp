@@ -13,7 +13,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: WEB_ORIGIN
-        value: https://examops.entropixsystems.com
+        value: https://examos.entropixsystems.com
       - key: DATABASE_URL
         sync: false
       - key: DATABASE_SSL_CA_PATH
