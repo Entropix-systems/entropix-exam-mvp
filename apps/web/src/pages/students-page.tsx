@@ -4,13 +4,16 @@ import type {
   StudentImportPreview,
   StudentImportRequest,
 } from '@entropix/contracts'
-import { AuthApiError } from '../auth/auth-client'
 import { useAuth } from '../auth/auth-context'
 import { PeopleApiClient } from '../people/people-client'
 import { WorkspaceShell } from './workspace-shell'
+import { AsyncButton } from '../components/async-button'
+import { apiErrorMessage } from '../feedback/api-error-message'
+import { useNotification } from '../feedback/notification-context'
+import { useAsyncAction } from '../feedback/use-async-action'
 
 function message(reason: unknown, fallback: string): string {
-  return reason instanceof AuthApiError ? reason.message : fallback
+  return apiErrorMessage(reason, fallback)
 }
 
 export function StudentsPage({ client }: { client: PeopleApiClient }) {
@@ -26,8 +29,9 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
   const [selected, setSelected] = useState<StudentDirectoryRecord | null>(null)
   const [importInput, setImportInput] = useState<StudentImportRequest | null>(null)
   const [preview, setPreview] = useState<StudentImportPreview | null>(null)
-  const [importBusy, setImportBusy] = useState(false)
-  const [notice, setNotice] = useState<string | null>(null)
+  const [importPhase, setImportPhase] = useState<'preview' | null>(null)
+  const { notify } = useNotification()
+  const { pendingAction, isPending, runMutationWithRefresh } = useAsyncAction()
   const fileInput = useRef<HTMLInputElement>(null)
 
   const canImport = currentUser?.context.kind === 'TENANT' &&
@@ -58,6 +62,15 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
     }
   }, [client, currentCursor, pageSize, search])
 
+  const refreshFirstPage = useCallback(async () => {
+    const directory = await client.listStudents({ search, cursor: null, pageSize })
+    setStudents(directory.students)
+    setTotal(directory.total)
+    setNextCursor(directory.nextCursor)
+    setCursorHistory([null])
+    setError(null)
+  }, [client, pageSize, search])
+
   useEffect(() => {
     let active = true
     void client.listStudents({ search, cursor: currentCursor, pageSize }).then(
@@ -80,38 +93,36 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
 
   async function chooseFile(file: File | undefined) {
     if (!file) return
-    setImportBusy(true)
-    setNotice(null)
+    setImportPhase('preview')
     try {
       const input = { fileName: file.name, sourceText: await file.text() }
       setImportInput(input)
       setPreview(await client.previewStudents(input))
     } catch (reason) {
-      setNotice(message(reason, 'Import preview could not be created.'))
+      notify(apiErrorMessage(reason, 'Import preview could not be created.'), 'error')
       setPreview(null)
     } finally {
-      setImportBusy(false)
+      setImportPhase(null)
       if (fileInput.current) fileInput.current.value = ''
     }
   }
 
   async function commit() {
     if (!importInput || !preview || preview.errors.length > 0) return
-    setImportBusy(true)
-    try {
-      const result = await client.commitStudents(importInput)
-      setNotice(result.replayed
-        ? `This file was already committed. No duplicate students were created.`
-        : `${result.createdCount} students and ${result.enrolmentCount} enrolments imported.`)
+    const result = await runMutationWithRefresh('commit-import', () => client.commitStudents(importInput), refreshFirstPage)
+    if (result.status === 'success' || result.status === 'refresh-failed') {
       setPreview(null)
       setImportInput(null)
-      if (currentCursor) setCursorHistory([null])
-      else await load()
-    } catch (reason) {
-      setNotice(message(reason, 'Import could not be committed.'))
-    } finally {
-      setImportBusy(false)
-    }
+      if (result.status === 'refresh-failed') {
+        const refreshFailure = 'Student import was committed, but the latest student directory could not be refreshed. Retry refresh.'
+        setError(refreshFailure)
+        notify(refreshFailure, 'warning')
+        return
+      }
+      notify(result.value.replayed
+        ? `This file was already committed. No duplicate students were created.`
+        : `${result.value.createdCount} students and ${result.value.enrolmentCount} enrolments imported.`, result.value.replayed ? 'info' : 'success')
+    } else if (result.status === 'mutation-failed') notify(apiErrorMessage(result.error, 'Student import failed.'), 'error')
   }
 
   if (!currentUser) return null
@@ -138,22 +149,23 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
               accept=".csv,text/csv"
               onChange={(event) => void chooseFile(event.target.files?.[0])}
             />
-            <button
+            <AsyncButton
               type="button"
               className="primary-button"
-              disabled={importBusy}
+              disabled={importPhase !== null || isPending}
+              loading={importPhase === 'preview'}
+              loadingText="Validating…"
               onClick={() => fileInput.current?.click()}
             >
-              {importBusy ? 'Validating…' : 'Import students'}
-            </button>
+              Import students
+            </AsyncButton>
           </>
         ) : null}
       </div>
-      {notice ? <p className="form-message page-message success">{notice}</p> : null}
       {error ? (
         <div className="academic-error" role="alert">
           <p>{error}</p>
-          <button type="button" className="secondary-button" onClick={() => void load()}>Retry</button>
+          <button type="button" className="secondary-button" onClick={() => void load()}>Retry refresh</button>
         </div>
       ) : null}
       <section className="student-directory-card" aria-labelledby="student-directory-title">
@@ -262,7 +274,7 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
       {preview ? (
         <div className="modal-backdrop" role="presentation">
           <section className="import-dialog" role="dialog" aria-modal="true" aria-labelledby="import-title">
-            <header><div><p className="eyebrow">Atomic CSV validation</p><h2 id="import-title">Import students · Preview</h2></div><button type="button" className="icon-button" aria-label="Close" onClick={() => setPreview(null)}>×</button></header>
+            <header><div><p className="eyebrow">Atomic CSV validation</p><h2 id="import-title">Import students · Preview</h2></div><button type="button" className="icon-button" aria-label="Close" disabled={importPhase !== null || isPending} onClick={() => setPreview(null)}>×</button></header>
             <div className="import-summary">
               <span><b>{preview.rowCount}</b> source rows</span>
               <span className="valid"><b>{preview.acceptedCount}</b> valid</span>
@@ -278,7 +290,7 @@ export function StudentsPage({ client }: { client: PeopleApiClient }) {
             </div>
             <footer>
               <p>{preview.errors.length ? 'Correct every rejected row and upload again. No records have changed.' : preview.alreadyCommitted ? 'This exact file is already committed; confirming is retry-safe.' : 'All rows are valid. Confirm to create students and enrolments atomically.'}</p>
-              <div><button type="button" className="secondary-button" onClick={() => setPreview(null)}>Cancel</button><button type="button" className="primary-button" disabled={preview.errors.length > 0 || importBusy} onClick={() => void commit()}>{importBusy ? 'Importing…' : 'Confirm import'}</button></div>
+              <div><button type="button" className="secondary-button" disabled={importPhase !== null || isPending} onClick={() => setPreview(null)}>Cancel</button><AsyncButton type="button" className="primary-button" disabled={preview.errors.length > 0 || importPhase !== null || isPending} loading={pendingAction === 'commit-import'} loadingText="Importing…" onClick={() => void commit()}>Confirm import</AsyncButton></div>
             </footer>
           </section>
         </div>

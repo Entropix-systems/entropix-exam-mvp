@@ -38,6 +38,7 @@ export class IdentityAdminController {
   ) {
     const body = bodyRecord(rawBody);
     return this.identity.invite(context, {
+      name: body.name,
       email: body.email,
       grants: body.grants,
     } as CreateInvitationRequest);

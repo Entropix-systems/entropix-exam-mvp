@@ -5,6 +5,7 @@ import { invitationErrorMessage } from '../auth/invitation-errors'
 import { navigate } from '../auth/navigation'
 import { useOneTimeToken } from '../auth/use-one-time-token'
 import { AuthLayout, FormError } from './auth-layout'
+import { AsyncButton } from '../components/async-button'
 
 export function InvitationPage({ client }: { client: AuthApiClient }) {
   const token = useOneTimeToken()
@@ -36,7 +37,7 @@ export function InvitationPage({ client }: { client: AuthApiClient }) {
           <label>Password for a new account <input name="password" type="password" minLength={12} maxLength={1024} autoComplete="new-password" disabled={!token} /></label>
           <p className="field-help">Already have an account? Leave this blank. You may be asked to sign in before acceptance.</p>
           <FormError message={error} />
-          <button className="primary-button" disabled={!token || busy}>{busy ? 'Accepting…' : 'Accept invitation'}</button>
+          <AsyncButton className="primary-button" disabled={!token} loading={busy} loadingText="Accepting…">Accept invitation</AsyncButton>
         </form>
       )}
     </AuthLayout>

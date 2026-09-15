@@ -6,6 +6,7 @@ import { navigate } from '../auth/navigation'
 import { landingDestination } from '../auth/route-policy'
 import { AuthLayout, FormError } from './auth-layout'
 import { INITIAL_LOGIN_STATE, loginStateReducer } from './login-state'
+import { AsyncButton } from '../components/async-button'
 
 export function LoginPage() {
   const { login } = useAuth()
@@ -38,7 +39,7 @@ export function LoginPage() {
         <label>Email <input name="email" type="email" autoComplete="username" required onChange={() => dispatch({ type: 'EDIT' })} /></label>
         <label>Password <input name="password" type="password" autoComplete="current-password" required onChange={() => dispatch({ type: 'EDIT' })} /></label>
         <FormError message={state.error} />
-        <button className="primary-button" disabled={state.busy}>{state.busy ? 'Signing in…' : 'Sign in'}</button>
+        <AsyncButton className="primary-button" loading={state.busy} loadingText="Signing in…">Sign in</AsyncButton>
       </form>
     </AuthLayout>
   )

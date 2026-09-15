@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import type { ScopedRoleGrant, TenantRole } from '@entropix/contracts'
-import { AuthApiError } from '../auth/auth-client'
 import { useAuth } from '../auth/auth-context'
 import {
   TENANT_ROLE_OPTIONS,
@@ -17,9 +16,12 @@ import type {
 import { IdentityApiClient } from '../identity/identity-client'
 import { AccessDeniedPage } from './access-denied-page'
 import { WorkspaceShell } from './workspace-shell'
+import { AsyncButton } from '../components/async-button'
+import { apiErrorMessage, isFieldValidationError } from '../feedback/api-error-message'
+import { useNotification } from '../feedback/notification-context'
 
 function requestError(reason: unknown, fallback: string): string {
-  return reason instanceof AuthApiError ? reason.message : fallback
+  return apiErrorMessage(reason, fallback)
 }
 
 function canActivate(status: string): boolean {
@@ -187,18 +189,18 @@ export function MembershipTable({
                     Edit roles
                   </button>
                   {membership.status.toUpperCase() === 'ACTIVE' || canActivate(membership.status) ? (
-                    <button
+                    <AsyncButton
                       type="button"
                       className={membership.status.toUpperCase() === 'ACTIVE' ? 'danger-link' : 'link-button'}
-                      disabled={busyMembershipId === membership.id}
+                      disabled={busyMembershipId !== null && busyMembershipId !== membership.id}
+                      loading={busyMembershipId === membership.id}
+                      loadingText={membership.status.toUpperCase() === 'ACTIVE' ? 'Deactivating…' : 'Activating…'}
                       onClick={() => onToggleActive(membership)}
                     >
-                      {busyMembershipId === membership.id
-                        ? 'Updating…'
-                        : membership.status.toUpperCase() === 'ACTIVE'
+                      {membership.status.toUpperCase() === 'ACTIVE'
                           ? 'Deactivate'
                           : 'Activate'}
-                    </button>
+                    </AsyncButton>
                   ) : null}
                 </div>
               </td>
@@ -245,7 +247,7 @@ function AccessDialog({
       <section className="access-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
         <header>
           <h2 id="dialog-title">{title}</h2>
-          <button type="button" className="icon-button" aria-label="Close" onClick={onClose}>×</button>
+          <button type="button" className="icon-button" aria-label="Close" disabled={busy} onClick={onClose}>×</button>
         </header>
         <form onSubmit={onSubmit}>
           <div className="dialog-body">
@@ -281,10 +283,8 @@ function AccessDialog({
             {error ? <p className="form-message error" role="alert">{error}</p> : null}
           </div>
           <footer>
-            <button type="button" className="secondary-button" onClick={onClose}>Cancel</button>
-            <button type="submit" className="primary-button" disabled={busy}>
-              {busy ? 'Saving…' : 'Save'}
-            </button>
+            <button type="button" className="secondary-button" disabled={busy} onClick={onClose}>Cancel</button>
+            <AsyncButton type="submit" className="primary-button" loading={busy} loadingText="Saving…">Save</AsyncButton>
           </footer>
         </form>
       </section>
@@ -301,7 +301,7 @@ export function SetupAccessPage({
   const [directory, setDirectory] = useState<MembershipDirectory | null>(null)
   const [loading, setLoading] = useState(true)
   const [pageError, setPageError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
+  const { notify } = useNotification()
   const [inviteOpen, setInviteOpen] = useState(false)
   const [inviteName, setInviteName] = useState('')
   const [inviteEmail, setInviteEmail] = useState('')
@@ -317,24 +317,30 @@ export function SetupAccessPage({
   const mayManageIdentity = canManageIdentity(currentUser)
 
   const currentCursor = cursorHistory[cursorHistory.length - 1] ?? null
+  const refresh = useCallback(async (
+    cursor = currentCursor,
+    requestedPageSize = pageSize,
+  ) => {
+    const nextDirectory = await client.listMemberships({
+      cursor,
+      pageSize: requestedPageSize,
+    })
+    setPageError(null)
+    setDirectory(nextDirectory)
+  }, [client, currentCursor, pageSize])
   const load = useCallback(async (
     cursor = currentCursor,
     requestedPageSize = pageSize,
   ) => {
     setLoading(true)
     try {
-      const nextDirectory = await client.listMemberships({
-        cursor,
-        pageSize: requestedPageSize,
-      })
-      setPageError(null)
-      setDirectory(nextDirectory)
+      await refresh(cursor, requestedPageSize)
     } catch (reason) {
       setPageError(requestError(reason, 'Memberships could not be loaded.'))
     } finally {
       setLoading(false)
     }
-  }, [client, currentCursor, pageSize])
+  }, [currentCursor, pageSize, refresh])
 
   useEffect(() => {
     if (!mayManageIdentity) return
@@ -389,10 +395,17 @@ export function SetupAccessPage({
     try {
       await client.createInvitation({ name: inviteName.trim(), email: inviteEmail.trim(), grants: draftGrants })
       closeDialog()
-      setSuccess(`Invitation sent to ${inviteEmail.trim()}.`)
-      await load()
+      try {
+        await refresh()
+        notify(`Invitation sent to ${inviteEmail.trim()}.`, 'success')
+      } catch {
+        const refreshFailure = `Invitation was sent to ${inviteEmail.trim()}, but the latest membership directory could not be refreshed. Retry refresh.`
+        setPageError(refreshFailure)
+        notify(refreshFailure, 'warning')
+      }
     } catch (reason) {
-      setDialogError(requestError(reason, 'Invitation could not be sent.'))
+      if (isFieldValidationError(reason)) setDialogError(requestError(reason, 'Invitation could not be sent.'))
+      else notify(apiErrorMessage(reason, 'Invitation could not be sent.'), 'error')
     } finally {
       setSaving(false)
     }
@@ -411,10 +424,17 @@ export function SetupAccessPage({
         grants: draftGrants,
       })
       closeDialog()
-      setSuccess(`Role grants updated for ${editing.user.email}.`)
-      await load()
+      try {
+        await refresh()
+        notify(`Role grants updated for ${editing.user.email}.`, 'success')
+      } catch {
+        const refreshFailure = `Role grants were updated for ${editing.user.email}, but the latest membership directory could not be refreshed. Retry refresh.`
+        setPageError(refreshFailure)
+        notify(refreshFailure, 'warning')
+      }
     } catch (reason) {
-      setDialogError(requestError(reason, 'Role grants could not be updated.'))
+      if (isFieldValidationError(reason)) setDialogError(requestError(reason, 'Role grants could not be updated.'))
+      else notify(apiErrorMessage(reason, 'Role grants could not be updated.'), 'error')
     } finally {
       setSaving(false)
     }
@@ -428,17 +448,19 @@ export function SetupAccessPage({
     )
       return
     setBusyMembershipId(membership.id)
-    setPageError(null)
-    setSuccess(null)
     try {
       if (isActive) await client.deactivate(membership.id, membership.version)
       else await client.activate(membership.id, membership.version)
-      setSuccess(
-        `${membership.user.email} ${isActive ? 'deactivated' : 'activated'}.`,
-      )
-      await load()
+      try {
+        await refresh()
+        notify(`${membership.user.email} ${isActive ? 'deactivated' : 'activated'}.`, 'success')
+      } catch {
+        const refreshFailure = `${membership.user.email} was ${isActive ? 'deactivated' : 'activated'}, but the latest membership directory could not be refreshed. Retry refresh.`
+        setPageError(refreshFailure)
+        notify(refreshFailure, 'warning')
+      }
     } catch (reason) {
-      setPageError(requestError(reason, 'Membership status could not be updated.'))
+      notify(apiErrorMessage(reason, 'Membership status could not be updated.'), 'error')
     } finally {
       setBusyMembershipId(null)
     }
@@ -460,8 +482,7 @@ export function SetupAccessPage({
         </div>
         <button type="button" className="primary-button" onClick={openInvite}>Invite user</button>
       </div>
-      {success ? <p className="form-message success page-message" role="status">{success}</p> : null}
-      {pageError ? <p className="form-message error page-message" role="alert">{pageError}</p> : null}
+      {pageError ? <div className="academic-error" role="alert"><p>{pageError}</p><button type="button" className="secondary-button" onClick={() => void load()}>Retry</button></div> : null}
       <section className="directory-card" aria-labelledby="membership-title">
         <header>
           <div>
