@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: entropix-exam-api
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: corepack enable && corepack prepare pnpm@12.3.4 --activate && pnpm install --frozen-lockfile && pnpm --filter @entropix/api... build
+    startCommand: pnpm --filter @entropix/api start:prod
+    healthCheckPath: /api/v1/health/live
+    envVars:
+      - key: NODE_VERSION
+        value: 24.20.0
+      - key: NODE_ENV
+        value: production
+      - key: WEB_ORIGIN
+        value: https://examops.entropixsystems.com
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_SSL_CA_PATH
+        value: /etc/secrets/supabase-ca.crt
+      - key: ACCESS_TOKEN_SECRET
+        sync: false
+      - key: REFRESH_TOKEN_PEPPER
+        sync: false
+      - key: ACCESS_TOKEN_TTL_SECONDS
+        value: 900
+      - key: REFRESH_TOKEN_TTL_SECONDS
+        value: 604800
+      - key: INVITE_TTL_SECONDS
+        value: 86400
+      - key: PASSWORD_RESET_TTL_SECONDS
+        value: 1800
+      - key: EMAIL_PROVIDER
+        value: test
+      - key: EMAIL_TEST_MODE
+        value: ACCEPT
+      - key: LOG_LEVEL
+        value: info

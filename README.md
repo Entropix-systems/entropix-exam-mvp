@@ -151,5 +151,55 @@ application code must use the established tenant transaction helper. Do not use
 the bootstrap or migration role as the running API/worker identity, and do not
 manually patch a database to make the demo work.
 
+## Free demo deployment
+
+The production demo uses the same GitHub monorepo for two independently filtered
+deployments:
+
+```text
+examops.entropixsystems.com           Vercel Vite static site
+  /api/*                              proxied by Vercel
+api.examops.entropixsystems.com       Render NestJS Web Service
+entropix-exam-mvp-staging             Supabase PostgreSQL
+```
+
+Both hosting projects must use the repository root so `pnpm-workspace.yaml`, the
+lockfile, and shared `packages/*` remain available. `vercel.json` builds only
+`@entropix/web` and publishes `apps/web/dist`. `render.yaml` builds only
+`@entropix/api` and its workspace dependencies. The worker is intentionally not
+deployed for the demo because its runtime currently exposes only foundation
+health endpoints.
+
+Create the Render service from `render.yaml`, then configure the three values
+marked `sync: false` in the Render dashboard:
+
+```text
+DATABASE_URL           restricted exam_app Supabase session-pooler URL
+ACCESS_TOKEN_SECRET    independent random secret, at least 32 characters
+REFRESH_TOKEN_PEPPER   different random secret, at least 32 characters
+```
+
+Download the Supabase server root certificate and add it to the Render service
+as a secret file named `supabase-ca.crt`. Render mounts it at
+`/etc/secrets/supabase-ca.crt`; `DATABASE_SSL_CA_PATH` in `render.yaml` points
+the API at that file and the database client verifies the server certificate.
+Because the client supplies SSL options explicitly, keep `sslmode`, `sslcert`,
+`sslkey`, and `sslrootcert` out of `DATABASE_URL`; node-postgres otherwise
+replaces the configured CA object while parsing the URL.
+
+Do not give the runtime service `DATABASE_MIGRATION_URL`. Apply committed
+migrations separately with the migration role, verify migration status, and
+only then deploy the API. Seed the shared fictional demo target only with the
+guarded `DEMO_SEED_TARGET=shared` acknowledgement documented above.
+
+In Render, add `api.examops.entropixsystems.com` as the API custom domain. In
+Vercel, add `examops.entropixsystems.com` to the Web project. Create the exact
+CNAME records each platform displays in Cloudflare with proxying disabled until
+both platforms verify their domains and provision TLS.
+
+The Web app keeps `VITE_API_BASE_URL=/api/v1`. Do not point the browser directly
+at Render: Vercel's `/api/*` rewrite preserves the same-origin secure-cookie
+authentication contract and avoids adding a cross-origin CORS path.
+
 For branch, lock, contract, and verification rules, read `AGENTS.md` and the
 current files under `docs/codex/` relevant to your task.
