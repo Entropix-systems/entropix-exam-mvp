@@ -4,10 +4,18 @@ import { PeopleApiClient } from './people-client'
 
 describe('PeopleApiClient', () => {
   it('loads and searches the real student directory route', async () => {
-    const request = vi.fn().mockResolvedValue({ students: [], total: 0 })
+    const request = vi.fn().mockResolvedValue({
+      students: [], total: 0, nextCursor: null, pageSize: 10,
+    })
     const client = new PeopleApiClient({ request } as unknown as AuthApiClient)
-    await client.listStudents('NS26001')
-    expect(request).toHaveBeenCalledWith('/people/students?search=NS26001')
+    await client.listStudents({
+      search: 'NS26001',
+      cursor: '11111111-1111-4111-8111-111111111111',
+      pageSize: 10,
+    })
+    expect(request).toHaveBeenCalledWith(
+      '/people/students?search=NS26001&cursor=11111111-1111-4111-8111-111111111111&pageSize=10',
+    )
   })
 
   it('sends the exact previewed CSV to the atomic commit route', async () => {

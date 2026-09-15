@@ -55,6 +55,10 @@ async function main() {
       id: TENANT_A_ID,
       name: 'Northstar College',
       slug: 'northstar-college',
+      code: 'NORTHSTAR_COLLEGE',
+      type: 'College',
+      primaryAdministratorName: 'Demo Administrator',
+      primaryAdministratorEmail: 'admin@northstar-college.example.test',
       timezone: 'Asia/Kolkata',
       status: 'ACTIVE',
       plan: 'MVP',
@@ -74,6 +78,10 @@ async function main() {
       id: TENANT_B_ID,
       name: 'Cedar School',
       slug: 'cedar-school',
+      code: 'CEDAR_SCHOOL',
+      type: 'School',
+      primaryAdministratorName: 'Demo Administrator',
+      primaryAdministratorEmail: 'admin@cedar-school.example.test',
       timezone: 'Asia/Kolkata',
       status: 'ACTIVE',
       plan: 'MVP',
@@ -236,7 +244,10 @@ async function main() {
       (tx) => tx.membership.findMany(),
     );
 
-  assert.equal(tenantARows.length, 1);
+  assert.ok(
+    tenantARows.some((row) => row.id === membershipA.id),
+    'Tenant A could not read its own membership',
+  );
 
   for (const row of tenantARows) {
     assert.equal(row.tenantId, tenantA.id);
@@ -253,7 +264,10 @@ async function main() {
       (tx) => tx.membership.findMany(),
     );
 
-  assert.equal(tenantBRows.length, 1);
+  assert.ok(
+    tenantBRows.some((row) => row.id === membershipB.id),
+    'Tenant B could not read its own membership',
+  );
 
   for (const row of tenantBRows) {
     assert.equal(row.tenantId, tenantB.id);
@@ -331,7 +345,7 @@ async function main() {
               tx.membership.findMany(),
           );
 
-        assert.equal(rows.length, 1);
+        assert.ok(rows.length >= 1);
 
         for (const row of rows) {
           assert.equal(

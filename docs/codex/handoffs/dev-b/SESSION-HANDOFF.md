@@ -1,156 +1,149 @@
-# SESSION HANDOFF — DEV B
+# SESSION HANDOFF - DEV B
 
-Last updated: 2026-09-13
-Branch: `codex/implement-pure-result-rules-engine`
-Base: `7ef9edd`
-Head: `7ef9edd` plus the uncommitted B01 working-tree changes listed below
-
-## Current Sprint Goal
-
-Working Examination ERP demo for Tuesday.
-
-IAM is complete in another developer's lane. Do not rebuild or re-analyze IAM unless a concrete integration blocker requires it.
-
-## Lane Ownership
-
-Developer B owns:
-
-- result rules
-- marks entry and independent review
-- result runs and publication
-- student outputs, dashboard, reports, and demo polish
-
-Developer A owns:
-
-- academic masters
-- students, faculty, enrolments, and demo import
-- exams and registration
-- timetable, halls, seats, duties, attendance, and incidents
-
-## Completed in This Lane
-
-- B01 pure result rule validation and result computation are implemented and focused-test verified in the current working tree.
-- The implementation is not yet committed or merged into `integration`.
+Last updated: 2026-09-14
+Branch: `feat/B05-dashboard-reports-demo-polish`
+Base / starting HEAD: `b5fe792` (`integration` after PR #10)
+Implementation commit: `6cd45a4`
+Integration merge: `5d021ed`
 
 ## Current Task
 
-Task: B01 — Result Rules / Pure Engine
-Status: IMPLEMENTED AND FOCUSED-VERIFIED; AWAITING REVIEW/COMMIT
+Task: B05 Dashboard, Reports, Audit & Demo Polish
+Status: MERGED INTO `integration`; VERIFIED ON DISPOSABLE LOCAL POSTGRESQL
 
-Public pure API exported by `@entropix/domain`:
+B05 replaces the starter home screen with an authoritative examination overview,
+adds role-scoped reports and safe CSV exports, persists real post-migration
+command audit events, and aligns workspace navigation/loading/empty/error states
+for the Tuesday demo.
 
-- `validateResultRule(input)` validates and freezes a normalized FINAL or INTERNAL+EXTERNAL rule.
-- `computeSubjectResult(rule, input)` computes exact threshold decisions, display percentage, grade, grade points, and ABSENT/WITHHELD behavior.
-- `calculateCurrentExamGpa(input)` computes exact current-exam credit-weighted GPA.
-- `computeStudentAggregate(input)` applies WITHHELD > ABSENT > FAIL precedence, equal-subject overall percentage, and optional current-exam GPA.
-- `RuleValidationError` and `ResultInputError` expose stable local error codes, including `INCOMPLETE_INPUT`.
+## Implemented
 
-The engine uses an internal `bigint` rational representation. Threshold decisions never use binary floating-point or rounded display values. Returned raw numbers are accompanied by an exact fraction for aggregate reuse; display values round half-up to two decimals.
+- `/` now loads tenant- and active-role-scoped exam counts, readiness steps,
+  schedule context, blockers, result-run currency, and publication state.
+- `/reports` exposes registration roster, timetable/seating, attendance/incidents,
+  evaluation progress, current-result register, and audit exports according to
+  the server-resolved active role.
+- All CSV fields are quoted, embedded quotes are escaped, and cells beginning
+  with `=`, `+`, `-`, or `@` after leading whitespace receive an apostrophe.
+- Current-result exports contain only the active publication; WITHHELD rows omit
+  percentage and GPA. No access token, question content, or client-asserted
+  tenant is included.
+- Successful mapped tenant command requests append immutable audit events with
+  actor membership, active role, action, target, optional reason, request ID,
+  and timestamp. Failed/read/auth requests and allocation previews are excluded.
+- Historical seed activity is intentionally absent because it predates audit
+  persistence. The UI states that history is empty instead of inferring it.
+- Navigation follows the demo journey: Overview, setup, masters, students,
+  exams/registration, timetable/halls, duties/attendance, marks/review,
+  publication, reports/audit.
 
-## Stable Context for Next Session
+## Schema / Contracts / Decisions
 
-The next agent may assume:
+- Migration: `20260914150000_audit_events`.
+- Model: tenant-owned `AuditEvent` with composite tenant relationships, forced
+  RLS, immutable update/delete trigger, and unique
+  `(tenant_id, request_id)` idempotency.
+- The migration applied successfully through Prisma to disposable local
+  PostgreSQL and the configured Supabase target. Prisma reports all 16
+  migrations current on the configured target.
+- Shared contracts: NONE. B05 request/response types remain feature-local.
+- Decision: `DEC-012 — Request-Level Immutable Audit Events`.
+- Migration lock: RELEASED after integration merge `5d021ed`.
 
-- B01 has no database, API, Worker, UI, environment, or migration changes.
-- Rule inputs accept decimal strings or finite numbers; normalized validated values are immutable decimal strings.
-- Grade bands may be supplied in any order but must form exact contiguous `[min, max)` bands from 0, with the final band including 100.
-- A present student must have every required component mark. Missing marks throw `ResultInputError` with `code: 'INCOMPLETE_INPUT'`.
-- Component failure forces the lowest grade label and zero points even when the total percentage is otherwise passing.
-- ABSENT hides subject percentage/grade and contributes zero GPA points. WITHHELD hides subject and aggregate numeric output and suppresses GPA.
-- Aggregate overall percentage is equally weighted by subject. GPA is weighted by positive subject credits and includes failed/absent subjects with zero points.
+## Verification
 
-## Shared Contracts / Schema That Matter
+Focused automated checks:
 
-Schema changes: NONE.
+```text
+pnpm --filter @entropix/api exec vitest run \
+  src/modules/audit/csv.spec.ts \
+  src/modules/audit/audit.service.spec.ts \
+  src/modules/audit/audit.interceptor.spec.ts
+  -> PASS (3 files, 8 tests)
 
-Shared contract changes: NONE.
+pnpm --filter @entropix/web exec vitest run \
+  src/audit/audit-client.spec.ts \
+  src/pages/home-page.spec.tsx \
+  src/pages/workspace-shell.spec.tsx
+  -> PASS (3 files, 5 tests)
 
-- B01 consumes the existing `ResultOutcome`/`RESULT_OUTCOMES` contract without modifying it.
-- Engine rule/value types remain local to `packages/domain`.
-- If A03 needs a persisted/exported RuleVersion DTO, coordinate the typed shared contract with DEV A under the contract lock instead of duplicating this local input shape.
+pnpm --filter @entropix/db typecheck -> PASS
+pnpm --filter @entropix/api typecheck -> PASS
+pnpm --filter @entropix/web typecheck -> PASS
+pnpm --filter @entropix/api lint -> PASS
+pnpm --filter @entropix/web lint -> PASS
+pnpm --filter @entropix/api build -> PASS
+pnpm --filter @entropix/web build -> PASS
+pnpm smoke:demo:full-application -> PASS
+```
 
-## Migrations
+Local repository smoke through the real Audit repository:
 
-- B01 creates or modifies no migration.
-- Migration-lock ownership was not re-read because it is irrelevant to this pure-domain task; consult current shared state before any later schema work.
+```text
+Northstar historical
+  2 registrations; 3/3 papers; 6/6 seats; 3/3 approved; 0 holds
+  CSV rows: registration 4, timetable 6, attendance 7,
+            evaluation 6, current result 2
 
-## Shared Contract Lock
+Cedar historical
+  20 registrations; 3/3 papers; 60/60 seats; 3/3 approved; 1 hold
+  CSV rows: registration 40, timetable 120, attendance 121,
+            evaluation 6, current result 40
+```
 
-- B01 did not acquire or modify the shared contract lock.
-- Current lock ownership was not re-read because no shared contract changed.
+The smoke asserted that WITHHELD current-result rows end with blank percentage
+and GPA columns. A Northstar audit event was not visible through the Cedar actor,
+providing a direct tenant-scope check in addition to database RLS.
 
-## Files / Modules to Continue From
+## Browser Evidence
 
-- `packages/domain/src/rules/decimal.ts`
-- `packages/domain/src/rules/index.ts`
-- `packages/domain/src/results/index.ts`
-- `packages/domain/src/results/results.spec.ts`
-- `packages/domain/src/index.ts` already exports both result and rule modules.
-- `fixtures/results/result-engine-fixtures.json` remains the executable fixture source.
+- Northstar institution administrator selected `NORTHSTAR-HIST-2026` and saw
+  the complete 2 / 3 / 6 / 3 readiness path and current publication.
+- The administrator created fictional local hall `B05-VERIFY`; Reports & Audit
+  immediately showed the real `HALL CREATED` event with actor, target, request
+  ID, and timestamp.
+- Cedar exam controller selected `CEDAR-HIST-2026` and saw 20 registrations,
+  3/3 scheduled papers, 60/60 seats, 3/3 independently approved subjects, the
+  one WITHHELD hold, and current publication.
+- Cedar downloaded each of the five required export kinds from the real API;
+  row counts matched the repository smoke. The desktop reports layout rendered
+  without a Vite overlay or browser error.
 
-## Mockup Reference
+## Important Limitations
 
-Relevant mock screens:
-
-- `docs/design/index.html#marks`
-- `docs/design/index.html#results`
-
-Supported terminology/behavior:
-
-- PASS, FAIL, ABSENT, WITHHELD
-- unrounded decisions with two-decimal display percentages
-- component minimum failure forcing F/zero points
-- current-exam GPA
-- withheld results showing no numeric result
-
-No UI terminology was moved into the domain.
-
-## Verified Behavior
-
-- `pnpm --filter @entropix/contracts build` → PASS (existing workspace dependency prerequisite)
-- `pnpm --filter @entropix/domain exec vitest run src/results/results.spec.ts` → PASS, 1 file / 17 tests
-- `pnpm --filter @entropix/domain typecheck` → PASS
-- `pnpm fixtures:check` → PASS, including `Result R1-R6 fixtures: READY`
-- Fixture assertions cover R1–R6 and V1 directly from `fixtures/results/result-engine-fixtures.json`.
-- Invalid component shapes, exact weight totals, non-positive maxima, thresholds, grade-band gaps/overlap/endpoints, marks, credits, and GPA inputs are covered.
-
-## Known Limitations / Deferred
-
-- Historic CGPA, grace marks, cross-exam aggregation, and arbitrary executable grading formulas are intentionally not implemented.
-- Persistence, rule snapshots/versioning, result runs/publication, API serialization, and UI formatting beyond display percentage/GPA strings remain outside B01.
-- The pure engine accepts only PRESENT or ABSENT for subject computation; upstream attendance integration must resolve any additional workflow states before invoking it.
-
-## Blockers
-
-- NONE for B01.
-
-## Cross-Lane Dependency
-
-Waiting on:
-
-- A03 for Exam, ExamSubject, and approved RegistrationSubject roster before B02 full integration.
-- A05 for finalized attendance outcomes and incident-hold state before B02/B03 completion.
-
-Other lane needs from us:
-
-- A03 may consume the B01 validated grading-policy semantics. A shared RuleVersion DTO still requires coordination under the contract lock.
+- The configured Supabase schema was migrated, but its application data and
+  browser journeys were not reverified.
+- The configured `exam_app` connection is non-owner, non-superuser, and does not
+  bypass RLS. It currently inherits UPDATE and DELETE table privileges despite
+  the migration's explicit SELECT/INSERT grant; the immutable trigger still
+  rejects both operations. Tightening that inherited ACL requires a separate
+  reviewed migration.
+- The audit interceptor is intentionally request-level for the demo, not a
+  transactional outbox. A committed command can survive an audit persistence
+  failure; the failure is logged.
+- Audit history starts when the migration and B05 API are deployed. It does not
+  backfill historical seeded actions.
+- Disposable local Cedar `ANNUAL-2026` had pre-existing interactive mutations
+  from another running dev session (publication v13 and active holds). The
+  isolated historical journey remained authoritative and passed.
+- `B05-VERIFY` is fictional verification data in disposable local PostgreSQL
+  only; it is not part of the idempotent seed or shared fixtures.
 
 ## Next Exact Action
 
-1. Review `git diff` for the four B01 implementation/test files and this handoff.
-2. Commit the verified B01 slice on `codex/implement-pure-result-rules-engine` and merge it through `integration` when approved.
-3. Start B02 only after refreshing the A03/A05 shared state needed for roster, attendance, and incident integration.
+1. Affected developers pull/rebase updated `integration` and reread
+   `CURRENT-STATE.md` plus `DEC-012`.
+2. Rerun the focused B05 checks and both authenticated institution journeys on
+   that exact target.
 
-## Minimal Context Files for Next Session
-
-Required:
+## Minimal Context for the Next Session
 
 1. `AGENTS.md`
-2. this `SESSION-HANDOFF.md`
-3. `packages/domain/src/rules/index.ts`
-4. `packages/domain/src/results/index.ts`
-5. `packages/domain/src/results/results.spec.ts`
-6. `packages/contracts/src/results.ts`
-7. `fixtures/results/result-engine-fixtures.json`
-
-Read shared docs only if starting B02, coordinating a shared DTO, or a recorded assumption above has changed.
+2. this handoff
+3. `docs/codex/CURRENT-STATE.md`
+4. `docs/codex/DECISIONS.md` (`DEC-012`)
+5. `docs/codex/generated/B05-dashboard-reports-demo-polish.md`
+6. `apps/api/src/modules/audit/`
+7. `apps/web/src/pages/home-page.tsx`
+8. `apps/web/src/pages/reports-page.tsx`
+9. `packages/db/prisma/migrations/20260914150000_audit_events/migration.sql`

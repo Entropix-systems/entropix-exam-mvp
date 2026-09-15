@@ -13,7 +13,7 @@ as persisted/API canonical roles. Existing database values are not rewritten her
 
 `AuthenticatedContext` is a discriminated union:
 
-- TENANT: userId, tenantId, membershipId, grants (role + nullable departmentId).
+- TENANT: userId, tenantId, membershipId, activeRole, and grants (role + nullable departmentId).
 - PLATFORM: userId and role PLATFORM_ADMIN, with no tenant/membership fields.
 
 `RequestContext` adds requestId to that union. This intentionally replaces the old

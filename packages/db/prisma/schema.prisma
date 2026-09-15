@@ -11,38 +11,54 @@ model Tenant {
   id        String   @id @default(uuid()) @db.Uuid
   name      String
   slug      String   @unique
+  code      String   @unique
+  type      String   @default("COLLEGE")
+  primaryAdministratorName String @map("primary_administrator_name")
+  primaryAdministratorEmail String @map("primary_administrator_email")
   status    String   @default("ACTIVE")
+  onboardingState String @default("COMPLETE") @map("onboarding_state")
   timezone  String
   plan      String   @default("MVP")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  memberships          Membership[]
-  campuses             Campus[]
-  departments          Department[]
-  programs             Program[]
-  academicYears        AcademicYear[]
-  terms                Term[]
-  cohorts              Cohort[]
-  subjects             Subject[]
-  students             Student[]
-  faculty              Faculty[]
-  enrolments           Enrolment[]
-  studentImports       StudentImport[]
-  ruleVersions         RuleVersion[]
-  exams                Exam[]
-  examSubjects         ExamSubject[]
-  registrations        Registration[]
-  registrationSubjects RegistrationSubject[]
-  examPapers           ExamPaper[]
-  halls                Hall[]
-  hallSittings         HallSitting[]
-  seatAssignments      SeatAssignment[]
-  duties               Duty[]
-  attendanceBatches    AttendanceBatch[]
-  attendanceRows       Attendance[]
-  incidents            Incident[]
-  incidentStudents     IncidentStudent[]
+  memberships           Membership[]
+  campuses              Campus[]
+  departments           Department[]
+  programs              Program[]
+  academicYears         AcademicYear[]
+  terms                 Term[]
+  cohorts               Cohort[]
+  subjects              Subject[]
+  students              Student[]
+  faculty               Faculty[]
+  enrolments            Enrolment[]
+  studentImports        StudentImport[]
+  ruleVersions          RuleVersion[]
+  exams                 Exam[]
+  examSubjects          ExamSubject[]
+  registrations         Registration[]
+  registrationSubjects  RegistrationSubject[]
+  examPapers            ExamPaper[]
+  halls                 Hall[]
+  hallSittings          HallSitting[]
+  seatAssignments       SeatAssignment[]
+  duties                Duty[]
+  attendanceBatches     AttendanceBatch[]
+  attendanceRows        Attendance[]
+  incidents             Incident[]
+  incidentStudents      IncidentStudent[]
+  evaluationAssignments EvaluationAssignment[]
+  marksBatches          MarksBatch[]
+  marks                 Mark[]
+  resultRuns            ResultRun[]
+  resultItems           ResultItem[]
+  studentResults        StudentResult[]
+  publications          Publication[]
+  auditEvents           AuditEvent[]
+  platformAuditEvents   PlatformAuditEvent[]
+  workerJobs            WorkerJob[]
+  workerOutputs         WorkerOutput[]
 
   @@map("tenants")
 }
@@ -199,6 +215,7 @@ model Subject {
 
 model User {
   id           String   @id @default(uuid()) @db.Uuid
+  name         String?
   email        String   @unique
   passwordHash String?  @map("password_hash")
   status       String   @default("ACTIVE")
@@ -209,6 +226,7 @@ model User {
   memberships Membership[]
   sessions    Session[]
   authTokens  AuthToken[]
+  platformAuditEvents PlatformAuditEvent[]
 
   @@map("users")
 }
@@ -222,21 +240,30 @@ model Membership {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  tenant                Tenant            @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  user                  User              @relation(fields: [userId], references: [id], onDelete: Restrict)
+  tenant                Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Restrict)
   roleGrants            RoleGrant[]
   sessions              Session[]
   authTokens            AuthToken[]
   student               Student?
   faculty               Faculty?
-  reviewedRegistrations Registration[]    @relation("RegistrationReviewer")
-  assignedDuties        Duty[]            @relation("DutyAssigner")
-  respondedDuties       Duty[]            @relation("DutyResponder")
-  updatedAttendance     Attendance[]      @relation("AttendanceUpdater")
-  submittedAttendance   AttendanceBatch[] @relation("AttendanceSubmitter")
-  reopenedAttendance    AttendanceBatch[] @relation("AttendanceReopener")
-  createdIncidents      Incident[]        @relation("IncidentCreator")
-  disposedIncidents     Incident[]        @relation("IncidentDisposer")
+  reviewedRegistrations Registration[]         @relation("RegistrationReviewer")
+  assignedDuties        Duty[]                 @relation("DutyAssigner")
+  respondedDuties       Duty[]                 @relation("DutyResponder")
+  updatedAttendance     Attendance[]           @relation("AttendanceUpdater")
+  submittedAttendance   AttendanceBatch[]      @relation("AttendanceSubmitter")
+  reopenedAttendance    AttendanceBatch[]      @relation("AttendanceReopener")
+  createdIncidents      Incident[]             @relation("IncidentCreator")
+  disposedIncidents     Incident[]             @relation("IncidentDisposer")
+  assignedEvaluations   EvaluationAssignment[] @relation("EvaluationAssigner")
+  submittedMarksBatches MarksBatch[]           @relation("MarksBatchSubmitter")
+  reviewedMarksBatches  MarksBatch[]           @relation("MarksBatchReviewer")
+  reopenedMarksBatches  MarksBatch[]           @relation("MarksBatchReopener")
+  updatedMarks          Mark[]                 @relation("MarkUpdater")
+  computedResultRuns    ResultRun[]            @relation("ResultRunComputer")
+  publishedResults      Publication[]          @relation("PublicationPublisher")
+  withdrawnResults      Publication[]          @relation("PublicationWithdrawer")
+  auditEvents           AuditEvent[]           @relation("AuditEventActor")
 
   @@unique([tenantId, userId], map: "memberships_tenant_user_key")
   @@unique([tenantId, id], map: "memberships_tenant_id_id_key")
@@ -258,11 +285,13 @@ model Student {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  membership    Membership     @relation(fields: [tenantId, membershipId], references: [tenantId, id], onDelete: Restrict)
-  cohort        Cohort         @relation(fields: [tenantId, cohortId], references: [tenantId, id], onDelete: Restrict)
+  tenant        Tenant          @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  membership    Membership      @relation(fields: [tenantId, membershipId], references: [tenantId, id], onDelete: Restrict)
+  cohort        Cohort          @relation(fields: [tenantId, cohortId], references: [tenantId, id], onDelete: Restrict)
   enrolments    Enrolment[]
   registrations Registration[]
+  resultItems   ResultItem[]
+  results       StudentResult[]
 
   @@unique([tenantId, id], map: "students_tenant_id_id_key")
   @@unique([tenantId, id, cohortId], map: "students_tenant_id_cohort_id_key")
@@ -284,10 +313,11 @@ model Faculty {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  tenant     Tenant     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  membership Membership @relation(fields: [tenantId, membershipId], references: [tenantId, id], onDelete: Restrict)
-  department Department @relation(fields: [tenantId, departmentId], references: [tenantId, id], onDelete: Restrict)
-  duties     Duty[]
+  tenant                Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  membership            Membership             @relation(fields: [tenantId, membershipId], references: [tenantId, id], onDelete: Restrict)
+  department            Department             @relation(fields: [tenantId, departmentId], references: [tenantId, id], onDelete: Restrict)
+  duties                Duty[]
+  evaluationAssignments EvaluationAssignment[]
 
   @@unique([tenantId, id], map: "faculty_tenant_id_id_key")
   @@unique([tenantId, membershipId], map: "faculty_tenant_membership_key")
@@ -344,8 +374,9 @@ model RuleVersion {
   frozenAt  DateTime? @map("frozen_at")
   createdAt DateTime  @default(now()) @map("created_at")
 
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  exams  Exam[]
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  exams      Exam[]
+  resultRuns ResultRun[]
 
   @@unique([tenantId, id], map: "rule_versions_tenant_id_id_key")
   @@unique([tenantId, version], map: "rule_versions_tenant_version_key")
@@ -366,15 +397,19 @@ model Exam {
   registrationClosesAt DateTime @map("registration_closes_at")
   version              Int      @default(1)
   scheduleRevision     Int      @default(0) @map("schedule_revision")
+  inputRevision        Int      @default(0) @map("input_revision")
   createdAt            DateTime @default(now()) @map("created_at")
   updatedAt            DateTime @updatedAt @map("updated_at")
 
-  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  term          Term           @relation(fields: [tenantId, termId], references: [tenantId, id], onDelete: Restrict)
-  ruleVersion   RuleVersion    @relation(fields: [tenantId, ruleVersionId], references: [tenantId, id], onDelete: Restrict)
-  subjects      ExamSubject[]
-  registrations Registration[]
-  papers        ExamPaper[]
+  tenant         Tenant          @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  term           Term            @relation(fields: [tenantId, termId], references: [tenantId, id], onDelete: Restrict)
+  ruleVersion    RuleVersion     @relation(fields: [tenantId, ruleVersionId], references: [tenantId, id], onDelete: Restrict)
+  subjects       ExamSubject[]
+  registrations  Registration[]
+  papers         ExamPaper[]
+  resultRuns     ResultRun[]
+  studentResults StudentResult[]
+  publications   Publication[]
 
   @@unique([tenantId, id], map: "exams_tenant_id_id_key")
   @@unique([tenantId, termId, code], map: "exams_tenant_term_code_key")
@@ -394,6 +429,8 @@ model ExamSubject {
   subject              Subject               @relation(fields: [tenantId, subjectId], references: [tenantId, id], onDelete: Restrict)
   registrationSubjects RegistrationSubject[]
   paper                ExamPaper?
+  evaluationAssignment EvaluationAssignment?
+  marksBatch           MarksBatch?
 
   @@unique([tenantId, id], map: "exam_subjects_tenant_id_id_key")
   @@unique([tenantId, id, examId], map: "exam_subjects_tenant_id_exam_id_key")
@@ -447,6 +484,8 @@ model RegistrationSubject {
   enrolment        Enrolment         @relation(fields: [tenantId, enrolmentId], references: [tenantId, id], onDelete: Restrict)
   seatAssignments  SeatAssignment[]
   incidentStudents IncidentStudent[]
+  marks            Mark[]
+  resultItems      ResultItem[]
 
   @@unique([tenantId, id], map: "registration_subjects_tenant_id_id_key")
   @@unique([tenantId, id, examSubjectId], map: "registration_subjects_tenant_id_exam_subject_id_key")
@@ -674,6 +713,281 @@ model IncidentStudent {
   @@map("incident_students")
 }
 
+model EvaluationAssignment {
+  id                     String   @id @default(uuid()) @db.Uuid
+  tenantId               String   @map("tenant_id") @db.Uuid
+  examSubjectId          String   @map("exam_subject_id") @db.Uuid
+  facultyId              String   @map("faculty_id") @db.Uuid
+  version                Int      @default(1)
+  assignedByMembershipId String   @map("assigned_by_membership_id") @db.Uuid
+  assignedAt             DateTime @default(now()) @map("assigned_at")
+  updatedAt              DateTime @updatedAt @map("updated_at")
+
+  tenant      Tenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  examSubject ExamSubject @relation(fields: [tenantId, examSubjectId], references: [tenantId, id], onDelete: Cascade)
+  faculty     Faculty     @relation(fields: [tenantId, facultyId], references: [tenantId, id], onDelete: Restrict)
+  assigner    Membership  @relation("EvaluationAssigner", fields: [tenantId, assignedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, id], map: "evaluation_assignments_tenant_id_id_key")
+  @@unique([tenantId, examSubjectId], map: "evaluation_assignments_tenant_exam_subject_key")
+  @@index([tenantId, facultyId])
+  @@map("evaluation_assignments")
+}
+
+model MarksBatch {
+  id                      String    @id @default(uuid()) @db.Uuid
+  tenantId                String    @map("tenant_id") @db.Uuid
+  examSubjectId           String    @map("exam_subject_id") @db.Uuid
+  state                   String    @default("DRAFT")
+  version                 Int       @default(1)
+  submittedByMembershipId String?   @map("submitted_by_membership_id") @db.Uuid
+  submittedAt             DateTime? @map("submitted_at")
+  reviewedByMembershipId  String?   @map("reviewed_by_membership_id") @db.Uuid
+  reviewedAt              DateTime? @map("reviewed_at")
+  reviewReason            String?   @map("review_reason")
+  reopenedByMembershipId  String?   @map("reopened_by_membership_id") @db.Uuid
+  reopenedAt              DateTime? @map("reopened_at")
+  reopenReason            String?   @map("reopen_reason")
+  history                 Json      @default("[]")
+  createdAt               DateTime  @default(now()) @map("created_at")
+  updatedAt               DateTime  @updatedAt @map("updated_at")
+
+  tenant      Tenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  examSubject ExamSubject @relation(fields: [tenantId, examSubjectId], references: [tenantId, id], onDelete: Cascade)
+  submitter   Membership? @relation("MarksBatchSubmitter", fields: [tenantId, submittedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+  reviewer    Membership? @relation("MarksBatchReviewer", fields: [tenantId, reviewedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+  reopener    Membership? @relation("MarksBatchReopener", fields: [tenantId, reopenedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+  marks       Mark[]
+
+  @@unique([tenantId, id], map: "marks_batches_tenant_id_id_key")
+  @@unique([tenantId, id, examSubjectId], map: "marks_batches_tenant_id_exam_subject_key")
+  @@unique([tenantId, examSubjectId], map: "marks_batches_tenant_exam_subject_key")
+  @@index([tenantId, state])
+  @@map("marks_batches")
+}
+
+model Mark {
+  id                    String   @id @default(uuid()) @db.Uuid
+  tenantId              String   @map("tenant_id") @db.Uuid
+  marksBatchId          String   @map("marks_batch_id") @db.Uuid
+  examSubjectId         String   @map("exam_subject_id") @db.Uuid
+  registrationSubjectId String   @map("registration_subject_id") @db.Uuid
+  component             String
+  value                 Decimal  @db.Decimal(12, 4)
+  version               Int      @default(1)
+  updatedByMembershipId String   @map("updated_by_membership_id") @db.Uuid
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  tenant              Tenant              @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  batch               MarksBatch          @relation(fields: [tenantId, marksBatchId, examSubjectId], references: [tenantId, id, examSubjectId], onDelete: Cascade)
+  registrationSubject RegistrationSubject @relation(fields: [tenantId, registrationSubjectId, examSubjectId], references: [tenantId, id, examSubjectId], onDelete: Restrict)
+  updater             Membership          @relation("MarkUpdater", fields: [tenantId, updatedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, id], map: "marks_tenant_id_id_key")
+  @@unique([tenantId, marksBatchId, registrationSubjectId, component], map: "marks_tenant_batch_registration_component_key")
+  @@index([tenantId, examSubjectId, registrationSubjectId])
+  @@map("marks")
+}
+
+model ResultRun {
+  id                     String   @id @default(uuid()) @db.Uuid
+  tenantId               String   @map("tenant_id") @db.Uuid
+  examId                 String   @map("exam_id") @db.Uuid
+  ruleVersionId          String   @map("rule_version_id") @db.Uuid
+  inputRevision          Int      @map("input_revision")
+  checksum               String
+  studentCount           Int      @map("student_count")
+  itemCount              Int      @map("item_count")
+  passCount              Int      @map("pass_count")
+  failCount              Int      @map("fail_count")
+  absentCount            Int      @map("absent_count")
+  withheldCount          Int      @map("withheld_count")
+  computedByMembershipId String   @map("computed_by_membership_id") @db.Uuid
+  computedAt             DateTime @default(now()) @map("computed_at")
+
+  tenant       Tenant          @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  exam         Exam            @relation(fields: [tenantId, examId], references: [tenantId, id], onDelete: Restrict)
+  ruleVersion  RuleVersion     @relation(fields: [tenantId, ruleVersionId], references: [tenantId, id], onDelete: Restrict)
+  computer     Membership      @relation("ResultRunComputer", fields: [tenantId, computedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+  items        ResultItem[]
+  students     StudentResult[]
+  publications Publication[]
+
+  @@unique([tenantId, id], map: "result_runs_tenant_id_id_key")
+  @@unique([tenantId, id, examId], map: "result_runs_tenant_id_exam_id_key")
+  @@unique([tenantId, examId, inputRevision], map: "result_runs_tenant_exam_input_revision_key")
+  @@index([tenantId, examId, computedAt])
+  @@map("result_runs")
+}
+
+model ResultItem {
+  id                    String   @id @default(uuid()) @db.Uuid
+  tenantId              String   @map("tenant_id") @db.Uuid
+  resultRunId           String   @map("result_run_id") @db.Uuid
+  examId                String   @map("exam_id") @db.Uuid
+  registrationSubjectId String   @map("registration_subject_id") @db.Uuid
+  examSubjectId         String   @map("exam_subject_id") @db.Uuid
+  studentId             String   @map("student_id") @db.Uuid
+  subjectCode           String   @map("subject_code")
+  subjectName           String   @map("subject_name")
+  credits               Int
+  outcome               String
+  percentage            Decimal? @db.Decimal(12, 4)
+  components            Json
+  grade                 String?
+  gradePoints           Decimal? @map("grade_points") @db.Decimal(12, 4)
+  reason                String?
+  createdAt             DateTime @default(now()) @map("created_at")
+
+  tenant              Tenant              @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  resultRun           ResultRun           @relation(fields: [tenantId, resultRunId, examId], references: [tenantId, id, examId], onDelete: Restrict)
+  registrationSubject RegistrationSubject @relation(fields: [tenantId, registrationSubjectId, examSubjectId], references: [tenantId, id, examSubjectId], onDelete: Restrict)
+  student             Student             @relation(fields: [tenantId, studentId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, id], map: "result_items_tenant_id_id_key")
+  @@unique([tenantId, resultRunId, registrationSubjectId], map: "result_items_tenant_run_registration_subject_key")
+  @@index([tenantId, resultRunId, studentId])
+  @@map("result_items")
+}
+
+model StudentResult {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  resultRunId    String   @map("result_run_id") @db.Uuid
+  examId         String   @map("exam_id") @db.Uuid
+  studentId      String   @map("student_id") @db.Uuid
+  rollNo         String   @map("roll_no")
+  studentName    String   @map("student_name")
+  outcome        String
+  percentage     Decimal? @db.Decimal(12, 4)
+  gpa            Decimal? @db.Decimal(12, 4)
+  totalCredits   Decimal  @map("total_credits") @db.Decimal(12, 4)
+  weightedPoints Decimal? @map("weighted_points") @db.Decimal(12, 4)
+  reason         String?
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  resultRun ResultRun @relation(fields: [tenantId, resultRunId, examId], references: [tenantId, id, examId], onDelete: Restrict)
+  exam      Exam      @relation(fields: [tenantId, examId], references: [tenantId, id], onDelete: Restrict)
+  student   Student   @relation(fields: [tenantId, studentId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, id], map: "student_results_tenant_id_id_key")
+  @@unique([tenantId, resultRunId, studentId], map: "student_results_tenant_run_student_key")
+  @@index([tenantId, examId, studentId])
+  @@map("student_results")
+}
+
+model Publication {
+  id                      String    @id @default(uuid()) @db.Uuid
+  tenantId                String    @map("tenant_id") @db.Uuid
+  examId                  String    @map("exam_id") @db.Uuid
+  resultRunId             String    @map("result_run_id") @db.Uuid
+  version                 Int
+  isCurrent               Boolean   @default(true) @map("is_current")
+  publishedByMembershipId String    @map("published_by_membership_id") @db.Uuid
+  publishedAt             DateTime  @default(now()) @map("published_at")
+  withdrawnByMembershipId String?   @map("withdrawn_by_membership_id") @db.Uuid
+  withdrawnAt             DateTime? @map("withdrawn_at")
+  withdrawReason          String?   @map("withdraw_reason")
+
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  exam       Exam        @relation(fields: [tenantId, examId], references: [tenantId, id], onDelete: Restrict)
+  resultRun  ResultRun   @relation(fields: [tenantId, resultRunId, examId], references: [tenantId, id, examId], onDelete: Restrict)
+  publisher  Membership  @relation("PublicationPublisher", fields: [tenantId, publishedByMembershipId], references: [tenantId, id], onDelete: Restrict)
+  withdrawer Membership? @relation("PublicationWithdrawer", fields: [tenantId, withdrawnByMembershipId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, id], map: "publications_tenant_id_id_key")
+  @@unique([tenantId, examId, version], map: "publications_tenant_exam_version_key")
+  @@index([tenantId, examId, isCurrent])
+  @@map("publications")
+}
+
+model AuditEvent {
+  id                String   @id @default(uuid()) @db.Uuid
+  tenantId          String   @map("tenant_id") @db.Uuid
+  actorMembershipId String   @map("actor_membership_id") @db.Uuid
+  actorRole         String   @map("actor_role")
+  action            String
+  targetType        String   @map("target_type")
+  targetId          String?  @map("target_id") @db.Uuid
+  reason            String?
+  requestId         String   @map("request_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  tenant Tenant     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  actor  Membership @relation("AuditEventActor", fields: [tenantId, actorMembershipId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, requestId], map: "audit_events_tenant_request_id_key")
+  @@index([tenantId, createdAt])
+  @@index([tenantId, actorMembershipId, createdAt])
+  @@map("audit_events")
+}
+
+/** Immutable platform-admin audit; actor identity is global, never a tenant membership. */
+model PlatformAuditEvent {
+  id          String   @id @default(uuid()) @db.Uuid
+  actorUserId String   @map("actor_user_id") @db.Uuid
+  tenantId    String?  @map("tenant_id") @db.Uuid
+  action      String
+  previous    Json?
+  next        Json?
+  requestId   String   @unique @map("request_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  actor User    @relation(fields: [actorUserId], references: [id], onDelete: Restrict)
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@index([actorUserId, createdAt])
+  @@index([tenantId, createdAt])
+  @@map("platform_audit_events")
+}
+
+model WorkerJob {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  kind           String
+  businessKey    String    @map("business_key")
+  payload        Json
+  state          String    @default("READY")
+  availableAt    DateTime  @default(now()) @map("available_at")
+  leaseOwner     String?   @map("lease_owner")
+  leaseExpiresAt DateTime? @map("lease_expires_at")
+  attemptCount   Int       @default(0) @map("attempt_count")
+  completedAt    DateTime? @map("completed_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  tenant Tenant        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  output WorkerOutput?
+
+  @@unique([tenantId, id], map: "worker_jobs_tenant_id_id_key")
+  @@unique([tenantId, kind, businessKey], map: "worker_jobs_tenant_kind_business_key_key")
+  @@index([tenantId, state, availableAt, leaseExpiresAt])
+  @@map("worker_jobs")
+}
+
+model WorkerOutput {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  jobId       String   @map("job_id") @db.Uuid
+  kind        String
+  businessKey String   @map("business_key")
+  checksum    String
+  objectKey   String?  @map("object_key")
+  output      Json
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  tenant Tenant    @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  job    WorkerJob @relation(fields: [tenantId, jobId], references: [tenantId, id], onDelete: Restrict)
+
+  @@unique([tenantId, id], map: "worker_outputs_tenant_id_id_key")
+  @@unique([tenantId, jobId], map: "worker_outputs_tenant_job_key")
+  @@unique([tenantId, kind, businessKey], map: "worker_outputs_tenant_kind_business_key_key")
+  @@index([tenantId, createdAt])
+  @@map("worker_outputs")
+}
+
 model RoleGrant {
   id           String   @id @default(uuid()) @db.Uuid
   tenantId     String   @map("tenant_id") @db.Uuid
@@ -697,6 +1011,7 @@ model Session {
   kind             String
   tenantId         String?   @map("tenant_id") @db.Uuid
   membershipId     String?   @map("membership_id") @db.Uuid
+  activeRole       String?   @map("active_role")
   expiresAt        DateTime  @map("expires_at")
   lastUsedAt       DateTime? @map("last_used_at")
   revokedAt        DateTime? @map("revoked_at")

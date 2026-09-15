@@ -86,7 +86,11 @@ export class AuthenticationGuard implements CanActivate {
         (principal.identity.tenantId.toLowerCase() !==
           principal.context.tenantId.toLowerCase() ||
           principal.identity.membershipId.toLowerCase() !==
-            principal.context.membershipId.toLowerCase()))
+            principal.context.membershipId.toLowerCase())) ||
+      (principal.identity.kind === 'PLATFORM' &&
+        principal.context.kind === 'PLATFORM' &&
+        (principal.identity.tenantId ?? null) !==
+          (principal.context.tenantId ?? null))
     )
       throw new UnauthorizedException('Authentication required');
     // Detach from mutable repository objects; downstream code receives readonly data.

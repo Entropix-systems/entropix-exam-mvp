@@ -16,6 +16,7 @@ const context: AuthenticatedContext = {
   userId: '88888888-8888-4888-8888-888888888888',
   tenantId,
   membershipId,
+  activeRole: 'EXAM_CONTROLLER',
   grants: [{ role: 'EXAM_CONTROLLER', departmentId: null }],
 };
 const preview: AllocationPreview = {
@@ -52,6 +53,20 @@ function repository(overrides: Partial<SchedulingRepository> = {}) {
 }
 
 describe('SchedulingService timetable and allocation rules', () => {
+  it('authorizes the selected role rather than another available grant', () => {
+    const service = new SchedulingService(repository());
+    const auditorContext: AuthenticatedContext = {
+      ...context,
+      activeRole: 'AUDITOR',
+      grants: [
+        ...context.grants,
+        { role: 'AUDITOR', departmentId: null },
+      ],
+    };
+
+    expect(() => service.list(auditorContext)).toThrow('Permission denied');
+  });
+
   it('returns a deterministic successful allocation preview in roll-number order', async () => {
     const previewAllocation = vi.fn().mockResolvedValue(preview);
     const service = new SchedulingService(repository({ previewAllocation }));

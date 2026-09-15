@@ -79,6 +79,17 @@ export const ModelName = {
   Attendance: 'Attendance',
   Incident: 'Incident',
   IncidentStudent: 'IncidentStudent',
+  EvaluationAssignment: 'EvaluationAssignment',
+  MarksBatch: 'MarksBatch',
+  Mark: 'Mark',
+  ResultRun: 'ResultRun',
+  ResultItem: 'ResultItem',
+  StudentResult: 'StudentResult',
+  Publication: 'Publication',
+  AuditEvent: 'AuditEvent',
+  PlatformAuditEvent: 'PlatformAuditEvent',
+  WorkerJob: 'WorkerJob',
+  WorkerOutput: 'WorkerOutput',
   RoleGrant: 'RoleGrant',
   Session: 'Session',
   AuthToken: 'AuthToken'
@@ -104,7 +115,12 @@ export const TenantScalarFieldEnum = {
   id: 'id',
   name: 'name',
   slug: 'slug',
+  code: 'code',
+  type: 'type',
+  primaryAdministratorName: 'primaryAdministratorName',
+  primaryAdministratorEmail: 'primaryAdministratorEmail',
   status: 'status',
+  onboardingState: 'onboardingState',
   timezone: 'timezone',
   plan: 'plan',
   createdAt: 'createdAt',
@@ -212,6 +228,7 @@ export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeo
 
 export const UserScalarFieldEnum = {
   id: 'id',
+  name: 'name',
   email: 'email',
   passwordHash: 'passwordHash',
   status: 'status',
@@ -321,6 +338,7 @@ export const ExamScalarFieldEnum = {
   registrationClosesAt: 'registrationClosesAt',
   version: 'version',
   scheduleRevision: 'scheduleRevision',
+  inputRevision: 'inputRevision',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -514,6 +532,203 @@ export const IncidentStudentScalarFieldEnum = {
 export type IncidentStudentScalarFieldEnum = (typeof IncidentStudentScalarFieldEnum)[keyof typeof IncidentStudentScalarFieldEnum]
 
 
+export const EvaluationAssignmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examSubjectId: 'examSubjectId',
+  facultyId: 'facultyId',
+  version: 'version',
+  assignedByMembershipId: 'assignedByMembershipId',
+  assignedAt: 'assignedAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EvaluationAssignmentScalarFieldEnum = (typeof EvaluationAssignmentScalarFieldEnum)[keyof typeof EvaluationAssignmentScalarFieldEnum]
+
+
+export const MarksBatchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examSubjectId: 'examSubjectId',
+  state: 'state',
+  version: 'version',
+  submittedByMembershipId: 'submittedByMembershipId',
+  submittedAt: 'submittedAt',
+  reviewedByMembershipId: 'reviewedByMembershipId',
+  reviewedAt: 'reviewedAt',
+  reviewReason: 'reviewReason',
+  reopenedByMembershipId: 'reopenedByMembershipId',
+  reopenedAt: 'reopenedAt',
+  reopenReason: 'reopenReason',
+  history: 'history',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarksBatchScalarFieldEnum = (typeof MarksBatchScalarFieldEnum)[keyof typeof MarksBatchScalarFieldEnum]
+
+
+export const MarkScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  marksBatchId: 'marksBatchId',
+  examSubjectId: 'examSubjectId',
+  registrationSubjectId: 'registrationSubjectId',
+  component: 'component',
+  value: 'value',
+  version: 'version',
+  updatedByMembershipId: 'updatedByMembershipId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarkScalarFieldEnum = (typeof MarkScalarFieldEnum)[keyof typeof MarkScalarFieldEnum]
+
+
+export const ResultRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examId: 'examId',
+  ruleVersionId: 'ruleVersionId',
+  inputRevision: 'inputRevision',
+  checksum: 'checksum',
+  studentCount: 'studentCount',
+  itemCount: 'itemCount',
+  passCount: 'passCount',
+  failCount: 'failCount',
+  absentCount: 'absentCount',
+  withheldCount: 'withheldCount',
+  computedByMembershipId: 'computedByMembershipId',
+  computedAt: 'computedAt'
+} as const
+
+export type ResultRunScalarFieldEnum = (typeof ResultRunScalarFieldEnum)[keyof typeof ResultRunScalarFieldEnum]
+
+
+export const ResultItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  resultRunId: 'resultRunId',
+  examId: 'examId',
+  registrationSubjectId: 'registrationSubjectId',
+  examSubjectId: 'examSubjectId',
+  studentId: 'studentId',
+  subjectCode: 'subjectCode',
+  subjectName: 'subjectName',
+  credits: 'credits',
+  outcome: 'outcome',
+  percentage: 'percentage',
+  components: 'components',
+  grade: 'grade',
+  gradePoints: 'gradePoints',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type ResultItemScalarFieldEnum = (typeof ResultItemScalarFieldEnum)[keyof typeof ResultItemScalarFieldEnum]
+
+
+export const StudentResultScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  resultRunId: 'resultRunId',
+  examId: 'examId',
+  studentId: 'studentId',
+  rollNo: 'rollNo',
+  studentName: 'studentName',
+  outcome: 'outcome',
+  percentage: 'percentage',
+  gpa: 'gpa',
+  totalCredits: 'totalCredits',
+  weightedPoints: 'weightedPoints',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type StudentResultScalarFieldEnum = (typeof StudentResultScalarFieldEnum)[keyof typeof StudentResultScalarFieldEnum]
+
+
+export const PublicationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  examId: 'examId',
+  resultRunId: 'resultRunId',
+  version: 'version',
+  isCurrent: 'isCurrent',
+  publishedByMembershipId: 'publishedByMembershipId',
+  publishedAt: 'publishedAt',
+  withdrawnByMembershipId: 'withdrawnByMembershipId',
+  withdrawnAt: 'withdrawnAt',
+  withdrawReason: 'withdrawReason'
+} as const
+
+export type PublicationScalarFieldEnum = (typeof PublicationScalarFieldEnum)[keyof typeof PublicationScalarFieldEnum]
+
+
+export const AuditEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  actorMembershipId: 'actorMembershipId',
+  actorRole: 'actorRole',
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  reason: 'reason',
+  requestId: 'requestId',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
+
+
+export const PlatformAuditEventScalarFieldEnum = {
+  id: 'id',
+  actorUserId: 'actorUserId',
+  tenantId: 'tenantId',
+  action: 'action',
+  previous: 'previous',
+  next: 'next',
+  requestId: 'requestId',
+  createdAt: 'createdAt'
+} as const
+
+export type PlatformAuditEventScalarFieldEnum = (typeof PlatformAuditEventScalarFieldEnum)[keyof typeof PlatformAuditEventScalarFieldEnum]
+
+
+export const WorkerJobScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  kind: 'kind',
+  businessKey: 'businessKey',
+  payload: 'payload',
+  state: 'state',
+  availableAt: 'availableAt',
+  leaseOwner: 'leaseOwner',
+  leaseExpiresAt: 'leaseExpiresAt',
+  attemptCount: 'attemptCount',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WorkerJobScalarFieldEnum = (typeof WorkerJobScalarFieldEnum)[keyof typeof WorkerJobScalarFieldEnum]
+
+
+export const WorkerOutputScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  jobId: 'jobId',
+  kind: 'kind',
+  businessKey: 'businessKey',
+  checksum: 'checksum',
+  objectKey: 'objectKey',
+  output: 'output',
+  createdAt: 'createdAt'
+} as const
+
+export type WorkerOutputScalarFieldEnum = (typeof WorkerOutputScalarFieldEnum)[keyof typeof WorkerOutputScalarFieldEnum]
+
+
 export const RoleGrantScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -532,6 +747,7 @@ export const SessionScalarFieldEnum = {
   kind: 'kind',
   tenantId: 'tenantId',
   membershipId: 'membershipId',
+  activeRole: 'activeRole',
   expiresAt: 'expiresAt',
   lastUsedAt: 'lastUsedAt',
   revokedAt: 'revokedAt',

@@ -37,6 +37,61 @@ OBSERVER  = INVIGILATOR with a duty/sitting assignment
 
 `HOD`, `EXAMINER`, and `OBSERVER` are not canonical MVP role bundles.
 
+## Authenticated institution and role context
+
+Login accepts credentials only. After authentication, the server chooses the
+oldest active institution membership with at least one role grant (breaking ties
+by membership UUID); a platform administrator with no such membership enters the
+platform context. A credentialed user with neither kind of access receives the
+generic forbidden/no-access result.
+
+Tenant sessions persist one `activeRole`. The resolved authorization context
+contains that role plus every currently valid grant for the selected membership,
+but permission and feature checks evaluate only the active role bundle. JWTs remain
+identity hints and never carry authoritative role state.
+
+```text
+POST /api/v1/auth/context  { institutionId?, role?, returnToPlatform? }
+GET  /api/v1/auth/me       → { email, context, sessionId, institutions }
+```
+
+Context switching accepts only an active institution membership belonging to the
+authenticated user and, when supplied, a role currently granted on that
+membership. A Platform Admin may instead select an ACTIVE institution through the
+same command: the session stays `PLATFORM`, retains the real user/role, and
+persists only a server-validated selected tenant ID (never a membership or tenant
+role). A successful switch updates the session and live refresh-token binding
+atomically, then returns a replacement access token. The browser reloads
+`/auth/me` and remounts all selected-institution screens so no tenant-local page
+state survives the switch.
+
+Platform institution management is available only to a current `PLATFORM_ADMIN`:
+
+```text
+GET  /api/v1/platform/institutions
+POST /api/v1/platform/institutions
+POST /api/v1/platform/institutions/:id/status
+```
+
+Onboarding requires name, unique code, type, initial academic year, initial
+administrator details, status, and a request ID. Platform actions are retained in
+the immutable platform audit with the real actor user ID, selected tenant, prior/
+next material values, request ID, and timestamp. Non-platform users cannot list,
+onboard, select, or mutate arbitrary institutions.
+
+The staff access directory is cursor-paginated on the server:
+
+```text
+GET /api/v1/identity/memberships?cursor=<membership UUID>&pageSize=<1..100>
+→ { institutionName, departments, pageSize,
+    memberships: { items, nextCursor } }
+```
+
+The cursor must identify a visible staff membership in the active tenant.
+Memberships backed by a Student profile or any `STUDENT` grant are excluded.
+Internal user IDs are not returned in directory items; the Web UI displays names,
+emails, institution names, and role labels instead of UUIDs.
+
 ---
 
 # Academic Hierarchy
@@ -108,7 +163,7 @@ The typed A02 records and import results are defined in
 `packages/contracts/src/people.ts`. The authenticated API surface is:
 
 ```text
-GET  /api/v1/people/students
+GET  /api/v1/people/students?search=<text>&cursor=<student UUID>&pageSize=<1..100>
 GET  /api/v1/people/students/:id
 GET  /api/v1/people/faculty
 POST /api/v1/people/student-imports/preview
@@ -121,6 +176,11 @@ replays return the original result without creating students or enrolments.
 Students with the `STUDENT` grant are scoped to the Student profile bound to
 their current membership. Tenant scope and membership authority are never
 accepted from the request.
+
+The student directory is cursor-paginated by roll number and stable student ID.
+Its response is `{ students, total, nextCursor, pageSize }`; `total` counts all
+records matching the active tenant, role scope, and search rather than only the
+current page. The default page size is 25.
 
 `withTenant` accepts an optional transaction-options argument for bounded
 long-running atomic work. Existing callers are unchanged; the A02 import commit
@@ -428,8 +488,153 @@ GET  /conduct/exams/:examId/result-state
   lacks an accepted duty/submitted attendance or such a hall incident remains.
 - Published results freeze attendance and incident disposition; the controller
   must withdraw publication before changing conduct state.
+- Saving/submitting/reopening attendance and creating/disposing incidents advance
+  `Exam.inputRevision`; an already computed result run is stale after any of
+  these result-affecting conduct changes.
 - B02/B03 must consume `GET /conduct/exams/:examId/result-state` (or the same
   `ConductResultState` type) and must not create duplicate attendance/hold tables.
+
+---
+
+# Evaluation, Marks Entry and Independent Review Contract
+
+Typed B02 contracts live in `packages/contracts/src/evaluation.ts`. The
+evaluation snapshot consumes the stable A03 `RegistrationSubject.id` roster and
+the submitted A05 attendance/incident state.
+
+```text
+GET  /evaluation
+PUT  /evaluation/subjects/:examSubjectId/assignment
+PUT  /evaluation/subjects/:examSubjectId/marks
+POST /evaluation/subjects/:examSubjectId/submit
+POST /evaluation/subjects/:examSubjectId/return
+POST /evaluation/subjects/:examSubjectId/approve
+POST /evaluation/subjects/:examSubjectId/reopen
+```
+
+- `EvaluationAssignment` is the exact examiner authority for one `ExamSubject`.
+  Examiner commands require the session-selected `FACULTY` role, use the
+  server-resolved membership, and never accept an actor identity from the request
+  body. A `FACULTY` grant alone does not grant access to an unassigned subject.
+- Assignment and marks mutations use `expectedVersion`. A missing batch has
+  version `0`; persisted assignment and batch versions start at `1`.
+- Component columns and maxima come from the exam's frozen `RuleVersion`.
+  Decimal values are strings at the HTTP boundary and are persisted as
+  `DECIMAL(12,4)` after component, range and roster validation.
+- Submission requires every approved roster row to have submitted attendance,
+  no unresolved hall incident, and every configured mark for an attending
+  student. `ABSENT` keeps external/final blank; incident-held students retain
+  marks while downstream numeric results remain hidden.
+- Batch states are `DRAFT`, `SUBMITTED`, `RETURNED`, and `APPROVED`. Only the
+  assigned examiner in an active `FACULTY` context may edit `DRAFT`/`RETURNED`;
+  return and approval require an active controller role or department
+  administrator role scoped to the subject department.
+  Approval also requires a reviewer membership distinct from the submitter and
+  rechecks the authoritative roster, conduct state and mark completeness.
+- Only an institution administrator or exam controller may reopen an approved
+  batch, and a 5–500 character reason is required. Marks/review mutations update
+  `Exam.inputRevision`, which B03 must capture and recheck before committing a
+  result run.
+
+---
+
+# Result Run and Publication Contract
+
+Typed B03 contracts live in `packages/contracts/src/results.ts`. Computation
+consumes the frozen result rule, approved B02 marks, and submitted A05 conduct
+state synchronously.
+
+```text
+GET  /results
+GET  /results/student/current
+POST /results/exams/:examId/compute
+POST /results/exams/:examId/withdraw
+GET  /results/runs/:resultRunId
+POST /results/runs/:resultRunId/publish
+```
+
+- Only the session-selected `INSTITUTION_ADMIN` or `EXAM_CONTROLLER` role may
+  compute, review, publish, or withdraw results. The student route resolves the
+  current membership server-side and never accepts a student identifier.
+- A `ResultRun` captures the exam, rule version, `Exam.inputRevision`, canonical
+  input checksum, aggregate counts, and immutable per-subject/per-student
+  snapshots. Repeating computation for the same unchanged revision returns the
+  existing run.
+- Computation is blocked until every scheduled sitting has accepted duty and
+  submitted attendance, no hall-wide incident is unresolved, and every exam
+  subject has an independently approved complete marks batch.
+- `ABSENT` is never converted to zero. `ABSENT` and `WITHHELD` snapshots retain
+  explicit outcomes while hiding the numeric values prohibited by the B01 rule
+  contract. A student-level hold hides every subject's numeric result.
+- Publish rechecks the current rule, input revision, and canonical input checksum
+  inside the result transaction. A stale candidate is rejected and must be
+  recomputed. Retrying publication of the active run is idempotent.
+- At most one `Publication` per exam is current. Withdrawal requires a reason,
+  removes student visibility, and returns the exam to `EVALUATION`; a corrected
+  publication receives the next monotonically increasing version.
+- Student reads return only the caller's own result from the current publication.
+  Draft candidate runs, historical versions, and withdrawn publications are not
+  student-visible. A `WITHHELD` response is a dedicated hold-message variant and
+  contains no result item, component, percentage, GPA, or credit fields.
+
+---
+
+# Student Portal and Current Document Contract
+
+Typed B04 contracts live in `packages/contracts/src/student-portal.ts`. Every
+route below requires the session-selected `STUDENT` role and resolves both tenant
+and student identity from the authenticated membership. No route accepts a
+student identifier.
+
+```text
+GET /api/v1/me/student-portal
+GET /api/v1/me/registrations
+GET /api/v1/me/timetable
+GET /api/v1/me/result
+GET /api/v1/me/documents
+```
+
+- Registration reads contain only the caller's currently `APPROVED`
+  registrations.
+- Timetable, hall, and seat data is visible only while the exam has a published
+  schedule state and every registered subject has a current paper and seat.
+- Admit-card metadata binds its stable issue ID to the approved registration and
+  current `Exam.scheduleRevision`. Editing a published schedule removes the
+  current timetable/admit reference until the later revision is published.
+- Result reads contain only an active current publication backed by an approved
+  registration. Withdrawal removes result and grade-card visibility.
+- `WITHHELD` returns only the publication/exam identity, explicit outcome, and a
+  hold message. `PASS`, `FAIL`, and `ABSENT` may expose the immutable published
+  snapshot and a current grade-card reference; `ABSENT` is never rendered as
+  zero.
+- Admit cards and grade cards are printable HTML for the demo. Their metadata
+  has no public or signed file URL. Grade-card issue IDs bind to publication
+  version; no persisted document table or storage object is introduced.
+
+---
+
+# Private Object Authorization and Recovery Contract
+
+Private object download authorization is evaluated before a signed URL is
+created. The server-resolved actor and persisted document access record must
+agree on tenant, membership assignment, allowed active role, `CLEAN` scan state,
+and the half-open `[availableFrom, availableUntil)` access window. Quarantine
+keys are never downloadable. Generated and promoted-clean keys may be signed
+only when the object exists, and URL lifetime is capped by both the configured
+TTL and the remaining access window.
+
+Durable asynchronous work uses tenant-owned `WorkerJob` and `WorkerOutput`
+records. Both tables have forced RLS. A `(tenant, kind, businessKey)` identifies
+one logical job and one logical output. Claims use row locking with
+`SKIP LOCKED`; only `READY` jobs or expired leases may be claimed. A live lease
+cannot be stolen, a stale owner cannot complete, and successful completion
+atomically records one checksum-addressed output and clears the lease.
+
+Release recovery evidence must restore the logical PostgreSQL backup and each
+referenced private object. Verification compares tenant identities, tenant-owned
+record counts, current publication identities/versions/result checksums, object
+references and object checksums, and rechecks missing-context RLS in the restored
+database.
 
 ---
 

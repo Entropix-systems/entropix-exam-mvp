@@ -2,9 +2,11 @@ import { randomUUID } from 'node:crypto';
 import type {
   AuthenticatedContext,
   CreateInvitationRequest,
+  MembershipDirectoryResponse,
   ScopedRoleGrant,
   UUID,
 } from '@entropix/contracts';
+import { MAX_CURSOR_PAGE_SIZE } from '@entropix/contracts';
 import { isScopedRoleGrant, isUuid } from '@entropix/domain';
 import {
   ConflictException,
@@ -42,6 +44,12 @@ function normalizedEmail(value: unknown): string | null {
     normalized.length <= 320
     ? normalized
     : null;
+}
+
+function normalizedName(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const normalized = value.normalize('NFKC').trim().replace(/\s+/g, ' ');
+  return normalized.length >= 1 && normalized.length <= 160 ? normalized : null;
 }
 
 function checkedGrants(value: unknown): readonly ScopedRoleGrant[] {
@@ -94,15 +102,55 @@ export class IdentityAdminService {
     this.policy = configuration.tokenPolicy ?? DEFAULT_TOKEN_POLICY;
   }
 
-  async list(context: AuthenticatedContext) {
+  async list(
+    context: AuthenticatedContext,
+    cursorValue: unknown,
+    pageSizeValue: unknown,
+  ): Promise<MembershipDirectoryResponse> {
     const tenant = tenantContext(context);
+    const cursor =
+      cursorValue === undefined || cursorValue === ''
+        ? null
+        : typeof cursorValue === 'string' && isUuid(cursorValue)
+          ? cursorValue.toLowerCase()
+          : (() => {
+              throw new UnprocessableEntityException('Membership cursor is invalid');
+            })();
+    const parsedPageSize =
+      pageSizeValue === undefined || pageSizeValue === ''
+        ? 25
+        : typeof pageSizeValue === 'string' && /^\d+$/.test(pageSizeValue)
+          ? Number(pageSizeValue)
+          : Number.NaN;
+    if (
+      !Number.isSafeInteger(parsedPageSize) ||
+      parsedPageSize < 1 ||
+      parsedPageSize > MAX_CURSOR_PAGE_SIZE
+    )
+      throw new UnprocessableEntityException('Membership page size is invalid');
+    const directory = await this.repository.listMemberships(
+      tenant.tenantId,
+      parsedPageSize,
+      cursor,
+    );
+    if (!directory) throw new NotFoundException('Membership page not found');
     return {
-      memberships: await this.repository.listMemberships(tenant.tenantId),
+      institutionName: directory.institutionName,
+      departments: directory.departments,
+      pageSize: parsedPageSize,
+      memberships: {
+        items: directory.memberships.items.map(
+          ({ userId: _userId, ...membership }) => membership,
+        ),
+        nextCursor: directory.memberships.nextCursor,
+      },
     };
   }
 
   async invite(context: AuthenticatedContext, input: CreateInvitationRequest) {
     const tenant = tenantContext(context);
+    const name = normalizedName(input.name);
+    if (!name) throw new UnprocessableEntityException('Name is invalid');
     const email = normalizedEmail(input.email);
     if (!email) throw new UnprocessableEntityException('Email is invalid');
     const grants = checkedGrants(input.grants);
@@ -111,6 +159,7 @@ export class IdentityAdminService {
     const result = await this.repository.createInvitation({
       tenantId: tenant.tenantId,
       actorMembershipId: tenant.membershipId,
+      name,
       email,
       grants,
       invitationTokenId: randomUUID(),
@@ -128,7 +177,7 @@ export class IdentityAdminService {
     try {
       await this.notifications.send({
         to: email,
-        subject: 'You are invited to Examination ERP',
+        subject: 'You are invited to ExamOS by Entropix Systems',
         text: `Use this one-time link to accept your invitation: ${link.toString()}`,
         category: 'INVITATION',
       });

@@ -7,7 +7,7 @@ import type {
   StudentImportRowError,
   UUID,
 } from '@entropix/contracts';
-import { isUuid } from '@entropix/domain';
+import { hasActiveRole, isUuid } from '@entropix/domain';
 import {
   ForbiddenException,
   Injectable,
@@ -40,19 +40,23 @@ function tenantContext(context: AuthenticatedContext) {
 }
 
 function mayReadDirectory(context: AuthenticatedContext): boolean {
-  return context.kind === 'TENANT' && context.grants.some((grant) =>
-    ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'FACULTY', 'STUDENT', 'AUDITOR']
-      .includes(grant.role));
+  return hasActiveRole(context, [
+    'INSTITUTION_ADMIN',
+    'EXAM_CONTROLLER',
+    'DEPARTMENT_ADMIN',
+    'FACULTY',
+    'STUDENT',
+    'AUDITOR',
+  ]);
 }
 
 function mayImport(context: AuthenticatedContext): boolean {
-  return context.kind === 'TENANT' && context.grants.some((grant) =>
-    ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(grant.role));
+  return hasActiveRole(context, ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER']);
 }
 
 function studentMembership(context: AuthenticatedContext): UUID | null {
   if (context.kind !== 'TENANT') return null;
-  return context.grants.some((grant) => grant.role === 'STUDENT')
+  return context.activeRole === 'STUDENT'
     ? context.membershipId
     : null;
 }
@@ -182,15 +186,39 @@ function validateRows(rows: readonly ParsedRow[], context: ImportValidationConte
 export class PeopleService {
   constructor(private readonly repository: PeopleRepository) {}
 
-  async listStudents(context: AuthenticatedContext, search = '') {
+  async listStudents(
+    context: AuthenticatedContext,
+    search = '',
+    cursorValue?: unknown,
+    pageSizeValue?: unknown,
+  ) {
     if (!mayReadDirectory(context)) throw new ForbiddenException('Permission denied');
     const tenant = tenantContext(context);
-    const students = await this.repository.listStudents(
+    const cursor =
+      cursorValue === undefined || cursorValue === ''
+        ? null
+        : typeof cursorValue === 'string' && isUuid(cursorValue)
+          ? cursorValue.toLowerCase()
+          : (() => {
+              throw new UnprocessableEntityException('Student cursor is invalid');
+            })();
+    const pageSize =
+      pageSizeValue === undefined || pageSizeValue === ''
+        ? 25
+        : typeof pageSizeValue === 'string' && /^\d+$/.test(pageSizeValue)
+          ? Number(pageSizeValue)
+          : Number.NaN;
+    if (!Number.isSafeInteger(pageSize) || pageSize < 1 || pageSize > 100)
+      throw new UnprocessableEntityException('Student page size is invalid');
+    const directory = await this.repository.listStudents(
       tenant.tenantId,
       studentMembership(context),
       search.trim().slice(0, 100),
+      pageSize,
+      cursor,
     );
-    return { students, total: students.length };
+    if (!directory) throw new NotFoundException('Student page not found');
+    return { ...directory, pageSize };
   }
 
   async getStudent(context: AuthenticatedContext, id: string) {
@@ -208,8 +236,13 @@ export class PeopleService {
 
   async listFaculty(context: AuthenticatedContext) {
     const tenant = tenantContext(context);
-    if (!tenant.grants.some((grant) =>
-      ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'FACULTY', 'AUDITOR'].includes(grant.role)))
+    if (!hasActiveRole(tenant, [
+      'INSTITUTION_ADMIN',
+      'EXAM_CONTROLLER',
+      'DEPARTMENT_ADMIN',
+      'FACULTY',
+      'AUDITOR',
+    ]))
       throw new ForbiddenException('Permission denied');
     return this.repository.listFaculty(tenant.tenantId);
   }

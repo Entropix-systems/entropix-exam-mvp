@@ -1,0 +1,8 @@
+roll_no,name,email,cohort_code,subject_codes
+NS26001,Existing Roll Reconciliation,existing.roll@northstar.example.test,BSC-CS-S3,CS301|MA301|EN301
+NS27991,Unknown Subject Reconciliation,unknown.subject@northstar.example.test,BSC-CS-S3,CS301|UNKNOWN999
+NS27992,Invalid Email Reconciliation,not-an-email,BSC-CS-S3,CS301|MA301|EN301
+NS27993,,missing.name@northstar.example.test,BSC-CS-S3,CS301|MA301|EN301
+NS27994,Unknown Cohort Reconciliation,unknown.cohort@northstar.example.test,UNKNOWN-COHORT,CS301|MA301|EN301
+NS27995,Duplicate File Reconciliation A,duplicate.file.a@northstar.example.test,BSC-CS-S3,CS301|MA301|EN301
+NS27995,Duplicate File Reconciliation B,duplicate.file.b@northstar.example.test,BSC-CS-S3,CS301|MA301|EN301

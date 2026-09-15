@@ -4,16 +4,19 @@ import { IdentityApiClient } from './identity-client'
 describe('IdentityApiClient', () => {
   it('loads the tenant membership directory', async () => {
     const request = vi.fn().mockResolvedValue({
-      tenantName: 'Northstar College',
-      memberships: [],
+      institutionName: 'Northstar College',
+      memberships: { items: [], nextCursor: 'next-membership' },
       departments: [],
+      pageSize: 10,
     })
     const client = new IdentityApiClient({ request })
 
-    await expect(client.listMemberships()).resolves.toMatchObject({
-      tenantName: 'Northstar College',
+    await expect(client.listMemberships({ cursor: 'cursor-1', pageSize: 10 })).resolves.toMatchObject({
+      institutionName: 'Northstar College',
+      nextCursor: 'next-membership',
+      pageSize: 10,
     })
-    expect(request).toHaveBeenCalledWith('/identity/memberships')
+    expect(request).toHaveBeenCalledWith('/identity/memberships?cursor=cursor-1&pageSize=10')
   })
 
   it('submits invitations and role grants without platform authority', async () => {
@@ -23,7 +26,7 @@ describe('IdentityApiClient', () => {
       { role: 'FACULTY' as const, departmentId: 'department-1' },
     ]
 
-    await client.createInvitation({ email: 'faculty@example.test', grants })
+    await client.createInvitation({ email: 'faculty@example.test', name: 'Faculty Member', grants })
     await client.replaceRoleGrants('membership/1', {
       expectedVersion: 3,
       grants,

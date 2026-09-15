@@ -20,6 +20,11 @@
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
+    "smoke:evaluation-flow": "tsx scripts/evaluation-flow-smoke.ts",
+    "smoke:scheduling-concurrency": "tsx scripts/scheduling-concurrency-smoke.ts",
+    "smoke:results-flow": "tsx scripts/results-flow-smoke.ts",
+    "smoke:student-portal": "tsx scripts/student-portal-smoke.ts",
+    "demo:full-application": "tsx scripts/full-application-demo.ts",
     "typecheck": "tsc -p tsconfig.build.json --noEmit"
   },
   "dependencies": {

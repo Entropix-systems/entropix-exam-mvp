@@ -14,6 +14,7 @@ import type {
   ForgotPasswordRequest,
   LoginRequest,
   ResetPasswordRequest,
+  SwitchAuthContextRequest,
 } from '@entropix/contracts';
 import { AuthApplicationService } from '../application/auth.service.js';
 import type { AuthenticatedPrincipal } from '../identity.repository.js';
@@ -26,6 +27,7 @@ import { refreshCookiePolicy } from '../security/cookie-policy.js';
 import type { RefreshCookieConfiguration } from '../security/cookie-policy.js';
 import { AuthApplicationError } from '../application/auth.errors.js';
 import { CookieMutationGuard } from './cookie-mutation.guard.js';
+import { requestIdFor } from './request-context.js';
 
 export abstract class RefreshCookieConfigurationProvider {
   abstract readonly value: RefreshCookieConfiguration;
@@ -71,7 +73,6 @@ export class AuthController {
     const issued = await this.auth.login({
       email: body.email,
       password: body.password,
-      institutionSlug: body.institutionSlug,
     } as LoginRequest);
     this.setRefreshCookie(response, issued.refreshToken);
     const { refreshToken: _secret, ...publicResult } = issued;
@@ -143,6 +144,22 @@ export class AuthController {
   }
 
   @Authenticated()
+  @Post('context')
+  switchContext(
+    @CurrentAuthPrincipal() principal: AuthenticatedPrincipal,
+    @Body() rawBody: unknown,
+    @Req() request: Request,
+  ) {
+    const body = objectBody(rawBody);
+    return this.auth.switchContext(principal, {
+      institutionId: body.institutionId,
+      role: body.role,
+      returnToPlatform: body.returnToPlatform,
+      requestId: requestIdFor(request),
+    } as SwitchAuthContextRequest);
+  }
+
+  @Authenticated()
   @Get('me')
   me(@CurrentAuthPrincipal() principal: AuthenticatedPrincipal) {
     return this.auth.me(principal);
@@ -153,4 +170,3 @@ export class AuthController {
     response.cookie(cookie.name, rawToken, cookie.options);
   }
 }
-

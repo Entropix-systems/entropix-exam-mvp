@@ -20,6 +20,13 @@ import {
   type ScanResult,
 } from './clamd.js';
 
+import {
+  authorizePrivateDocument,
+  PrivateDocumentAccessDenied,
+  type PrivateDocumentAccessRecord,
+  type PrivateDocumentActor,
+} from './authorization.js';
+
 export class PrivateObjectStorage {
   readonly client: S3Client;
 
@@ -217,5 +224,21 @@ export class PrivateObjectStorage {
         expiresIn,
       },
     );
+  }
+
+  async authorizedSignedDownloadUrl(
+    record: PrivateDocumentAccessRecord,
+    actor: PrivateDocumentActor,
+    now: Date = new Date(),
+  ): Promise<string> {
+    authorizePrivateDocument(record, actor, now);
+    if (
+      !record.objectKey.startsWith(this.config.cleanPrefix)
+      && !record.objectKey.startsWith(this.config.generatedPrefix)
+    ) throw new PrivateDocumentAccessDenied();
+    if (!(await this.exists(record.objectKey))) throw new PrivateDocumentAccessDenied();
+    const windowSeconds = Math.floor((record.availableUntil.getTime() - now.getTime()) / 1000);
+    if (windowSeconds < 1) throw new PrivateDocumentAccessDenied();
+    return this.signedDownloadUrl(record.objectKey, Math.min(this.config.signedUrlTtlSeconds, windowSeconds));
   }
 }

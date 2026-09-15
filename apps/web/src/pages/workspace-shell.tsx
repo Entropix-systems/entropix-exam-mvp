@@ -1,49 +1,117 @@
+import { useState } from 'react'
 import type { PropsWithChildren } from 'react'
-import type { CurrentUserResponse } from '@entropix/contracts'
+import type { CurrentUserResponse, TenantRole } from '@entropix/contracts'
+import { AuthApiError } from '../auth/auth-client'
 import { navigate } from '../auth/navigation'
-import { canManageIdentity } from '../identity/identity-access'
+import { canAccessWorkspacePath, destinationAfterContextChange } from '../auth/route-policy'
+import { roleLabel } from '../identity/identity-access'
 
 export function WorkspaceShell({
   currentUser,
   active,
   onLogout,
+  onSwitchInstitution,
+  onReturnToPlatform,
+  onSwitchRole,
   children,
 }: PropsWithChildren<{
   currentUser: CurrentUserResponse
-  active: 'overview' | 'setup-access' | 'masters' | 'students' | 'exams' | 'schedule' | 'attendance'
+  active: 'platform' | 'overview' | 'setup-access' | 'masters' | 'students' | 'exams' | 'schedule' | 'attendance' | 'marks' | 'results' | 'student' | 'reports'
   onLogout(): Promise<void>
+  onSwitchInstitution(institutionId: string): Promise<CurrentUserResponse>
+  onReturnToPlatform?(): Promise<CurrentUserResponse>
+  onSwitchRole(role: TenantRole): Promise<CurrentUserResponse>
 }>) {
-  const tenantContext = currentUser.context.kind === 'TENANT'
+  const tenant = currentUser.context.kind === 'TENANT' ? currentUser.context : null
+  const platformTenantId = currentUser.context.kind === 'PLATFORM' ? currentUser.context.tenantId : undefined
+  const returnPlatform = onReturnToPlatform
+  const [switching, setSwitching] = useState(false)
+  const [switchError, setSwitchError] = useState<string | null>(null)
+  const activeInstitution = tenant || platformTenantId
+    ? currentUser.institutions.find(
+        (institution) => institution.id === (tenant?.tenantId ?? platformTenantId),
+      )
+    : null
+  const availableRoles = tenant
+    ? [...new Set(tenant.grants.map((grant) => grant.role))]
+    : []
+
+  async function change(operation: () => Promise<void>) {
+    setSwitching(true)
+    setSwitchError(null)
+    try {
+      await operation()
+    } catch (reason) {
+      setSwitchError(
+        reason instanceof AuthApiError
+          ? reason.message
+          : 'Access context could not be changed.',
+      )
+    } finally {
+      setSwitching(false)
+    }
+  }
+
+  async function changeContext(operation: () => Promise<CurrentUserResponse>) {
+    await change(async () => {
+      const nextUser = await operation()
+      const currentPath = window.location.pathname
+      const destination = destinationAfterContextChange(currentPath, nextUser)
+      if (destination !== currentPath) navigate(destination, true)
+    })
+  }
   return (
     <div className="workspace-shell">
       <aside className="workspace-sidebar">
         <div className="workspace-brand">
-          Examination ERP
-          <small>ENTROPIX SYSTEMS</small>
+          ExamOS
+          <small>by Entropix Systems</small>
         </div>
         <div className="tenant-box">
-          <small>INSTITUTION WORKSPACE</small>
-          <strong>{tenantContext ? 'Current institution' : 'Platform context'}</strong>
-        </div>
-        <p className="nav-label">EXAMINATION WORKSPACE</p>
-        <nav aria-label="Primary navigation">
-          <button
-            type="button"
-            className={active === 'overview' ? 'active' : ''}
-            onClick={() => navigate('/')}
-          >
-            <span aria-hidden="true">◫</span> Overview
-          </button>
-          {canManageIdentity(currentUser) ? (
-            <button
-              type="button"
-              className={active === 'masters' ? 'active' : ''}
-              onClick={() => navigate('/masters')}
+          <small>{tenant || platformTenantId ? 'INSTITUTION WORKSPACE' : 'PLATFORM WORKSPACE'}</small>
+          {currentUser.context.kind === 'PLATFORM' ? (
+            <select aria-label="Active institution" value={platformTenantId ?? ''} disabled={switching} onChange={(event) => void changeContext(() => event.target.value ? onSwitchInstitution(event.target.value) : returnPlatform!())}>
+              <option value="">Platform administration</option>
+              {currentUser.institutions.map((institution) => <option key={institution.id} value={institution.id}>{institution.name}</option>)}
+            </select>
+          ) : currentUser.institutions.length > 1 ? (
+            <select
+              aria-label="Active institution"
+              value={activeInstitution?.id ?? ''}
+              disabled={switching}
+              onChange={(event) =>
+                void changeContext(() => onSwitchInstitution(event.target.value))
+              }
             >
-              <span aria-hidden="true">▦</span> Academic masters
+              {!activeInstitution ? <option value="">Select institution</option> : null}
+              {currentUser.institutions.map((institution) => (
+                <option key={institution.id} value={institution.id}>
+                  {institution.name}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <strong>
+              {currentUser.institutions[0]?.name ?? 'Platform context'}
+            </strong>
+          )}
+        </div>
+        <p className="nav-label">{tenant || platformTenantId ? 'EXAMINATION WORKSPACE' : 'PLATFORM ADMINISTRATION'}</p>
+        <nav aria-label="Primary navigation">
+          {!tenant && !platformTenantId ? (
+            <button type="button" className={active === 'platform' ? 'active' : ''} onClick={() => navigate('/platform')}>
+              <span aria-hidden="true">◫</span> Platform workspace
             </button>
-          ) : null}
-          {canManageIdentity(currentUser) ? (
+          ) : tenant?.activeRole === 'STUDENT' ? (
+            <button type="button" className={active === 'student' ? 'active' : ''} onClick={() => navigate('/student')}>
+              <span aria-hidden="true">◫</span> Student portal
+            </button>
+          ) : (
+            <button type="button" className={active === 'overview' ? 'active' : ''} onClick={() => navigate('/')}>
+              <span aria-hidden="true">◫</span> Overview
+            </button>
+          )}
+          {canAccessWorkspacePath(currentUser, '/setup-access') ? (
             <button
               type="button"
               className={active === 'setup-access' ? 'active' : ''}
@@ -52,23 +120,16 @@ export function WorkspaceShell({
               <span aria-hidden="true">⚙</span> Setup &amp; access
             </button>
           ) : null}
-          {currentUser.context.kind === 'TENANT' && currentUser.context.grants.some(
-            (grant) => ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER'].includes(grant.role),
-          ) ? (
-            <button type="button" className={active === 'schedule' ? 'active' : ''} onClick={() => navigate('/schedule')}>
-              <span aria-hidden="true">▦</span> Timetable &amp; halls
+          {canAccessWorkspacePath(currentUser, '/masters') ? (
+            <button
+              type="button"
+              className={active === 'masters' ? 'active' : ''}
+              onClick={() => navigate('/masters')}
+            >
+              <span aria-hidden="true">▦</span> Academic masters
             </button>
           ) : null}
-          {currentUser.context.kind === 'TENANT' && currentUser.context.grants.some(
-            (grant) => ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'INVIGILATOR'].includes(grant.role),
-          ) ? (
-            <button type="button" className={active === 'attendance' ? 'active' : ''} onClick={() => navigate('/attendance')}>
-              <span aria-hidden="true">✓</span> Duties &amp; attendance
-            </button>
-          ) : null}
-          {currentUser.context.kind === 'TENANT' && currentUser.context.grants.some(
-            (grant) => ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'FACULTY', 'STUDENT', 'AUDITOR'].includes(grant.role),
-          ) ? (
+          {canAccessWorkspacePath(currentUser, '/students') ? (
             <button
               type="button"
               className={active === 'students' ? 'active' : ''}
@@ -77,26 +138,74 @@ export function WorkspaceShell({
               <span aria-hidden="true">▤</span> Students
             </button>
           ) : null}
-          {currentUser.context.kind === 'TENANT' && currentUser.context.grants.some(
-            (grant) => ['INSTITUTION_ADMIN', 'EXAM_CONTROLLER', 'DEPARTMENT_ADMIN', 'FACULTY', 'STUDENT', 'AUDITOR'].includes(grant.role),
-          ) ? (
+          {canAccessWorkspacePath(currentUser, '/exams') ? (
             <button type="button" className={active === 'exams' ? 'active' : ''} onClick={() => navigate('/exams')}>
               <span aria-hidden="true">▣</span> Exams &amp; registration
             </button>
           ) : null}
+          {canAccessWorkspacePath(currentUser, '/schedule') ? (
+            <button type="button" className={active === 'schedule' ? 'active' : ''} onClick={() => navigate('/schedule')}>
+              <span aria-hidden="true">▦</span> Timetable &amp; halls
+            </button>
+          ) : null}
+          {canAccessWorkspacePath(currentUser, '/attendance') ? (
+            <button type="button" className={active === 'attendance' ? 'active' : ''} onClick={() => navigate('/attendance')}>
+              <span aria-hidden="true">✓</span> Duties &amp; attendance
+            </button>
+          ) : null}
+          {canAccessWorkspacePath(currentUser, '/marks') ? (
+            <button type="button" className={active === 'marks' ? 'active' : ''} onClick={() => navigate('/marks')}>
+              <span aria-hidden="true">≡</span> Marks &amp; review
+            </button>
+          ) : null}
+          {canAccessWorkspacePath(currentUser, '/results') ? (
+            <button type="button" className={active === 'results' ? 'active' : ''} onClick={() => navigate('/results')}>
+              <span aria-hidden="true">◎</span> Result publication
+            </button>
+          ) : null}
+          {canAccessWorkspacePath(currentUser, '/reports') ? (
+            <button type="button" className={active === 'reports' ? 'active' : ''} onClick={() => navigate('/reports')}>
+              <span aria-hidden="true">↗</span> Reports &amp; audit
+            </button>
+          ) : null}
         </nav>
+        {platformTenantId && returnPlatform ? <button type="button" className="secondary-button" onClick={() => void changeContext(returnPlatform)}>Return to platform</button> : null}
         <p className="sidebar-foot">Academic year 2026–27<br />MVP · Written examinations</p>
       </aside>
       <div className="workspace-main">
         <header className="workspace-topbar">
-          <span>Workspace / {active === 'overview' ? 'Overview' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : 'Setup & access'}</span>
+          <span>{platformTenantId ? `Platform Admin · Managing ${activeInstitution?.name ?? 'selected institution'} / ` : 'Workspace / '}{active === 'platform' ? 'Platform administration' : active === 'overview' ? 'Overview' : active === 'student' ? 'Student portal' : active === 'masters' ? 'Academic masters' : active === 'students' ? 'Students' : active === 'exams' ? 'Exams & registration' : active === 'schedule' ? 'Timetable & halls' : active === 'attendance' ? 'Duties & attendance' : active === 'marks' ? 'Marks & review' : active === 'results' ? 'Result publication' : active === 'reports' ? 'Reports & audit' : 'Setup & access'}</span>
           <div className="topbar-actions">
-            <span className="context-kind">{currentUser.context.kind}</span>
+            <span className="user-identity">
+              {currentUser.name ? <strong>{currentUser.name}</strong> : null}
+              <span className="user-email">{currentUser.email}</span>
+            </span>
+            {tenant && availableRoles.length > 1 ? (
+              <select
+                aria-label="Active role"
+                value={tenant.activeRole}
+                disabled={switching}
+                onChange={(event) =>
+                  void changeContext(() => onSwitchRole(event.target.value as TenantRole))
+                }
+              >
+                {availableRoles.map((role) => (
+                  <option key={role} value={role}>{roleLabel(role)}</option>
+                ))}
+              </select>
+            ) : (
+              <span className="context-kind">
+                {tenant
+                  ? roleLabel(tenant.activeRole)
+                  : 'Platform Admin'}
+              </span>
+            )}
             <button type="button" className="secondary-button" onClick={() => void onLogout()}>
               Sign out
             </button>
           </div>
         </header>
+        {switchError ? <p className="context-switch-error" role="alert">{switchError}</p> : null}
         <div className="demo-notice">Live application · Server-authorized access</div>
         <main className="workspace-content">{children}</main>
       </div>

@@ -6,6 +6,9 @@ import type {
 } from '@entropix/contracts';
 
 const roleValues: readonly string[] = Object.values(ROLES);
+const tenantRoleValues = roleValues.filter(
+  (role) => role !== ROLES.PLATFORM_ADMIN,
+);
 export function isUuid(value: unknown): value is string {
   return (
     typeof value === 'string' &&
@@ -39,7 +42,7 @@ export function isAuthenticatedContext(
   if (value.kind === 'PLATFORM') {
     return (
       value.role === ROLES.PLATFORM_ADMIN &&
-      !('tenantId' in value) &&
+      (!('tenantId' in value) || isUuid(value.tenantId)) &&
       !('membershipId' in value) &&
       !('grants' in value)
     );
@@ -49,8 +52,11 @@ export function isAuthenticatedContext(
     !('role' in value) &&
     isUuid(value.tenantId) &&
     isUuid(value.membershipId) &&
+    typeof value.activeRole === 'string' &&
+    tenantRoleValues.includes(value.activeRole) &&
     Array.isArray(value.grants) &&
-    value.grants.every(isScopedRoleGrant)
+    value.grants.every(isScopedRoleGrant) &&
+    value.grants.some((grant) => grant.role === value.activeRole)
   );
 }
 export function isAccessTokenIdentity(
@@ -59,7 +65,7 @@ export function isAccessTokenIdentity(
   if (!record(value) || !isUuid(value.userId) || !isUuid(value.sessionId))
     return false;
   if (value.kind === 'PLATFORM')
-    return !('tenantId' in value) && !('membershipId' in value);
+    return (!('tenantId' in value) || isUuid(value.tenantId)) && !('membershipId' in value);
   return (
     value.kind === 'TENANT' &&
     isUuid(value.tenantId) &&

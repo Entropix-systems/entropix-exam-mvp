@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "Creating Examination ERP database roles..."
+echo "Creating ExamOS database roles..."
 
 psql \
   --username "$POSTGRES_USER" \
@@ -75,4 +75,4 @@ ALTER DEFAULT PRIVILEGES
   GRANT USAGE, SELECT ON SEQUENCES TO exam_app;
 EOSQL
 
-echo "Examination ERP PostgreSQL initialization complete."
+echo "ExamOS PostgreSQL initialization complete."

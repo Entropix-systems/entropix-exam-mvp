@@ -48,7 +48,7 @@ export function planDeterministicSeats(
 }
 
 async function lockScheduling(tx: TenantTransaction, tenantId: UUID) {
-  await tx.$queryRaw<Array<{ pg_advisory_xact_lock: unknown }>>`
+  await tx.$executeRaw`
     SELECT pg_advisory_xact_lock(hashtextextended(${tenantId}, 0))
   `;
 }
@@ -239,7 +239,7 @@ export class SchedulingRepository {
         halls: halls.map((hall) => ({ id: hall.id, campusId: hall.campusId, campusName: hall.campus.name, code: hall.code, name: hall.name, capacity: hall.capacity, version: hall.version })),
         exams: await Promise.all(exams.map((exam) => examRecord(tx, tenantId, exam.id))),
       };
-    });
+    }, { maxWait: 10_000, timeout: 120_000 });
   }
 
   initializeExam(tenantId: UUID, examId: UUID): Promise<ExamScheduleRecord> {
@@ -253,7 +253,7 @@ export class SchedulingRepository {
         skipDuplicates: true,
       });
       return examRecord(tx, tenantId, examId);
-    });
+    }, { maxWait: 10_000, timeout: 120_000 });
   }
 
   createHall(tenantId: UUID, input: HallCreateInput) {
@@ -328,6 +328,6 @@ export class SchedulingRepository {
       if (exam.state !== 'PREPARATION') throw new Error('INVALID_EXAM_STATE');
       await tx.exam.update({ where: { id: examId }, data: { state: 'SCHEDULE_PUBLISHED', scheduleRevision: { increment: 1 }, version: { increment: 1 } } });
       return examRecord(tx, tenantId, examId);
-    });
+    }, { maxWait: 10_000, timeout: 120_000 });
   }
 }

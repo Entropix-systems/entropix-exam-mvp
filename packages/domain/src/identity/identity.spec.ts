@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { IAM_PERMISSIONS as P, ROLES } from '@entropix/contracts';
-import type { ScopedRoleGrant, TenantAuthContext } from '@entropix/contracts';
+import type { ScopedRoleGrant, TenantAuthContext, TenantRole } from '@entropix/contracts';
 import { isAccessTokenIdentity, isAuthenticatedContext } from './context.js';
 import { canReplaceRoleGrants, hasPermission } from './permissions.js';
 
@@ -17,6 +17,7 @@ const tenant = (grants: readonly ScopedRoleGrant[]): TenantAuthContext => ({
   userId,
   tenantId,
   membershipId,
+  activeRole: (grants[0]?.role ?? 'STUDENT') as TenantRole,
   grants,
 });
 const platform = { kind: 'PLATFORM', userId, role: 'PLATFORM_ADMIN' } as const;
@@ -40,8 +41,8 @@ describe('canonical identity contexts', () => {
   });
   it('distinguishes platform authority without fabricating tenant records', () => {
     expect(isAuthenticatedContext(platform)).toBe(true);
-    expect(isAuthenticatedContext({ ...platform, tenantId })).toBe(false);
-    expect(isAuthenticatedContext(tenant([]))).toBe(true);
+    expect(isAuthenticatedContext({ ...platform, tenantId })).toBe(true);
+    expect(isAuthenticatedContext(tenant([]))).toBe(false);
     expect(
       isAuthenticatedContext({ ...tenant([]), membershipId: undefined }),
     ).toBe(false);
@@ -81,7 +82,7 @@ describe('canonical identity contexts', () => {
   it('validates access identity hints independently from authority', () => {
     const identity = { kind: 'PLATFORM', userId, sessionId: membershipId };
     expect(isAccessTokenIdentity(identity)).toBe(true);
-    expect(isAccessTokenIdentity({ ...identity, tenantId })).toBe(false);
+    expect(isAccessTokenIdentity({ ...identity, tenantId })).toBe(true);
     expect(
       isAccessTokenIdentity({
         ...identity,
@@ -166,6 +167,18 @@ describe('IAM permissions and scopes', () => {
         ),
       ),
     ).toBe(true);
+  });
+  it('uses only the active role bundle when a membership has multiple roles', () => {
+    const grants = [
+      { role: 'INSTITUTION_ADMIN', departmentId: null },
+      { role: 'AUDITOR', departmentId: null },
+    ] as const;
+    const administrator = { ...tenant(grants), activeRole: 'INSTITUTION_ADMIN' as const };
+    const auditor = { ...tenant(grants), activeRole: 'AUDITOR' as const };
+
+    expect(hasPermission(administrator, P.MEMBERSHIPS_MANAGE, scope())).toBe(true);
+    expect(hasPermission(auditor, P.MEMBERSHIPS_MANAGE, scope())).toBe(false);
+    expect(isAuthenticatedContext(auditor)).toBe(true);
   });
   it('denies foreign tenants and unknown permissions, roles, and scopes', () => {
     const admin = tenant([{ role: 'INSTITUTION_ADMIN', departmentId: null }]);

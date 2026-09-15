@@ -29,11 +29,13 @@ export type AggregateExam = {
 export type ExamAvgAggregateOutputType = {
   version: number | null
   scheduleRevision: number | null
+  inputRevision: number | null
 }
 
 export type ExamSumAggregateOutputType = {
   version: number | null
   scheduleRevision: number | null
+  inputRevision: number | null
 }
 
 export type ExamMinAggregateOutputType = {
@@ -49,6 +51,7 @@ export type ExamMinAggregateOutputType = {
   registrationClosesAt: Date | null
   version: number | null
   scheduleRevision: number | null
+  inputRevision: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,6 +69,7 @@ export type ExamMaxAggregateOutputType = {
   registrationClosesAt: Date | null
   version: number | null
   scheduleRevision: number | null
+  inputRevision: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -83,6 +87,7 @@ export type ExamCountAggregateOutputType = {
   registrationClosesAt: number
   version: number
   scheduleRevision: number
+  inputRevision: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -92,11 +97,13 @@ export type ExamCountAggregateOutputType = {
 export type ExamAvgAggregateInputType = {
   version?: true
   scheduleRevision?: true
+  inputRevision?: true
 }
 
 export type ExamSumAggregateInputType = {
   version?: true
   scheduleRevision?: true
+  inputRevision?: true
 }
 
 export type ExamMinAggregateInputType = {
@@ -112,6 +119,7 @@ export type ExamMinAggregateInputType = {
   registrationClosesAt?: true
   version?: true
   scheduleRevision?: true
+  inputRevision?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -129,6 +137,7 @@ export type ExamMaxAggregateInputType = {
   registrationClosesAt?: true
   version?: true
   scheduleRevision?: true
+  inputRevision?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -146,6 +155,7 @@ export type ExamCountAggregateInputType = {
   registrationClosesAt?: true
   version?: true
   scheduleRevision?: true
+  inputRevision?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -250,6 +260,7 @@ export type ExamGroupByOutputType = {
   registrationClosesAt: Date
   version: number
   scheduleRevision: number
+  inputRevision: number
   createdAt: Date
   updatedAt: Date
   _count: ExamCountAggregateOutputType | null
@@ -290,6 +301,7 @@ export type ExamWhereInput = {
   registrationClosesAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   version?: Prisma.IntFilter<"Exam"> | number
   scheduleRevision?: Prisma.IntFilter<"Exam"> | number
+  inputRevision?: Prisma.IntFilter<"Exam"> | number
   createdAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -298,6 +310,9 @@ export type ExamWhereInput = {
   subjects?: Prisma.ExamSubjectListRelationFilter
   registrations?: Prisma.RegistrationListRelationFilter
   papers?: Prisma.ExamPaperListRelationFilter
+  resultRuns?: Prisma.ResultRunListRelationFilter
+  studentResults?: Prisma.StudentResultListRelationFilter
+  publications?: Prisma.PublicationListRelationFilter
 }
 
 export type ExamOrderByWithRelationInput = {
@@ -313,6 +328,7 @@ export type ExamOrderByWithRelationInput = {
   registrationClosesAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -321,6 +337,9 @@ export type ExamOrderByWithRelationInput = {
   subjects?: Prisma.ExamSubjectOrderByRelationAggregateInput
   registrations?: Prisma.RegistrationOrderByRelationAggregateInput
   papers?: Prisma.ExamPaperOrderByRelationAggregateInput
+  resultRuns?: Prisma.ResultRunOrderByRelationAggregateInput
+  studentResults?: Prisma.StudentResultOrderByRelationAggregateInput
+  publications?: Prisma.PublicationOrderByRelationAggregateInput
 }
 
 export type ExamWhereUniqueInput = Prisma.AtLeast<{
@@ -341,6 +360,7 @@ export type ExamWhereUniqueInput = Prisma.AtLeast<{
   registrationClosesAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   version?: Prisma.IntFilter<"Exam"> | number
   scheduleRevision?: Prisma.IntFilter<"Exam"> | number
+  inputRevision?: Prisma.IntFilter<"Exam"> | number
   createdAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -349,6 +369,9 @@ export type ExamWhereUniqueInput = Prisma.AtLeast<{
   subjects?: Prisma.ExamSubjectListRelationFilter
   registrations?: Prisma.RegistrationListRelationFilter
   papers?: Prisma.ExamPaperListRelationFilter
+  resultRuns?: Prisma.ResultRunListRelationFilter
+  studentResults?: Prisma.StudentResultListRelationFilter
+  publications?: Prisma.PublicationListRelationFilter
 }, "id" | "tenantId_id" | "tenantId_termId_code">
 
 export type ExamOrderByWithAggregationInput = {
@@ -364,6 +387,7 @@ export type ExamOrderByWithAggregationInput = {
   registrationClosesAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ExamCountOrderByAggregateInput
@@ -389,6 +413,7 @@ export type ExamScalarWhereWithAggregatesInput = {
   registrationClosesAt?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
   version?: Prisma.IntWithAggregatesFilter<"Exam"> | number
   scheduleRevision?: Prisma.IntWithAggregatesFilter<"Exam"> | number
+  inputRevision?: Prisma.IntWithAggregatesFilter<"Exam"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Exam"> | Date | string
 }
@@ -403,6 +428,7 @@ export type ExamCreateInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
@@ -411,6 +437,9 @@ export type ExamCreateInput = {
   subjects?: Prisma.ExamSubjectCreateNestedManyWithoutExamInput
   registrations?: Prisma.RegistrationCreateNestedManyWithoutExamInput
   papers?: Prisma.ExamPaperCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateInput = {
@@ -426,11 +455,15 @@ export type ExamUncheckedCreateInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
   registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutExamInput
   papers?: Prisma.ExamPaperUncheckedCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamUpdateInput = {
@@ -443,6 +476,7 @@ export type ExamUpdateInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
@@ -451,6 +485,9 @@ export type ExamUpdateInput = {
   subjects?: Prisma.ExamSubjectUpdateManyWithoutExamNestedInput
   registrations?: Prisma.RegistrationUpdateManyWithoutExamNestedInput
   papers?: Prisma.ExamPaperUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateInput = {
@@ -466,11 +503,15 @@ export type ExamUncheckedUpdateInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
   registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutExamNestedInput
   papers?: Prisma.ExamPaperUncheckedUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamCreateManyInput = {
@@ -486,6 +527,7 @@ export type ExamCreateManyInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -500,6 +542,7 @@ export type ExamUpdateManyMutationInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -517,6 +560,7 @@ export type ExamUncheckedUpdateManyInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -555,6 +599,7 @@ export type ExamCountOrderByAggregateInput = {
   registrationClosesAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -562,6 +607,7 @@ export type ExamCountOrderByAggregateInput = {
 export type ExamAvgOrderByAggregateInput = {
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
 }
 
 export type ExamMaxOrderByAggregateInput = {
@@ -577,6 +623,7 @@ export type ExamMaxOrderByAggregateInput = {
   registrationClosesAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -594,6 +641,7 @@ export type ExamMinOrderByAggregateInput = {
   registrationClosesAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -601,6 +649,7 @@ export type ExamMinOrderByAggregateInput = {
 export type ExamSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
   scheduleRevision?: Prisma.SortOrder
+  inputRevision?: Prisma.SortOrder
 }
 
 export type ExamScalarRelationFilter = {
@@ -776,6 +825,48 @@ export type ExamUpdateOneRequiredWithoutPapersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ExamUpdateToOneWithWhereWithoutPapersInput, Prisma.ExamUpdateWithoutPapersInput>, Prisma.ExamUncheckedUpdateWithoutPapersInput>
 }
 
+export type ExamCreateNestedOneWithoutResultRunsInput = {
+  create?: Prisma.XOR<Prisma.ExamCreateWithoutResultRunsInput, Prisma.ExamUncheckedCreateWithoutResultRunsInput>
+  connectOrCreate?: Prisma.ExamCreateOrConnectWithoutResultRunsInput
+  connect?: Prisma.ExamWhereUniqueInput
+}
+
+export type ExamUpdateOneRequiredWithoutResultRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.ExamCreateWithoutResultRunsInput, Prisma.ExamUncheckedCreateWithoutResultRunsInput>
+  connectOrCreate?: Prisma.ExamCreateOrConnectWithoutResultRunsInput
+  upsert?: Prisma.ExamUpsertWithoutResultRunsInput
+  connect?: Prisma.ExamWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ExamUpdateToOneWithWhereWithoutResultRunsInput, Prisma.ExamUpdateWithoutResultRunsInput>, Prisma.ExamUncheckedUpdateWithoutResultRunsInput>
+}
+
+export type ExamCreateNestedOneWithoutStudentResultsInput = {
+  create?: Prisma.XOR<Prisma.ExamCreateWithoutStudentResultsInput, Prisma.ExamUncheckedCreateWithoutStudentResultsInput>
+  connectOrCreate?: Prisma.ExamCreateOrConnectWithoutStudentResultsInput
+  connect?: Prisma.ExamWhereUniqueInput
+}
+
+export type ExamUpdateOneRequiredWithoutStudentResultsNestedInput = {
+  create?: Prisma.XOR<Prisma.ExamCreateWithoutStudentResultsInput, Prisma.ExamUncheckedCreateWithoutStudentResultsInput>
+  connectOrCreate?: Prisma.ExamCreateOrConnectWithoutStudentResultsInput
+  upsert?: Prisma.ExamUpsertWithoutStudentResultsInput
+  connect?: Prisma.ExamWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ExamUpdateToOneWithWhereWithoutStudentResultsInput, Prisma.ExamUpdateWithoutStudentResultsInput>, Prisma.ExamUncheckedUpdateWithoutStudentResultsInput>
+}
+
+export type ExamCreateNestedOneWithoutPublicationsInput = {
+  create?: Prisma.XOR<Prisma.ExamCreateWithoutPublicationsInput, Prisma.ExamUncheckedCreateWithoutPublicationsInput>
+  connectOrCreate?: Prisma.ExamCreateOrConnectWithoutPublicationsInput
+  connect?: Prisma.ExamWhereUniqueInput
+}
+
+export type ExamUpdateOneRequiredWithoutPublicationsNestedInput = {
+  create?: Prisma.XOR<Prisma.ExamCreateWithoutPublicationsInput, Prisma.ExamUncheckedCreateWithoutPublicationsInput>
+  connectOrCreate?: Prisma.ExamCreateOrConnectWithoutPublicationsInput
+  upsert?: Prisma.ExamUpsertWithoutPublicationsInput
+  connect?: Prisma.ExamWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ExamUpdateToOneWithWhereWithoutPublicationsInput, Prisma.ExamUpdateWithoutPublicationsInput>, Prisma.ExamUncheckedUpdateWithoutPublicationsInput>
+}
+
 export type ExamCreateWithoutTenantInput = {
   id?: string
   code: string
@@ -786,6 +877,7 @@ export type ExamCreateWithoutTenantInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   term: Prisma.TermCreateNestedOneWithoutExamsInput
@@ -793,6 +885,9 @@ export type ExamCreateWithoutTenantInput = {
   subjects?: Prisma.ExamSubjectCreateNestedManyWithoutExamInput
   registrations?: Prisma.RegistrationCreateNestedManyWithoutExamInput
   papers?: Prisma.ExamPaperCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutTenantInput = {
@@ -807,11 +902,15 @@ export type ExamUncheckedCreateWithoutTenantInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
   registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutExamInput
   papers?: Prisma.ExamPaperUncheckedCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutTenantInput = {
@@ -856,6 +955,7 @@ export type ExamScalarWhereInput = {
   registrationClosesAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   version?: Prisma.IntFilter<"Exam"> | number
   scheduleRevision?: Prisma.IntFilter<"Exam"> | number
+  inputRevision?: Prisma.IntFilter<"Exam"> | number
   createdAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Exam"> | Date | string
 }
@@ -870,6 +970,7 @@ export type ExamCreateWithoutTermInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
@@ -877,6 +978,9 @@ export type ExamCreateWithoutTermInput = {
   subjects?: Prisma.ExamSubjectCreateNestedManyWithoutExamInput
   registrations?: Prisma.RegistrationCreateNestedManyWithoutExamInput
   papers?: Prisma.ExamPaperCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutTermInput = {
@@ -890,11 +994,15 @@ export type ExamUncheckedCreateWithoutTermInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
   registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutExamInput
   papers?: Prisma.ExamPaperUncheckedCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutTermInput = {
@@ -933,6 +1041,7 @@ export type ExamCreateWithoutRuleVersionInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
@@ -940,6 +1049,9 @@ export type ExamCreateWithoutRuleVersionInput = {
   subjects?: Prisma.ExamSubjectCreateNestedManyWithoutExamInput
   registrations?: Prisma.RegistrationCreateNestedManyWithoutExamInput
   papers?: Prisma.ExamPaperCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutRuleVersionInput = {
@@ -953,11 +1065,15 @@ export type ExamUncheckedCreateWithoutRuleVersionInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
   registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutExamInput
   papers?: Prisma.ExamPaperUncheckedCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutRuleVersionInput = {
@@ -996,6 +1112,7 @@ export type ExamCreateWithoutSubjectsInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
@@ -1003,6 +1120,9 @@ export type ExamCreateWithoutSubjectsInput = {
   ruleVersion: Prisma.RuleVersionCreateNestedOneWithoutExamsInput
   registrations?: Prisma.RegistrationCreateNestedManyWithoutExamInput
   papers?: Prisma.ExamPaperCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutSubjectsInput = {
@@ -1018,10 +1138,14 @@ export type ExamUncheckedCreateWithoutSubjectsInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutExamInput
   papers?: Prisma.ExamPaperUncheckedCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutSubjectsInput = {
@@ -1050,6 +1174,7 @@ export type ExamUpdateWithoutSubjectsInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
@@ -1057,6 +1182,9 @@ export type ExamUpdateWithoutSubjectsInput = {
   ruleVersion?: Prisma.RuleVersionUpdateOneRequiredWithoutExamsNestedInput
   registrations?: Prisma.RegistrationUpdateManyWithoutExamNestedInput
   papers?: Prisma.ExamPaperUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutSubjectsInput = {
@@ -1072,10 +1200,14 @@ export type ExamUncheckedUpdateWithoutSubjectsInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutExamNestedInput
   papers?: Prisma.ExamPaperUncheckedUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamCreateWithoutRegistrationsInput = {
@@ -1088,6 +1220,7 @@ export type ExamCreateWithoutRegistrationsInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
@@ -1095,6 +1228,9 @@ export type ExamCreateWithoutRegistrationsInput = {
   ruleVersion: Prisma.RuleVersionCreateNestedOneWithoutExamsInput
   subjects?: Prisma.ExamSubjectCreateNestedManyWithoutExamInput
   papers?: Prisma.ExamPaperCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutRegistrationsInput = {
@@ -1110,10 +1246,14 @@ export type ExamUncheckedCreateWithoutRegistrationsInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
   papers?: Prisma.ExamPaperUncheckedCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutRegistrationsInput = {
@@ -1142,6 +1282,7 @@ export type ExamUpdateWithoutRegistrationsInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
@@ -1149,6 +1290,9 @@ export type ExamUpdateWithoutRegistrationsInput = {
   ruleVersion?: Prisma.RuleVersionUpdateOneRequiredWithoutExamsNestedInput
   subjects?: Prisma.ExamSubjectUpdateManyWithoutExamNestedInput
   papers?: Prisma.ExamPaperUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutRegistrationsInput = {
@@ -1164,10 +1308,14 @@ export type ExamUncheckedUpdateWithoutRegistrationsInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
   papers?: Prisma.ExamPaperUncheckedUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamCreateWithoutPapersInput = {
@@ -1180,6 +1328,7 @@ export type ExamCreateWithoutPapersInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
@@ -1187,6 +1336,9 @@ export type ExamCreateWithoutPapersInput = {
   ruleVersion: Prisma.RuleVersionCreateNestedOneWithoutExamsInput
   subjects?: Prisma.ExamSubjectCreateNestedManyWithoutExamInput
   registrations?: Prisma.RegistrationCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutExamInput
 }
 
 export type ExamUncheckedCreateWithoutPapersInput = {
@@ -1202,10 +1354,14 @@ export type ExamUncheckedCreateWithoutPapersInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
   registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutExamInput
 }
 
 export type ExamCreateOrConnectWithoutPapersInput = {
@@ -1234,6 +1390,7 @@ export type ExamUpdateWithoutPapersInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
@@ -1241,6 +1398,9 @@ export type ExamUpdateWithoutPapersInput = {
   ruleVersion?: Prisma.RuleVersionUpdateOneRequiredWithoutExamsNestedInput
   subjects?: Prisma.ExamSubjectUpdateManyWithoutExamNestedInput
   registrations?: Prisma.RegistrationUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutPapersInput = {
@@ -1256,10 +1416,338 @@ export type ExamUncheckedUpdateWithoutPapersInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
   registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutExamNestedInput
+}
+
+export type ExamCreateWithoutResultRunsInput = {
+  id?: string
+  code: string
+  name: string
+  registrationMode: string
+  state?: string
+  registrationOpensAt: Date | string
+  registrationClosesAt: Date | string
+  version?: number
+  scheduleRevision?: number
+  inputRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
+  term: Prisma.TermCreateNestedOneWithoutExamsInput
+  ruleVersion: Prisma.RuleVersionCreateNestedOneWithoutExamsInput
+  subjects?: Prisma.ExamSubjectCreateNestedManyWithoutExamInput
+  registrations?: Prisma.RegistrationCreateNestedManyWithoutExamInput
+  papers?: Prisma.ExamPaperCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutExamInput
+}
+
+export type ExamUncheckedCreateWithoutResultRunsInput = {
+  id?: string
+  tenantId: string
+  termId: string
+  ruleVersionId: string
+  code: string
+  name: string
+  registrationMode: string
+  state?: string
+  registrationOpensAt: Date | string
+  registrationClosesAt: Date | string
+  version?: number
+  scheduleRevision?: number
+  inputRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
+  registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutExamInput
+  papers?: Prisma.ExamPaperUncheckedCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutExamInput
+}
+
+export type ExamCreateOrConnectWithoutResultRunsInput = {
+  where: Prisma.ExamWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExamCreateWithoutResultRunsInput, Prisma.ExamUncheckedCreateWithoutResultRunsInput>
+}
+
+export type ExamUpsertWithoutResultRunsInput = {
+  update: Prisma.XOR<Prisma.ExamUpdateWithoutResultRunsInput, Prisma.ExamUncheckedUpdateWithoutResultRunsInput>
+  create: Prisma.XOR<Prisma.ExamCreateWithoutResultRunsInput, Prisma.ExamUncheckedCreateWithoutResultRunsInput>
+  where?: Prisma.ExamWhereInput
+}
+
+export type ExamUpdateToOneWithWhereWithoutResultRunsInput = {
+  where?: Prisma.ExamWhereInput
+  data: Prisma.XOR<Prisma.ExamUpdateWithoutResultRunsInput, Prisma.ExamUncheckedUpdateWithoutResultRunsInput>
+}
+
+export type ExamUpdateWithoutResultRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationMode?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationOpensAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
+  term?: Prisma.TermUpdateOneRequiredWithoutExamsNestedInput
+  ruleVersion?: Prisma.RuleVersionUpdateOneRequiredWithoutExamsNestedInput
+  subjects?: Prisma.ExamSubjectUpdateManyWithoutExamNestedInput
+  registrations?: Prisma.RegistrationUpdateManyWithoutExamNestedInput
+  papers?: Prisma.ExamPaperUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutExamNestedInput
+}
+
+export type ExamUncheckedUpdateWithoutResultRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  termId?: Prisma.StringFieldUpdateOperationsInput | string
+  ruleVersionId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationMode?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationOpensAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
+  registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutExamNestedInput
+  papers?: Prisma.ExamPaperUncheckedUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutExamNestedInput
+}
+
+export type ExamCreateWithoutStudentResultsInput = {
+  id?: string
+  code: string
+  name: string
+  registrationMode: string
+  state?: string
+  registrationOpensAt: Date | string
+  registrationClosesAt: Date | string
+  version?: number
+  scheduleRevision?: number
+  inputRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
+  term: Prisma.TermCreateNestedOneWithoutExamsInput
+  ruleVersion: Prisma.RuleVersionCreateNestedOneWithoutExamsInput
+  subjects?: Prisma.ExamSubjectCreateNestedManyWithoutExamInput
+  registrations?: Prisma.RegistrationCreateNestedManyWithoutExamInput
+  papers?: Prisma.ExamPaperCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutExamInput
+}
+
+export type ExamUncheckedCreateWithoutStudentResultsInput = {
+  id?: string
+  tenantId: string
+  termId: string
+  ruleVersionId: string
+  code: string
+  name: string
+  registrationMode: string
+  state?: string
+  registrationOpensAt: Date | string
+  registrationClosesAt: Date | string
+  version?: number
+  scheduleRevision?: number
+  inputRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
+  registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutExamInput
+  papers?: Prisma.ExamPaperUncheckedCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutExamInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutExamInput
+}
+
+export type ExamCreateOrConnectWithoutStudentResultsInput = {
+  where: Prisma.ExamWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExamCreateWithoutStudentResultsInput, Prisma.ExamUncheckedCreateWithoutStudentResultsInput>
+}
+
+export type ExamUpsertWithoutStudentResultsInput = {
+  update: Prisma.XOR<Prisma.ExamUpdateWithoutStudentResultsInput, Prisma.ExamUncheckedUpdateWithoutStudentResultsInput>
+  create: Prisma.XOR<Prisma.ExamCreateWithoutStudentResultsInput, Prisma.ExamUncheckedCreateWithoutStudentResultsInput>
+  where?: Prisma.ExamWhereInput
+}
+
+export type ExamUpdateToOneWithWhereWithoutStudentResultsInput = {
+  where?: Prisma.ExamWhereInput
+  data: Prisma.XOR<Prisma.ExamUpdateWithoutStudentResultsInput, Prisma.ExamUncheckedUpdateWithoutStudentResultsInput>
+}
+
+export type ExamUpdateWithoutStudentResultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationMode?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationOpensAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
+  term?: Prisma.TermUpdateOneRequiredWithoutExamsNestedInput
+  ruleVersion?: Prisma.RuleVersionUpdateOneRequiredWithoutExamsNestedInput
+  subjects?: Prisma.ExamSubjectUpdateManyWithoutExamNestedInput
+  registrations?: Prisma.RegistrationUpdateManyWithoutExamNestedInput
+  papers?: Prisma.ExamPaperUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutExamNestedInput
+}
+
+export type ExamUncheckedUpdateWithoutStudentResultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  termId?: Prisma.StringFieldUpdateOperationsInput | string
+  ruleVersionId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationMode?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationOpensAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
+  registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutExamNestedInput
+  papers?: Prisma.ExamPaperUncheckedUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutExamNestedInput
+}
+
+export type ExamCreateWithoutPublicationsInput = {
+  id?: string
+  code: string
+  name: string
+  registrationMode: string
+  state?: string
+  registrationOpensAt: Date | string
+  registrationClosesAt: Date | string
+  version?: number
+  scheduleRevision?: number
+  inputRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutExamsInput
+  term: Prisma.TermCreateNestedOneWithoutExamsInput
+  ruleVersion: Prisma.RuleVersionCreateNestedOneWithoutExamsInput
+  subjects?: Prisma.ExamSubjectCreateNestedManyWithoutExamInput
+  registrations?: Prisma.RegistrationCreateNestedManyWithoutExamInput
+  papers?: Prisma.ExamPaperCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultCreateNestedManyWithoutExamInput
+}
+
+export type ExamUncheckedCreateWithoutPublicationsInput = {
+  id?: string
+  tenantId: string
+  termId: string
+  ruleVersionId: string
+  code: string
+  name: string
+  registrationMode: string
+  state?: string
+  registrationOpensAt: Date | string
+  registrationClosesAt: Date | string
+  version?: number
+  scheduleRevision?: number
+  inputRevision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subjects?: Prisma.ExamSubjectUncheckedCreateNestedManyWithoutExamInput
+  registrations?: Prisma.RegistrationUncheckedCreateNestedManyWithoutExamInput
+  papers?: Prisma.ExamPaperUncheckedCreateNestedManyWithoutExamInput
+  resultRuns?: Prisma.ResultRunUncheckedCreateNestedManyWithoutExamInput
+  studentResults?: Prisma.StudentResultUncheckedCreateNestedManyWithoutExamInput
+}
+
+export type ExamCreateOrConnectWithoutPublicationsInput = {
+  where: Prisma.ExamWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExamCreateWithoutPublicationsInput, Prisma.ExamUncheckedCreateWithoutPublicationsInput>
+}
+
+export type ExamUpsertWithoutPublicationsInput = {
+  update: Prisma.XOR<Prisma.ExamUpdateWithoutPublicationsInput, Prisma.ExamUncheckedUpdateWithoutPublicationsInput>
+  create: Prisma.XOR<Prisma.ExamCreateWithoutPublicationsInput, Prisma.ExamUncheckedCreateWithoutPublicationsInput>
+  where?: Prisma.ExamWhereInput
+}
+
+export type ExamUpdateToOneWithWhereWithoutPublicationsInput = {
+  where?: Prisma.ExamWhereInput
+  data: Prisma.XOR<Prisma.ExamUpdateWithoutPublicationsInput, Prisma.ExamUncheckedUpdateWithoutPublicationsInput>
+}
+
+export type ExamUpdateWithoutPublicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationMode?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationOpensAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
+  term?: Prisma.TermUpdateOneRequiredWithoutExamsNestedInput
+  ruleVersion?: Prisma.RuleVersionUpdateOneRequiredWithoutExamsNestedInput
+  subjects?: Prisma.ExamSubjectUpdateManyWithoutExamNestedInput
+  registrations?: Prisma.RegistrationUpdateManyWithoutExamNestedInput
+  papers?: Prisma.ExamPaperUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUpdateManyWithoutExamNestedInput
+}
+
+export type ExamUncheckedUpdateWithoutPublicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  termId?: Prisma.StringFieldUpdateOperationsInput | string
+  ruleVersionId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationMode?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationOpensAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
+  registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutExamNestedInput
+  papers?: Prisma.ExamPaperUncheckedUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamCreateManyTenantInput = {
@@ -1274,6 +1762,7 @@ export type ExamCreateManyTenantInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1288,6 +1777,7 @@ export type ExamUpdateWithoutTenantInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   term?: Prisma.TermUpdateOneRequiredWithoutExamsNestedInput
@@ -1295,6 +1785,9 @@ export type ExamUpdateWithoutTenantInput = {
   subjects?: Prisma.ExamSubjectUpdateManyWithoutExamNestedInput
   registrations?: Prisma.RegistrationUpdateManyWithoutExamNestedInput
   papers?: Prisma.ExamPaperUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutTenantInput = {
@@ -1309,11 +1802,15 @@ export type ExamUncheckedUpdateWithoutTenantInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
   registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutExamNestedInput
   papers?: Prisma.ExamPaperUncheckedUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateManyWithoutTenantInput = {
@@ -1328,6 +1825,7 @@ export type ExamUncheckedUpdateManyWithoutTenantInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1343,6 +1841,7 @@ export type ExamCreateManyTermInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1357,6 +1856,7 @@ export type ExamUpdateWithoutTermInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
@@ -1364,6 +1864,9 @@ export type ExamUpdateWithoutTermInput = {
   subjects?: Prisma.ExamSubjectUpdateManyWithoutExamNestedInput
   registrations?: Prisma.RegistrationUpdateManyWithoutExamNestedInput
   papers?: Prisma.ExamPaperUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutTermInput = {
@@ -1377,11 +1880,15 @@ export type ExamUncheckedUpdateWithoutTermInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
   registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutExamNestedInput
   papers?: Prisma.ExamPaperUncheckedUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateManyWithoutTermInput = {
@@ -1395,6 +1902,7 @@ export type ExamUncheckedUpdateManyWithoutTermInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1410,6 +1918,7 @@ export type ExamCreateManyRuleVersionInput = {
   registrationClosesAt: Date | string
   version?: number
   scheduleRevision?: number
+  inputRevision?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1424,6 +1933,7 @@ export type ExamUpdateWithoutRuleVersionInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExamsNestedInput
@@ -1431,6 +1941,9 @@ export type ExamUpdateWithoutRuleVersionInput = {
   subjects?: Prisma.ExamSubjectUpdateManyWithoutExamNestedInput
   registrations?: Prisma.RegistrationUpdateManyWithoutExamNestedInput
   papers?: Prisma.ExamPaperUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateWithoutRuleVersionInput = {
@@ -1444,11 +1957,15 @@ export type ExamUncheckedUpdateWithoutRuleVersionInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.ExamSubjectUncheckedUpdateManyWithoutExamNestedInput
   registrations?: Prisma.RegistrationUncheckedUpdateManyWithoutExamNestedInput
   papers?: Prisma.ExamPaperUncheckedUpdateManyWithoutExamNestedInput
+  resultRuns?: Prisma.ResultRunUncheckedUpdateManyWithoutExamNestedInput
+  studentResults?: Prisma.StudentResultUncheckedUpdateManyWithoutExamNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutExamNestedInput
 }
 
 export type ExamUncheckedUpdateManyWithoutRuleVersionInput = {
@@ -1462,6 +1979,7 @@ export type ExamUncheckedUpdateManyWithoutRuleVersionInput = {
   registrationClosesAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleRevision?: Prisma.IntFieldUpdateOperationsInput | number
+  inputRevision?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1475,12 +1993,18 @@ export type ExamCountOutputType = {
   subjects: number
   registrations: number
   papers: number
+  resultRuns: number
+  studentResults: number
+  publications: number
 }
 
 export type ExamCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subjects?: boolean | ExamCountOutputTypeCountSubjectsArgs
   registrations?: boolean | ExamCountOutputTypeCountRegistrationsArgs
   papers?: boolean | ExamCountOutputTypeCountPapersArgs
+  resultRuns?: boolean | ExamCountOutputTypeCountResultRunsArgs
+  studentResults?: boolean | ExamCountOutputTypeCountStudentResultsArgs
+  publications?: boolean | ExamCountOutputTypeCountPublicationsArgs
 }
 
 /**
@@ -1514,6 +2038,27 @@ export type ExamCountOutputTypeCountPapersArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.ExamPaperWhereInput
 }
 
+/**
+ * ExamCountOutputType without action
+ */
+export type ExamCountOutputTypeCountResultRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ResultRunWhereInput
+}
+
+/**
+ * ExamCountOutputType without action
+ */
+export type ExamCountOutputTypeCountStudentResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StudentResultWhereInput
+}
+
+/**
+ * ExamCountOutputType without action
+ */
+export type ExamCountOutputTypeCountPublicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PublicationWhereInput
+}
+
 
 export type ExamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1528,6 +2073,7 @@ export type ExamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   registrationClosesAt?: boolean
   version?: boolean
   scheduleRevision?: boolean
+  inputRevision?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1536,6 +2082,9 @@ export type ExamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   subjects?: boolean | Prisma.Exam$subjectsArgs<ExtArgs>
   registrations?: boolean | Prisma.Exam$registrationsArgs<ExtArgs>
   papers?: boolean | Prisma.Exam$papersArgs<ExtArgs>
+  resultRuns?: boolean | Prisma.Exam$resultRunsArgs<ExtArgs>
+  studentResults?: boolean | Prisma.Exam$studentResultsArgs<ExtArgs>
+  publications?: boolean | Prisma.Exam$publicationsArgs<ExtArgs>
   _count?: boolean | Prisma.ExamCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["exam"]>
 
@@ -1552,6 +2101,7 @@ export type ExamSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   registrationClosesAt?: boolean
   version?: boolean
   scheduleRevision?: boolean
+  inputRevision?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1572,6 +2122,7 @@ export type ExamSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   registrationClosesAt?: boolean
   version?: boolean
   scheduleRevision?: boolean
+  inputRevision?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1592,11 +2143,12 @@ export type ExamSelectScalar = {
   registrationClosesAt?: boolean
   version?: boolean
   scheduleRevision?: boolean
+  inputRevision?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ExamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "termId" | "ruleVersionId" | "code" | "name" | "registrationMode" | "state" | "registrationOpensAt" | "registrationClosesAt" | "version" | "scheduleRevision" | "createdAt" | "updatedAt", ExtArgs["result"]["exam"]>
+export type ExamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "termId" | "ruleVersionId" | "code" | "name" | "registrationMode" | "state" | "registrationOpensAt" | "registrationClosesAt" | "version" | "scheduleRevision" | "inputRevision" | "createdAt" | "updatedAt", ExtArgs["result"]["exam"]>
 export type ExamInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   term?: boolean | Prisma.TermDefaultArgs<ExtArgs>
@@ -1604,6 +2156,9 @@ export type ExamInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   subjects?: boolean | Prisma.Exam$subjectsArgs<ExtArgs>
   registrations?: boolean | Prisma.Exam$registrationsArgs<ExtArgs>
   papers?: boolean | Prisma.Exam$papersArgs<ExtArgs>
+  resultRuns?: boolean | Prisma.Exam$resultRunsArgs<ExtArgs>
+  studentResults?: boolean | Prisma.Exam$studentResultsArgs<ExtArgs>
+  publications?: boolean | Prisma.Exam$publicationsArgs<ExtArgs>
   _count?: boolean | Prisma.ExamCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ExamIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1626,6 +2181,9 @@ export type $ExamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     subjects: Prisma.$ExamSubjectPayload<ExtArgs>[]
     registrations: Prisma.$RegistrationPayload<ExtArgs>[]
     papers: Prisma.$ExamPaperPayload<ExtArgs>[]
+    resultRuns: Prisma.$ResultRunPayload<ExtArgs>[]
+    studentResults: Prisma.$StudentResultPayload<ExtArgs>[]
+    publications: Prisma.$PublicationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1640,6 +2198,7 @@ export type $ExamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     registrationClosesAt: Date
     version: number
     scheduleRevision: number
+    inputRevision: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["exam"]>
@@ -2042,6 +2601,9 @@ export interface Prisma__ExamClient<T, Null = never, ExtArgs extends runtime.Typ
   subjects<T extends Prisma.Exam$subjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Exam$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   registrations<T extends Prisma.Exam$registrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Exam$registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   papers<T extends Prisma.Exam$papersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Exam$papersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamPaperPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  resultRuns<T extends Prisma.Exam$resultRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Exam$resultRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResultRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  studentResults<T extends Prisma.Exam$studentResultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Exam$studentResultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  publications<T extends Prisma.Exam$publicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Exam$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2083,6 +2645,7 @@ export interface ExamFieldRefs {
   readonly registrationClosesAt: Prisma.FieldRef<"Exam", 'DateTime'>
   readonly version: Prisma.FieldRef<"Exam", 'Int'>
   readonly scheduleRevision: Prisma.FieldRef<"Exam", 'Int'>
+  readonly inputRevision: Prisma.FieldRef<"Exam", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Exam", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Exam", 'DateTime'>
 }
@@ -2555,6 +3118,78 @@ export type Exam$papersArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.ExamPaperScalarFieldEnum | Prisma.ExamPaperScalarFieldEnum[]
+}
+
+/**
+ * Exam.resultRuns
+ */
+export type Exam$resultRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ResultRun
+   */
+  select?: Prisma.ResultRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ResultRun
+   */
+  omit?: Prisma.ResultRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ResultRunInclude<ExtArgs> | null
+  where?: Prisma.ResultRunWhereInput
+  orderBy?: Prisma.ResultRunOrderByWithRelationInput | Prisma.ResultRunOrderByWithRelationInput[]
+  cursor?: Prisma.ResultRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ResultRunScalarFieldEnum | Prisma.ResultRunScalarFieldEnum[]
+}
+
+/**
+ * Exam.studentResults
+ */
+export type Exam$studentResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StudentResult
+   */
+  select?: Prisma.StudentResultSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StudentResult
+   */
+  omit?: Prisma.StudentResultOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StudentResultInclude<ExtArgs> | null
+  where?: Prisma.StudentResultWhereInput
+  orderBy?: Prisma.StudentResultOrderByWithRelationInput | Prisma.StudentResultOrderByWithRelationInput[]
+  cursor?: Prisma.StudentResultWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StudentResultScalarFieldEnum | Prisma.StudentResultScalarFieldEnum[]
+}
+
+/**
+ * Exam.publications
+ */
+export type Exam$publicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Publication
+   */
+  select?: Prisma.PublicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Publication
+   */
+  omit?: Prisma.PublicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PublicationInclude<ExtArgs> | null
+  where?: Prisma.PublicationWhereInput
+  orderBy?: Prisma.PublicationOrderByWithRelationInput | Prisma.PublicationOrderByWithRelationInput[]
+  cursor?: Prisma.PublicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PublicationScalarFieldEnum | Prisma.PublicationScalarFieldEnum[]
 }
 
 /**

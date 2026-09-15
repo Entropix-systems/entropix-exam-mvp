@@ -10,7 +10,7 @@ const message = (reason: unknown) => reason instanceof AuthApiError ? reason.mes
 const displayTime = (value: string, timezone: string) => new Intl.DateTimeFormat('en-IN', { timeZone: timezone, dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value))
 
 export function ConductPage({ client }: { client: ConductApiClient }) {
-  const { currentUser, logout } = useAuth()
+  const { currentUser, logout, switchInstitution, switchRole } = useAuth()
   const [snapshot, setSnapshot] = useState<ConductSnapshot | null>(null)
   const [selectedId, setSelectedId] = useState('')
   const [attendanceDrafts, setAttendanceDrafts] = useState<Record<string, Record<string, AttendanceState>>>({})
@@ -72,7 +72,13 @@ export function ConductPage({ client }: { client: ConductApiClient }) {
   const draft = sitting ? draftFor(sitting) : {}
   const notMarked = sitting?.attendance.rows.filter((row) => (draft[row.seatAssignmentId] ?? row.state) === 'NOT_MARKED').length ?? 0
 
-  return <WorkspaceShell currentUser={currentUser} active="attendance" onLogout={logout}>
+  return <WorkspaceShell
+    currentUser={currentUser}
+    active="attendance"
+    onLogout={logout}
+    onSwitchInstitution={switchInstitution}
+    onSwitchRole={switchRole}
+  >
     <div className="page-heading"><div><p className="eyebrow">Examination day</p><h1>Duties &amp; attendance</h1><p>Assigned sittings, mobile roster capture, and result-hold disposition.</p></div></div>
     {notice ? <p className="form-message page-message">{notice}</p> : null}
     {loading ? <p className="conduct-empty">Loading assigned sittings…</p> : !snapshot || snapshot.sittings.length === 0 ? <section className="conduct-empty"><h2>No conduct sittings available</h2><p>Controllers see published sittings; invigilators see only their own assignments.</p></section> : <>

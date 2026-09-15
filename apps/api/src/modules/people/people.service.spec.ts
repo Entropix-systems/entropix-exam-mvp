@@ -15,6 +15,7 @@ function context(role: 'INSTITUTION_ADMIN' | 'EXAM_CONTROLLER' | 'STUDENT'): Aut
     userId: '66666666-6666-4666-8666-666666666666',
     tenantId,
     membershipId,
+    activeRole: role,
     grants: [{ role, departmentId: null }],
   };
 }
@@ -31,7 +32,7 @@ function validation(overrides: Partial<ImportValidationContext> = {}): ImportVal
 
 function repository(overrides: Partial<PeopleRepository> = {}) {
   return {
-    listStudents: vi.fn().mockResolvedValue([]),
+    listStudents: vi.fn().mockResolvedValue({ students: [], total: 0, nextCursor: null }),
     getStudent: vi.fn().mockResolvedValue(null),
     listFaculty: vi.fn().mockResolvedValue([]),
     importContext: vi.fn().mockResolvedValue(validation()),
@@ -140,9 +141,22 @@ describe('PeopleService student import', () => {
   });
 
   it('scopes student-role directory reads to the caller membership', async () => {
-    const listStudents = vi.fn().mockResolvedValue([]);
+    const listStudents = vi.fn().mockResolvedValue({ students: [], total: 0, nextCursor: null });
     const service = new PeopleService(repository({ listStudents }));
-    await service.listStudents(context('STUDENT'));
-    expect(listStudents).toHaveBeenCalledWith(tenantId, membershipId, '');
+    await expect(service.listStudents(context('STUDENT'))).resolves.toEqual({
+      students: [], total: 0, nextCursor: null, pageSize: 25,
+    });
+    expect(listStudents).toHaveBeenCalledWith(tenantId, membershipId, '', 25, null);
+  });
+
+  it('validates and forwards student pagination and search parameters', async () => {
+    const listStudents = vi.fn().mockResolvedValue({ students: [], total: 0, nextCursor: null });
+    const service = new PeopleService(repository({ listStudents }));
+    const cursor = '77777777-7777-4777-8777-777777777777';
+    await service.listStudents(context('INSTITUTION_ADMIN'), '  Ada  ', cursor, '10');
+    expect(listStudents).toHaveBeenCalledWith(tenantId, null, 'Ada', 10, cursor);
+    await expect(
+      service.listStudents(context('INSTITUTION_ADMIN'), '', undefined, '0'),
+    ).rejects.toThrow('Student page size is invalid');
   });
 });

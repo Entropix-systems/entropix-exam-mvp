@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { AuthApiClient } from './auth/auth-client'
 import { AuthProvider } from './auth/auth-provider'
+import { useAuth } from './auth/auth-context'
+import { authContextKey } from './auth/context-key'
 import { ProtectedRoute } from './auth/protected-route'
 import { IdentityApiClient } from './identity/identity-client'
 import { AcademicsApiClient } from './academics/academics-client'
@@ -8,19 +10,32 @@ import { PeopleApiClient } from './people/people-client'
 import { ExamsApiClient } from './exams/exams-client'
 import { SchedulingApiClient } from './scheduling/scheduling-client'
 import { ConductApiClient } from './conduct/conduct-client'
-import { AccessDeniedPage } from './pages/access-denied-page'
-import { ForgotPasswordPage } from './pages/forgot-password-page'
-import { HomePage } from './pages/home-page'
-import { InvitationPage } from './pages/invitation-page'
-import { LoginPage } from './pages/login-page'
-import { MastersPage } from './pages/masters-page'
-import { ResetPasswordPage } from './pages/reset-password-page'
-import { SetupAccessPage } from './pages/setup-access-page'
-import { StudentsPage } from './pages/students-page'
-import { ExamsPage } from './pages/exams-page'
-import { SchedulingPage } from './pages/scheduling-page'
-import { ConductPage } from './pages/conduct-page'
+import { EvaluationApiClient } from './evaluation/evaluation-client'
+import { ResultsApiClient } from './results/results-client'
+import { StudentPortalApiClient } from './student-portal/student-portal-client'
+import { AuditApiClient } from './audit/audit-client'
+import { PlatformApiClient } from './platform/platform-client'
+import { navigate } from './auth/navigation'
+import { landingDestination } from './auth/route-policy'
 import './App.css'
+
+const AccessDeniedPage = lazy(() => import('./pages/access-denied-page').then((module) => ({ default: module.AccessDeniedPage })))
+const ForgotPasswordPage = lazy(() => import('./pages/forgot-password-page').then((module) => ({ default: module.ForgotPasswordPage })))
+const HomePage = lazy(() => import('./pages/home-page').then((module) => ({ default: module.HomePage })))
+const InvitationPage = lazy(() => import('./pages/invitation-page').then((module) => ({ default: module.InvitationPage })))
+const LoginPage = lazy(() => import('./pages/login-page').then((module) => ({ default: module.LoginPage })))
+const PlatformPage = lazy(() => import('./pages/platform-page').then((module) => ({ default: module.PlatformPage })))
+const MastersPage = lazy(() => import('./pages/masters-page').then((module) => ({ default: module.MastersPage })))
+const ResetPasswordPage = lazy(() => import('./pages/reset-password-page').then((module) => ({ default: module.ResetPasswordPage })))
+const SetupAccessPage = lazy(() => import('./pages/setup-access-page').then((module) => ({ default: module.SetupAccessPage })))
+const StudentsPage = lazy(() => import('./pages/students-page').then((module) => ({ default: module.StudentsPage })))
+const ExamsPage = lazy(() => import('./pages/exams-page').then((module) => ({ default: module.ExamsPage })))
+const SchedulingPage = lazy(() => import('./pages/scheduling-page').then((module) => ({ default: module.SchedulingPage })))
+const ConductPage = lazy(() => import('./pages/conduct-page').then((module) => ({ default: module.ConductPage })))
+const EvaluationPage = lazy(() => import('./pages/evaluation-page').then((module) => ({ default: module.EvaluationPage })))
+const ResultsPage = lazy(() => import('./pages/results-page').then((module) => ({ default: module.ResultsPage })))
+const StudentPortalPage = lazy(() => import('./pages/student-portal-page').then((module) => ({ default: module.StudentPortalPage })))
+const ReportsPage = lazy(() => import('./pages/reports-page').then((module) => ({ default: module.ReportsPage })))
 
 const authClient = new AuthApiClient(
   import.meta.env.VITE_API_BASE_URL ?? '/api/v1',
@@ -31,6 +46,11 @@ const peopleClient = new PeopleApiClient(authClient)
 const examsClient = new ExamsApiClient(authClient)
 const schedulingClient = new SchedulingApiClient(authClient)
 const conductClient = new ConductApiClient(authClient)
+const evaluationClient = new EvaluationApiClient(authClient)
+const resultsClient = new ResultsApiClient(authClient)
+const studentPortalClient = new StudentPortalApiClient(authClient)
+const auditClient = new AuditApiClient(authClient)
+const platformClient = new PlatformApiClient(authClient)
 
 function usePathname() {
   const [pathname, setPathname] = useState(window.location.pathname)
@@ -41,8 +61,17 @@ function usePathname() {
   }, [])
   return pathname
 }
+
+function Redirect({ to }: { to: string }) {
+  useEffect(() => navigate(to, true), [to])
+  return null
+}
+
 function Routes() {
   const pathname = usePathname()
+  const { currentUser } = useAuth()
+  const scopeKey = authContextKey(currentUser)
+  const studentRole = currentUser?.context.kind === 'TENANT' && currentUser.context.activeRole === 'STUDENT'
   if (pathname === '/login') return <LoginPage />
   if (pathname === '/forgot-password')
     return <ForgotPasswordPage client={authClient} />
@@ -51,45 +80,81 @@ function Routes() {
   if (pathname === '/accept-invitation')
     return <InvitationPage client={authClient} />
   if (pathname === '/access-denied') return <AccessDeniedPage />
+  if (pathname === '/platform') {
+    if (currentUser?.context.kind === 'TENANT') return <Redirect to={landingDestination(currentUser)} />
+    return <ProtectedRoute><PlatformPage client={platformClient} /></ProtectedRoute>
+  }
   if (pathname === '/setup-access')
     return (
       <ProtectedRoute>
-        <SetupAccessPage client={identityClient} />
+        <SetupAccessPage key={scopeKey} client={identityClient} />
       </ProtectedRoute>
     )
   if (pathname === '/masters')
     return (
       <ProtectedRoute>
-        <MastersPage client={academicsClient} />
+        <MastersPage key={scopeKey} client={academicsClient} />
       </ProtectedRoute>
     )
   if (pathname === '/students')
     return (
       <ProtectedRoute>
-        <StudentsPage client={peopleClient} />
+        <StudentsPage key={scopeKey} client={peopleClient} />
       </ProtectedRoute>
     )
   if (pathname === '/exams')
     return (
       <ProtectedRoute>
-        <ExamsPage client={examsClient} academicClient={academicsClient} />
+        <ExamsPage key={scopeKey} client={examsClient} academicClient={academicsClient} />
       </ProtectedRoute>
     )
   if (pathname === '/schedule')
     return (
       <ProtectedRoute>
-        <SchedulingPage client={schedulingClient} academicClient={academicsClient} />
+        <SchedulingPage key={scopeKey} client={schedulingClient} academicClient={academicsClient} />
       </ProtectedRoute>
     )
   if (pathname === '/attendance')
     return (
       <ProtectedRoute>
-        <ConductPage client={conductClient} />
+        <ConductPage key={scopeKey} client={conductClient} />
       </ProtectedRoute>
     )
+  if (pathname === '/marks')
+    return (
+      <ProtectedRoute>
+        <EvaluationPage key={scopeKey} client={evaluationClient} />
+      </ProtectedRoute>
+    )
+  if (pathname === '/results')
+    return (
+      <ProtectedRoute>
+        <ResultsPage key={scopeKey} client={resultsClient} />
+      </ProtectedRoute>
+    )
+  if (pathname === '/student')
+    return (
+      <ProtectedRoute>
+        <StudentPortalPage key={scopeKey} client={studentPortalClient} />
+      </ProtectedRoute>
+    )
+  if (pathname === '/reports')
+    return (
+      <ProtectedRoute>
+        <ReportsPage key={scopeKey} client={auditClient} />
+      </ProtectedRoute>
+    )
+  if (studentRole)
+    return (
+      <ProtectedRoute>
+        <StudentPortalPage key={scopeKey} client={studentPortalClient} />
+      </ProtectedRoute>
+    )
+  if (pathname === '/' && currentUser?.context.kind === 'PLATFORM' && !currentUser.context.tenantId)
+    return <ProtectedRoute><Redirect to="/platform" /></ProtectedRoute>
   return (
     <ProtectedRoute>
-      <HomePage />
+      <HomePage key={scopeKey} client={auditClient} />
     </ProtectedRoute>
   )
 }
@@ -97,7 +162,9 @@ function Routes() {
 export default function App() {
   return (
     <AuthProvider client={authClient}>
-      <Routes />
+      <Suspense fallback={<p className="evaluation-empty">Loading workspace…</p>}>
+        <Routes />
+      </Suspense>
     </AuthProvider>
   )
 }

@@ -1,5 +1,9 @@
-import type { UUID } from './common.js';
-import type { AuthenticatedContext, ScopedRoleGrant } from './context.js';
+import type { CursorPage, UUID } from './common.js';
+import type {
+  AuthenticatedContext,
+  ScopedRoleGrant,
+  TenantRole,
+} from './context.js';
 import type { VersionedCommand } from './commands.js';
 
 export const AUTH_TOKEN_PURPOSES = {
@@ -15,6 +19,7 @@ export const AUTH_PROTOCOL_OPERATIONS = [
   'login',
   'refresh',
   'logout',
+  'context-switch',
   'forgot-password',
   'reset-password',
   'invitation-acceptance',
@@ -23,7 +28,6 @@ export const AUTH_PROTOCOL_OPERATIONS = [
 export interface LoginRequest {
   email: string;
   password: string;
-  institutionSlug?: string;
 }
 export interface ForgotPasswordRequest {
   email: string;
@@ -44,8 +48,53 @@ export interface AccessTokenResponse {
 export interface CurrentUserResponse {
   context: AuthenticatedContext;
   sessionId: UUID;
+  name: string | null;
+  email: string;
+  institutions: readonly InstitutionAccessSummary[];
+}
+export interface InstitutionAccessSummary {
+  id: UUID;
+  name: string;
+  slug: string;
+}
+export interface SwitchAuthContextRequest {
+  institutionId?: UUID;
+  role?: TenantRole;
+  returnToPlatform?: true;
+}
+export interface PlatformInstitutionSummary extends InstitutionAccessSummary {
+  code: string;
+  type: string;
+  status: string;
+  academicYear: string | null;
+  onboardingState: string;
+}
+export interface OnboardInstitutionRequest {
+  name: string;
+  code: string;
+  type: string;
+  primaryAdministratorName: string;
+  primaryAdministratorEmail: string;
+  academicYear: string;
+  status: 'ACTIVE' | 'SUSPENDED';
+  requestId: string;
+}
+export interface MembershipDirectoryItem {
+  id: UUID;
+  email: string;
+  name: string | null;
+  status: string;
+  version: number;
+  grants: readonly ScopedRoleGrant[];
+}
+export interface MembershipDirectoryResponse {
+  institutionName: string;
+  departments: readonly { id: UUID; name: string }[];
+  memberships: CursorPage<MembershipDirectoryItem>;
+  pageSize: number;
 }
 export interface CreateInvitationRequest {
+  name: string;
   email: string;
   grants: readonly ScopedRoleGrant[];
 }
@@ -58,7 +107,8 @@ export type AccessTokenIdentity = {
   userId: UUID;
   sessionId: UUID;
 } & (
-  { kind: 'TENANT'; tenantId: UUID; membershipId: UUID } | { kind: 'PLATFORM' }
+  { kind: 'TENANT'; tenantId: UUID; membershipId: UUID }
+  | { kind: 'PLATFORM'; tenantId?: UUID }
 );
 
 export const IAM_PERMISSIONS = {

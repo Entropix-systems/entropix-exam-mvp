@@ -61,6 +61,8 @@ describeDatabase('PostgreSQL IAM persistence', () => {
   const authority = new PrismaCurrentAuthorityRepository(prisma);
   let adminMembership = '';
   let memberMembership = '';
+  let additionalStaffMembership = '';
+  let memberForeignMembership = '';
   let foreignMembership = '';
 
   async function clean(): Promise<void> {
@@ -92,12 +94,20 @@ describeDatabase('PostgreSQL IAM persistence', () => {
           id: tenantA,
           name: 'IAM Phase 3 College',
           slug: 'iam-phase3-college',
+          code: 'IAM_PHASE3_COLLEGE',
+          type: 'College',
+          primaryAdministratorName: 'IAM Admin',
+          primaryAdministratorEmail: 'admin@iam-phase3.example.test',
           timezone: 'Asia/Kolkata',
         },
         {
           id: tenantB,
           name: 'IAM Phase 3 Foreign College',
           slug: 'iam-phase3-foreign-college',
+          code: 'IAM_PHASE3_FOREIGN',
+          type: 'College',
+          primaryAdministratorName: 'IAM Foreign Admin',
+          primaryAdministratorEmail: 'foreign@iam-phase3.example.test',
           timezone: 'Asia/Kolkata',
         },
       ],
@@ -106,16 +116,19 @@ describeDatabase('PostgreSQL IAM persistence', () => {
       data: [
         {
           id: adminUser,
+          name: 'Platform Admin',
           email: 'admin@iam-phase3.example.test',
           passwordHash: '$test$admin password',
         },
         {
           id: memberUser,
+          name: 'IAM Member',
           email: 'member@iam-phase3.example.test',
           passwordHash: '$test$member password',
         },
         {
           id: foreignUser,
+          name: 'IAM Foreign',
           email: 'foreign@iam-phase3.example.test',
           passwordHash: '$test$foreign password',
         },
@@ -135,10 +148,24 @@ describeDatabase('PostgreSQL IAM persistence', () => {
         }),
       )
     ).id;
+    additionalStaffMembership = (
+      await withTenant(prisma, tenantA, (tx) =>
+        tx.membership.create({
+          data: { tenantId: tenantA, userId: foreignUser, status: 'ACTIVE' },
+        }),
+      )
+    ).id;
     foreignMembership = (
       await withTenant(prisma, tenantB, (tx) =>
         tx.membership.create({
           data: { tenantId: tenantB, userId: foreignUser, status: 'ACTIVE' },
+        }),
+      )
+    ).id;
+    memberForeignMembership = (
+      await withTenant(prisma, tenantB, (tx) =>
+        tx.membership.create({
+          data: { tenantId: tenantB, userId: memberUser, status: 'ACTIVE' },
         }),
       )
     ).id;
@@ -157,17 +184,37 @@ describeDatabase('PostgreSQL IAM persistence', () => {
             role: 'FACULTY',
             departmentId,
           },
+          {
+            tenantId: tenantA,
+            membershipId: memberMembership,
+            role: 'AUDITOR',
+            departmentId: null,
+          },
+          {
+            tenantId: tenantA,
+            membershipId: additionalStaffMembership,
+            role: 'INVIGILATOR',
+            departmentId: null,
+          },
         ],
       }),
     );
     await withTenant(prisma, tenantB, (tx) =>
-      tx.roleGrant.create({
-        data: {
-          tenantId: tenantB,
-          membershipId: foreignMembership,
-          role: 'STUDENT',
-          departmentId: null,
-        },
+      tx.roleGrant.createMany({
+        data: [
+          {
+            tenantId: tenantB,
+            membershipId: foreignMembership,
+            role: 'STUDENT',
+            departmentId: null,
+          },
+          {
+            tenantId: tenantB,
+            membershipId: memberForeignMembership,
+            role: 'INVIGILATOR',
+            departmentId: null,
+          },
+        ],
       }),
     );
   });
@@ -193,7 +240,6 @@ describeDatabase('PostgreSQL IAM persistence', () => {
     const login = await service.login({
       email: ' MEMBER@IAM-PHASE3.EXAMPLE.TEST ',
       password: 'member password',
-      institutionSlug: 'iam-phase3-college',
     });
     expect(login.accessToken).toMatch(/^access:/);
     const sessionId = login.accessToken.slice('access:'.length);
@@ -209,7 +255,11 @@ describeDatabase('PostgreSQL IAM persistence', () => {
     );
     expect(context).toMatchObject({
       kind: 'TENANT',
-      grants: [{ role: 'FACULTY', departmentId }],
+      activeRole: 'FACULTY',
+      grants: expect.arrayContaining([
+        { role: 'FACULTY', departmentId },
+        { role: 'AUDITOR', departmentId: null },
+      ]),
     });
   });
 
@@ -219,7 +269,6 @@ describeDatabase('PostgreSQL IAM persistence', () => {
     const tokenHash = hashOpaqueToken('A'.repeat(43));
     await repository.createLoginSession({
       userId: memberUser,
-      institutionSlug: 'iam-phase3-college',
       sessionId,
       refreshTokenId: tokenId,
       refreshTokenHash: tokenHash,
@@ -264,6 +313,7 @@ describeDatabase('PostgreSQL IAM persistence', () => {
     const invited = await repository.createInvitation({
       tenantId: tenantA,
       actorMembershipId: adminMembership,
+      name: 'Invited User',
       email: 'invited@iam-phase3.example.test',
       grants: [{ role: 'STUDENT', departmentId: null }],
       invitationTokenId: randomUUID(),
@@ -295,9 +345,9 @@ describeDatabase('PostgreSQL IAM persistence', () => {
     const invitedUser = await prisma.user.findUniqueOrThrow({
       where: { email: 'invited@iam-phase3.example.test' },
     });
+    expect(invitedUser.name).toBe('Invited User');
     const login = await repository.createLoginSession({
       userId: invitedUser.id,
-      institutionSlug: 'iam-phase3-college',
       sessionId: randomUUID(),
       refreshTokenId: randomUUID(),
       refreshTokenHash: 'd'.repeat(64),
@@ -313,7 +363,6 @@ describeDatabase('PostgreSQL IAM persistence', () => {
     const sessionId = randomUUID();
     await repository.createLoginSession({
       userId: adminUser,
-      institutionSlug: 'iam-phase3-college',
       sessionId,
       refreshTokenId: randomUUID(),
       refreshTokenHash: 'e'.repeat(64),
@@ -355,7 +404,6 @@ describeDatabase('PostgreSQL IAM persistence', () => {
     const sessionId = randomUUID();
     await repository.createLoginSession({
       userId: memberUser,
-      institutionSlug: 'iam-phase3-college',
       sessionId,
       refreshTokenId: randomUUID(),
       refreshTokenHash: '9'.repeat(64),
@@ -380,8 +428,135 @@ describeDatabase('PostgreSQL IAM persistence', () => {
     ).toBe(1);
   });
 
+  it('switches only to institutions and roles granted to the current user', async () => {
+    const sessionId = randomUUID();
+    await expect(
+      repository.createLoginSession({
+        userId: memberUser,
+        sessionId,
+        refreshTokenId: randomUUID(),
+        refreshTokenHash: '7'.repeat(64),
+        now,
+        expiresAt: new Date(now.getTime() + 60_000),
+        requireActiveUser: true,
+        requireActiveTenantMembership: true,
+      }),
+    ).resolves.toMatchObject({
+      kind: 'CREATED',
+      identity: { tenantId: tenantA, membershipId: memberMembership },
+    });
+    await expect(repository.currentUserAccess(memberUser)).resolves.toMatchObject({
+      name: 'IAM Member',
+      email: 'member@iam-phase3.example.test',
+      institutions: [
+        { id: tenantA, name: 'IAM Phase 3 College' },
+        { id: tenantB, name: 'IAM Phase 3 Foreign College' },
+      ],
+    });
+
+    await expect(
+      repository.switchSessionContext({
+        userId: memberUser,
+        sessionId,
+        institutionId: tenantA,
+        role: 'AUDITOR',
+        now: new Date(now.getTime() + 1_000),
+      }),
+    ).resolves.toMatchObject({
+      kind: 'SWITCHED',
+      identity: { tenantId: tenantA, membershipId: memberMembership },
+    });
+    expect(
+      await authority.resolveCurrentAuthority(
+        {
+          kind: 'TENANT',
+          userId: memberUser,
+          sessionId,
+          tenantId: tenantA,
+          membershipId: memberMembership,
+        },
+        new Date(now.getTime() + 2_000),
+      ),
+    ).toMatchObject({ activeRole: 'AUDITOR' });
+
+    await expect(
+      repository.switchSessionContext({
+        userId: memberUser,
+        sessionId,
+        institutionId: tenantB,
+        role: 'INVIGILATOR',
+        now: new Date(now.getTime() + 3_000),
+      }),
+    ).resolves.toMatchObject({
+      kind: 'SWITCHED',
+      identity: { tenantId: tenantB, membershipId: memberForeignMembership },
+    });
+    await expect(
+      repository.switchSessionContext({
+        userId: memberUser,
+        sessionId,
+        institutionId: tenantB,
+        role: 'INSTITUTION_ADMIN',
+        now: new Date(now.getTime() + 4_000),
+      }),
+    ).resolves.toEqual({ kind: 'FORBIDDEN' });
+    await expect(
+      repository.switchSessionContext({
+        userId: memberUser,
+        sessionId,
+        institutionId: randomUUID(),
+        role: null,
+        now: new Date(now.getTime() + 5_000),
+      }),
+    ).resolves.toEqual({ kind: 'FORBIDDEN' });
+  });
+
+  it('paginates staff, rejects foreign cursors, and excludes student identities', async () => {
+    const first = await repository.listMemberships(tenantA, 1, null);
+    expect(first).not.toBeNull();
+    expect(first!.institutionName).toBe('IAM Phase 3 College');
+    expect(first!.memberships.items).toHaveLength(1);
+    expect(first!.memberships.nextCursor).not.toBeNull();
+
+    const middle = await repository.listMemberships(
+      tenantA,
+      1,
+      first!.memberships.nextCursor,
+    );
+    expect(middle!.memberships.items).toHaveLength(1);
+    expect(middle!.memberships.nextCursor).not.toBeNull();
+    const final = await repository.listMemberships(
+      tenantA,
+      1,
+      middle!.memberships.nextCursor,
+    );
+    expect(final!.memberships.items).toHaveLength(1);
+    expect(final!.memberships.nextCursor).toBeNull();
+    expect(
+      new Set([
+        ...first!.memberships.items.map(({ id }) => id),
+        ...middle!.memberships.items.map(({ id }) => id),
+        ...final!.memberships.items.map(({ id }) => id),
+      ]),
+    ).toEqual(
+      new Set([adminMembership, memberMembership, additionalStaffMembership]),
+    );
+    await expect(
+      repository.listMemberships(tenantA, 25, foreignMembership),
+    ).resolves.toBeNull();
+
+    const tenantBDirectory = await repository.listMemberships(tenantB, 25, null);
+    expect(tenantBDirectory!.memberships.items.map(({ id }) => id)).toEqual([
+      memberForeignMembership,
+    ]);
+    expect(tenantBDirectory!.memberships.items).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ id: foreignMembership })]),
+    );
+  });
+
   it('replaces canonical role grants with department scope and hides foreign targets', async () => {
-    const current = (await repository.listMemberships(tenantA)).find(
+    const current = (await repository.listMemberships(tenantA, 25, null))!
+      .memberships.items.find(
       (membership) => membership.id === memberMembership,
     )!;
     const updated = await repository.replaceRoleGrants({
@@ -424,15 +599,16 @@ describeDatabase('PostgreSQL IAM persistence', () => {
 
   it('isolates membership lists and deactivation kills tenant authority permanently for old sessions', async () => {
     expect(
-      (await repository.listMemberships(tenantA)).every(
+      (await repository.listMemberships(tenantA, 25, null))!.memberships.items.every(
         (m) => m.id !== foreignMembership,
       ),
     ).toBe(true);
-    expect(await repository.listMemberships(tenantB)).toHaveLength(1);
+    expect(
+      (await repository.listMemberships(tenantB, 25, null))!.memberships.items,
+    ).toHaveLength(1);
     const sessionId = randomUUID();
     await repository.createLoginSession({
       userId: memberUser,
-      institutionSlug: 'iam-phase3-college',
       sessionId,
       refreshTokenId: randomUUID(),
       refreshTokenHash: '0'.repeat(64),

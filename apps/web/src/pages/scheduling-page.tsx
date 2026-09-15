@@ -11,7 +11,7 @@ const localInput = (value: string | null) => value ? new Date(new Date(value).ge
 const displayTime = (value: string | null, timezone: string) => value ? new Intl.DateTimeFormat('en-IN', { timeZone: timezone, dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value)) : 'Not scheduled'
 
 export function SchedulingPage({ client, academicClient }: { client: SchedulingApiClient; academicClient: AcademicsApiClient }) {
-  const { currentUser, logout } = useAuth()
+  const { currentUser, logout, switchInstitution, switchRole } = useAuth()
   const [snapshot, setSnapshot] = useState<SchedulingSnapshot | null>(null)
   const [academics, setAcademics] = useState<AcademicStructureSnapshot | null>(null)
   const [selectedExamId, setSelectedExamId] = useState('')
@@ -53,7 +53,13 @@ export function SchedulingPage({ client, academicClient }: { client: SchedulingA
     setPreviews((value) => { const next = { ...value }; delete next[paper.id]; return next })
   }
   if (!currentUser) return null
-  return <WorkspaceShell currentUser={currentUser} active="schedule" onLogout={logout}>
+  return <WorkspaceShell
+    currentUser={currentUser}
+    active="schedule"
+    onLogout={logout}
+    onSwitchInstitution={switchInstitution}
+    onSwitchRole={switchRole}
+  >
     <div className="page-heading"><div><p className="eyebrow">Exam preparation</p><h1>Timetable &amp; halls</h1><p>Persisted paper times, deterministic seats, and publication readiness.</p></div>{exam ? <button className="primary-button" disabled={busy || !exam.readiness.ready || exam.state === 'SCHEDULE_PUBLISHED'} onClick={() => void action(() => client.publish(exam.examId, exam.version), 'Schedule published with a new revision.')}>{exam.state === 'SCHEDULE_PUBLISHED' ? `Published · revision ${exam.scheduleRevision}` : 'Publish schedule'}</button> : null}</div>
     {notice ? <p className="form-message page-message">{notice}</p> : null}
     {loading ? <p>Loading timetable…</p> : !snapshot ? null : <>

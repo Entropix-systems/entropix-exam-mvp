@@ -5,7 +5,7 @@ import type {
   UUID,
 } from '@entropix/contracts';
 import { ACADEMIC_RESOURCE_PATHS } from '@entropix/contracts';
-import { isUuid } from '@entropix/domain';
+import { hasActiveRole, isUuid } from '@entropix/domain';
 import {
   ForbiddenException,
   Injectable,
@@ -36,10 +36,7 @@ function tenantContext(context: AuthenticatedContext) {
 function requireAcademicAdmin(context: AuthenticatedContext) {
   const tenant = tenantContext(context);
   if (
-    !tenant.grants.some(
-      (grant) =>
-        grant.role === 'INSTITUTION_ADMIN' && grant.departmentId === null,
-    )
+    !hasActiveRole(tenant, ['INSTITUTION_ADMIN'])
   )
     throw new ForbiddenException('Permission denied');
   return tenant;

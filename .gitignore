@@ -4,6 +4,7 @@ build/
 .env
 .env.*
 !.env.example
+!.env.docker.example
 .DS_Store
 coverage/
 *.log
@@ -25,6 +26,9 @@ test-results/
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+
+# Local-only agent handoff notes (may contain fictional demo credentials)
+.local/
 
 # Local Docker / database files
 docker-data/

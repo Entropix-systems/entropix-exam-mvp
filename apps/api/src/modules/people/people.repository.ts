@@ -5,6 +5,7 @@ import type {
   UUID,
 } from '@entropix/contracts';
 import { PrismaClient, withTenant } from '@entropix/db';
+import type { Prisma } from '@entropix/db';
 import { Injectable } from '@nestjs/common';
 
 export interface ImportRowToCreate {
@@ -53,42 +54,69 @@ export class PeopleRepository {
     tenantId: UUID,
     membershipId: UUID | null,
     search: string,
-  ): Promise<StudentDirectoryRecord[]> {
+    pageSize: number,
+    cursor: UUID | null,
+  ): Promise<{
+    students: StudentDirectoryRecord[];
+    total: number;
+    nextCursor: UUID | null;
+  } | null> {
     return withTenant(this.prisma, tenantId, async (tx) => {
-      const rows = await tx.student.findMany({
-        where: {
-          tenantId,
-          ...(membershipId ? { membershipId } : {}),
-          ...(search
-            ? {
-                OR: [
-                  { rollNo: { contains: search, mode: 'insensitive' } },
-                  { name: { contains: search, mode: 'insensitive' } },
-                  { email: { contains: search, mode: 'insensitive' } },
-                ],
-              }
-            : {}),
-        },
-        include: {
-          cohort: { select: { id: true, code: true, name: true } },
-          enrolments: {
-            where: { status: 'ACTIVE' },
-            include: { subject: { select: { id: true, code: true, name: true } } },
-            orderBy: { subject: { code: 'asc' } },
+      const where: Prisma.StudentWhereInput = {
+        tenantId,
+        ...(membershipId ? { membershipId } : {}),
+        ...(search
+          ? {
+              OR: [
+                { rollNo: { contains: search, mode: 'insensitive' } },
+                { name: { contains: search, mode: 'insensitive' } },
+                { email: { contains: search, mode: 'insensitive' } },
+              ],
+            }
+          : {}),
+      };
+      if (cursor) {
+        const cursorExists = await tx.student.findFirst({
+          where: { ...where, id: cursor },
+          select: { id: true },
+        });
+        if (!cursorExists) return null;
+      }
+      const [total, rows] = await Promise.all([
+        tx.student.count({ where }),
+        tx.student.findMany({
+          where,
+          include: {
+            cohort: { select: { id: true, code: true, name: true } },
+            enrolments: {
+              where: { status: 'ACTIVE' },
+              include: { subject: { select: { id: true, code: true, name: true } } },
+              orderBy: { subject: { code: 'asc' } },
+            },
           },
-        },
-        orderBy: { rollNo: 'asc' },
-      });
-      return rows.map((row) => ({
-        id: row.id,
-        membershipId: row.membershipId,
-        rollNo: row.rollNo,
-        name: row.name,
-        email: row.email,
-        status: row.status as 'ACTIVE' | 'INACTIVE',
-        cohort: row.cohort,
-        subjects: row.enrolments.map((entry) => entry.subject),
-      }));
+          orderBy: [{ rollNo: 'asc' }, { id: 'asc' }],
+          take: pageSize + 1,
+          ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+        }),
+      ]);
+      const hasMore = rows.length > pageSize;
+      const visibleRows = hasMore ? rows.slice(0, pageSize) : rows;
+      return {
+        students: visibleRows.map((row) => ({
+          id: row.id,
+          membershipId: row.membershipId,
+          rollNo: row.rollNo,
+          name: row.name,
+          email: row.email,
+          status: row.status as 'ACTIVE' | 'INACTIVE',
+          cohort: row.cohort,
+          subjects: row.enrolments.map((entry) => entry.subject),
+        })),
+        total,
+        nextCursor: hasMore
+          ? visibleRows[visibleRows.length - 1]?.id ?? null
+          : null,
+      };
     });
   }
 
@@ -97,8 +125,30 @@ export class PeopleRepository {
     id: UUID,
     membershipId: UUID | null,
   ): Promise<StudentDirectoryRecord | null> {
-    const rows = await this.listStudents(tenantId, membershipId, '');
-    return rows.find((row) => row.id === id) ?? null;
+    return withTenant(this.prisma, tenantId, async (tx) => {
+      const row = await tx.student.findFirst({
+        where: { tenantId, id, ...(membershipId ? { membershipId } : {}) },
+        include: {
+          cohort: { select: { id: true, code: true, name: true } },
+          enrolments: {
+            where: { status: 'ACTIVE' },
+            include: { subject: { select: { id: true, code: true, name: true } } },
+            orderBy: { subject: { code: 'asc' } },
+          },
+        },
+      });
+      if (!row) return null;
+      return {
+        id: row.id,
+        membershipId: row.membershipId,
+        rollNo: row.rollNo,
+        name: row.name,
+        email: row.email,
+        status: row.status as 'ACTIVE' | 'INACTIVE',
+        cohort: row.cohort,
+        subjects: row.enrolments.map((entry) => entry.subject),
+      };
+    });
   }
 
   async listFaculty(tenantId: UUID): Promise<FacultyDirectoryRecord[]> {

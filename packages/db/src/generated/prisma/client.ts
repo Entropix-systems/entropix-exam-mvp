@@ -182,6 +182,61 @@ export type Incident = Prisma.IncidentModel
  */
 export type IncidentStudent = Prisma.IncidentStudentModel
 /**
+ * Model EvaluationAssignment
+ *
+ */
+export type EvaluationAssignment = Prisma.EvaluationAssignmentModel
+/**
+ * Model MarksBatch
+ *
+ */
+export type MarksBatch = Prisma.MarksBatchModel
+/**
+ * Model Mark
+ *
+ */
+export type Mark = Prisma.MarkModel
+/**
+ * Model ResultRun
+ *
+ */
+export type ResultRun = Prisma.ResultRunModel
+/**
+ * Model ResultItem
+ *
+ */
+export type ResultItem = Prisma.ResultItemModel
+/**
+ * Model StudentResult
+ *
+ */
+export type StudentResult = Prisma.StudentResultModel
+/**
+ * Model Publication
+ *
+ */
+export type Publication = Prisma.PublicationModel
+/**
+ * Model AuditEvent
+ *
+ */
+export type AuditEvent = Prisma.AuditEventModel
+/**
+ * Model PlatformAuditEvent
+ * * Immutable platform-admin audit; actor identity is global, never a tenant membership.
+ */
+export type PlatformAuditEvent = Prisma.PlatformAuditEventModel
+/**
+ * Model WorkerJob
+ *
+ */
+export type WorkerJob = Prisma.WorkerJobModel
+/**
+ * Model WorkerOutput
+ *
+ */
+export type WorkerOutput = Prisma.WorkerOutputModel
+/**
  * Model RoleGrant
  *
  */

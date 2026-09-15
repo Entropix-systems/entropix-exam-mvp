@@ -18,7 +18,7 @@ function tenant(context: AuthenticatedContext) {
 }
 
 function hasRole(context: ReturnType<typeof tenant>, roles: readonly string[]) {
-  return context.grants.some((grant) => roles.includes(grant.role));
+  return roles.includes(context.activeRole);
 }
 
 function controller(context: AuthenticatedContext) {

@@ -120,7 +120,7 @@ function GrantEditor({
       <button
         type="button"
         className="secondary-button add-role-button"
-        onClick={() => onChange([...grants, { role: 'STUDENT', departmentId: null }])}
+        onClick={() => onChange([...grants, { role: 'INVIGILATOR', departmentId: null }])}
       >
         Add another role
       </button>
@@ -174,7 +174,7 @@ export function MembershipTable({
                         <small>
                           {grant.departmentName ??
                             departmentNames.get(grant.departmentId) ??
-                            grant.departmentId}
+                            'Department-scoped access'}
                         </small>
                       ) : null}
                     </span>
@@ -215,23 +215,27 @@ export function MembershipTable({
 
 function AccessDialog({
   title,
+  name,
   email,
   grants,
   departments,
   busy,
   error,
   onEmailChange,
+  onNameChange,
   onGrantsChange,
   onClose,
   onSubmit,
 }: {
   title: string
+  name?: string
   email?: string
   grants: readonly ScopedRoleGrant[]
   departments: readonly DepartmentSummary[]
   busy: boolean
   error: string | null
   onEmailChange?(email: string): void
+  onNameChange?(name: string): void
   onGrantsChange(grants: ScopedRoleGrant[]): void
   onClose(): void
   onSubmit(event: FormEvent<HTMLFormElement>): void
@@ -245,6 +249,17 @@ function AccessDialog({
         </header>
         <form onSubmit={onSubmit}>
           <div className="dialog-body">
+            {onNameChange ? (
+              <label className="field-label">
+                Name
+                <input
+                  value={name}
+                  autoComplete="name"
+                  required
+                  onChange={(event) => onNameChange(event.target.value)}
+                />
+              </label>
+            ) : null}
             {onEmailChange ? (
               <label className="field-label">
                 Email
@@ -282,25 +297,36 @@ export function SetupAccessPage({
 }: {
   client: IdentityApiClient
 }) {
-  const { currentUser, logout } = useAuth()
+  const { currentUser, logout, switchInstitution, switchRole } = useAuth()
   const [directory, setDirectory] = useState<MembershipDirectory | null>(null)
   const [loading, setLoading] = useState(true)
   const [pageError, setPageError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [inviteOpen, setInviteOpen] = useState(false)
+  const [inviteName, setInviteName] = useState('')
   const [inviteEmail, setInviteEmail] = useState('')
   const [draftGrants, setDraftGrants] = useState<ScopedRoleGrant[]>([
-    { role: 'STUDENT', departmentId: null },
+    { role: 'INVIGILATOR', departmentId: null },
   ])
+  const [cursorHistory, setCursorHistory] = useState<(string | null)[]>([null])
+  const [pageSize, setPageSize] = useState(25)
   const [editing, setEditing] = useState<MembershipSummary | null>(null)
   const [dialogError, setDialogError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [busyMembershipId, setBusyMembershipId] = useState<string | null>(null)
   const mayManageIdentity = canManageIdentity(currentUser)
 
-  const load = useCallback(async () => {
+  const currentCursor = cursorHistory[cursorHistory.length - 1] ?? null
+  const load = useCallback(async (
+    cursor = currentCursor,
+    requestedPageSize = pageSize,
+  ) => {
+    setLoading(true)
     try {
-      const nextDirectory = await client.listMemberships()
+      const nextDirectory = await client.listMemberships({
+        cursor,
+        pageSize: requestedPageSize,
+      })
       setPageError(null)
       setDirectory(nextDirectory)
     } catch (reason) {
@@ -308,15 +334,16 @@ export function SetupAccessPage({
     } finally {
       setLoading(false)
     }
-  }, [client])
+  }, [client, currentCursor, pageSize])
 
   useEffect(() => {
     if (!mayManageIdentity) return
     let active = true
-    void client.listMemberships().then(
+    void client.listMemberships({ cursor: currentCursor, pageSize }).then(
       (nextDirectory) => {
         if (!active) return
         setDirectory(nextDirectory)
+        setPageError(null)
         setLoading(false)
       },
       (reason: unknown) => {
@@ -328,7 +355,7 @@ export function SetupAccessPage({
     return () => {
       active = false
     }
-  }, [client, mayManageIdentity])
+  }, [client, currentCursor, mayManageIdentity, pageSize])
 
   if (!currentUser) return null
   if (!mayManageIdentity) return <AccessDeniedPage />
@@ -340,8 +367,9 @@ export function SetupAccessPage({
   }
 
   function openInvite() {
+    setInviteName('')
     setInviteEmail('')
-    setDraftGrants([{ role: 'STUDENT', departmentId: null }])
+    setDraftGrants([{ role: 'INVIGILATOR', departmentId: null }])
     setDialogError(null)
     setInviteOpen(true)
   }
@@ -359,7 +387,7 @@ export function SetupAccessPage({
     setSaving(true)
     setDialogError(null)
     try {
-      await client.createInvitation({ email: inviteEmail.trim(), grants: draftGrants })
+      await client.createInvitation({ name: inviteName.trim(), email: inviteEmail.trim(), grants: draftGrants })
       closeDialog()
       setSuccess(`Invitation sent to ${inviteEmail.trim()}.`)
       await load()
@@ -417,12 +445,18 @@ export function SetupAccessPage({
   }
 
   return (
-    <WorkspaceShell currentUser={currentUser} active="setup-access" onLogout={logout}>
+    <WorkspaceShell
+      currentUser={currentUser}
+      active="setup-access"
+      onLogout={logout}
+      onSwitchInstitution={switchInstitution}
+      onSwitchRole={switchRole}
+    >
       <div className="page-heading">
         <div>
           <p className="eyebrow">Institution administration</p>
           <h1>Setup &amp; access</h1>
-          <p>Manage people and fixed tenant roles for {directory?.tenantName ?? 'this institution'}.</p>
+          <p>Manage people and fixed tenant roles for {directory?.institutionName ?? 'this institution'}.</p>
         </div>
         <button type="button" className="primary-button" onClick={openInvite}>Invite user</button>
       </div>
@@ -447,16 +481,63 @@ export function SetupAccessPage({
             busyMembershipId={busyMembershipId}
           />
         ) : null}
+        {!loading && directory ? (
+          <div className="pagination-controls" aria-label="Membership pagination">
+            <span>Page {cursorHistory.length}</span>
+            <label>
+              Rows
+              <select
+                aria-label="Membership page size"
+                value={pageSize}
+                onChange={(event) => {
+                  setLoading(true)
+                  setPageSize(Number(event.target.value))
+                  setCursorHistory([null])
+                }}
+              >
+                {[10, 25, 50].map((size) => (
+                  <option key={size} value={size}>{size}</option>
+                ))}
+              </select>
+            </label>
+            <button
+              type="button"
+              className="secondary-button"
+              disabled={cursorHistory.length === 1}
+              onClick={() => {
+                setLoading(true)
+                setCursorHistory((history) => history.slice(0, -1))
+              }}
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              className="secondary-button"
+              disabled={!directory.nextCursor}
+              onClick={() => {
+                if (directory.nextCursor) {
+                  setLoading(true)
+                  setCursorHistory((history) => [...history, directory.nextCursor])
+                }
+              }}
+            >
+              Next
+            </button>
+          </div>
+        ) : null}
       </section>
       {inviteOpen ? (
         <AccessDialog
           title="Invite user"
+          name={inviteName}
           email={inviteEmail}
           grants={draftGrants}
           departments={directory?.departments ?? []}
           busy={saving}
           error={dialogError}
           onEmailChange={setInviteEmail}
+          onNameChange={setInviteName}
           onGrantsChange={setDraftGrants}
           onClose={closeDialog}
           onSubmit={(event) => void submitInvite(event)}
@@ -465,6 +546,7 @@ export function SetupAccessPage({
       {editing ? (
         <AccessDialog
           title="Edit roles"
+          name={editing.user.name ?? undefined}
           email={editing.user.email}
           grants={draftGrants}
           departments={directory?.departments ?? []}

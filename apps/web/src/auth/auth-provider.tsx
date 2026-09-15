@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { PropsWithChildren } from 'react'
-import type { CurrentUserResponse, LoginRequest } from '@entropix/contracts'
+import type {
+  CurrentUserResponse,
+  LoginRequest,
+  TenantRole,
+} from '@entropix/contracts'
 import { AuthApiClient, AuthApiError } from './auth-client'
 import { AuthContext } from './auth-context'
 import type { AuthStatus } from './auth-context'
@@ -59,10 +63,45 @@ export function AuthProvider({
 
   const login = useCallback(
     async (input: LoginRequest) => {
-      setCurrentUser(await client.login(input))
+      const user = await client.login(input)
+      setCurrentUser(user)
       setStatus('AUTHENTICATED')
+      return user
     },
     [client],
+  )
+
+  const switchInstitution = useCallback(
+    async (institutionId: string) => {
+      const user = await client.switchContext({ institutionId })
+      setCurrentUser(user)
+      setStatus('AUTHENTICATED')
+      return user
+    },
+    [client],
+  )
+
+  const returnToPlatform = useCallback(async () => {
+    const user = await client.returnToPlatform()
+    setCurrentUser(user)
+    setStatus('AUTHENTICATED')
+    return user
+  }, [client])
+
+  const switchRole = useCallback(
+    async (role: TenantRole) => {
+      if (!currentUser || currentUser.context.kind !== 'TENANT') {
+        throw new AuthApiError(403, 'CONTEXT_UNAVAILABLE', 'Access context could not be changed.')
+      }
+      const user = await client.switchContext({
+        institutionId: currentUser.context.tenantId,
+        role,
+      })
+      setCurrentUser(user)
+      setStatus('AUTHENTICATED')
+      return user
+    },
+    [client, currentUser],
   )
 
   const logout = useCallback(async () => {
@@ -75,8 +114,26 @@ export function AuthProvider({
   }, [client])
 
   const value = useMemo(
-    () => ({ status, currentUser, login, logout, restore }),
-    [status, currentUser, login, logout, restore],
+    () => ({
+      status,
+      currentUser,
+      login,
+      switchInstitution,
+      returnToPlatform,
+      switchRole,
+      logout,
+      restore,
+    }),
+    [
+      status,
+      currentUser,
+      login,
+      switchInstitution,
+      returnToPlatform,
+      switchRole,
+      logout,
+      restore,
+    ],
   )
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
