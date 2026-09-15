@@ -3,13 +3,18 @@ import type { FormEvent } from 'react'
 import type { AuthApiClient } from '../auth/auth-client'
 import { navigate } from '../auth/navigation'
 import { AuthLayout } from './auth-layout'
+import { AsyncButton } from '../components/async-button'
+import { useAsyncAction } from '../feedback/use-async-action'
 
 export function ForgotPasswordPage({ client }: { client: AuthApiClient }) {
   const [sent, setSent] = useState(false)
+  const { pendingAction, run } = useAsyncAction()
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const email = String(new FormData(event.currentTarget).get('email') ?? '')
-    await client.forgotPassword({ email }).catch(() => undefined)
+    await run('forgot-password', async () => {
+      await client.forgotPassword({ email }).catch(() => undefined)
+    })
     setSent(true)
   }
   return (
@@ -23,7 +28,7 @@ export function ForgotPasswordPage({ client }: { client: AuthApiClient }) {
       ) : (
         <form onSubmit={submit} className="auth-form">
           <label>Email <input name="email" type="email" autoComplete="email" required /></label>
-          <button className="primary-button">Send reset link</button>
+          <AsyncButton className="primary-button" loading={pendingAction === 'forgot-password'} loadingText="Sending…">Send reset link</AsyncButton>
         </form>
       )}
     </AuthLayout>

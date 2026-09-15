@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { CurrentStudentResultRecord, ResultRunRecord, ResultsSnapshot } from '@entropix/contracts'
-import { AuthApiError } from '../auth/auth-client'
 import { useAuth } from '../auth/auth-context'
 import { ResultsApiClient } from '../results/results-client'
 import { WorkspaceShell } from './workspace-shell'
+import { AsyncButton } from '../components/async-button'
+import { apiErrorMessage } from '../feedback/api-error-message'
+import { useNotification } from '../feedback/notification-context'
+import { useAsyncAction } from '../feedback/use-async-action'
 
-const errorMessage = (reason: unknown) => reason instanceof AuthApiError ? reason.message : 'The result action could not be completed.'
+const errorMessage = (reason: unknown) => apiErrorMessage(reason, 'Results could not be loaded.')
 const value = (input: string | null, suffix = '') => input === null ? '—' : Number(input).toFixed(2) + suffix
 
 function ResultTable({ run, studentOnly = false }: { run: ResultRunRecord; studentOnly?: boolean }) {
@@ -53,8 +56,9 @@ export function ResultsPage({ client }: { client: ResultsApiClient }) {
   const [studentResult, setStudentResult] = useState<CurrentStudentResultRecord | null>(null)
   const [selectedId, setSelectedId] = useState('')
   const [loading, setLoading] = useState(true)
-  const [busy, setBusy] = useState(false)
-  const [notice, setNotice] = useState<string | null>(null)
+  const [pageError, setPageError] = useState<string | null>(null)
+  const { notify } = useNotification()
+  const { pendingAction, isPending, runMutationWithRefresh } = useAsyncAction()
 
   const load = useCallback(async () => {
     if (studentRole) setStudentResult(await client.currentStudent())
@@ -77,16 +81,16 @@ export function ResultsPage({ client }: { client: ResultsApiClient }) {
       }
       setLoading(false)
     }, (reason: unknown) => {
-      if (active) { setNotice(errorMessage(reason)); setLoading(false) }
+      if (active) { setPageError(errorMessage(reason)); setLoading(false) }
     })
     return () => { active = false }
   }, [client, studentRole])
 
-  async function action(operation: () => Promise<unknown>, success: string) {
-    setBusy(true); setNotice(null)
-    try { await operation(); await load(); setNotice(success) }
-    catch (reason) { setNotice(errorMessage(reason)) }
-    finally { setBusy(false) }
+  async function action(key: string, operation: () => Promise<unknown>, success: string, refreshFailure = 'Changes were saved, but the latest result state could not be reloaded. Retry refresh.') {
+    const result = await runMutationWithRefresh(key, operation, load)
+    if (result.status === 'success') notify(success, 'success')
+    else if (result.status === 'refresh-failed') { setPageError(refreshFailure); notify(refreshFailure, 'warning') }
+    else if (result.status === 'mutation-failed') notify(apiErrorMessage(result.error, 'The result action could not be completed.'), 'error')
   }
 
   if (!currentUser) return null
@@ -96,18 +100,18 @@ export function ResultsPage({ client }: { client: ResultsApiClient }) {
 
   function publish() {
     if (!run || !window.confirm(`Publish result version for ${run.studentCount} students?`)) return
-    void action(() => client.publish(run.id), 'Results published. Only this current snapshot is visible to students.')
+    void action(`publish-${run.id}`, () => client.publish(run.id), 'Results published. Only this current snapshot is visible to students.', 'Results were published, but the latest result state could not be reloaded. Retry refresh.')
   }
 
   function withdraw() {
     if (!exam) return
     const reason = window.prompt('Reason for withdrawing this publication')?.trim()
-    if (reason) void action(() => client.withdraw(exam.examId, { reason }), 'Publication withdrawn. Student visibility has been removed.')
+    if (reason) void action(`withdraw-${exam.examId}`, () => client.withdraw(exam.examId, { reason }), 'Publication withdrawn. Student visibility has been removed.', 'Results were withdrawn, but the latest result state could not be reloaded. Retry refresh.')
   }
 
   return <WorkspaceShell currentUser={currentUser} active="results" onLogout={logout} onSwitchInstitution={switchInstitution} onSwitchRole={switchRole}>
-    <div className="page-heading"><div><p className="eyebrow">{studentRole ? 'Student workspace' : 'Controller approval'}</p><h1>{studentRole ? 'My result' : 'Result publication'}</h1><p>{studentRole ? 'Only your institution’s current published snapshot is shown.' : 'Review the immutable candidate run before releasing it to students.'}</p></div>{!studentRole && exam ? exam.currentPublication ? <button className="danger-button" disabled={busy} onClick={withdraw}>Withdraw publication</button> : <button className="primary-button" disabled={busy || hardBlockers.length > 0} onClick={() => void action(() => client.compute(exam.examId), 'Current candidate result run computed.')}>Compute result run</button> : null}</div>
-    {notice ? <p className="form-message page-message">{notice}</p> : null}
+    <div className="page-heading"><div><p className="eyebrow">{studentRole ? 'Student workspace' : 'Controller approval'}</p><h1>{studentRole ? 'My result' : 'Result publication'}</h1><p>{studentRole ? 'Only your institution’s current published snapshot is shown.' : 'Review the immutable candidate run before releasing it to students.'}</p></div>{!studentRole && exam ? exam.currentPublication ? <AsyncButton className="danger-button" disabled={isPending} loading={pendingAction === `withdraw-${exam.examId}`} loadingText="Withdrawing…" onClick={withdraw}>Withdraw publication</AsyncButton> : <AsyncButton className="primary-button" disabled={isPending || hardBlockers.length > 0} loading={pendingAction === `compute-${exam.examId}`} loadingText="Computing…" onClick={() => void action(`compute-${exam.examId}`, () => client.compute(exam.examId), 'Current candidate result run computed.')}>Compute result run</AsyncButton> : null}</div>
+    {pageError ? <div className="academic-error" role="alert"><p>{pageError}</p><button type="button" className="secondary-button" onClick={() => { setPageError(null); setLoading(true); void load().then(() => setLoading(false), (reason: unknown) => { setPageError(errorMessage(reason)); setLoading(false) }) }}>Retry refresh</button></div> : null}
     {loading ? <p className="evaluation-empty">Loading result workspace…</p> : studentRole ? <StudentResults current={studentResult} /> : !snapshot || snapshot.exams.length === 0 ? <section className="evaluation-empty"><h2>No result-ready exams</h2><p>Scheduled or evaluation exams will appear here.</p></section> : exam ? <>
       <section className="evaluation-toolbar"><label>Exam<select value={exam.examId} onChange={(event) => setSelectedId(event.target.value)}>{snapshot.exams.map((entry) => <option key={entry.examId} value={entry.examId}>{entry.examCode} · {entry.examName}</option>)}</select></label><span className={'status-badge ' + (exam.currentPublication ? 'active' : '')}>{exam.currentPublication ? 'PUBLISHED v' + exam.currentPublication.version : run ? 'CANDIDATE' : 'NOT COMPUTED'}</span></section>
       <div className="evaluation-stack">
@@ -118,7 +122,7 @@ export function ResultsPage({ client }: { client: ResultsApiClient }) {
         {run ? <section className="evaluation-card"><header><div><p className="eyebrow">Candidate result register</p><h2>Sample review</h2><p>{run.studentCount} students · {run.itemCount} subject outcomes · checksum {run.checksum.slice(0, 12)}</p></div><span className="status-badge">REVISION {run.inputRevision}</span></header>
           <div className="result-stats"><div><b>{run.passCount}</b><span>Pass</span></div><div><b>{run.failCount}</b><span>Fail</span></div><div><b>{run.absentCount}</b><span>Absent</span></div><div><b>{run.withheldCount}</b><span>Withheld</span></div></div>
           <ResultTable run={run} />
-          <footer className="evaluation-actions"><span>Computed {new Date(run.computedAt).toLocaleString()} · immutable snapshot</span>{!exam.currentPublication ? <button className="primary-button" disabled={busy || run.inputRevision !== exam.inputRevision || hardBlockers.length > 0} onClick={publish}>Publish results</button> : null}</footer>
+          <footer className="evaluation-actions"><span>Computed {new Date(run.computedAt).toLocaleString()} · immutable snapshot</span>{!exam.currentPublication ? <AsyncButton className="primary-button" disabled={isPending || run.inputRevision !== exam.inputRevision || hardBlockers.length > 0} loading={pendingAction === `publish-${run.id}`} loadingText="Publishing…" onClick={publish}>Publish results</AsyncButton> : null}</footer>
         </section> : null}
       </div>
     </> : null}

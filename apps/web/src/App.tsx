@@ -17,6 +17,7 @@ import { AuditApiClient } from './audit/audit-client'
 import { PlatformApiClient } from './platform/platform-client'
 import { navigate } from './auth/navigation'
 import { landingDestination } from './auth/route-policy'
+import { NotificationProvider } from './feedback/notification-provider'
 import './App.css'
 
 const AccessDeniedPage = lazy(() => import('./pages/access-denied-page').then((module) => ({ default: module.AccessDeniedPage })))
@@ -161,10 +162,12 @@ function Routes() {
 
 export default function App() {
   return (
-    <AuthProvider client={authClient}>
-      <Suspense fallback={<p className="evaluation-empty">Loading workspace…</p>}>
-        <Routes />
-      </Suspense>
-    </AuthProvider>
+    <NotificationProvider>
+      <AuthProvider client={authClient}>
+        <Suspense fallback={<p className="evaluation-empty">Loading workspace…</p>}>
+          <Routes />
+        </Suspense>
+      </AuthProvider>
+    </NotificationProvider>
   )
 }

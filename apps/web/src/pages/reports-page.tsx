@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { AuditApiClient, type AuditActivityRow, type DashboardSnapshot, type ReportKind } from '../audit/audit-client'
-import { AuthApiError } from '../auth/auth-client'
 import { useAuth } from '../auth/auth-context'
 import { WorkspaceShell } from './workspace-shell'
+import { AsyncButton } from '../components/async-button'
+import { apiErrorMessage } from '../feedback/api-error-message'
+import { useNotification } from '../feedback/notification-context'
 
 const catalogue: readonly { kind: ReportKind; name: string; scope: string; access: string }[] = [
   { kind: 'registration-roster', name: 'Registration roster', scope: 'Exam and approved subject set', access: 'Controller / HOD' },
@@ -13,7 +15,7 @@ const catalogue: readonly { kind: ReportKind; name: string; scope: string; acces
   { kind: 'audit-activity', name: 'Audit activity', scope: 'Tenant, actor, action, target and request ID', access: 'Controller / Auditor' },
 ]
 
-const errorMessage = (reason: unknown) => reason instanceof AuthApiError ? `${reason.message}${reason.requestId ? ` · Request ${reason.requestId}` : ''}` : 'Reports could not be loaded.'
+const errorMessage = (reason: unknown) => apiErrorMessage(reason, 'Reports could not be loaded.')
 
 function saveExport(file: { fileName: string; contentType: string; csv: string }) {
   const url = URL.createObjectURL(new Blob([file.csv], { type: file.contentType }))
@@ -28,7 +30,8 @@ export function ReportsPage({ client }: { client: AuditApiClient }) {
   const [events, setEvents] = useState<readonly AuditActivityRow[]>([])
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState<ReportKind | null>(null)
-  const [notice, setNotice] = useState<string | null>(null)
+  const [pageError, setPageError] = useState<string | null>(null)
+  const { notify } = useNotification()
 
   useEffect(() => {
     let active = true
@@ -38,30 +41,29 @@ export function ReportsPage({ client }: { client: AuditApiClient }) {
         const activity = snapshot.availableReports.includes('audit-activity') ? await client.activity() : []
         if (active) { setDashboard(snapshot); setEvents(activity); setLoading(false) }
       } catch (reason) {
-        if (active) { setNotice(errorMessage(reason)); setLoading(false) }
+        if (active) { setPageError(errorMessage(reason)); setLoading(false) }
       }
     })()
     return () => { active = false }
   }, [client])
 
   async function exportReport(kind: ReportKind) {
-    setBusy(kind); setNotice(null)
+    setBusy(kind)
     try {
       const file = await client.export(kind)
       saveExport(file)
-      setNotice(`${file.fileName} exported with ${file.rowCount} data row(s).`)
-    } catch (reason) { setNotice(errorMessage(reason)) }
+      notify(`${file.fileName} exported with ${file.rowCount} data row(s).`, 'success')
+    } catch (reason) { notify(apiErrorMessage(reason, 'The report could not be exported.'), 'error') }
     finally { setBusy(null) }
   }
 
   if (!currentUser) return null
   const allowed = new Set(dashboard?.availableReports ?? [])
   return <WorkspaceShell currentUser={currentUser} active="reports" onLogout={logout} onSwitchInstitution={switchInstitution} onSwitchRole={switchRole}>
-    <div className="page-heading"><div><p className="eyebrow">Operational visibility</p><h1>Reports &amp; audit</h1><p>Exports and activity use the current institution and active server-authorized role.</p></div>{allowed.has('audit-activity') ? <button type="button" className="primary-button" disabled={busy !== null} onClick={() => void exportReport('audit-activity')}>Export audit activity</button> : null}</div>
-    {notice ? <p className="form-message page-message" role="status">{notice}</p> : null}
-    {loading ? <div className="reports-empty"><b>Loading report catalogue…</b><p>Resolving the active role scope.</p></div> : !dashboard ? <div className="reports-error" role="alert"><b>Reports unavailable</b><p>{notice ?? 'Reload this page to try again.'}</p></div> : <>
+    <div className="page-heading"><div><p className="eyebrow">Operational visibility</p><h1>Reports &amp; audit</h1><p>Exports and activity use the current institution and active server-authorized role.</p></div>{allowed.has('audit-activity') ? <AsyncButton type="button" className="primary-button" disabled={busy !== null} loading={busy === 'audit-activity'} loadingText="Preparing…" onClick={() => void exportReport('audit-activity')}>Export audit activity</AsyncButton> : null}</div>
+    {loading ? <div className="reports-empty"><b>Loading report catalogue…</b><p>Resolving the active role scope.</p></div> : !dashboard ? <div className="reports-error" role="alert"><b>Reports unavailable</b><p>{pageError ?? 'Reload this page to try again.'}</p><button className="secondary-button" type="button" onClick={() => window.location.reload()}>Retry</button></div> : <>
       <section className="overview-card"><header><div><p className="eyebrow">Download catalogue</p><h2>Current operational reports</h2></div><span className="status-badge active">{dashboard.institutionName}</span></header>
-        <div className="reports-table-wrap"><table><thead><tr><th>Report</th><th>Scope</th><th>Access</th><th>Action</th></tr></thead><tbody>{catalogue.map((report) => <tr key={report.kind}><td><b>{report.name}</b></td><td>{report.scope}</td><td>{report.access}</td><td>{allowed.has(report.kind) ? <button type="button" className="secondary-button" disabled={busy !== null} onClick={() => void exportReport(report.kind)}>{busy === report.kind ? 'Preparing…' : 'Export CSV'}</button> : <span className="status-badge">NOT IN ACTIVE SCOPE</span>}</td></tr>)}</tbody></table></div>
+        <div className="reports-table-wrap"><table><thead><tr><th>Report</th><th>Scope</th><th>Access</th><th>Action</th></tr></thead><tbody>{catalogue.map((report) => <tr key={report.kind}><td><b>{report.name}</b></td><td>{report.scope}</td><td>{report.access}</td><td>{allowed.has(report.kind) ? <AsyncButton type="button" className="secondary-button" disabled={busy !== null} loading={busy === report.kind} loadingText="Preparing…" onClick={() => void exportReport(report.kind)}>Export CSV</AsyncButton> : <span className="status-badge">NOT IN ACTIVE SCOPE</span>}</td></tr>)}</tbody></table></div>
       </section>
       {allowed.has('audit-activity') ? <section className="overview-card"><header><div><p className="eyebrow">Real command events</p><h2>Recent audit activity</h2></div><span className="status-badge">LATEST 100</span></header>
         {events.length === 0 ? <div className="reports-empty"><b>No command events recorded yet</b><p>Historical state is not inferred. Successful API commands performed after the B05 audit migration appear here.</p></div> : <div className="reports-table-wrap"><table><thead><tr><th>Time</th><th>Actor</th><th>Action</th><th>Target / reason</th><th>Request ID</th></tr></thead><tbody>{events.map((event) => <tr key={event.id}><td>{new Date(event.occurredAt).toLocaleString()}</td><td><b>{event.actor}</b><small>{event.actorRole.replaceAll('_', ' ')}</small></td><td>{event.action.replaceAll('_', ' ')}</td><td><b>{event.targetType.replaceAll('_', ' ')}</b>{event.targetId ? <small>{event.targetId}</small> : null}{event.reason ? <small>{event.reason}</small> : null}</td><td><code>{event.requestId}</code></td></tr>)}</tbody></table></div>}

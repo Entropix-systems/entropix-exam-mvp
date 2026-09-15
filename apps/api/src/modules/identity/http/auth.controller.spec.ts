@@ -138,6 +138,8 @@ describe('auth HTTP surface', () => {
     expect(auth.switchContext).toHaveBeenCalledWith(principal, {
       institutionId: '11111111-1111-4111-8111-111111111111',
       role: 'AUDITOR',
+      returnToPlatform: undefined,
+      requestId: expect.stringMatching(/^[0-9a-f-]{36}$/),
     });
     expect(response.body.data).toEqual({
       accessToken: 'switched-access-token',

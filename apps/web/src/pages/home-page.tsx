@@ -8,7 +8,7 @@ import { attentionViewFor } from './home-attention'
 import { WorkspaceShell } from './workspace-shell'
 
 function message(reason: unknown): string {
-  return reason instanceof AuthApiError ? `${reason.message}${reason.requestId ? ` · Request ${reason.requestId}` : ''}` : 'Overview data could not be loaded.'
+  return reason instanceof AuthApiError ? reason.message : 'Overview data could not be loaded.'
 }
 
 function formatDate(value: string | null, timezone: string): string {

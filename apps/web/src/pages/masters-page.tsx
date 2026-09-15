@@ -7,11 +7,13 @@ import type {
   AcademicStructureSnapshot,
 } from '@entropix/contracts'
 import { AcademicsApiClient } from '../academics/academics-client'
-import { AuthApiError } from '../auth/auth-client'
 import { useAuth } from '../auth/auth-context'
 import { canManageIdentity } from '../identity/identity-access'
 import { AccessDeniedPage } from './access-denied-page'
 import { WorkspaceShell } from './workspace-shell'
+import { AsyncButton } from '../components/async-button'
+import { useNotification } from '../feedback/notification-context'
+import { apiErrorMessage, isFieldValidationError } from '../feedback/api-error-message'
 
 const MASTER_TYPES: readonly {
   path: AcademicResourcePath
@@ -56,7 +58,7 @@ const BLANK_FORM: MasterFormState = {
 }
 
 function requestError(reason: unknown, fallback: string): string {
-  return reason instanceof AuthApiError ? reason.message : fallback
+  return apiErrorMessage(reason, fallback)
 }
 
 function recordsFor(
@@ -157,20 +159,23 @@ export function MastersPage({ client }: { client: AcademicsApiClient }) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [dialogError, setDialogError] = useState<string | null>(null)
-  const [notice, setNotice] = useState<string | null>(null)
+  const { notify } = useNotification()
   const mayManage = canManageIdentity(currentUser)
 
+  const refresh = useCallback(async () => {
+    setStructure(await client.list())
+    setError(null)
+  }, [client])
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      setStructure(await client.list())
-      setError(null)
+      await refresh()
     } catch (reason) {
       setError(requestError(reason, 'Academic masters could not be loaded.'))
     } finally {
       setLoading(false)
     }
-  }, [client])
+  }, [refresh])
 
   useEffect(() => {
     if (!mayManage) return
@@ -249,10 +254,18 @@ export function MastersPage({ client }: { client: AcademicsApiClient }) {
     try {
       await persist()
       closeDialog()
-      setNotice(`${selectedType.singular[0]!.toUpperCase()}${selectedType.singular.slice(1)} ${editing ? 'updated' : 'created'}.`)
-      await load()
+      try {
+        await refresh()
+        notify(`${selectedType.singular[0]!.toUpperCase()}${selectedType.singular.slice(1)} ${editing ? 'updated' : 'created'}.`, 'success')
+      } catch {
+        const refreshFailure = `The ${selectedType.singular} was ${editing ? 'updated' : 'created'}, but the latest academic masters data could not be refreshed. Retry refresh.`
+        setError(refreshFailure)
+        notify(refreshFailure, 'warning')
+      }
     } catch (reason) {
-      setDialogError(requestError(reason, `The ${selectedType.singular} could not be saved.`))
+      const fallback = `The ${selectedType.singular} could not be saved.`
+      if (isFieldValidationError(reason)) setDialogError(requestError(reason, fallback))
+      else notify(apiErrorMessage(reason, fallback), 'error')
     } finally {
       setBusy(false)
     }
@@ -276,7 +289,6 @@ export function MastersPage({ client }: { client: AcademicsApiClient }) {
           Add {selectedType.singular}
         </button>
       </div>
-      {notice ? <p className="form-message success page-message" role="status">{notice}</p> : null}
       {error ? (
         <div className="academic-error" role="alert">
           <p>{error}</p>
@@ -292,7 +304,7 @@ export function MastersPage({ client }: { client: AcademicsApiClient }) {
                 type="button"
                 className={resource === item.path ? 'active' : ''}
                 key={item.path}
-                onClick={() => { setResource(item.path); setNotice(null) }}
+                onClick={() => setResource(item.path)}
               >
                 <span>{item.label}</span><b>{count}</b>
               </button>
@@ -329,11 +341,11 @@ export function MastersPage({ client }: { client: AcademicsApiClient }) {
         </section>
       </div>
       {dialogOpen && structure ? (
-        <div className="modal-backdrop" role="presentation" onMouseDown={closeDialog}>
+        <div className="modal-backdrop" role="presentation" onMouseDown={() => { if (!busy) closeDialog() }}>
           <form className="master-dialog" role="dialog" aria-modal="true" aria-labelledby="master-dialog-title" onSubmit={(event) => void submit(event)} onMouseDown={(event) => event.stopPropagation()}>
             <header>
               <div><p className="eyebrow">Academic master</p><h2 id="master-dialog-title">{editing ? 'Edit' : 'Add'} {selectedType.singular}</h2></div>
-              <button type="button" className="icon-button" aria-label="Close" onClick={closeDialog}>×</button>
+              <button type="button" className="icon-button" aria-label="Close" disabled={busy} onClick={closeDialog}>×</button>
             </header>
             <div className="master-form">
               <label>Code<input required maxLength={32} value={form.code} onChange={(event) => setForm({ ...form, code: event.target.value.toUpperCase() })} /></label>
@@ -348,7 +360,7 @@ export function MastersPage({ client }: { client: AcademicsApiClient }) {
               {resource === 'subjects' ? <label>Credits<input required min="1" max="50" type="number" value={form.credits} onChange={(event) => setForm({ ...form, credits: event.target.value })} /></label> : null}
               {dialogError ? <p className="form-message error master-form-error" role="alert">{dialogError}</p> : null}
             </div>
-            <footer><button type="button" className="secondary-button" onClick={closeDialog}>Cancel</button><button type="submit" className="primary-button" disabled={busy}>{busy ? 'Saving…' : 'Save'}</button></footer>
+            <footer><button type="button" className="secondary-button" disabled={busy} onClick={closeDialog}>Cancel</button><AsyncButton type="submit" className="primary-button" loading={busy} loadingText="Saving…">Save</AsyncButton></footer>
           </form>
         </div>
       ) : null}

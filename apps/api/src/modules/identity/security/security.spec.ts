@@ -82,6 +82,12 @@ describe('access token signing and verification', () => {
         userId: identity.userId,
         sessionId: identity.sessionId,
       } as const,
+      {
+        kind: 'PLATFORM',
+        userId: identity.userId,
+        sessionId: identity.sessionId,
+        tenantId: identity.tenantId,
+      } as const,
     ]) {
       const token = await codec.sign(value);
       expect(await codec.verify(token)).toEqual(value);
@@ -173,7 +179,6 @@ describe('access token signing and verification', () => {
       { ...valid, sid: undefined },
       { ...valid, sub: 'invalid' },
       { ...valid, kind: 'TENANT' },
-      { ...valid, tenantId: identity.tenantId },
       { ...valid, exp: now + 901 },
       { ...valid, exp: now },
     ];

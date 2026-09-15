@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import type { PropsWithChildren } from 'react'
 import type { CurrentUserResponse, TenantRole } from '@entropix/contracts'
-import { AuthApiError } from '../auth/auth-client'
 import { navigate } from '../auth/navigation'
 import { canAccessWorkspacePath, destinationAfterContextChange } from '../auth/route-policy'
 import { roleLabel } from '../identity/identity-access'
+import { AsyncButton } from '../components/async-button'
+import { apiErrorMessage } from '../feedback/api-error-message'
+import { useNotification } from '../feedback/notification-context'
+import { useAsyncAction } from '../feedback/use-async-action'
 
 export function WorkspaceShell({
   currentUser,
@@ -26,7 +29,8 @@ export function WorkspaceShell({
   const platformTenantId = currentUser.context.kind === 'PLATFORM' ? currentUser.context.tenantId : undefined
   const returnPlatform = onReturnToPlatform
   const [switching, setSwitching] = useState(false)
-  const [switchError, setSwitchError] = useState<string | null>(null)
+  const { notify } = useNotification()
+  const { pendingAction, run } = useAsyncAction()
   const activeInstitution = tenant || platformTenantId
     ? currentUser.institutions.find(
         (institution) => institution.id === (tenant?.tenantId ?? platformTenantId),
@@ -38,15 +42,10 @@ export function WorkspaceShell({
 
   async function change(operation: () => Promise<void>) {
     setSwitching(true)
-    setSwitchError(null)
     try {
       await operation()
     } catch (reason) {
-      setSwitchError(
-        reason instanceof AuthApiError
-          ? reason.message
-          : 'Access context could not be changed.',
-      )
+      notify(apiErrorMessage(reason, 'Access context could not be changed.'), 'error')
     } finally {
       setSwitching(false)
     }
@@ -169,8 +168,8 @@ export function WorkspaceShell({
             </button>
           ) : null}
         </nav>
-        {platformTenantId && returnPlatform ? <button type="button" className="secondary-button" onClick={() => void changeContext(returnPlatform)}>Return to platform</button> : null}
-        <p className="sidebar-foot">Academic year 2026–27<br />MVP · Written examinations</p>
+        {platformTenantId && returnPlatform ? <AsyncButton type="button" className="secondary-button" disabled={switching} loading={switching} loadingText="Returning…" onClick={() => void changeContext(returnPlatform)}>Return to platform</AsyncButton> : null}
+        <p className="sidebar-foot">Academic year 2026–27<br />Written examinations</p>
       </aside>
       <div className="workspace-main">
         <header className="workspace-topbar">
@@ -200,12 +199,11 @@ export function WorkspaceShell({
                   : 'Platform Admin'}
               </span>
             )}
-            <button type="button" className="secondary-button" onClick={() => void onLogout()}>
+            <AsyncButton type="button" className="secondary-button" loading={pendingAction === 'logout'} loadingText="Signing out…" onClick={() => void run('logout', onLogout)}>
               Sign out
-            </button>
+            </AsyncButton>
           </div>
         </header>
-        {switchError ? <p className="context-switch-error" role="alert">{switchError}</p> : null}
         <div className="demo-notice">Live application · Server-authorized access</div>
         <main className="workspace-content">{children}</main>
       </div>

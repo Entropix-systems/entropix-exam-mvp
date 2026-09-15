@@ -34,7 +34,7 @@ describe('IdentityApiClient', () => {
 
     expect(request).toHaveBeenNthCalledWith(1, '/identity/invitations', {
       method: 'POST',
-      body: JSON.stringify({ email: 'faculty@example.test', grants }),
+      body: JSON.stringify({ email: 'faculty@example.test', name: 'Faculty Member', grants }),
     })
     expect(request).toHaveBeenNthCalledWith(
       2,
