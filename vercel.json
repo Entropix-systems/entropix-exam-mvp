@@ -7,7 +7,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://api.examops.entropixsystems.com/api/:path*"
+      "destination": "https://entropix-exam-mvp.onrender.com/api/:path*"
     },
     {
       "source": "/:path*",
