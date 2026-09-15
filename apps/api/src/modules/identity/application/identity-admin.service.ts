@@ -177,7 +177,7 @@ export class IdentityAdminService {
     try {
       await this.notifications.send({
         to: email,
-        subject: 'You are invited to Examination ERP',
+        subject: 'You are invited to ExamOS by Entropix Systems',
         text: `Use this one-time link to accept your invitation: ${link.toString()}`,
         category: 'INVITATION',
       });

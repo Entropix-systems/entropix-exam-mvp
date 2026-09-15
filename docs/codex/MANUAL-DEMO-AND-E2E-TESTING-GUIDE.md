@@ -446,6 +446,256 @@ Expected proof: Auditor has read-only tenant access.
 
 Use a fresh disposable database and follow this sequence when the audience needs to see record creation rather than only seeded completed states.
 
+### 7.0 Complete examination lifecycle — one chronological flow
+
+Use this as the master checklist for a complete examination. Do not skip ahead: each phase produces the records required by the next phase.
+
+| Phase | Primary actor | Workspace | Action | Must be true before continuing |
+| --- | --- | --- | --- | --- |
+| 1 | Platform Admin | Platform | Onboard/select institution | Correct institution context is active. |
+| 2 | Institution Admin | Academic masters | Create academic structure and subjects | Campus, department, program, year, term, cohort, and subjects exist. |
+| 3 | Institution Admin | Students | Create/import students, faculty, and enrolments | Active eligible students are enrolled in every intended exam subject. |
+| 4 | Exam Controller | Exams & registration | Create exam and choose subjects/rules | Exam is `DRAFT`; dates and rule are valid. |
+| 5 | Exam Controller | Exams & registration | Open registration | Rule version freezes; exam becomes `REGISTRATION_OPEN`. |
+| 6 | Student / Exam Controller | Exams & registration | Apply and approve, or auto-enrol | Every candidate needed for the exam is `APPROVED`. |
+| 7 | Exam Controller | Exams & registration | Close registration | Exam becomes `PREPARATION`; roster is stable. |
+| 8 | Exam Controller | Timetable & halls | Create halls, schedule papers, preview allocation | No capacity, student, or hall conflicts. |
+| 9 | Exam Controller | Timetable & halls | Commit seats and publish schedule | Every approved subject registration has one seat; exam becomes `SCHEDULE_PUBLISHED`. |
+| 10 | Exam Controller | Duties & attendance | Assign invigilators | Every hall sitting has an accepted duty. |
+| 11 | Invigilator | Duties & attendance | Conduct each sitting and save attendance | Every student is PRESENT, LATE, or ABSENT; no row is `NOT_MARKED`. |
+| 12 | Invigilator / Controller | Duties & attendance | Submit attendance and resolve incidents | Attendance is `SUBMITTED`; holds have an explicit disposition. |
+| 13 | Faculty | Marks & review | Enter and submit marks | Required attending-student components are complete and valid. |
+| 14 | Department Admin / Exam Controller | Marks & review | Independently approve marks | Every subject batch is `APPROVED`; submitter did not self-approve. |
+| 15 | Exam Controller | Results | Check readiness and compute result run | Candidate run matches current input revision. |
+| 16 | Exam Controller | Results | Review and publish the run | Exactly one current publication exists; exam becomes `PUBLISHED`. |
+| 17 | Student | Student portal | View result and documents | Student sees only their own current published data. |
+| 18 | Auditor | Reports & audit | Review evidence | Actions are visible/read-only and role boundaries hold. |
+
+#### Phase 1 — Institution context and people who will operate the exam
+
+1. Login as Platform Admin and select the target institution, or login as its Institution Admin.
+2. In **Setup & access**, confirm the needed people have the correct roles.
+3. Ensure there is:
+   - one Exam Controller;
+   - at least one Institution Admin;
+   - Faculty members who can be assigned to subjects;
+   - separate Department Admin or Exam Controller reviewers for marks approval;
+   - Invigilators for each hall sitting; and
+   - students with individual login accounts when student-portal testing is required.
+4. Confirm that the person approving marks is not the person who will submit the marks batch.
+
+Expected result: all actors exist within the selected institution and are active. Do not create cross-tenant or shared identities for the test.
+
+#### Phase 2 — Create academic structure, subjects, students, faculty, and enrolments
+
+1. As Institution Admin, open **Academic masters**.
+2. Create, in order: Campus → Department → Program → Academic Year → Term → Cohort.
+3. Create the subjects that will be included in the exam. Record each subject code and whether it uses the configured internal/external components.
+4. Open **Students** and create/import students.
+5. Create or link Faculty records to active memberships.
+6. Create active student enrolments for every subject each student should take.
+7. Reload the screens and verify that records persisted.
+
+Expected result: students are active, belong to the exam term/cohort, and have active enrolments in every subject they will register for. A student missing an enrolment must not be approved for that subject.
+
+#### Phase 3 — Create the exam and select its subjects
+
+Actor: Exam Controller or Institution Admin.
+
+1. Open **Exams & registration**.
+2. Choose **Create exam**.
+3. Enter a unique exam code and a clear name.
+4. Select the correct term. The app will offer subjects from that term’s program.
+5. Select the exam subjects.
+6. Choose the registration mode:
+   - **Student application** for the Northstar/college flow; or
+   - **School auto-enrol** for the Cedar/school flow.
+7. Set valid registration open and close date/times.
+8. Confirm the grading rule shown by the form. It is frozen when registration opens, so verify it before opening.
+9. Create the exam.
+
+Expected result: the exam is in `DRAFT`. It has subjects, a valid term, a registration mode, a valid window, and a rule version.
+
+#### Phase 4 — Open registration and build the approved roster
+
+Actor: Exam Controller or Institution Admin.
+
+1. On the new exam, select **Open registration**.
+2. Confirm the status becomes `REGISTRATION_OPEN`.
+3. Confirm the rule version is now frozen.
+
+For **Student application** mode:
+
+1. Logout and login as an eligible Student.
+2. Open **Exams & registration**.
+3. Select only subjects in which the student has an active enrolment.
+4. Save draft, then **Submit application**.
+5. Logout and login as Exam Controller.
+6. Review the application and eligibility indicators.
+7. Approve the application, or reject it with a reason and demonstrate resubmission.
+
+For **School auto-enrol** mode:
+
+1. Stay logged in as the Exam Controller.
+2. Run the auto-enrol action while registration is open.
+3. Confirm each eligible active student receives an `APPROVED` registration and all expected subjects.
+4. Confirm inactive, incorrect-term, or incompletely enrolled students are excluded.
+
+Expected result: each candidate who will sit the exam has an `APPROVED` registration and an approved registration-subject record for every selected subject.
+
+#### Phase 5 — Close registration
+
+Actor: Exam Controller or Institution Admin.
+
+1. Return to the exam.
+2. Confirm all required applications are approved or auto-enrolment is complete.
+3. Select **Close registration**.
+4. Confirm the exam becomes `PREPARATION`.
+5. Confirm students can no longer submit or revise applications.
+
+Expected result: the approved registration roster is stable. Scheduling and allocation must use this roster, not a manually typed student list.
+
+#### Phase 6 — Create halls, papers, schedule, and seats
+
+Actor: Exam Controller or Institution Admin.
+
+1. Open **Timetable & halls**.
+2. Create the required halls and enter realistic capacities.
+3. For every exam subject, create/configure one paper with a valid start and end time.
+4. Assign halls to each paper’s sitting.
+5. Run allocation preview.
+6. Resolve every warning before committing:
+   - hall capacity;
+   - hall overlap;
+   - student overlap;
+   - duplicate allocation; and
+   - invalid time ranges.
+7. Commit the allocation.
+8. Confirm every approved registration subject has exactly one hall and seat number.
+9. Publish the schedule.
+10. Confirm schedule revision is incremented and exam status becomes `SCHEDULE_PUBLISHED`.
+
+Expected result: all papers are scheduled, every approved candidate has exactly one seat per subject, and the student’s admit-card data is available for the current schedule revision.
+
+#### Phase 7 — Assign exam duties before the first sitting
+
+Actor: Exam Controller or Institution Admin.
+
+1. Open **Duties & attendance**.
+2. For every hall sitting, assign an eligible faculty member as Invigilator.
+3. Ensure one faculty member is not assigned to overlapping duties.
+4. Logout and login as each assigned Invigilator.
+5. Accept the duty.
+6. Return as Exam Controller and confirm every sitting has at least one accepted duty.
+
+Expected result: no unassigned/declined invigilator can edit a roster, and every scheduled hall sitting has an accepted person responsible for attendance.
+
+#### Phase 8 — Start and conduct the exam sitting
+
+There is no separate “Start exam” button. A paper is operationally started by its published scheduled time and the Invigilator opening the assigned roster during the conduct window.
+
+Actor: assigned Invigilator.
+
+1. Login as the Invigilator.
+2. Open **Duties & attendance**.
+3. Select the assigned sitting during its configured start/end window.
+4. Verify the hall, paper, time, and roster.
+5. Mark every student as one of:
+   - `PRESENT`;
+   - `LATE`; or
+   - `ABSENT`.
+6. Save the draft as needed.
+7. Create any student or hall incident that occurred.
+
+Expected result: the invigilator sees only assigned accepted sittings. Attendance cannot be saved/submitted outside the conduct window, and unassigned users cannot access the roster.
+
+#### Phase 9 — Complete attendance and complete conduct
+
+Actor: Invigilator, then Exam Controller.
+
+1. Before submitting, verify that no attendance row remains `NOT_MARKED`.
+2. Submit attendance for the sitting.
+3. Confirm the attendance batch becomes `SUBMITTED` and is locked for the Invigilator.
+4. Repeat for every hall sitting and paper.
+5. Login as Exam Controller.
+6. Review submitted batches.
+7. Reopen only if a correction is needed; provide a reason and resubmit after correction.
+8. Resolve each incident:
+   - clear it when it has no result consequence;
+   - retain a student hold when the student result must be WITHHELD; or
+   - explicitly close a hall incident with no result impact when appropriate.
+
+Expected result: every completed sitting has submitted attendance and an accepted duty. `LATE` counts as attended. `ABSENT` is a result outcome input, not a numeric score. A retained student hold will yield WITHHELD after computation.
+
+#### Phase 10 — Assign examiners and enter marks
+
+Actor: Exam Controller or Institution Admin, then assigned Faculty.
+
+1. Open **Marks & review**.
+2. For every exam subject, assign exactly one eligible Faculty member as examiner.
+3. Verify the examiner belongs to the valid department/subject scope.
+4. Logout and login as that assigned Faculty member.
+5. Open the assigned subject.
+6. Enter marks for every attending student using the displayed components.
+7. Leave required final/external marks blank for ABSENT students.
+8. Save the draft and reload to prove persistence.
+9. Submit the complete marks batch.
+10. Repeat for every subject.
+
+Expected result: only the assigned examiner can edit the subject. Marks must be within component bounds, attendance-consistent, complete for attending candidates, and version-safe. An unassigned Faculty member must be denied.
+
+#### Phase 11 — Independently approve marks
+
+Actor: Department Admin, Exam Controller, or Institution Admin who is not the marks submitter.
+
+1. Login as the separate reviewer.
+2. Open **Marks & review** and choose a submitted subject batch.
+3. Verify roster, attendance, component values, and submission identity.
+4. Choose one of:
+   - **Return** with a correction reason; or
+   - **Approve**.
+5. If returned, login as the examiner, correct, resubmit, then approve as the independent reviewer.
+6. Repeat until every subject has an `APPROVED` marks batch.
+
+Expected result: a submitter cannot approve their own batch. Changes after approval increment the exam input revision and require a new valid result run; published results must be withdrawn before conduct or marks can be changed.
+
+#### Phase 12 — Compute, review, and publish results
+
+Actor: Exam Controller or Institution Admin.
+
+1. Open **Results**.
+2. Select the completed exam.
+3. Review the readiness checklist. It must show:
+   - approved registrations;
+   - published schedule and seats;
+   - submitted attendance for each sitting;
+   - resolved holds/incidents;
+   - approved marks for each subject; and
+   - no stale candidate run.
+4. Start result computation.
+5. Review the candidate run’s outcome counts and sample student results.
+6. Verify special outcomes:
+   - PASS has numeric result values;
+   - FAIL remains distinct from ABSENT;
+   - ABSENT subject percentage/grade is nonnumeric/not applicable; and
+   - WITHHELD hides all numeric details.
+7. Publish the candidate run.
+8. Confirm exactly one current publication exists and the exam becomes `PUBLISHED`.
+
+Expected result: the published result is immutable snapshot data. Students cannot see candidate, stale, or withdrawn runs.
+
+#### Phase 13 — Student verification and final closeout
+
+Actor: Student, Auditor, and Exam Controller.
+
+1. Login as a PASS student and show registration, schedule, seat, admit card, published result, and grade card.
+2. Login as an ABSENT student and show the explicitly labelled absence presentation.
+3. Login as a WITHHELD student and confirm there are no marks, percentage, GPA, or grade-card action.
+4. Login as Auditor and confirm the audit/reports view is read-only.
+5. Logout and prove protected routes are no longer accessible.
+
+Expected result: student privacy and role authorization remain intact after publication. This is the final business completion of the examination lifecycle.
+
 ### 7.1 Platform Admin — onboard an institution
 
 Login: `platform.admin@demo.example.test`

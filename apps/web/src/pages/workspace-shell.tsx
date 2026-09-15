@@ -64,8 +64,8 @@ export function WorkspaceShell({
     <div className="workspace-shell">
       <aside className="workspace-sidebar">
         <div className="workspace-brand">
-          Examination ERP
-          <small>ENTROPIX SYSTEMS</small>
+          ExamOS
+          <small>by Entropix Systems</small>
         </div>
         <div className="tenant-box">
           <small>{tenant || platformTenantId ? 'INSTITUTION WORKSPACE' : 'PLATFORM WORKSPACE'}</small>

@@ -2,7 +2,7 @@
   "name": "entropix-exam-mvp",
   "version": "0.1.0",
   "private": true,
-  "description": "Entropix Systems Examination ERP MVP",
+  "description": "ExamOS by Entropix Systems — Examination Operating System",
   "packageManager": "pnpm@12.3.4",
   "engines": {
     "node": "24.20.0"

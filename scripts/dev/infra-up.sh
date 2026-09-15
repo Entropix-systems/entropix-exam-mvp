@@ -15,7 +15,7 @@ if [[ ! -f .env.docker ]]; then
   exit 1
 fi
 
-echo "Starting Entropix Examination ERP local infrastructure..."
+echo "Starting ExamOS local infrastructure..."
 
 env \
   -u POSTGRES_BOOTSTRAP_PASSWORD \

@@ -1,6 +1,6 @@
-# Entropix Examination ERP MVP
+# ExamOS by Entropix Systems
 
-A tenant-safe Examination ERP demo built as a pnpm monorepo with a React web app,
+A tenant-safe examination operating system demo built as a pnpm monorepo with a React web app,
 NestJS API, worker, PostgreSQL/Prisma persistence, shared contracts, and pure
 domain rules.
 

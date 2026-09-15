@@ -269,7 +269,7 @@ export class AuthApplicationService {
         link.searchParams.set('token', rawToken);
         await this.notifications.send({
           to: user.email,
-          subject: 'Reset your Examination ERP password',
+          subject: 'Reset your ExamOS password',
           text: `Use this one-time link to reset your password: ${link.toString()}`,
           category: 'PASSWORD_RESET',
         });
