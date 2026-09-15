@@ -308,7 +308,7 @@ export class EvaluationRepository {
       }
       await tx.exam.update({ where: { id: row.examId }, data: { inputRevision: { increment: 1 } } });
       return batch;
-    }, { maxWait: 10_000, timeout: 120_000 });
+    }, { maxWait: 50_000, timeout: 120_000 });
   }
 
   submit(tenantId: UUID, membershipId: UUID, examSubjectId: UUID, expectedVersion: number, now: Date) {

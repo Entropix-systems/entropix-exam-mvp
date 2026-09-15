@@ -297,6 +297,6 @@ export class PeopleRepository {
         },
       });
       return committedResult(committed, false);
-    }, { maxWait: 10_000, timeout: 120_000 });
+    }, { maxWait: 50_000, timeout: 120_000 });
   }
 }

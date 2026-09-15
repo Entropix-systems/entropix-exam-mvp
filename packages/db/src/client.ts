@@ -31,5 +31,9 @@ export function createPrismaClient(
 
   return new PrismaClient({
     adapter,
+    transactionOptions: {
+      maxWait: 50_000,
+      timeout: 120_000,
+    },
   });
 }

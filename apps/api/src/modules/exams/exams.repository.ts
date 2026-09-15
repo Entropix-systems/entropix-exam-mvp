@@ -225,6 +225,6 @@ export class ExamsRepository {
         created += 1;
       }
       return created;
-    }, { maxWait: 10_000, timeout: 120_000 });
+    }, { maxWait: 50_000, timeout: 120_000 });
   }
 }
